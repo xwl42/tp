@@ -301,30 +301,30 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### Use cases
 
-(For all use cases below, the **System** is the `AddressBook` and the **Actor** is the `user`, unless specified otherwise)
+(For all use cases below, the **System** is the `LambdaLab` and the **Actor** is the `user`, unless specified otherwise)
 
-**Use case: Delete a person**
+**Use case: Grade an exercise**
+
+**Precondition: A student has submitted their programming exercise**
 
 **MSS**
 
-1.  User requests to list persons
-2.  AddressBook shows a list of persons
-3.  User requests to delete a specific person in the list
-4.  AddressBook deletes the person
+1.  User receives notification that a student has submitted the exercise
+3.  User navigates to student's submission on GitHub via notification
+3.  User returns after grading student's submission on GitHub
+4.  User marks exercise as graded in LambdaLab 
+5.  LambdaLab updates statistics
 
     Use case ends.
 
 **Extensions**
 
-* 2a. The list is empty.
-
-  Use case ends.
-
-* 3a. The given index is invalid.
-
-    * 3a1. AddressBook shows an error message.
-
-      Use case resumes at step 2.
+* 1a. User doesn't want to grade student's exercise now
+  * 1a1. User dismisses the notification
+    Use case ends.
+* 1b. User accidentally dismisses notification
+  * 1b1. User goes to student's profile
+  * 1b2. User navigates to student's submission on GitHub via link in student's profile
 
 *{More to be added}*
 

@@ -274,13 +274,14 @@ _{Explain here how the data archiving feature will be implemented}_
 
 **Target user profile**:
 
-* has a need to manage a significant number of contacts
-* prefer desktop apps over other types
-* can type fast
-* prefers typing to mouse interactions
-* is reasonably comfortable using CLI apps
+* Undergraduate Teaching Assistants of CS2030S
+* need to manage a significant number of students
+* prefer desktop apps for reliability during labs/consultations
+* can type fast and are comfortable with keyboard shortcuts (Vim)
+* prefer typing over mouse interactions
+* comfortable using CLI apps 
 
-**Value proposition**: manage contacts faster than a typical mouse/GUI driven app
+**Value proposition**: manage students, submissions, attendance, and resources faster and more efficiently than traditional spreadsheets or GUI-based systems
 
 
 ### User stories

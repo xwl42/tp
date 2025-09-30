@@ -7,3 +7,4 @@
   * For TAs of CS2030S, this app can be used to manage their classes and keep track of their
   * students' attendance, grades and other information.
 * It is named `LambdaLab`
+

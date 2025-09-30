@@ -21,11 +21,11 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 * Role: Project Advisor
 
-### Jane Doe
+### Phoebe Yap
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/phoebey05.png" width="200px">
 
-[[github](http://github.com/johndoe)]
+[[github](http://github.com/PhoebeY05)]
 [[portfolio](team/johndoe.md)]
 
 * Role: Team Lead

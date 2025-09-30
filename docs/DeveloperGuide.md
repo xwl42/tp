@@ -334,8 +334,14 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 1.  Should work on any _mainstream OS_ as long as it has Java `17` or above installed.
 2.  Should be able to hold up to 1000 persons without a noticeable sluggishness in performance for typical usage.
 3.  A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
+4.  The system should respond to any command within 1 second.
+5.  Core functionalities should be covered by automated tests to ensure that future changes do not break the existing features
+6.  Users should be able to run the application simply by executing a JAR file, without needing to run an installer.
+7.  Should be able to function fully offline.
+8.  Date persistence should not depend on an external database system. Storage should be file-based and embedded.
+9.  User data should not be lost due to unexpected situations (e.g., unexpected shutdowns).
+10. Should be able to support multiple screen resolutions (e.g., 1280×720 and above) without layout issues.
 
-*{More to be added}*
 
 ### Glossary
 

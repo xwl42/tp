@@ -40,11 +40,11 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 * Role: Developer
 * Responsibilities: Data
 
-### Jean Doe
+### Wenli
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/xwl42.png" width="200px">
 
-[[github](http://github.com/johndoe)]
+[[github](http://github.com/xwl42)]
 [[portfolio](team/johndoe.md)]
 
 * Role: Developer

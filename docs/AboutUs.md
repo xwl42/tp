@@ -11,12 +11,12 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 ## Project team
 
-### John Doe
+### Sahishnu Kumaar
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/sahishnuk2.png" width="200px">
 
-[[homepage](http://www.comp.nus.edu.sg/~damithch)]
-[[github](https://github.com/johndoe)]
+[[homepage](https://www.sahishnu.dev/)]
+[[github](https://github.com/sahishnuk2)]
 [[portfolio](team/johndoe.md)]
 
 * Role: Project Advisor

@@ -325,6 +325,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * 1b. User accidentally dismisses notification
   * 1b1. User goes to student's profile
   * 1b2. User navigates to student's submission on GitHub via link in student's profile
+    Use case resumes at Step 3
 
 *{More to be added}*
 

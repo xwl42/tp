@@ -274,13 +274,14 @@ _{Explain here how the data archiving feature will be implemented}_
 
 **Target user profile**:
 
-* has a need to manage a significant number of contacts
-* prefer desktop apps over other types
-* can type fast
-* prefers typing to mouse interactions
-* is reasonably comfortable using CLI apps
+* Undergraduate Teaching Assistants of CS2030S
+* need to manage a significant number of students
+* prefer desktop apps for reliability during labs/consultations
+* can type fast and are comfortable with keyboard shortcuts (Vim)
+* prefer typing over mouse interactions
+* comfortable using CLI apps 
 
-**Value proposition**: manage contacts faster than a typical mouse/GUI driven app
+**Value proposition**: manage students, submissions, attendance, and resources faster and more efficiently than traditional spreadsheets or GUI-based systems
 
 
 ### User stories
@@ -300,30 +301,55 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### Use cases
 
-(For all use cases below, the **System** is the `AddressBook` and the **Actor** is the `user`, unless specified otherwise)
+(For all use cases below, the **System** is the `LambdaLab` and the **Actor** is the `user`, unless specified otherwise)
 
-**Use case: Delete a person**
+**Use case: Grade an exercise**
+
+**Precondition: A student has submitted their programming exercise**
 
 **MSS**
 
-1.  User requests to list persons
-2.  AddressBook shows a list of persons
-3.  User requests to delete a specific person in the list
-4.  AddressBook deletes the person
-
+1.  User receives notification that a student has submitted the exercise
+2.  User navigates to student's submission on GitHub via notification
+3.  User returns after grading student's submission on GitHub
+4.  User marks exercise as graded in LambdaLab 
+5.  LambdaLab updates statistics
     Use case ends.
 
 **Extensions**
 
-* 2a. The list is empty.
+* 1a. User doesn't want to grade student's exercise now
+  * 1a1. User dismisses the notification
+    Use case ends.
+* 1b. User accidentally dismisses notification
+  * 1b1. User goes to student's profile
+  * 1b2. User navigates to student's submission on GitHub via link in student's profile
+    Use case resumes at Step 3
 
-  Use case ends.
 
-* 3a. The given index is invalid.
+**Use case: Mark student attendance**
 
-    * 3a1. AddressBook shows an error message.
+**MSS**
 
-      Use case resumes at step 2.
+1.  User wants to mark attendance, enters student name and lab number using the command format
+2.  LambdaLab validates the student name and lab number
+3.  LambdaLab marks the student’s attendance for the specified lab
+4.  LambdaLab confirms: “Attendance for <studentName> marked for lab number <labNumber>”
+    Use case ends.
+
+**Extensions**
+
+* 1a. User provides an empty name or a name with invalid characters
+  * 1a1. LambdaLab displays error message: “Invalid name”
+  * 1a2. User re-enters a valid name
+    Use case resumes at Step 2
+* 1b. User provides an invalid lab number (non-numeric, zero, negative, or out-of-range)
+  * 1b1. System displays error message: “Invalid lab number”
+  * 1b2. User re-enters a valid lab number
+    Use case resumes at Step 2
+* 3a. Attendance for the student in that lab number has already been marked
+  * 3a1. LambdaLab displays: “Attendance already marked for <studentName> in lab number <labNumber>”
+    Use case ends.
 
 *{More to be added}*
 
@@ -332,8 +358,14 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 1.  Should work on any _mainstream OS_ as long as it has Java `17` or above installed.
 2.  Should be able to hold up to 1000 persons without a noticeable sluggishness in performance for typical usage.
 3.  A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
+4.  The system should respond to any command within 1 second.
+5.  Core functionalities should be covered by automated tests to ensure that future changes do not break the existing features
+6.  Users should be able to run the application simply by executing a JAR file, without needing to run an installer.
+7.  Should be able to function fully offline.
+8.  Date persistence should not depend on an external database system. Storage should be file-based and embedded.
+9.  User data should not be lost due to unexpected situations (e.g., unexpected shutdowns).
+10. Should be able to support multiple screen resolutions (e.g., 1280×720 and above) without layout issues.
 
-*{More to be added}*
 
 ### Glossary
 

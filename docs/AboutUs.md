@@ -11,44 +11,45 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 ## Project team
 
-### John Doe
+### Sahishnu Kumaar
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/sahishnuk2.png" width="200px">
 
-[[homepage](http://www.comp.nus.edu.sg/~damithch)]
-[[github](https://github.com/johndoe)]
+[[homepage](https://www.sahishnu.dev/)]
+[[github](https://github.com/sahishnuk2)]
 [[portfolio](team/johndoe.md)]
 
-* Role: Project Advisor
+* Role: In charge of testing
+* Responsibilities: Ensures the testing of the project is done properly and on time.
 
-### Jane Doe
+### Phoebe Yap
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/phoebey05.png" width="200px">
 
-[[github](http://github.com/johndoe)]
+[[github](http://github.com/PhoebeY05)]
 [[portfolio](team/johndoe.md)]
 
-* Role: Team Lead
-* Responsibilities: UI
+* Role: In charge of scheduling and tracking
+* Responsibilities: Defines, assigns and tracks project tasks.
 
-### Johnny Doe
+### Ng Jun Hao
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/junhao4.png" width="200px">
 
-[[github](http://github.com/johndoe)] [[portfolio](team/johndoe.md)]
+[[github](http://github.com/junhao4)] [[portfolio](team/johndoe.md)]
 
-* Role: Developer
-* Responsibilities: Data
+* Role: In change of code quality
+* Responsibilities: Looks after code quality, ensures adherence to coding standards, etc.
 
-### Jean Doe
+### Xiao Wenli
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/xwl42.png" width="200px">
 
-[[github](http://github.com/johndoe)]
+[[github](http://github.com/xwl42)]
 [[portfolio](team/johndoe.md)]
 
-* Role: Developer
-* Responsibilities: Dev Ops + Threading
+* Role: In charge of integration
+* Responsibilities: In charge of versioning of the code, maintaining the code repository, integrating various parts of the software to create a whole.
 
 ### Thomas
 
@@ -57,5 +58,5 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 [[github](http://github.com/thomas5564)]
 [[portfolio](team/johndoe.md)]
 
-* Role: Developer
-* Responsibilities: UI
+* Role: In charge of documentation
+* Responsibilities: Responsible for the quality of various project documents.

@@ -310,11 +310,10 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **MSS**
 
 1.  User receives notification that a student has submitted the exercise
-3.  User navigates to student's submission on GitHub via notification
+2.  User navigates to student's submission on GitHub via notification
 3.  User returns after grading student's submission on GitHub
 4.  User marks exercise as graded in LambdaLab 
 5.  LambdaLab updates statistics
-
     Use case ends.
 
 **Extensions**
@@ -326,6 +325,31 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
   * 1b1. User goes to student's profile
   * 1b2. User navigates to student's submission on GitHub via link in student's profile
     Use case resumes at Step 3
+
+
+**Use case: Mark student attendance**
+
+**MSS**
+
+1.  User wants to mark attendance, enters student name and lab number using the command format
+2.  LambdaLab validates the student name and lab number
+3.  LambdaLab marks the student’s attendance for the specified lab
+4.  LambdaLab confirms: “Attendance for <studentName> marked for lab number <labNumber>”
+    Use case ends.
+
+**Extensions**
+
+* 1a. User provides an empty name or a name with invalid characters
+  * 1a1. LambdaLab displays error message: “Invalid name”
+  * 1a2. User re-enters a valid name
+    Use case resumes at Step 2
+* 1b. User provides an invalid lab number (non-numeric, zero, negative, or out-of-range)
+  * 1b1. System displays error message: “Invalid lab number”
+  * 1b2. User re-enters a valid lab number
+    Use case resumes at Step 2
+* 3a. Attendance for the student in that lab number has already been marked
+  * 3a1. LambdaLab displays: “Attendance already marked for <studentName> in lab number <labNumber>”
+    Use case ends.
 
 *{More to be added}*
 

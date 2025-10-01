@@ -415,8 +415,15 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### Glossary
 
+* **Assignment**: Weekly coding homework that is submitted through GitHub
+* **Auto-link**: Automatically add a link to the students GitHub repo
+* **Consultation**: Scheduled meeting between a TA and student
+* **Exercise**: Weekly coding homework that is submitted through GitHub
 * **Mainstream OS**: Windows, Linux, Unix, MacOS
-* **Private contact detail**: A contact detail that is not meant to be shared with others
+* **Students' performance**: Grades that students receive for their weekly exercises and labs
+* **TA**: Teaching Assistant
+
+
 
 --------------------------------------------------------------------------------------------------------------------
 

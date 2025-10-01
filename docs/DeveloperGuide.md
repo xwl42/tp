@@ -351,6 +351,28 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
   * 3a1. LambdaLab displays: “Attendance already marked for <studentName> in lab number <labNumber>”
     Use case ends.
 
+
+**Use case: Schedule a consultation**
+
+**Precondition: User has uploaded his schedule**
+
+**Actor:User**
+
+**MSS**
+1. User views all the periods of available time he has
+2. User inputs a desired consultation time slot
+3. Time slot is saved into his schedule
+4. A day before the consultation, the user will be reminded of it
+
+**Extensions**
+* 2a. User inputs an invalid consultation slot
+    * 1a1. User is prompted to enter a valid consultation slot
+      Use case resumes at step 2.
+* 3a.
+    * 3a1. User requests to reschedule or delete the consultation.
+    * 3a2. System allows modification or cancellation.
+    Use case ends.
+  
 *{More to be added}*
 
 ### Non-Functional Requirements

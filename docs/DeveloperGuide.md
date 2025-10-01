@@ -288,16 +288,40 @@ _{Explain here how the data archiving feature will be implemented}_
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
-| Priority | As a …​                                    | I want to …​                 | So that I can…​                                                        |
-|----------|--------------------------------------------|------------------------------|------------------------------------------------------------------------|
-| `* * *`  | new user                                   | see usage instructions       | refer to instructions when I forget how to use the App                 |
-| `* * *`  | user                                       | add a new person             |                                                                        |
-| `* * *`  | user                                       | delete a person              | remove entries that I no longer need                                   |
-| `* * *`  | user                                       | find a person by name        | locate details of persons without having to go through the entire list |
-| `* *`    | user                                       | hide private contact details | minimize chance of someone else seeing them by accident                |
-| `*`      | user with many persons in the address book | sort persons by name         | locate a person easily                                                 |
+| Priority | As a …​                                   | I want to …​                                                                              | So that I can…​                                                                                        |
+|----------|-------------------------------------------|-------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------|
+| `* * *`  | CS2030S TA                                | add a GitHub username to the student                                                      | track their exercises easily (auto-link)                                                               |
+| `* * *`  | Grader                                    | mark student's exercise as graded after grading it                                        | know which students' exercises are graded / not graded yet                                             |
+| `* * *`  | New user                                  | receive help from the app                                                                 | learn how to use it quickly                                                                            |
+| `* * *`  | TA                                        | search for students based on their name                                                   | easily find the student im looking for                                                                 |
+| `* * *`  | TA                                        | delete student's information                                                              | remove false information                                                                               |
+| `* * *`  | TA conducting labs                        | mark students attendance                                                                  | know which students attended the lab and which students didnt                                          |
+| `* * *`  | TA with many students                     | add, update students data                                                                 | have their accurate information in LambdaLabs                                                          |
+| `* *`    | Grader                                    | tag my student based on their exercise performance                                        | know how much effort I would need to help each student                                                 |
+| `* *`    | New user                                  | input student data quickly                                                                | focus on teaching                                                                                      |
+| `* *`    | New user                                  | undo my mistakes                                                                          | recover from them quickly                                                                              |
+| `* *`    | TA                                        | review statistics regarding performance                                                   | see if the class has room for improvement                                                              |
+| `* *`    | TA                                        | search for students based on their student ID                                             | easily find the student im looking for                                                                 |
+| `* *`    | TA                                        | I can visualise the students' performance through charts and graph                        | see which part students are doing well/lacking at and put a sufficient amount of effort for that topic |
+| `* *`    | TA                                        | sort based on alphabetical order                                                          | easily look for a student and his/her data by his/her name                                             |
+| `* *`    | TA                                        | I can sort based on students grades                                                       | see who is underperforming and needs help                                                              |
+| `* *`    | TA                                        | sort students based on assignment submitted/ graded/ not submitted                        | better visualise the class's progress on current assignment                                            |
+| `* *`    | TA                                        | I can sort based on students attendance rate                                              | see who is missing the most classes                                                                    |
+| `* *`    | TA                                        | I can add a tag to signal I need to follow up with a student                              | ensure all students are well taught                                                                    |
+| `* *`    | TA                                        | I can filter based on specific assignment submissions                                     | check who did which assignment                                                                         |
+| `* *`    | TA accepting consultations                | get my available time slots                                                               | schedule consultations easily by allowing students to choose from all my free time                     |
+| `* *`    | TA accepting consultations                | block out timeslots by inputting manually                                                 | use the scheduling feature                                                                             |
+| `* *`    | TA marking for attendance                 | filter students based on attendance                                                       | accurately grade my students' attendance                                                               |
+| `*`      | Experienced user                          | quickly access my students data                                                           | save time                                                                                              |
+| `*`      | Experienced user                          | add aliases to commonly used commands                                                     | easily call frequently used commands                                                                   |
+| `*`      | Grader                                    | be notified if any new students have submitted the assignment since I last opened the app | grade their exercises promptly                                                                         |
+| `*`      | TA                                        | receive notifications if I have class/consultations the next day                          | not miss any classes/consultations                                                                     |
+| `*`      | TA who is making my own slides            | add my slides as a link or filepath                                                       | easily retrieve my slides                                                                              |
+| `*`      | TA accepting consultations                | block out timeslots by importing the .ics file from NUSMods                               | use the scheduling feature wiithout much setup                                                         |
+| `*`      | TA who is teaching for multiple semesters | archive my student data from previous semesters                                           | focus on the current students                                                                          |
+| `*`      | TA who is teaching for multiple semesters | unarchive my past student data                                                            | find something that happened in previous semester if I need that                                       |
+| `*`      | TA who is teaching multiple semesters     | I can archive my timetable data                                                           | schedule consultations based on current semester's timetable                                           |
 
-*{More to be added}*
 
 ### Use cases
 

@@ -380,8 +380,6 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **Precondition: User has uploaded his schedule**
 
-**Actor:User**
-
 **MSS**
 1. User views all the periods of available time he has
 2. User inputs a desired consultation time slot

@@ -372,15 +372,13 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
   * 1b2. User re-enters a valid lab number
     Use case resumes at Step 2
 * 3a. Attendance for the student in that lab number has already been marked
-  * 3a1. LambdaLab displays: “Attendance already marked for <studentName> in lab number <labNumber>”
+  * 3a1. LambdaLab informs user that attendance already marked for <studentName> in lab number <labNumber>. 
     Use case ends.
 
 
 **Use case: Schedule a consultation**
 
 **Precondition: User has uploaded his schedule**
-
-**Actor:User**
 
 **MSS**
 1. User views all the periods of available time he has

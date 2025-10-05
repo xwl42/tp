@@ -63,7 +63,9 @@ public class Person {
         return Collections.unmodifiableSet(tags);
     }
 
-    public GithubUsername getGithubUsername() { return githubUsername; }
+    public GithubUsername getGithubUsername() {
+        return githubUsername;
+    }
 
     /**
      * Returns true if both persons have the same name.

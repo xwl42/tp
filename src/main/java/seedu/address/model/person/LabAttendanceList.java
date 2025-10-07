@@ -13,7 +13,7 @@ public class LabAttendanceList {
     public LabAttendanceList() {
         labAttendanceList = new LabAttendance[NUMBER_OF_LABS];
         for (int i = 0; i < NUMBER_OF_LABS; i++) {
-            labAttendanceList[i] =  new LabAttendance();
+            labAttendanceList[i] = new LabAttendance();
         }
     }
 

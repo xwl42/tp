@@ -58,7 +58,7 @@ public class PersonBuilder {
      * Sets the {@code StudentId} of the {@code Person} that we are building.
      */
     public PersonBuilder withStudentId(String studentId) {
-        this.name = new Name(studentId);
+        this.studentId = new StudentId(studentId);
         return this;
     }
 

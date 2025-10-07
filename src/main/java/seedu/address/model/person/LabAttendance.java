@@ -24,4 +24,15 @@ public class LabAttendance {
         }
         hasAttended = true;
     }
+
+    /**
+     * Returns whether this lab has been marked as attended.
+     *
+     * @return {@code true} if the lab has been marked as attended;
+     *         {@code false} otherwise
+     */
+    public boolean hasAttended() {
+        return hasAttended;
+    }
+
 }

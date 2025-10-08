@@ -23,7 +23,6 @@
             </stylesheets>
          <BorderPane>
             <top>
-      
                   <HBox fx:id="helpMessageContainer" alignment="CENTER" BorderPane.alignment="CENTER">
                       <children>
                           <Label fx:id="helpMessage" text="Label">

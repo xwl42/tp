@@ -18,8 +18,7 @@
       "NOT_DONE",
       "NOT_DONE",
       "NOT_DONE"
-    ]
-    "tags" : [ "friends" ],
+    ],
     "githubUsername":"Alice"
   }, {
     "studentId": "A1231231X",
@@ -28,8 +27,7 @@
     "email" : "johnd@example.com",
     "address" : "311, Clementi Ave 2, #02-25",
     "tags" : [ "owesMoney", "friends" ],
-    "githubUsername":"Benson"
-    "tags" : [ "owesMoney", "friends" ],
+    "githubUsername":"Benson",
     "exerciseStatuses": [
       "NOT_DONE",
       "NOT_DONE",
@@ -49,6 +47,7 @@
     "email" : "heinz@example.com",
     "address" : "wall street",
     "tags" : [ ],
+    "githubUsername":"Carl",
     "exerciseStatuses": [
       "NOT_DONE",
       "NOT_DONE",
@@ -61,8 +60,6 @@
       "NOT_DONE",
       "NOT_DONE"
     ]
-    "tags" : [ ],
-    "githubUsername":"Carl"
   }, {
     "studentId": "A1231233X",
     "name" : "Daniel Meier",
@@ -71,7 +68,6 @@
     "address" : "10th street",
     "tags" : [ "friends" ],
     "githubUsername":"Daniel",
-    "tags" : [ "friends" ],
     "exerciseStatuses": [
       "NOT_DONE",
       "NOT_DONE",
@@ -91,8 +87,7 @@
     "email" : "werner@example.com",
     "address" : "michegan ave",
     "tags" : [ ],
-    "githubUsername":"Elle"
-    "tags" : [ ],
+    "githubUsername":"Elle",
     "exerciseStatuses": [
       "NOT_DONE",
       "NOT_DONE",
@@ -123,8 +118,7 @@
       "NOT_DONE",
       "NOT_DONE",
       "NOT_DONE"
-    ]
-    "tags" : [ ],
+    ],
     "githubUsername":"Fiona"
   }, {
     "studentId": "A1231236X",
@@ -144,8 +138,7 @@
       "NOT_DONE",
       "NOT_DONE",
       "NOT_DONE"
-    ]
-    "tags" : [ ],
+    ],
     "githubUsername":"George"
   } ]
 }

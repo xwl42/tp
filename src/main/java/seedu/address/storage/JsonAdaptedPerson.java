@@ -36,20 +36,18 @@ class JsonAdaptedPerson {
     private final String githubUsername;
     private final List<String> exerciseStatuses = new ArrayList<>();
 
-
     /**
      * Constructs a {@code JsonAdaptedPerson} with the given person details.
      */
     @JsonCreator
-    public JsonAdaptedPerson(
-            @JsonProperty("studentId") String studentId,
-            @JsonProperty("name") String name,
-            @JsonProperty("phone") String phone,
-            @JsonProperty("email") String email,
-            @JsonProperty("address") String address,
-            @JsonProperty("tags") List<JsonAdaptedTag> tags,
-            @JsonProperty("githubUsername") String githubUsername,
-            @JsonProperty("exerciseStatuses") List<String> exerciseStatuses) {
+    public JsonAdaptedPerson(@JsonProperty("studentId") String studentId,
+                             @JsonProperty("name") String name,
+                             @JsonProperty("phone") String phone,
+                             @JsonProperty("email") String email,
+                             @JsonProperty("address") String address,
+                             @JsonProperty("tags") List<JsonAdaptedTag> tags,
+                             @JsonProperty("githubUsername") String githubUsername,
+                             @JsonProperty("exerciseStatuses") List<String> exerciseStatuses) {
         this.studentId = studentId;
         this.name = name;
         this.phone = phone;
@@ -64,18 +62,14 @@ class JsonAdaptedPerson {
         this.githubUsername = githubUsername;
     }
 
-    public JsonAdaptedPerson(
-            @JsonProperty("studentId") String studentId,
-            @JsonProperty("name") String name,
-            @JsonProperty("phone") String phone,
-            @JsonProperty("email") String email,
-            @JsonProperty("address") String address,
-            @JsonProperty("githubUsername") String githubUsername,
-            @JsonProperty("tags") List<JsonAdaptedTag> tags) {
+    /**
+     * Simplified constructor used in tests.
+     */
+    public JsonAdaptedPerson(String studentId, String name, String phone,
+                             String email, String address, List<JsonAdaptedTag> tags,
+                             String githubUsername) {
         this(studentId, name, phone, email, address, tags, githubUsername, new ArrayList<>());
     }
-
-
 
     /**
      * Converts a given {@code Person} into this class for Jackson use.
@@ -93,9 +87,8 @@ class JsonAdaptedPerson {
                 .getExerciseTracker()
                 .getStatuses()
                 .stream()
-                .map(status -> status.toString())
-                .collect(Collectors.toList())
-        );
+                .map(Object::toString)
+                .collect(Collectors.toList()));
         githubUsername = source.getGithubUsername().value;
     }
 
@@ -109,6 +102,7 @@ class JsonAdaptedPerson {
         for (JsonAdaptedTag tag : tags) {
             personTags.add(tag.toModelType());
         }
+
         final ArrayList<Status> exerciseStatusList = new ArrayList<>();
         for (String stat : exerciseStatuses) {
             exerciseStatusList.add(Status.valueOf(stat));
@@ -159,7 +153,7 @@ class JsonAdaptedPerson {
 
         if (githubUsername == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT,
-                                                            GithubUsername.class.getSimpleName()));
+                    GithubUsername.class.getSimpleName()));
         }
         if (!GithubUsername.isValidGithubUsername(githubUsername)) {
             throw new IllegalValueException(GithubUsername.MESSAGE_CONSTRAINTS);
@@ -167,6 +161,6 @@ class JsonAdaptedPerson {
         final GithubUsername modelGithubUsername = new GithubUsername(githubUsername);
 
         return new Person(modelStudentId, modelName, modelPhone, modelEmail,
-                modelAddress, modelTags, modelGithubUsername);
+                modelAddress, modelTags, modelGithubUsername, exerciseStatusList);
     }
 }

@@ -128,7 +128,6 @@ public class Person {
                 && phone.equals(otherPerson.phone)
                 && email.equals(otherPerson.email)
                 && address.equals(otherPerson.address)
-                && tags.equals(otherPerson.tags)
                 && exerciseTracker.equals(otherPerson.exerciseTracker)
                 && tags.equals(otherPerson.tags)
                 && githubUsername.equals(otherPerson.githubUsername);
@@ -143,17 +142,20 @@ public class Person {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .add("studentId", studentId)
-                .add("name", name)
-                .add("phone", phone)
-                .add("email", email)
-                .add("address", address)
-                .add("tags", tags)
-                .add("Exercise statuses", exerciseTracker)
-                .add("github username", githubUsername)
-                .toString();
+        final StringBuilder builder = new StringBuilder();
+        builder.append(getClass().getCanonicalName())
+                .append("{studentId=").append(studentId)
+                .append(", name=").append(name)
+                .append(", phone=").append(phone)
+                .append(", email=").append(email)
+                .append(", address=").append(address)
+                .append(", tags=").append(tags)
+                .append(", github username=").append(githubUsername)
+                .append(", exerciseStatuses=").append(exerciseTracker)
+                .append("}");
+        return builder.toString();
     }
+
     public ExerciseTracker getExerciseTracker() {
         return exerciseTracker;
     }

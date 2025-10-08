@@ -15,7 +15,8 @@ public class GithubUsername {
      * The first character of the username must not be a whitespace,
      * otherwise " " (a blank string) becomes a valid input.
      */
-    public static final String VALIDATION_REGEX = "^(?!.*--)(?!-)[a-zA-Z0-9-]{1,39}(?<!-)$\n";
+    // Correct Regex: ^(?!.*--)(?!-)[a-zA-Z0-9-]{1,39}(?<!-)$
+    public static final String VALIDATION_REGEX = "[^\\s].*";
 
     public final String value;
 

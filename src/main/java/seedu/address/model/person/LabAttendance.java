@@ -3,7 +3,7 @@ package seedu.address.model.person;
 /**
  * Represents a student's attendance status for a single lab session.
  */
-public class LabAttendance {
+public class LabAttendance implements Lab {
     private boolean hasAttended;
 
     /**
@@ -16,6 +16,7 @@ public class LabAttendance {
     /**
      * Marks the lab as attended.
      */
+    @Override
     public void markAsAttended() {
         if (hasAttended) {
             // throw exception
@@ -31,6 +32,7 @@ public class LabAttendance {
      * @return {@code true} if the lab has been marked as attended;
      *         {@code false} otherwise
      */
+    @Override
     public boolean hasAttended() {
         return hasAttended;
     }

@@ -19,4 +19,6 @@ public class LabAttendanceTest {
         labAttendance.markAsAttended();
         assertTrue(labAttendance.hasAttended());
     }
+
+    /* TODO invalid test cases */
 }

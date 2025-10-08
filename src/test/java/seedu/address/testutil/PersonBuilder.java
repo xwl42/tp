@@ -1,15 +1,18 @@
 package seedu.address.testutil;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.GithubUsername;
+import seedu.address.model.person.ExerciseTracker;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.StudentId;
+import seedu.address.model.person.Status;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.util.SampleDataUtil;
 
@@ -31,6 +34,7 @@ public class PersonBuilder {
     private Email email;
     private Address address;
     private Set<Tag> tags;
+    private ArrayList<Status> exerciseStatuses;
     private GithubUsername githubUsername;
 
     /**
@@ -43,6 +47,7 @@ public class PersonBuilder {
         email = new Email(DEFAULT_EMAIL);
         address = new Address(DEFAULT_ADDRESS);
         tags = new HashSet<>();
+        exerciseStatuses = new ExerciseTracker().getStatuses();
         githubUsername = new GithubUsername(DEFAULT_GITHUB_USERNAME);
     }
 
@@ -56,6 +61,7 @@ public class PersonBuilder {
         email = personToCopy.getEmail();
         address = personToCopy.getAddress();
         tags = new HashSet<>(personToCopy.getTags());
+        exerciseStatuses = personToCopy.getExerciseTracker().getStatuses();
         githubUsername = personToCopy.getGithubUsername();
     }
 
@@ -116,6 +122,6 @@ public class PersonBuilder {
     }
 
     public Person build() {
-        return new Person(studentId, name, phone, email, address, tags, githubUsername);
+        return new Person(studentId, name, phone, email, address, tags, githubUsername, exerciseStatuses);
     }
 }

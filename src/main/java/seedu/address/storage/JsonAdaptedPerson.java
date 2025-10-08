@@ -16,6 +16,7 @@ import seedu.address.model.person.GithubUsername;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
+import seedu.address.model.person.Status;
 import seedu.address.model.person.StudentId;
 import seedu.address.model.tag.Tag;
 
@@ -33,26 +34,48 @@ class JsonAdaptedPerson {
     private final String address;
     private final List<JsonAdaptedTag> tags = new ArrayList<>();
     private final String githubUsername;
+    private final List<String> exerciseStatuses = new ArrayList<>();
+
 
     /**
      * Constructs a {@code JsonAdaptedPerson} with the given person details.
      */
     @JsonCreator
-    public JsonAdaptedPerson(@JsonProperty("studentId") String studentId,
-                             @JsonProperty("name") String name, @JsonProperty("phone") String phone,
-                             @JsonProperty("email") String email, @JsonProperty("address") String address,
-                             @JsonProperty("tags") List<JsonAdaptedTag> tags,
-                             @JsonProperty("githubUsername") String githubUsername) {
+    public JsonAdaptedPerson(
+            @JsonProperty("studentId") String studentId,
+            @JsonProperty("name") String name,
+            @JsonProperty("phone") String phone,
+            @JsonProperty("email") String email,
+            @JsonProperty("address") String address,
+            @JsonProperty("tags") List<JsonAdaptedTag> tags,
+            @JsonProperty("githubUsername") String githubUsername,
+            @JsonProperty("exerciseStatuses") List<String> exerciseStatuses) {
         this.studentId = studentId;
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
+        if (exerciseStatuses != null) {
+            this.exerciseStatuses.addAll(exerciseStatuses);
+        }
         if (tags != null) {
             this.tags.addAll(tags);
         }
         this.githubUsername = githubUsername;
     }
+
+    public JsonAdaptedPerson(
+            @JsonProperty("studentId") String studentId,
+            @JsonProperty("name") String name,
+            @JsonProperty("phone") String phone,
+            @JsonProperty("email") String email,
+            @JsonProperty("address") String address,
+            @JsonProperty("githubUsername") String githubUsername,
+            @JsonProperty("tags") List<JsonAdaptedTag> tags) {
+        this(studentId, name, phone, email, address, tags, githubUsername, new ArrayList<>());
+    }
+
+
 
     /**
      * Converts a given {@code Person} into this class for Jackson use.
@@ -66,6 +89,13 @@ class JsonAdaptedPerson {
         tags.addAll(source.getTags().stream()
                 .map(JsonAdaptedTag::new)
                 .collect(Collectors.toList()));
+        exerciseStatuses.addAll(source
+                .getExerciseTracker()
+                .getStatuses()
+                .stream()
+                .map(status -> status.toString())
+                .collect(Collectors.toList())
+        );
         githubUsername = source.getGithubUsername().value;
     }
 
@@ -78,6 +108,10 @@ class JsonAdaptedPerson {
         final List<Tag> personTags = new ArrayList<>();
         for (JsonAdaptedTag tag : tags) {
             personTags.add(tag.toModelType());
+        }
+        final ArrayList<Status> exerciseStatusList = new ArrayList<>();
+        for (String stat : exerciseStatuses) {
+            exerciseStatusList.add(Status.valueOf(stat));
         }
 
         if (studentId == null) {

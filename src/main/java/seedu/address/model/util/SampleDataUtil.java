@@ -1,5 +1,6 @@
 package seedu.address.model.util;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -12,6 +13,7 @@ import seedu.address.model.person.GithubUsername;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
+import seedu.address.model.person.Status;
 import seedu.address.model.person.StudentId;
 import seedu.address.model.tag.Tag;
 
@@ -71,4 +73,19 @@ public class SampleDataUtil {
                 .collect(Collectors.toSet());
     }
 
+    /**
+     * Returns a list of exercise statuses with all values set to NOT_DONE.
+     */
+    public static ArrayList<Status> getExerciseStatuses(int count, boolean isRandom) {
+        ArrayList<Status> statuses = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            if (isRandom) {
+                Status[] allStatuses = Status.values();
+                statuses.add(allStatuses[i % 3]);
+            } else {
+                statuses.add(Status.NOT_DONE);
+            }
+        }
+        return statuses;
+    }
 }

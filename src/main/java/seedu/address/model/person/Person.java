@@ -2,6 +2,7 @@ package seedu.address.model.person;
 
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
@@ -27,6 +28,8 @@ public class Person {
     private final Set<Tag> tags = new HashSet<>();
     private final GithubUsername githubUsername;
 
+    private ExerciseTracker exerciseTracker;
+
     /**
      * Every field must be present and not null.
      */
@@ -39,6 +42,23 @@ public class Person {
         this.email = email;
         this.address = address;
         this.tags.addAll(tags);
+        this.exerciseTracker = new ExerciseTracker();
+        this.githubUsername = githubUsername;
+    }
+
+    /**
+     * Initialises a new person object, but with a specific list of exercise statuses
+     */
+    public Person(StudentId studentId, Name name, Phone phone, Email email, Address address, Set<Tag> tags,
+                  GithubUsername githubUsername, ArrayList<Status> statuses) {
+        requireAllNonNull(name, phone, email, address, tags);
+        this.studentId = studentId;
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+        this.address = address;
+        this.tags.addAll(tags);
+        this.exerciseTracker = new ExerciseTracker(statuses);
         this.githubUsername = githubUsername;
     }
 
@@ -109,13 +129,16 @@ public class Person {
                 && email.equals(otherPerson.email)
                 && address.equals(otherPerson.address)
                 && tags.equals(otherPerson.tags)
+                && exerciseTracker.equals(otherPerson.exerciseTracker)
+                && tags.equals(otherPerson.tags)
                 && githubUsername.equals(otherPerson.githubUsername);
     }
+
 
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(studentId, name, phone, email, address, tags, githubUsername);
+        return Objects.hash(studentId, name, phone, email, address, tags, githubUsername, exerciseTracker);
     }
 
     @Override
@@ -127,8 +150,11 @@ public class Person {
                 .add("email", email)
                 .add("address", address)
                 .add("tags", tags)
+                .add("Exercise statuses", exerciseTracker)
                 .add("github username", githubUsername)
                 .toString();
     }
-
+    public ExerciseTracker getExerciseTracker() {
+        return exerciseTracker;
+    }
 }

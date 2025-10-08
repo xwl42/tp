@@ -107,7 +107,8 @@ public class PersonTest {
                 + ", phone=" + ALICE.getPhone()
                 + ", email=" + ALICE.getEmail()
                 + ", address=" + ALICE.getAddress()
-                + ", tags=" + ALICE.getTags() + "}";
+                + ", tags=" + ALICE.getTags()
+                + ", github username=" + ALICE.getGithubUsername() + "}";
         assertEquals(expected, ALICE.toString());
     }
 }

@@ -5,6 +5,7 @@ import java.util.Set;
 
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
+import seedu.address.model.person.GithubUsername;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
@@ -22,6 +23,7 @@ public class PersonBuilder {
     public static final String DEFAULT_PHONE = "85355255";
     public static final String DEFAULT_EMAIL = "amy@gmail.com";
     public static final String DEFAULT_ADDRESS = "123, Jurong West Ave 6, #08-111";
+    public static final String DEFAULT_GITHUB_USERNAME = "TestUsername";
 
     private StudentId studentId;
     private Name name;
@@ -29,6 +31,7 @@ public class PersonBuilder {
     private Email email;
     private Address address;
     private Set<Tag> tags;
+    private GithubUsername githubUsername;
 
     /**
      * Creates a {@code PersonBuilder} with the default details.
@@ -40,6 +43,7 @@ public class PersonBuilder {
         email = new Email(DEFAULT_EMAIL);
         address = new Address(DEFAULT_ADDRESS);
         tags = new HashSet<>();
+        githubUsername = new GithubUsername(DEFAULT_GITHUB_USERNAME);
     }
 
     /**
@@ -52,6 +56,7 @@ public class PersonBuilder {
         email = personToCopy.getEmail();
         address = personToCopy.getAddress();
         tags = new HashSet<>(personToCopy.getTags());
+        githubUsername = personToCopy.getGithubUsername();
     }
 
     /**
@@ -102,7 +107,15 @@ public class PersonBuilder {
         return this;
     }
 
+    /**
+     * Sets the {@code GithubUsername} of the {@code Person} that we are building.
+     */
+    public PersonBuilder withGithubUsername(String githubUsername) {
+        this.githubUsername = new GithubUsername(githubUsername);
+        return this;
+    }
+
     public Person build() {
-        return new Person(studentId, name, phone, email, address, tags);
+        return new Person(studentId, name, phone, email, address, tags, githubUsername);
     }
 }

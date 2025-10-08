@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
+import seedu.address.model.person.GithubUsername;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
@@ -31,15 +32,17 @@ class JsonAdaptedPerson {
     private final String email;
     private final String address;
     private final List<JsonAdaptedTag> tags = new ArrayList<>();
+    private final String githubUsername;
 
     /**
      * Constructs a {@code JsonAdaptedPerson} with the given person details.
      */
     @JsonCreator
     public JsonAdaptedPerson(@JsonProperty("studentId") String studentId,
-            @JsonProperty("name") String name, @JsonProperty("phone") String phone,
-            @JsonProperty("email") String email, @JsonProperty("address") String address,
-            @JsonProperty("tags") List<JsonAdaptedTag> tags) {
+                             @JsonProperty("name") String name, @JsonProperty("phone") String phone,
+                             @JsonProperty("email") String email, @JsonProperty("address") String address,
+                             @JsonProperty("tags") List<JsonAdaptedTag> tags,
+                             @JsonProperty("githubUsername") String githubUsername) {
         this.studentId = studentId;
         this.name = name;
         this.phone = phone;
@@ -48,6 +51,7 @@ class JsonAdaptedPerson {
         if (tags != null) {
             this.tags.addAll(tags);
         }
+        this.githubUsername = githubUsername;
     }
 
     /**
@@ -62,6 +66,7 @@ class JsonAdaptedPerson {
         tags.addAll(source.getTags().stream()
                 .map(JsonAdaptedTag::new)
                 .collect(Collectors.toList()));
+        githubUsername = source.getGithubUsername().value;
     }
 
     /**
@@ -117,7 +122,17 @@ class JsonAdaptedPerson {
         final Address modelAddress = new Address(address);
 
         final Set<Tag> modelTags = new HashSet<>(personTags);
-        return new Person(modelStudentId, modelName, modelPhone, modelEmail, modelAddress, modelTags);
-    }
 
+        if (githubUsername == null) {
+            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT,
+                                                            GithubUsername.class.getSimpleName()));
+        }
+        if (!GithubUsername.isValidGithubUsername(githubUsername)) {
+            throw new IllegalValueException(GithubUsername.MESSAGE_CONSTRAINTS);
+        }
+        final GithubUsername modelGithubUsername = new GithubUsername(githubUsername);
+
+        return new Person(modelStudentId, modelName, modelPhone, modelEmail,
+                modelAddress, modelTags, modelGithubUsername);
+    }
 }

@@ -23,11 +23,9 @@ public class LabAttendanceList implements LabList {
      * @param index the zero-based index of the lab session.
      */
     @Override
-    public void markLabAsAttended(int index) {
+    public void markLabAsAttended(int index) throws IndexOutOfBoundsException {
         if (index < 0 || index >= NUMBER_OF_LABS) {
-            // throw exception
-            // TODO
-            return;
+            throw new IndexOutOfBoundsException("Index should be between 0 and " + (NUMBER_OF_LABS - 1));
         }
         labs[index].markAsAttended();
     }

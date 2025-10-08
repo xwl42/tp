@@ -1,6 +1,7 @@
 package seedu.address.model.person;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -38,5 +39,16 @@ public class LabAttendanceListTest {
         assertTrue(labs[5].hasAttended());
     }
 
-    /* TODO invalid test cases */
+    @Test
+    public void markLab_invalidIndex_throwsIndexOutOfBoundsException() {
+        LabAttendanceList labAttendanceList = new LabAttendanceList(labs);
+
+        assertThrows(IndexOutOfBoundsException.class, () -> {
+            labAttendanceList.markLabAsAttended(-1);
+        });
+
+        assertThrows(IndexOutOfBoundsException.class, () -> {
+            labAttendanceList.markLabAsAttended(10);
+        });
+    }
 }

@@ -13,9 +13,6 @@ public class LabAttendance implements Lab {
         this.hasAttended = false;
     }
 
-    /**
-     * Marks the lab as attended.
-     */
     @Override
     public void markAsAttended() {
         if (hasAttended) {
@@ -26,12 +23,6 @@ public class LabAttendance implements Lab {
         hasAttended = true;
     }
 
-    /**
-     * Returns whether this lab has been marked as attended.
-     *
-     * @return {@code true} if the lab has been marked as attended;
-     *         {@code false} otherwise
-     */
     @Override
     public boolean hasAttended() {
         return hasAttended;

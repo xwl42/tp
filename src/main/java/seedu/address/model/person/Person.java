@@ -100,8 +100,6 @@ public class Person {
         if (other == this) {
             return true;
         }
-
-        // instanceof handles nulls
         if (!(other instanceof Person)) {
             return false;
         }
@@ -114,6 +112,7 @@ public class Person {
                 && tags.equals(otherPerson.tags)
                 && exerciseTracker.equals(otherPerson.exerciseTracker);
     }
+
 
     @Override
     public int hashCode() {

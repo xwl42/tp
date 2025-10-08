@@ -39,7 +39,7 @@ class JsonAdaptedPerson {
     public JsonAdaptedPerson(@JsonProperty("name") String name, @JsonProperty("phone") String phone,
             @JsonProperty("email") String email, @JsonProperty("address") String address,
             @JsonProperty("tags") List<JsonAdaptedTag> tags,
-            @JsonProperty("tags") List<JsonAdaptedStatus> exerciseStatuses) {
+            @JsonProperty("exerciseStatuses") List<JsonAdaptedStatus> exerciseStatuses) {
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -51,6 +51,15 @@ class JsonAdaptedPerson {
             this.tags.addAll(tags);
         }
     }
+    @JsonCreator
+    public JsonAdaptedPerson(@JsonProperty("name") String name,
+                             @JsonProperty("phone") String phone,
+                             @JsonProperty("email") String email,
+                             @JsonProperty("address") String address,
+                             @JsonProperty("tags") List<JsonAdaptedTag> tags) {
+        this(name, phone, email, address, tags, new ArrayList<>()); // default empty statuses
+    }
+
 
     /**
      * Converts a given {@code Person} into this class for Jackson use.

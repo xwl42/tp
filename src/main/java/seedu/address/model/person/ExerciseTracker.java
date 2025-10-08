@@ -9,7 +9,6 @@ import java.util.stream.IntStream;
 
 /**
  * Represents a Person's address in the address book.
- * Guarantees: immutable; is valid as declared in {@link #isValidAddress(String)}
  */
 public class ExerciseTracker {
 
@@ -32,13 +31,6 @@ public class ExerciseTracker {
         this.statuses = statuses;
     }
 
-    /**
-     * Returns true if a given string is a valid email.
-     */
-    public static boolean isValidAddress(String test) {
-        return test.matches(VALIDATION_REGEX);
-    }
-
     @Override
     public String toString() {
         return IntStream.range(0, statuses.size())
@@ -51,14 +43,11 @@ public class ExerciseTracker {
         if (other == this) {
             return true;
         }
-
-        // instanceof handles nulls
-        if (!(other instanceof Address)) {
+        if (!(other instanceof ExerciseTracker)) {
             return false;
         }
-
-        Address otherAddress = (Address) other;
-        return statuses.equals(otherAddress.value);
+        ExerciseTracker otherTracker = (ExerciseTracker) other;
+        return statuses.equals(otherTracker.statuses);
     }
 
     @Override
@@ -67,6 +56,10 @@ public class ExerciseTracker {
     }
     public ArrayList<Status> getStatuses() {
         return statuses;
+    }
+
+    public void mark(int index, Status status) {
+        statuses.set(index, status);
     }
 }
 

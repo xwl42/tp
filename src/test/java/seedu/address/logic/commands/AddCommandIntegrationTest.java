@@ -28,7 +28,8 @@ public class AddCommandIntegrationTest {
 
     @Test
     public void execute_newPerson_success() {
-        Person validPerson = new PersonBuilder().build();
+        // Create a person with a unique StudentId that doesn't exist in typical address book
+        Person validPerson = new PersonBuilder().withStudentId("A9999999Z").build();
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.addPerson(validPerson);

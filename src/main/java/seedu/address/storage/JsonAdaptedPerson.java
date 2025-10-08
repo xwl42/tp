@@ -30,7 +30,8 @@ class JsonAdaptedPerson {
     private final String email;
     private final String address;
     private final List<JsonAdaptedTag> tags = new ArrayList<>();
-    private final List<JsonAdaptedStatus> exerciseStatuses = new ArrayList<>();
+    private final List<String> exerciseStatuses = new ArrayList<>();
+
 
     /**
      * Constructs a {@code JsonAdaptedPerson} with the given person details.
@@ -39,7 +40,7 @@ class JsonAdaptedPerson {
     public JsonAdaptedPerson(@JsonProperty("name") String name, @JsonProperty("phone") String phone,
             @JsonProperty("email") String email, @JsonProperty("address") String address,
             @JsonProperty("tags") List<JsonAdaptedTag> tags,
-            @JsonProperty("exerciseStatuses") List<JsonAdaptedStatus> exerciseStatuses) {
+            @JsonProperty("exerciseStatuses") List<String> exerciseStatuses) {
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -51,7 +52,6 @@ class JsonAdaptedPerson {
             this.tags.addAll(tags);
         }
     }
-    @JsonCreator
     public JsonAdaptedPerson(@JsonProperty("name") String name,
                              @JsonProperty("phone") String phone,
                              @JsonProperty("email") String email,
@@ -76,7 +76,7 @@ class JsonAdaptedPerson {
                 .getExerciseTracker()
                 .getStatuses()
                 .stream()
-                .map(JsonAdaptedStatus::new)
+                .map(status -> status.toString())
                 .collect(Collectors.toList())
         );
     }
@@ -92,8 +92,8 @@ class JsonAdaptedPerson {
             personTags.add(tag.toModelType());
         }
         final ArrayList<Status> exerciseStatusList = new ArrayList<>();
-        for (JsonAdaptedStatus jstat : exerciseStatuses) {
-            exerciseStatusList.add(jstat.toModelType());
+        for (String stat : exerciseStatuses) {
+            exerciseStatusList.add(Status.valueOf(stat));
         }
 
         if (name == null) {

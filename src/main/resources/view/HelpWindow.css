@@ -17,3 +17,24 @@
 #helpMessageContainer {
     -fx-background-color: derive(#1d1d1d, 20%);
 }
+
+#add, #list, #markLab{
+   -fx-background-color: #515658;
+
+}
+
+#help, #delete, #find, #markEx {
+-fx-background-color: #3c3e3f;
+}
+
+.scroll-pane {
+    -fx-background-color: derive(#1d1d1d, 15%);
+
+}
+
+.label {
+
+           -fx-font-family: "Segoe UI Semibold";
+           -fx-text-fill: white;
+           -fx-opacity: 1;
+}

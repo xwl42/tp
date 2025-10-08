@@ -104,9 +104,10 @@ public class UniquePersonListTest {
 
     @Test
     public void setPerson_editedPersonHasNonUniqueIdentity_throwsDuplicatePersonException() {
+        Person bobSameIdAsAlice = new PersonBuilder(BOB).withStudentId(ALICE.getStudentId().toString()).build();
         uniquePersonList.add(ALICE);
         uniquePersonList.add(BOB);
-        assertThrows(DuplicatePersonException.class, () -> uniquePersonList.setPerson(ALICE, BOB));
+        assertThrows(DuplicatePersonException.class, () -> uniquePersonList.setPerson(BOB, bobSameIdAsAlice));
     }
 
     @Test

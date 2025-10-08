@@ -6,8 +6,6 @@ import java.util.Collections;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import seedu.address.logic.commands.Status;
-
 
 /**
  * Represents a Person's address in the address book.
@@ -66,6 +64,9 @@ public class ExerciseTracker {
     @Override
     public int hashCode() {
         return statuses.hashCode();
+    }
+    public ArrayList<Status> getStatuses() {
+        return statuses;
     }
 }
 

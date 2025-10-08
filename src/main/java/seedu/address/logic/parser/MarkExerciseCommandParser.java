@@ -8,7 +8,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_STATUS;
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.logic.commands.MarkExerciseCommand;
-import seedu.address.logic.commands.Status;
+import seedu.address.model.person.Status;
 import seedu.address.logic.parser.exceptions.ParseException;
 
 /**

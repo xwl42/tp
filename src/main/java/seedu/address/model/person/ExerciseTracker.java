@@ -17,7 +17,22 @@ public class ExerciseTracker {
 
     public static final String MESSAGE_CONSTRAINTS = "Exercise tracker takes in statuses";
 
-    public final ArrayList<Status> statuses = new ArrayList<>(Collections.nCopies(10, Status.NOT_DONE));
+    public final ArrayList<Status> statuses;
+
+    /**
+     * Default constructor, initialises statuses to all be not done
+     */
+    public ExerciseTracker() {
+        this.statuses = new ArrayList<>(
+                Collections.nCopies(10, Status.NOT_DONE)
+        );
+    }
+    /**
+     * Alternative constructor, initialises statuses to an input arraylist
+     */
+    public ExerciseTracker(ArrayList<Status> statuses) {
+        this.statuses = statuses;
+    }
 
     /**
      * Returns true if a given string is a valid email.
@@ -28,7 +43,7 @@ public class ExerciseTracker {
 
     @Override
     public String toString() {
-        return IntStream.of(statuses.size())
+        return IntStream.range(0, statuses.size())
                 .mapToObj(x -> String.format("exercise %d: %s \n", x, statuses.get(x)))
                 .collect(Collectors.joining());
     }

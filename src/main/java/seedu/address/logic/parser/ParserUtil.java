@@ -132,7 +132,7 @@ public class ParserUtil {
     public static GithubUsername parseGithubUsername(String githubUsername) throws ParseException {
         requireNonNull(githubUsername);
         String trimmedGithubUsername = githubUsername.trim();
-        if (!Address.isValidAddress(trimmedGithubUsername)) {
+        if (!GithubUsername.isValidGithubUsername(trimmedGithubUsername)) {
             throw new ParseException(GithubUsername.MESSAGE_CONSTRAINTS);
         }
         return new GithubUsername(trimmedGithubUsername);

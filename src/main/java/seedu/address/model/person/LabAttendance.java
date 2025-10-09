@@ -26,4 +26,17 @@ public class LabAttendance implements Lab {
         return isAttended;
     }
 
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+
+        if (!(other instanceof LabAttendance)) {
+            return false;
+        }
+
+        LabAttendance otherLab = (LabAttendance) other;
+        return this.isAttended == otherLab.isAttended;
+    }
 }

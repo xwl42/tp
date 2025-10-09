@@ -1,6 +1,8 @@
 package seedu.address.model.person;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -30,5 +32,19 @@ public class LabAttendanceTest {
         assertTrue(labAttendance.isAttended());
 
         assertThrows(IllegalStateException.class, labAttendance::markAsAttended);
+    }
+
+    @Test
+    public void equals() {
+        LabAttendance labAttendance1 = new LabAttendance();
+        LabAttendance labAttendance2 = new LabAttendance();
+
+        assertEquals(labAttendance1, labAttendance2);
+
+        labAttendance1.markAsAttended();
+        assertNotEquals(labAttendance1, labAttendance2);
+
+        labAttendance2.markAsAttended();
+        assertEquals(labAttendance1, labAttendance2);
     }
 }

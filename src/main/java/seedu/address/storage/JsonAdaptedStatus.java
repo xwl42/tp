@@ -44,7 +44,7 @@ class JsonAdaptedStatus {
         }
 
         try {
-            return Status.valueOf(statusName);
+            return Status.fromString(statusName);
         } catch (IllegalArgumentException e) {
             throw new IllegalValueException("Invalid status value: " + statusName);
         }

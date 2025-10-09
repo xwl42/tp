@@ -105,7 +105,7 @@ class JsonAdaptedPerson {
 
         final ArrayList<Status> exerciseStatusList = new ArrayList<>();
         for (String stat : exerciseStatuses) {
-            exerciseStatusList.add(Status.valueOf(stat));
+            exerciseStatusList.add(Status.fromString(stat));
         }
 
         if (studentId == null) {

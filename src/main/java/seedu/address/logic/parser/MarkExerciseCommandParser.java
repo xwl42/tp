@@ -52,7 +52,7 @@ public class MarkExerciseCommandParser implements Parser<MarkExerciseCommand> {
         String statusString = argMultimap.getValue(PREFIX_STATUS)
                 .orElseThrow(() -> new ParseException("Missing status prefix s/"));
         try {
-            status = Status.valueOf(statusString.trim().toUpperCase());
+            status = Status.fromString(statusString.trim().toUpperCase());
         } catch (IllegalArgumentException e) {
             throw new ParseException("Invalid status. Must be one of: "
                     + Arrays.toString(Status.values()));

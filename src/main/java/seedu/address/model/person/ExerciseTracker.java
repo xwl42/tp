@@ -1,5 +1,4 @@
 package seedu.address.model.person;
-import static seedu.address.model.person.Name.VALIDATION_REGEX;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,7 +33,7 @@ public class ExerciseTracker {
     @Override
     public String toString() {
         return IntStream.range(0, statuses.size())
-                .mapToObj(x -> String.format("exercise %d: %s \n", x, statuses.get(x)))
+                .mapToObj(x -> String.format("ex %d: %s ", x, statuses.get(x)))
                 .collect(Collectors.joining());
     }
 

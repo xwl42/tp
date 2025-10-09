@@ -5,15 +5,15 @@ package seedu.address.model.person;
  * Provides a simple in-memory tracking of attendance status.
  */
 public class LabAttendanceStub implements Lab {
-    private boolean hasAttended = false;
+    private boolean isAttended = false;
 
     @Override
     public void markAsAttended() {
-        hasAttended = true;
+        isAttended = true;
     }
 
     @Override
-    public boolean hasAttended() {
-        return hasAttended;
+    public boolean isAttended() {
+        return isAttended;
     }
 }

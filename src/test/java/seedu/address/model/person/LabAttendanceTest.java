@@ -11,7 +11,7 @@ public class LabAttendanceTest {
     @Test
     public void constructor_default_hasAttendedFalse() {
         LabAttendance labAttendance = new LabAttendance();
-        assertFalse(labAttendance.hasAttended());
+        assertFalse(labAttendance.isAttended());
     }
 
     @Test
@@ -19,7 +19,7 @@ public class LabAttendanceTest {
         LabAttendance labAttendance = new LabAttendance();
 
         labAttendance.markAsAttended();
-        assertTrue(labAttendance.hasAttended());
+        assertTrue(labAttendance.isAttended());
     }
 
     @Test
@@ -27,7 +27,7 @@ public class LabAttendanceTest {
         LabAttendance labAttendance = new LabAttendance();
 
         labAttendance.markAsAttended();
-        assertTrue(labAttendance.hasAttended());
+        assertTrue(labAttendance.isAttended());
 
         assertThrows(IllegalStateException.class, labAttendance::markAsAttended);
     }

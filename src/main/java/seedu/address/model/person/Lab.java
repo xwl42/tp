@@ -16,5 +16,5 @@ public interface Lab {
      * @return {@code true} if the lab has been marked as attended;
      *         {@code false} otherwise
      */
-    public boolean hasAttended();
+    public boolean isAttended();
 }

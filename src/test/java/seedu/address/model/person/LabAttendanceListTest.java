@@ -22,7 +22,7 @@ public class LabAttendanceListTest {
     public void constructor_default_success() {
         LabAttendanceList labAttendanceList = new LabAttendanceList(labs);
         for (int i = 0; i < labs.length; i++) {
-            assertFalse(labs[i].hasAttended());
+            assertFalse(labs[i].isAttended());
         }
     }
 
@@ -30,13 +30,13 @@ public class LabAttendanceListTest {
     public void markLab_validIndex_success() {
         LabAttendanceList labAttendanceList = new LabAttendanceList(labs);
 
-        assertFalse(labs[0].hasAttended());
+        assertFalse(labs[0].isAttended());
         labAttendanceList.markLabAsAttended(0);
-        assertTrue(labs[0].hasAttended());
+        assertTrue(labs[0].isAttended());
 
-        assertFalse(labs[5].hasAttended());
+        assertFalse(labs[5].isAttended());
         labAttendanceList.markLabAsAttended(5);
-        assertTrue(labs[5].hasAttended());
+        assertTrue(labs[5].isAttended());
     }
 
     @Test

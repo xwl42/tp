@@ -29,4 +29,23 @@ public class LabAttendanceList implements LabList {
         }
         labs[index].markAsAttended();
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+
+        if (!(other instanceof LabAttendanceList)) {
+            return false;
+        }
+
+        LabAttendanceList otherLabList = (LabAttendanceList) other;
+        for (int i = 0; i < NUMBER_OF_LABS; i++) {
+            if (this.labs[i].isAttended() != otherLabList.labs[i].isAttended()) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

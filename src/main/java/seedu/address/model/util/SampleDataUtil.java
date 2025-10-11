@@ -28,37 +28,37 @@ public class SampleDataUtil {
                     new Address("Blk 30 Geylang Street 29, #06-40"),
                     getTagSet("friends"),
                     new GithubUsername("AlexYeoh"),
-                    getExerciseStatuses(10, true)),
+                    getExerciseStatuses(10)),
             new Person(new StudentId("A1231231B"), new Name("Bernice Yu"), new Phone("99272758"),
                     new Email("berniceyu@example.com"),
                     new Address("Blk 30 Lorong 3 Serangoon Gardens, #07-18"),
                     getTagSet("colleagues", "friends"),
                     new GithubUsername("BerniceYu"),
-                    getExerciseStatuses(10, true)),
+                    getExerciseStatuses(10)),
             new Person(new StudentId("A1231232B"), new Name("Charlotte Oliveiro"), new Phone("93210283"),
                     new Email("charlotte@example.com"),
                     new Address("Blk 11 Ang Mo Kio Street 74, #11-04"),
                     getTagSet("neighbours"),
                     new GithubUsername("CharlotteOliveiro"),
-                    getExerciseStatuses(10, true)),
+                    getExerciseStatuses(10)),
             new Person(new StudentId("A1231233B"), new Name("David Li"), new Phone("91031282"),
                     new Email("lidavid@example.com"),
                     new Address("Blk 436 Serangoon Gardens Street 26, #16-43"),
                     getTagSet("family"),
                     new GithubUsername("DavidLi"),
-                    getExerciseStatuses(10, true)),
+                    getExerciseStatuses(10)),
             new Person(new StudentId("A1231234B"), new Name("Irfan Ibrahim"), new Phone("92492021"),
                     new Email("irfan@example.com"),
                     new Address("Blk 47 Tampines Street 20, #17-35"),
                     getTagSet("classmates"),
                     new GithubUsername("IrfanIbrahim"),
-                    getExerciseStatuses(10, false)),
+                    getExerciseStatuses(10)),
             new Person(new StudentId("A1231235B"), new Name("Roy Balakrishnan"), new Phone("92624417"),
                     new Email("royb@example.com"),
                     new Address("Blk 45 Aljunied Street 85, #11-31"),
                     getTagSet("colleagues"),
                     new GithubUsername("RoyBalakrishnan"),
-                    getExerciseStatuses(10, false))
+                    getExerciseStatuses(10))
         };
     }
 
@@ -82,15 +82,10 @@ public class SampleDataUtil {
     /**
      * Returns a list of exercise statuses with all values set to NOT_DONE.
      */
-    public static ArrayList<Status> getExerciseStatuses(int count, boolean isRandom) {
+    public static ArrayList<Status> getExerciseStatuses(int count) {
         ArrayList<Status> statuses = new ArrayList<>();
         for (int i = 0; i < count; i++) {
-            if (isRandom) {
-                Status[] allStatuses = Status.values();
-                statuses.add(allStatuses[i % 3]);
-            } else {
-                statuses.add(Status.NOT_DONE);
-            }
+            statuses.add(Status.NOT_DONE);
         }
         return statuses;
     }

@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import seedu.address.commons.core.index.Index;
 
 /**
  * Represents a Person's address in the address book.
@@ -16,7 +17,7 @@ public class ExerciseTracker {
     public final ArrayList<Status> statuses;
 
     /**
-     * Default constructor, initialises statuses to all be not done
+     * Initialises statuses to all be not done
      */
     public ExerciseTracker() {
         this.statuses = new ArrayList<>(
@@ -24,7 +25,7 @@ public class ExerciseTracker {
         );
     }
     /**
-     * Alternative constructor, initialises statuses to an input arraylist
+     * Initialises statuses to an input arraylist
      */
     public ExerciseTracker(ArrayList<Status> statuses) {
         this.statuses = statuses;
@@ -57,8 +58,8 @@ public class ExerciseTracker {
         return statuses;
     }
 
-    public void mark(int index, Status status) {
-        statuses.set(index, status);
+    public void mark(Index index, Status status) {
+        statuses.set(index.getZeroBased(), status);
     }
 }
 

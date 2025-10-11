@@ -32,22 +32,22 @@ public class MarkExerciseCommand extends Command {
             "MarkExercise command not implemented yet";
     public static final String MESSAGE_MARK_EXERCISE =
             "Exercise %d marked as %s for student %d (%s)";
-    private Status status;
-    private Index studentIndex;
-    private int exerciseIndex;
+    private final Status status;
+    private final Index studentIndex;
+    private final Index exerciseIndex;
 
     /**
      * @param studentIndex of the student to be marked
      * @param exerciseIndex exercise number to mark
      * @param status status to mark the exercise with
      */
-    public MarkExerciseCommand(Status status, Index studentIndex, int exerciseIndex) {
+    public MarkExerciseCommand(Status status, Index studentIndex, Index exerciseIndex) {
         requireAllNonNull(studentIndex, status, exerciseIndex);
         this.studentIndex = studentIndex;
         this.exerciseIndex = exerciseIndex;
         this.status = status;
     }
-    public int getExerciseIndex() {
+    public Index getExerciseIndex() {
         return exerciseIndex;
     }
 
@@ -73,7 +73,7 @@ public class MarkExerciseCommand extends Command {
         model.setPerson(student, student);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
         return new CommandResult(String.format(MESSAGE_MARK_EXERCISE,
-                exerciseIndex,
+                exerciseIndex.getZeroBased(),
                 status,
                 studentIndex.getOneBased(),
                 student.getName()));

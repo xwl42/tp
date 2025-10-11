@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 import seedu.address.commons.exceptions.IllegalValueException;
+import seedu.address.logic.parser.ParserUtil;
 import seedu.address.model.person.Status;
 
 /**
@@ -44,7 +45,7 @@ class JsonAdaptedStatus {
         }
 
         try {
-            return Status.fromString(statusName);
+            return ParserUtil.parseStatus(statusName);
         } catch (IllegalArgumentException e) {
             throw new IllegalValueException("Invalid status value: " + statusName);
         }

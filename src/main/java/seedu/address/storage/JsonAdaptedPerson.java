@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import seedu.address.commons.exceptions.IllegalValueException;
+import seedu.address.logic.parser.ParserUtil;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.GithubUsername;
@@ -105,7 +106,9 @@ class JsonAdaptedPerson {
 
         final ArrayList<Status> exerciseStatusList = new ArrayList<>();
         for (String stat : exerciseStatuses) {
-            exerciseStatusList.add(Status.fromString(stat));
+            if (!stat.isEmpty()) {
+                exerciseStatusList.add(ParserUtil.parseStatus(stat));
+            }
         }
 
         if (studentId == null) {

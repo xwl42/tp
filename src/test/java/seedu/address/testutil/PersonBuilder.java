@@ -34,7 +34,7 @@ public class PersonBuilder {
     private Email email;
     private Address address;
     private Set<Tag> tags;
-    private ArrayList<Status> exerciseStatuses;
+    private  ExerciseTracker exerciseTracker;
     private GithubUsername githubUsername;
 
     /**
@@ -47,7 +47,7 @@ public class PersonBuilder {
         email = new Email(DEFAULT_EMAIL);
         address = new Address(DEFAULT_ADDRESS);
         tags = new HashSet<>();
-        exerciseStatuses = new ExerciseTracker().getStatuses();
+        exerciseTracker = new ExerciseTracker();
         githubUsername = new GithubUsername(DEFAULT_GITHUB_USERNAME);
     }
 
@@ -61,7 +61,7 @@ public class PersonBuilder {
         email = personToCopy.getEmail();
         address = personToCopy.getAddress();
         tags = new HashSet<>(personToCopy.getTags());
-        exerciseStatuses = personToCopy.getExerciseTracker().getStatuses();
+        exerciseTracker = personToCopy.getExerciseTracker();
         githubUsername = personToCopy.getGithubUsername();
     }
 
@@ -122,6 +122,13 @@ public class PersonBuilder {
     }
 
     public Person build() {
-        return new Person(studentId, name, phone, email, address, tags, githubUsername, exerciseStatuses);
+        return new Person(studentId,
+                name,
+                phone,
+                email,
+                address,
+                tags,
+                githubUsername,
+                exerciseTracker.getStatuses());
     }
 }

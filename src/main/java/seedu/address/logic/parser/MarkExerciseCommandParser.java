@@ -16,6 +16,8 @@ import seedu.address.model.person.Status;
  * Parser of the mark exercise command
  */
 public class MarkExerciseCommandParser implements Parser<MarkExerciseCommand> {
+    private static final String INVALID_STATUES_FORMAT = "Invalid status. Must be one of: ";
+
     /**
      * Parse the user input into a mark exercise command
      * @param args user input
@@ -27,34 +29,25 @@ public class MarkExerciseCommandParser implements Parser<MarkExerciseCommand> {
                 ArgumentTokenizer.tokenize(args, PREFIX_EXERCISE_INDEX, PREFIX_STATUS);
 
         Index personIndex;
-        int exerciseIndex;
+        Index exerciseIndex;
         Status status;
+        String statusString;
 
         // Parse the person index (from the command preamble)
         try {
             personIndex = ParserUtil.parseIndex(argMultimap.getPreamble());
+            exerciseIndex = Index.fromZeroBased(
+                    Integer.parseInt(argMultimap.getValue(PREFIX_EXERCISE_INDEX).get())
+            );
+            statusString = argMultimap.getValue(PREFIX_STATUS).get();
         } catch (IllegalValueException ive) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                     MarkExerciseCommand.MESSAGE_USAGE), ive);
         }
-
-        // Parse the exercise index
-        String exIndexString = argMultimap.getValue(PREFIX_EXERCISE_INDEX)
-                .orElseThrow(() -> new ParseException("Missing exercise index prefix ex/"));
         try {
-            exerciseIndex = Integer.parseInt(exIndexString);
-        } catch (NumberFormatException e) {
-            System.out.println(exIndexString);
-            throw new ParseException("Exercise index must be a number.");
-        }
-
-        // Parse the status string and convert to enum
-        String statusString = argMultimap.getValue(PREFIX_STATUS)
-                .orElseThrow(() -> new ParseException("Missing status prefix s/"));
-        try {
-            status = Status.fromString(statusString.trim().toUpperCase());
+            status = ParserUtil.parseStatus(statusString.trim().toUpperCase());
         } catch (IllegalArgumentException e) {
-            throw new ParseException("Invalid status. Must be one of: "
+            throw new ParseException(INVALID_STATUES_FORMAT
                     + Arrays.toString(Status.values()));
         }
 

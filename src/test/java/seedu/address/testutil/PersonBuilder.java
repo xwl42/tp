@@ -1,6 +1,5 @@
 package seedu.address.testutil;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,7 +10,6 @@ import seedu.address.model.person.GithubUsername;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
-import seedu.address.model.person.Status;
 import seedu.address.model.person.StudentId;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.util.SampleDataUtil;
@@ -34,7 +32,7 @@ public class PersonBuilder {
     private Email email;
     private Address address;
     private Set<Tag> tags;
-    private  ExerciseTracker exerciseTracker;
+    private ExerciseTracker exerciseTracker;
     private GithubUsername githubUsername;
 
     /**
@@ -121,6 +119,10 @@ public class PersonBuilder {
         return this;
     }
 
+    /**
+     * builds a person using the fields
+     * @return the person that is built
+     */
     public Person build() {
         return new Person(studentId,
                 name,

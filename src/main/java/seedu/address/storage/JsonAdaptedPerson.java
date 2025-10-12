@@ -74,8 +74,8 @@ class JsonAdaptedPerson {
      */
     public JsonAdaptedPerson(String studentId, String name, String phone,
                              String email, String address, List<JsonAdaptedTag> tags,
-                             String githubUsername) {
-        this(studentId, name, phone, email, address, tags, githubUsername, new ArrayList<>(), new LabList().toString());
+                             String githubUsername, String labAttendanceList) {
+        this(studentId, name, phone, email, address, tags, githubUsername, new ArrayList<>(), labAttendanceList);
     }
 
     /**
@@ -181,6 +181,7 @@ class JsonAdaptedPerson {
         final LabAttendanceList modelLabAttendanceList = ParserUtil.parseLabAttendanceList(labAttendanceList);
 
         return new Person(modelStudentId, modelName, modelPhone, modelEmail,
-                modelAddress, modelTags, modelGithubUsername, new ExerciseTracker(exerciseStatusList), modelLabAttendanceList);
+                modelAddress, modelTags, modelGithubUsername,
+                new ExerciseTracker(exerciseStatusList), modelLabAttendanceList);
     }
 }

@@ -7,7 +7,8 @@
     "email" : "alice@example.com",
     "address" : "123, Jurong West Ave 6, #08-111",
     "tags" : [ "friends" ],
-    "githubUsername":"Alice"
+    "githubUsername":"Alice",
+    "labAttendanceList": "L1: N L2: N L3: N L4: N L5: N L6: N L7: N L8: N L9: N L10: N "
   }, {
     "studentId": "A1231231X",
     "name" : "Benson Meier",
@@ -15,7 +16,8 @@
     "email" : "johnd@example.com",
     "address" : "311, Clementi Ave 2, #02-25",
     "tags" : [ "owesMoney", "friends" ],
-    "githubUsername":"Benson"
+    "githubUsername":"Benson",
+    "labAttendanceList": "L1: N L2: N L3: N L4: N L5: N L6: N L7: N L8: N L9: N L10: N "
   }, {
     "studentId": "A1231232X",
     "name" : "Carl Kurz",
@@ -23,7 +25,8 @@
     "email" : "heinz@example.com",
     "address" : "wall street",
     "tags" : [ ],
-    "githubUsername":"Carl"
+    "githubUsername":"Carl",
+    "labAttendanceList": "L1: N L2: N L3: N L4: N L5: N L6: N L7: N L8: N L9: N L10: N "
   }, {
     "studentId": "A1231233X",
     "name" : "Daniel Meier",
@@ -31,7 +34,8 @@
     "email" : "cornelia@example.com",
     "address" : "10th street",
     "tags" : [ "friends" ],
-    "githubUsername":"Daniel"
+    "githubUsername":"Daniel",
+    "labAttendanceList": "L1: N L2: N L3: N L4: N L5: N L6: N L7: N L8: N L9: N L10: N "
   }, {
     "studentId": "A1231234X",
     "name" : "Elle Meyer",
@@ -39,7 +43,8 @@
     "email" : "werner@example.com",
     "address" : "michegan ave",
     "tags" : [ ],
-    "githubUsername":"Elle"
+    "githubUsername":"Elle",
+    "labAttendanceList": "L1: N L2: N L3: N L4: N L5: N L6: N L7: N L8: N L9: N L10: N "
   }, {
     "studentId": "A1231235X",
     "name" : "Fiona Kunz",
@@ -47,7 +52,8 @@
     "email" : "lydia@example.com",
     "address" : "little tokyo",
     "tags" : [ ],
-    "githubUsername":"Fiona"
+    "githubUsername":"Fiona",
+    "labAttendanceList": "L1: N L2: N L3: N L4: N L5: N L6: N L7: N L8: N L9: N L10: N "
   }, {
     "studentId": "A1231236X",
     "name" : "George Best",
@@ -55,6 +61,7 @@
     "email" : "anna@example.com",
     "address" : "4th street",
     "tags" : [ ],
-    "githubUsername":"George"
+    "githubUsername":"George",
+    "labAttendanceList": "L1: N L2: N L3: N L4: N L5: N L6: N L7: N L8: N L9: N L10: N "
   } ]
 }

@@ -163,8 +163,8 @@ public class JsonAdaptedPersonTest {
     public void toModelType_invalidLabAttendanceList_throwsIllegalValueException() {
         JsonAdaptedPerson person =
                 new JsonAdaptedPerson(VALID_STUDENTID, VALID_NAME, VALID_PHONE,
-                        VALID_EMAIL, VALID_ADDRESS, VALID_TAGS, INVALID_GITHUB_USERNAME, INVALID_LAB_ATTENDANCE_LIST);
-        String expectedMessage = GithubUsername.MESSAGE_CONSTRAINTS;
+                        VALID_EMAIL, VALID_ADDRESS, VALID_TAGS, VALID_GITHUB_USERNAME, INVALID_LAB_ATTENDANCE_LIST);
+        String expectedMessage = LabList.MESSAGE_CONSTRAINTS;
         assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
     }
 

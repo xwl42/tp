@@ -29,6 +29,7 @@ public class PersonBuilder {
     public static final String DEFAULT_EMAIL = "amy@gmail.com";
     public static final String DEFAULT_ADDRESS = "123, Jurong West Ave 6, #08-111";
     public static final String DEFAULT_GITHUB_USERNAME = "TestUsername";
+    public static final String DEFAULT_LAB_ATTENDANCE_LIST = new LabList().toString();
 
     private StudentId studentId;
     private Name name;

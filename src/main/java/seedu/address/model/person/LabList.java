@@ -65,6 +65,24 @@ public class LabList implements LabAttendanceList {
         return true;
     }
 
+    /**
+     * Creates and returns a copy of this LabList with all the same attendance states.
+     *
+     * @return a new LabList with copied attendance records
+     */
+    public LabList copy() {
+        LabAttendance[] copiedLabs = new LabAttendance[NUMBER_OF_LABS];
+        for (int i = 0; i < NUMBER_OF_LABS; i++) {
+            Lab originalLab = (Lab) this.labs[i];
+            Lab newLab = new Lab(i + 1);
+            if (originalLab.isAttended()) {
+                newLab.markAsAttended();
+            }
+            copiedLabs[i] = newLab;
+        }
+        return new LabList(copiedLabs);
+    }
+
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();

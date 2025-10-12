@@ -11,6 +11,7 @@ import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.LabAttendanceList;
+import seedu.address.model.person.LabList;
 import seedu.address.model.person.Person;
 
 /**
@@ -55,7 +56,7 @@ public class MarkAttendanceCommand extends Command {
         }
 
         Person personToEdit = lastShownList.get(index.getZeroBased());
-        LabAttendanceList labAttendanceList = personToEdit.getLabAttendanceList();
+        LabAttendanceList labAttendanceList = ((LabList) personToEdit.getLabAttendanceList()).copy();
         try {
             labAttendanceList.markLabAsAttended(labNumber.getZeroBased());
         } catch (IndexOutOfBoundsException iob) {
@@ -63,6 +64,7 @@ public class MarkAttendanceCommand extends Command {
         } catch (IllegalStateException ise) {
             throw new CommandException(String.format(MESSAGE_FAILURE_ALREADY_ATTENDED, labNumber.getOneBased()));
         }
+
         Person editedPerson = new Person(
                 personToEdit.getStudentId(), personToEdit.getName(), personToEdit.getPhone(),
                 personToEdit.getEmail(), personToEdit.getAddress(), personToEdit.getTags(),

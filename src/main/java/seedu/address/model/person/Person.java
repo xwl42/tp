@@ -26,6 +26,7 @@ public class Person {
     private final Address address;
     private final Set<Tag> tags = new HashSet<>();
     private final GithubUsername githubUsername;
+    private final LabAttendanceList labAttendanceList;
 
     /**
      * Every field must be present and not null.
@@ -40,6 +41,23 @@ public class Person {
         this.address = address;
         this.tags.addAll(tags);
         this.githubUsername = githubUsername;
+        this.labAttendanceList = new LabList();
+    }
+
+    /**
+     * Every field must be present and not null.
+     */
+    public Person(StudentId studentId, Name name, Phone phone, Email email,
+                  Address address, Set<Tag> tags, GithubUsername githubUsername, LabAttendanceList labAttendanceList) {
+        requireAllNonNull(studentId, name, phone, email, address, tags, githubUsername, labAttendanceList);
+        this.studentId = studentId;
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+        this.address = address;
+        this.tags.addAll(tags);
+        this.githubUsername = githubUsername;
+        this.labAttendanceList = labAttendanceList;
     }
 
     public StudentId getStudentId() {
@@ -72,6 +90,10 @@ public class Person {
 
     public GithubUsername getGithubUsername() {
         return githubUsername;
+    }
+
+    public LabAttendanceList getLabAttendanceList() {
+        return labAttendanceList;
     }
 
     /**
@@ -109,13 +131,14 @@ public class Person {
                 && email.equals(otherPerson.email)
                 && address.equals(otherPerson.address)
                 && tags.equals(otherPerson.tags)
-                && githubUsername.equals(otherPerson.githubUsername);
+                && githubUsername.equals(otherPerson.githubUsername)
+                && labAttendanceList.equals(otherPerson.labAttendanceList);
     }
 
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(studentId, name, phone, email, address, tags, githubUsername);
+        return Objects.hash(studentId, name, phone, email, address, tags, githubUsername, labAttendanceList);
     }
 
     @Override
@@ -128,6 +151,7 @@ public class Person {
                 .add("address", address)
                 .add("tags", tags)
                 .add("github username", githubUsername)
+                .add("lab attendance list", labAttendanceList)
                 .toString();
     }
 

@@ -4,14 +4,16 @@ import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_LAB_NUMBER;
 
 import seedu.address.commons.core.index.Index;
+import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
+import seedu.address.model.person.Person;
 
 /**
  * Marks the specified lab as attended of an existing person in the address book.
  */
 public class MarkAttendanceCommand extends Command {
-    public static final String COMMAND_WORD = "markA";
+    public static final String COMMAND_WORD = "marka";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Marks the specific lab of the person identified "
             + "by the index number used in the last person listing.\n"
@@ -20,7 +22,7 @@ public class MarkAttendanceCommand extends Command {
             + "Example: " + COMMAND_WORD + " 1 "
             + PREFIX_LAB_NUMBER + "1";
 
-    public static final String MESSAGE_NOT_IMPLEMENTED_YET = "Remark command not implemented yet";
+//    public static final String MESSAGE_MARK_ATTENDANCE_SUCCESS = "Lab %d marked as attended for student %d (%s)";
 
     public static final String MESSAGE_ARGUMENTS = "Index: %1$d, Lab Number: %2$d";
 

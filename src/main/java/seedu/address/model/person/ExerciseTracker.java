@@ -13,7 +13,7 @@ import seedu.address.commons.core.index.Index;
 public class ExerciseTracker {
 
     public static final String MESSAGE_CONSTRAINTS = "Exercise tracker takes in statuses";
-
+    public static final int NUMBER_OF_EXERCISES = 10;
     public final ArrayList<Status> statuses;
 
     /**
@@ -21,7 +21,7 @@ public class ExerciseTracker {
      */
     public ExerciseTracker() {
         this.statuses = new ArrayList<>(
-                Collections.nCopies(10, Status.NOT_DONE)
+                Collections.nCopies(NUMBER_OF_EXERCISES, Status.NOT_DONE)
         );
     }
     /**

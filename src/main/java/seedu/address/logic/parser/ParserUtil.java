@@ -18,6 +18,7 @@ import seedu.address.model.person.LabAttendanceList;
 import seedu.address.model.person.LabList;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Phone;
+import seedu.address.model.person.Status;
 import seedu.address.model.person.StudentId;
 import seedu.address.model.tag.Tag;
 
@@ -156,6 +157,23 @@ public class ParserUtil {
             throw new ParseException(GithubUsername.MESSAGE_CONSTRAINTS);
         }
         return new GithubUsername(trimmedGithubUsername);
+    }
+
+    /**
+     * Converts first letter of status to status object
+     * @param code first letter of status
+     * @return status represented by code
+     */
+    public static Status parseStatus(String code) {
+        switch (code.toUpperCase()) {
+        case "D": return Status.DONE;
+        case "N": return Status.NOT_DONE;
+        case "I": return Status.IN_PROGRESS;
+        case "O": return Status.OVERDUE;
+        default:
+            // fallback for full names
+            return Status.valueOf(code.toUpperCase());
+        }
     }
 
     /**

@@ -7,6 +7,7 @@ import seedu.address.logic.parser.ParserUtil;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
+import seedu.address.model.person.ExerciseTracker;
 import seedu.address.model.person.GithubUsername;
 import seedu.address.model.person.LabAttendanceList;
 import seedu.address.model.person.LabList;
@@ -36,6 +37,7 @@ public class PersonBuilder {
     private Email email;
     private Address address;
     private Set<Tag> tags;
+    private ExerciseTracker exerciseTracker;
     private GithubUsername githubUsername;
     private LabAttendanceList labAttendanceList;
 
@@ -49,6 +51,7 @@ public class PersonBuilder {
         email = new Email(DEFAULT_EMAIL);
         address = new Address(DEFAULT_ADDRESS);
         tags = new HashSet<>();
+        exerciseTracker = new ExerciseTracker();
         githubUsername = new GithubUsername(DEFAULT_GITHUB_USERNAME);
         labAttendanceList = new LabList();
     }
@@ -63,6 +66,7 @@ public class PersonBuilder {
         email = personToCopy.getEmail();
         address = personToCopy.getAddress();
         tags = new HashSet<>(personToCopy.getTags());
+        exerciseTracker = personToCopy.getExerciseTracker();
         githubUsername = personToCopy.getGithubUsername();
         labAttendanceList = personToCopy.getLabAttendanceList();
     }
@@ -135,7 +139,19 @@ public class PersonBuilder {
         return this;
     }
 
+    /**
+     * builds a person using the fields
+     * @return the person that is built
+     */
     public Person build() {
-        return new Person(studentId, name, phone, email, address, tags, githubUsername, labAttendanceList);
+        return new Person(studentId,
+                name,
+                phone,
+                email,
+                address,
+                tags,
+                githubUsername,
+                exerciseTracker,
+                labAttendanceList);
     }
 }

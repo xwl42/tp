@@ -27,6 +27,7 @@ public class Person {
     private final Set<Tag> tags = new HashSet<>();
     private final GithubUsername githubUsername;
     private final LabAttendanceList labAttendanceList;
+    private ExerciseTracker exerciseTracker;
 
     /**
      * Every field must be present and not null.
@@ -40,22 +41,24 @@ public class Person {
         this.email = email;
         this.address = address;
         this.tags.addAll(tags);
+        this.exerciseTracker = new ExerciseTracker();
         this.githubUsername = githubUsername;
         this.labAttendanceList = new LabList();
     }
 
     /**
-     * Every field must be present and not null.
+     * Initialises a new person object, but with a specific list of exercise statuses
      */
-    public Person(StudentId studentId, Name name, Phone phone, Email email,
-                  Address address, Set<Tag> tags, GithubUsername githubUsername, LabAttendanceList labAttendanceList) {
-        requireAllNonNull(studentId, name, phone, email, address, tags, githubUsername, labAttendanceList);
+    public Person(StudentId studentId, Name name, Phone phone, Email email, Address address, Set<Tag> tags,
+                  GithubUsername githubUsername, ExerciseTracker exerciseTracker, LabAttendanceList labAttendanceList) {
+        requireAllNonNull(name, phone, email, address, tags, githubUsername, exerciseTracker, labAttendanceList);
         this.studentId = studentId;
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
         this.tags.addAll(tags);
+        this.exerciseTracker = exerciseTracker;
         this.githubUsername = githubUsername;
         this.labAttendanceList = labAttendanceList;
     }
@@ -96,6 +99,10 @@ public class Person {
         return labAttendanceList;
     }
 
+    public ExerciseTracker getExerciseTracker() {
+        return exerciseTracker;
+    }
+
     /**
      * Returns true if both persons have the same name.
      * This defines a weaker notion of equality between two persons.
@@ -130,6 +137,7 @@ public class Person {
                 && phone.equals(otherPerson.phone)
                 && email.equals(otherPerson.email)
                 && address.equals(otherPerson.address)
+                && exerciseTracker.equals(otherPerson.exerciseTracker)
                 && tags.equals(otherPerson.tags)
                 && githubUsername.equals(otherPerson.githubUsername)
                 && labAttendanceList.equals(otherPerson.labAttendanceList);
@@ -138,7 +146,7 @@ public class Person {
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(studentId, name, phone, email, address, tags, githubUsername, labAttendanceList);
+        return Objects.hash(studentId, name, phone, email, address, tags, githubUsername, exerciseTracker, labAttendanceList);
     }
 
     @Override
@@ -151,8 +159,8 @@ public class Person {
                 .add("address", address)
                 .add("tags", tags)
                 .add("github username", githubUsername)
+                .add("exerciseStatuses", exerciseTracker)
                 .add("lab attendance list", labAttendanceList)
                 .toString();
     }
-
 }

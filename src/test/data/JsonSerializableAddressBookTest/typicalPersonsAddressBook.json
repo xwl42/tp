@@ -8,6 +8,18 @@
     "address" : "123, Jurong West Ave 6, #08-111",
     "tags" : [ "friends" ],
     "githubUsername":"Alice",
+    "exerciseStatuses": [
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE"
+    ],
     "labAttendanceList": "L1: N L2: N L3: N L4: N L5: N L6: N L7: N L8: N L9: N L10: N "
   }, {
     "studentId": "A1231231X",
@@ -17,6 +29,18 @@
     "address" : "311, Clementi Ave 2, #02-25",
     "tags" : [ "owesMoney", "friends" ],
     "githubUsername":"Benson",
+    "exerciseStatuses": [
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE"
+    ],
     "labAttendanceList": "L1: N L2: N L3: N L4: N L5: N L6: N L7: N L8: N L9: N L10: N "
   }, {
     "studentId": "A1231232X",
@@ -26,6 +50,18 @@
     "address" : "wall street",
     "tags" : [ ],
     "githubUsername":"Carl",
+    "exerciseStatuses": [
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE"
+    ],
     "labAttendanceList": "L1: N L2: N L3: N L4: N L5: N L6: N L7: N L8: N L9: N L10: N "
   }, {
     "studentId": "A1231233X",
@@ -35,6 +71,18 @@
     "address" : "10th street",
     "tags" : [ "friends" ],
     "githubUsername":"Daniel",
+    "exerciseStatuses": [
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE"
+    ],
     "labAttendanceList": "L1: N L2: N L3: N L4: N L5: N L6: N L7: N L8: N L9: N L10: N "
   }, {
     "studentId": "A1231234X",
@@ -44,6 +92,18 @@
     "address" : "michegan ave",
     "tags" : [ ],
     "githubUsername":"Elle",
+    "exerciseStatuses": [
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE"
+    ],
     "labAttendanceList": "L1: N L2: N L3: N L4: N L5: N L6: N L7: N L8: N L9: N L10: N "
   }, {
     "studentId": "A1231235X",
@@ -53,6 +113,18 @@
     "address" : "little tokyo",
     "tags" : [ ],
     "githubUsername":"Fiona",
+    "exerciseStatuses": [
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE"
+    ],
     "labAttendanceList": "L1: N L2: N L3: N L4: N L5: N L6: N L7: N L8: N L9: N L10: N "
   }, {
     "studentId": "A1231236X",
@@ -62,6 +134,18 @@
     "address" : "4th street",
     "tags" : [ ],
     "githubUsername":"George",
+    "exerciseStatuses": [
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE",
+      "NOT_DONE"
+    ],
     "labAttendanceList": "L1: N L2: N L3: N L4: N L5: N L6: N L7: N L8: N L9: N L10: N "
   } ]
 }

@@ -13,12 +13,14 @@ import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.logic.parser.ParserUtil;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
+import seedu.address.model.person.ExerciseTracker;
 import seedu.address.model.person.GithubUsername;
 import seedu.address.model.person.LabAttendanceList;
 import seedu.address.model.person.LabList;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
+import seedu.address.model.person.Status;
 import seedu.address.model.person.StudentId;
 import seedu.address.model.tag.Tag;
 
@@ -36,6 +38,7 @@ class JsonAdaptedPerson {
     private final String address;
     private final List<JsonAdaptedTag> tags = new ArrayList<>();
     private final String githubUsername;
+    private final List<String> exerciseStatuses = new ArrayList<>();
     private final String labAttendanceList;
 
     /**
@@ -43,21 +46,36 @@ class JsonAdaptedPerson {
      */
     @JsonCreator
     public JsonAdaptedPerson(@JsonProperty("studentId") String studentId,
-                             @JsonProperty("name") String name, @JsonProperty("phone") String phone,
-                             @JsonProperty("email") String email, @JsonProperty("address") String address,
+                             @JsonProperty("name") String name,
+                             @JsonProperty("phone") String phone,
+                             @JsonProperty("email") String email,
+                             @JsonProperty("address") String address,
                              @JsonProperty("tags") List<JsonAdaptedTag> tags,
                              @JsonProperty("githubUsername") String githubUsername,
+                             @JsonProperty("exerciseStatuses") List<String> exerciseStatuses,
                              @JsonProperty("labAttendanceList") String labAttendanceList) {
         this.studentId = studentId;
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
+        if (exerciseStatuses != null) {
+            this.exerciseStatuses.addAll(exerciseStatuses);
+        }
         if (tags != null) {
             this.tags.addAll(tags);
         }
         this.githubUsername = githubUsername;
         this.labAttendanceList = labAttendanceList;
+    }
+
+    /**
+     * Simplified constructor used in tests.
+     */
+    public JsonAdaptedPerson(String studentId, String name, String phone,
+                             String email, String address, List<JsonAdaptedTag> tags,
+                             String githubUsername) {
+        this(studentId, name, phone, email, address, tags, githubUsername, new ArrayList<>(), new LabList().toString());
     }
 
     /**
@@ -72,6 +90,12 @@ class JsonAdaptedPerson {
         tags.addAll(source.getTags().stream()
                 .map(JsonAdaptedTag::new)
                 .collect(Collectors.toList()));
+        exerciseStatuses.addAll(source
+                .getExerciseTracker()
+                .getStatuses()
+                .stream()
+                .map(Object::toString)
+                .collect(Collectors.toList()));
         githubUsername = source.getGithubUsername().value;
         labAttendanceList = source.getLabAttendanceList().toString();
     }
@@ -85,6 +109,13 @@ class JsonAdaptedPerson {
         final List<Tag> personTags = new ArrayList<>();
         for (JsonAdaptedTag tag : tags) {
             personTags.add(tag.toModelType());
+        }
+
+        final ArrayList<Status> exerciseStatusList = new ArrayList<>();
+        for (String stat : exerciseStatuses) {
+            if (!stat.isEmpty()) {
+                exerciseStatusList.add(ParserUtil.parseStatus(stat));
+            }
         }
 
         if (studentId == null) {
@@ -132,7 +163,7 @@ class JsonAdaptedPerson {
 
         if (githubUsername == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT,
-                                                            GithubUsername.class.getSimpleName()));
+                    GithubUsername.class.getSimpleName()));
         }
         if (!GithubUsername.isValidGithubUsername(githubUsername)) {
             throw new IllegalValueException(GithubUsername.MESSAGE_CONSTRAINTS);
@@ -150,6 +181,6 @@ class JsonAdaptedPerson {
         final LabAttendanceList modelLabAttendanceList = ParserUtil.parseLabAttendanceList(labAttendanceList);
 
         return new Person(modelStudentId, modelName, modelPhone, modelEmail,
-                modelAddress, modelTags, modelGithubUsername, modelLabAttendanceList);
+                modelAddress, modelTags, modelGithubUsername, new ExerciseTracker(exerciseStatusList), modelLabAttendanceList);
     }
 }

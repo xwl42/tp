@@ -22,6 +22,7 @@ import seedu.address.model.tag.Tag;
  * Contains utility methods for populating {@code AddressBook} with sample data.
  */
 public class SampleDataUtil {
+    public static final int NUMBER_OF_EXERCISES = 10;
     public static Person[] getSamplePersons() {
         return new Person[] {
             new Person(new StudentId("A1231230B"), new Name("Alex Yeoh"), new Phone("87438807"),
@@ -41,25 +42,25 @@ public class SampleDataUtil {
                     new Address("Blk 11 Ang Mo Kio Street 74, #11-04"),
                     getTagSet("neighbours"),
                     new GithubUsername("CharlotteOliveiro"),
-                    new ExerciseTracker(getExerciseStatuses(10))),
+                    new ExerciseTracker(getExerciseStatuses(NUMBER_OF_EXERCISES))),
             new Person(new StudentId("A1231233B"), new Name("David Li"), new Phone("91031282"),
                     new Email("lidavid@example.com"),
                     new Address("Blk 436 Serangoon Gardens Street 26, #16-43"),
                     getTagSet("family"),
                     new GithubUsername("DavidLi"),
-                    new ExerciseTracker(getExerciseStatuses(10))),
+                    new ExerciseTracker(getExerciseStatuses(NUMBER_OF_EXERCISES))),
             new Person(new StudentId("A1231234B"), new Name("Irfan Ibrahim"), new Phone("92492021"),
                     new Email("irfan@example.com"),
                     new Address("Blk 47 Tampines Street 20, #17-35"),
                     getTagSet("classmates"),
                     new GithubUsername("IrfanIbrahim"),
-                    new ExerciseTracker(getExerciseStatuses(10))),
+                    new ExerciseTracker(getExerciseStatuses(NUMBER_OF_EXERCISES))),
             new Person(new StudentId("A1231235B"), new Name("Roy Balakrishnan"), new Phone("92624417"),
                     new Email("royb@example.com"),
                     new Address("Blk 45 Aljunied Street 85, #11-31"),
                     getTagSet("colleagues"),
                     new GithubUsername("RoyBalakrishnan"),
-                    new ExerciseTracker(getExerciseStatuses(10)))
+                    new ExerciseTracker(getExerciseStatuses(NUMBER_OF_EXERCISES)))
         };
     }
 

@@ -158,6 +158,12 @@ public class ParserUtil {
         return new GithubUsername(trimmedGithubUsername);
     }
 
+    /**
+     * Parses a {@code String labAttendanceListString} into an {@code LabAttendanceList}.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws ParseException if the given {@code labAttendanceListString} is invalid.
+     */
     public static LabAttendanceList parseLabAttendanceList(String labAttendanceList) throws ParseException {
         requireNonNull(labAttendanceList);
         String trimmed = labAttendanceList.trim();

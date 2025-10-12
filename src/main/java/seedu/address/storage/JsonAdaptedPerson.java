@@ -144,7 +144,7 @@ class JsonAdaptedPerson {
                     LabAttendanceList.class.getSimpleName()));
         }
 
-        if(!LabList.isValidLabList(labAttendanceList)) {
+        if (!LabList.isValidLabList(labAttendanceList)) {
             throw new IllegalValueException(LabList.MESSAGE_CONSTRAINTS);
         }
         final LabAttendanceList modelLabAttendanceList = ParserUtil.parseLabAttendanceList(labAttendanceList);

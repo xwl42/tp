@@ -3,9 +3,14 @@ package seedu.address.testutil;
 import java.util.HashSet;
 import java.util.Set;
 
+import seedu.address.commons.exceptions.IllegalValueException;
+import seedu.address.logic.parser.ParserUtil;
+import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.GithubUsername;
+import seedu.address.model.person.LabAttendanceList;
+import seedu.address.model.person.LabList;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
@@ -32,6 +37,7 @@ public class PersonBuilder {
     private Address address;
     private Set<Tag> tags;
     private GithubUsername githubUsername;
+    private LabAttendanceList labAttendanceList;
 
     /**
      * Creates a {@code PersonBuilder} with the default details.
@@ -44,6 +50,7 @@ public class PersonBuilder {
         address = new Address(DEFAULT_ADDRESS);
         tags = new HashSet<>();
         githubUsername = new GithubUsername(DEFAULT_GITHUB_USERNAME);
+        labAttendanceList = new LabList();
     }
 
     /**
@@ -57,6 +64,7 @@ public class PersonBuilder {
         address = personToCopy.getAddress();
         tags = new HashSet<>(personToCopy.getTags());
         githubUsername = personToCopy.getGithubUsername();
+        labAttendanceList = personToCopy.getLabAttendanceList();
     }
 
     /**
@@ -115,7 +123,19 @@ public class PersonBuilder {
         return this;
     }
 
+    /**
+     * Sets the {@code LabAttendanceList} of the {@code Person} that we are building.
+     */
+    public PersonBuilder withLabAttendanceList(String labListString) {
+        try {
+            labAttendanceList = ParserUtil.parseLabAttendanceList(labListString);
+        } catch (ParseException e) {
+            throw new IllegalArgumentException("Invalid Lab Attendance List format"); // For developers
+        }
+        return this;
+    }
+
     public Person build() {
-        return new Person(studentId, name, phone, email, address, tags, githubUsername);
+        return new Person(studentId, name, phone, email, address, tags, githubUsername, labAttendanceList);
     }
 }

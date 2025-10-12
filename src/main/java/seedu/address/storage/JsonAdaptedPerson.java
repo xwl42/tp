@@ -139,6 +139,11 @@ class JsonAdaptedPerson {
         }
         final GithubUsername modelGithubUsername = new GithubUsername(githubUsername);
 
+        if (labAttendanceList == null) {
+            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT,
+                    LabAttendanceList.class.getSimpleName()));
+        }
+
         if(!LabList.isValidLabList(labAttendanceList)) {
             throw new IllegalValueException(LabList.MESSAGE_CONSTRAINTS);
         }

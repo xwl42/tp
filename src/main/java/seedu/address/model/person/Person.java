@@ -49,7 +49,7 @@ public class Person {
      * Initialises a new person object, but with a specific list of exercise statuses
      */
     public Person(StudentId studentId, Name name, Phone phone, Email email, Address address, Set<Tag> tags,
-                  GithubUsername githubUsername, ArrayList<Status> statuses) {
+                  GithubUsername githubUsername, ExerciseTracker exerciseTracker) {
         requireAllNonNull(name, phone, email, address, tags);
         this.studentId = studentId;
         this.name = name;
@@ -57,7 +57,7 @@ public class Person {
         this.email = email;
         this.address = address;
         this.tags.addAll(tags);
-        this.exerciseTracker = new ExerciseTracker(statuses);
+        this.exerciseTracker = exerciseTracker;
         this.githubUsername = githubUsername;
     }
 

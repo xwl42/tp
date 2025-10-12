@@ -13,6 +13,7 @@ import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.logic.parser.ParserUtil;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
+import seedu.address.model.person.ExerciseTracker;
 import seedu.address.model.person.GithubUsername;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
@@ -164,6 +165,6 @@ class JsonAdaptedPerson {
         final GithubUsername modelGithubUsername = new GithubUsername(githubUsername);
 
         return new Person(modelStudentId, modelName, modelPhone, modelEmail,
-                modelAddress, modelTags, modelGithubUsername, exerciseStatusList);
+                modelAddress, modelTags, modelGithubUsername, new ExerciseTracker(exerciseStatusList));
     }
 }

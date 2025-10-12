@@ -131,6 +131,6 @@ public class PersonBuilder {
                 address,
                 tags,
                 githubUsername,
-                exerciseTracker.getStatuses());
+                exerciseTracker);
     }
 }

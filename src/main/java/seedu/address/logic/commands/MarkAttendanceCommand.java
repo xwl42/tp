@@ -27,6 +27,8 @@ public class MarkAttendanceCommand extends Command {
             + PREFIX_LAB_NUMBER + "1";
 
     public static final String MESSAGE_MARK_ATTENDANCE_SUCCESS = "Lab %1$d marked as attended for Student: %2$s";
+    public static final String MESSAGE_FAILURE_ALREADY_ATTENDED = "Lab %1$d already marked as attended";
+    public static final String MESSAGE_FAILURE_INVALID_LAB_INDEX = "The lab index provided is invalid";
 
     public static final String MESSAGE_ARGUMENTS = "Index: %1$d, Lab Number: %2$d";
 
@@ -54,7 +56,13 @@ public class MarkAttendanceCommand extends Command {
 
         Person personToEdit = lastShownList.get(index.getZeroBased());
         LabAttendanceList labAttendanceList = personToEdit.getLabAttendanceList();
-        labAttendanceList.markLabAsAttended(labNumber.getZeroBased());
+        try {
+            labAttendanceList.markLabAsAttended(labNumber.getZeroBased());
+        } catch (IndexOutOfBoundsException iob) {
+            throw new CommandException(MESSAGE_FAILURE_INVALID_LAB_INDEX);
+        } catch (IllegalStateException ise) {
+            throw new CommandException(String.format(MESSAGE_FAILURE_ALREADY_ATTENDED, labNumber.getOneBased()));
+        }
         Person editedPerson = new Person(
                 personToEdit.getStudentId(), personToEdit.getName(), personToEdit.getPhone(),
                 personToEdit.getEmail(), personToEdit.getAddress(), personToEdit.getTags(),

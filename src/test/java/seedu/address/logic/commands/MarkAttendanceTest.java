@@ -2,8 +2,7 @@ package seedu.address.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
-import static seedu.address.logic.commands.MarkAttendanceCommand.MESSAGE_ARGUMENTS;
+import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_LAB;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_LAB;
@@ -12,18 +11,37 @@ import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.address.logic.Messages;
+import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
+import seedu.address.model.person.LabAttendanceList;
+import seedu.address.model.person.LabList;
+import seedu.address.model.person.Person;
+import seedu.address.testutil.PersonBuilder;
 
 public class MarkAttendanceTest {
 
     private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
     @Test
-    public void execute() {
-        assertCommandFailure(new MarkAttendanceCommand(INDEX_FIRST_PERSON, INDEX_FIRST_LAB), model,
-                String.format(MESSAGE_ARGUMENTS, INDEX_FIRST_PERSON.getOneBased(), INDEX_FIRST_LAB.getOneBased()));
+    public void execute_markLab1_success() {
+        Person firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        LabAttendanceList labAttendanceList = new LabList();
+        labAttendanceList.markLabAsAttended(0);
+        Person editedPerson = new PersonBuilder(firstPerson)
+                .withLabAttendanceList(labAttendanceList.toString()).build();
+
+        MarkAttendanceCommand markAttendanceCommand = new MarkAttendanceCommand(INDEX_FIRST_PERSON, INDEX_FIRST_LAB);
+
+        String expectedMessage = String.format(MarkAttendanceCommand.MESSAGE_MARK_ATTENDANCE_SUCCESS,
+                INDEX_FIRST_LAB.getOneBased(), Messages.format(editedPerson));
+
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedModel.setPerson(firstPerson, editedPerson);
+
+        assertCommandSuccess(markAttendanceCommand, model, expectedMessage, expectedModel);
     }
 
     @Test

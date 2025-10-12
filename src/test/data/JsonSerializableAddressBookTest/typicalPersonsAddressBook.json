@@ -53,7 +53,7 @@
     "address" : "little tokyo",
     "tags" : [ ],
     "githubUsername":"Fiona",
-    "labAttendanceList": "L1: N L2: N L3: N L4: N L5: N L6: N L7: N L8: N L9: N L10: N "
+    "labAttendanceList": "L1: N L2: N L3: N L4: N L5: N L6: N L7: N L8: N L9: N L10: N"
   }, {
     "studentId": "A1231236X",
     "name" : "George Best",
@@ -62,6 +62,6 @@
     "address" : "4th street",
     "tags" : [ ],
     "githubUsername":"George",
-    "labAttendanceList": "L1: N L2: N L3: N L4: N L5: N L6: N L7: N L8: N L9: N L10: N "
+    "labAttendanceList": "L1: N L2: N L3: N L4: N L5: N L6: N L7: N L8: N L9: N L10: N"
   } ]
 }

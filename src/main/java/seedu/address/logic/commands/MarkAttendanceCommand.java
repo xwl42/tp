@@ -2,11 +2,15 @@ package seedu.address.logic.commands;
 
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_LAB_NUMBER;
+import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
+
+import java.util.List;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
+import seedu.address.model.person.LabAttendanceList;
 import seedu.address.model.person.Person;
 
 /**
@@ -22,7 +26,7 @@ public class MarkAttendanceCommand extends Command {
             + "Example: " + COMMAND_WORD + " 1 "
             + PREFIX_LAB_NUMBER + "1";
 
-//    public static final String MESSAGE_MARK_ATTENDANCE_SUCCESS = "Lab %d marked as attended for student %d (%s)";
+    public static final String MESSAGE_MARK_ATTENDANCE_SUCCESS = "Lab %1$d marked as attended for Student: %2$s";
 
     public static final String MESSAGE_ARGUMENTS = "Index: %1$d, Lab Number: %2$d";
 
@@ -42,8 +46,24 @@ public class MarkAttendanceCommand extends Command {
 
     @Override
     public CommandResult execute(Model model) throws CommandException {
-        throw new CommandException(
-                String.format(MESSAGE_ARGUMENTS, index.getOneBased(), labNumber.getOneBased()));
+        List<Person> lastShownList = model.getFilteredPersonList();
+
+        if (index.getZeroBased() >= lastShownList.size()) {
+            throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        }
+
+        Person personToEdit = lastShownList.get(index.getZeroBased());
+        LabAttendanceList labAttendanceList = personToEdit.getLabAttendanceList();
+        labAttendanceList.markLabAsAttended(labNumber.getZeroBased());
+        Person editedPerson = new Person(
+                personToEdit.getStudentId(), personToEdit.getName(), personToEdit.getPhone(),
+                personToEdit.getEmail(), personToEdit.getAddress(), personToEdit.getTags(),
+                personToEdit.getGithubUsername(), labAttendanceList);
+
+        model.setPerson(personToEdit, editedPerson);
+        model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+
+        return new CommandResult(generateSuccessMessage(editedPerson));
     }
 
     @Override
@@ -60,6 +80,15 @@ public class MarkAttendanceCommand extends Command {
         MarkAttendanceCommand otherCommand = (MarkAttendanceCommand) other;
         return index.equals(otherCommand.index)
                 && labNumber.equals(otherCommand.labNumber);
+    }
+
+    /**
+     * Generates a command execution success message based on whether
+     * the remark is added to or removed from
+     * {@code personToEdit}.
+     */
+    private String generateSuccessMessage(Person personToEdit) {
+        return String.format(MESSAGE_MARK_ATTENDANCE_SUCCESS, labNumber.getOneBased(), Messages.format(personToEdit));
     }
 
 

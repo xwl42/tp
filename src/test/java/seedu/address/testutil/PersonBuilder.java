@@ -3,7 +3,6 @@ package seedu.address.testutil;
 import java.util.HashSet;
 import java.util.Set;
 
-import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.ExerciseTracker;
 import seedu.address.model.person.GithubUsername;
@@ -30,7 +29,6 @@ public class PersonBuilder {
     private Name name;
     private Phone phone;
     private Email email;
-    private Address address;
     private Set<Tag> tags;
     private ExerciseTracker exerciseTracker;
     private GithubUsername githubUsername;
@@ -43,7 +41,6 @@ public class PersonBuilder {
         name = new Name(DEFAULT_NAME);
         phone = new Phone(DEFAULT_PHONE);
         email = new Email(DEFAULT_EMAIL);
-        address = new Address(DEFAULT_ADDRESS);
         tags = new HashSet<>();
         exerciseTracker = new ExerciseTracker();
         githubUsername = new GithubUsername(DEFAULT_GITHUB_USERNAME);
@@ -57,7 +54,6 @@ public class PersonBuilder {
         name = personToCopy.getName();
         phone = personToCopy.getPhone();
         email = personToCopy.getEmail();
-        address = personToCopy.getAddress();
         tags = new HashSet<>(personToCopy.getTags());
         exerciseTracker = personToCopy.getExerciseTracker();
         githubUsername = personToCopy.getGithubUsername();
@@ -84,14 +80,6 @@ public class PersonBuilder {
      */
     public PersonBuilder withTags(String ... tags) {
         this.tags = SampleDataUtil.getTagSet(tags);
-        return this;
-    }
-
-    /**
-     * Sets the {@code Address} of the {@code Person} that we are building.
-     */
-    public PersonBuilder withAddress(String address) {
-        this.address = new Address(address);
         return this;
     }
 
@@ -128,7 +116,6 @@ public class PersonBuilder {
                 name,
                 phone,
                 email,
-                address,
                 tags,
                 githubUsername,
                 exerciseTracker);

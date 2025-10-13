@@ -14,7 +14,6 @@ import java.util.stream.Stream;
 
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
-import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.GithubUsername;
 import seedu.address.model.person.Name;
@@ -45,17 +44,16 @@ public class AddCommandParser implements Parser<AddCommand> {
         }
 
         argMultimap.verifyNoDuplicatePrefixesFor(
-                PREFIX_STUDENTID, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS, PREFIX_GITHUB_USERNAME);
+                PREFIX_STUDENTID, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_GITHUB_USERNAME);
         StudentId studentId = ParserUtil.parseStudentId(argMultimap.getValue(PREFIX_STUDENTID).get());
         Name name = ParserUtil.parseName(argMultimap.getValue(PREFIX_NAME).get());
         Phone phone = ParserUtil.parsePhone(argMultimap.getValue(PREFIX_PHONE).get());
         Email email = ParserUtil.parseEmail(argMultimap.getValue(PREFIX_EMAIL).get());
-        Address address = ParserUtil.parseAddress(argMultimap.getValue(PREFIX_ADDRESS).get());
         Set<Tag> tagList = ParserUtil.parseTags(argMultimap.getAllValues(PREFIX_TAG));
         GithubUsername githubUsername = ParserUtil.parseGithubUsername(argMultimap.getValue(PREFIX_GITHUB_USERNAME)
                                                                                     .get());
 
-        Person person = new Person(studentId, name, phone, email, address, tagList, githubUsername);
+        Person person = new Person(studentId, name, phone, email, tagList, githubUsername);
 
         return new AddCommand(person);
     }

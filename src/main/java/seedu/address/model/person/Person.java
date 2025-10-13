@@ -21,8 +21,6 @@ public class Person {
     private final Phone phone;
     private final Email email;
 
-    // Data fields
-    private final Address address;
     private final Set<Tag> tags = new HashSet<>();
     private final GithubUsername githubUsername;
 
@@ -32,13 +30,12 @@ public class Person {
      * Every field must be present and not null.
      */
     public Person(StudentId studentId, Name name, Phone phone, Email email,
-                  Address address, Set<Tag> tags, GithubUsername githubUsername) {
-        requireAllNonNull(studentId, name, phone, email, address, tags, githubUsername);
+                  Set<Tag> tags, GithubUsername githubUsername) {
+        requireAllNonNull(studentId, name, phone, email, tags, githubUsername);
         this.studentId = studentId;
         this.name = name;
         this.phone = phone;
         this.email = email;
-        this.address = address;
         this.tags.addAll(tags);
         this.exerciseTracker = new ExerciseTracker();
         this.githubUsername = githubUsername;
@@ -47,14 +44,13 @@ public class Person {
     /**
      * Initialises a new person object, but with a specific list of exercise statuses
      */
-    public Person(StudentId studentId, Name name, Phone phone, Email email, Address address, Set<Tag> tags,
+    public Person(StudentId studentId, Name name, Phone phone, Email email, Set<Tag> tags,
                   GithubUsername githubUsername, ExerciseTracker exerciseTracker) {
-        requireAllNonNull(name, phone, email, address, tags);
+        requireAllNonNull(name, phone, email, tags);
         this.studentId = studentId;
         this.name = name;
         this.phone = phone;
         this.email = email;
-        this.address = address;
         this.tags.addAll(tags);
         this.exerciseTracker = exerciseTracker;
         this.githubUsername = githubUsername;
@@ -74,10 +70,6 @@ public class Person {
 
     public Email getEmail() {
         return email;
-    }
-
-    public Address getAddress() {
-        return address;
     }
 
     /**
@@ -125,7 +117,6 @@ public class Person {
                 && name.equals(otherPerson.name)
                 && phone.equals(otherPerson.phone)
                 && email.equals(otherPerson.email)
-                && address.equals(otherPerson.address)
                 && exerciseTracker.equals(otherPerson.exerciseTracker)
                 && tags.equals(otherPerson.tags)
                 && githubUsername.equals(otherPerson.githubUsername);
@@ -135,7 +126,7 @@ public class Person {
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(studentId, name, phone, email, address, tags, githubUsername, exerciseTracker);
+        return Objects.hash(studentId, name, phone, email, tags, githubUsername, exerciseTracker);
     }
 
     @Override
@@ -146,7 +137,6 @@ public class Person {
                 .append(", name=").append(name)
                 .append(", phone=").append(phone)
                 .append(", email=").append(email)
-                .append(", address=").append(address)
                 .append(", tags=").append(tags)
                 .append(", github username=").append(githubUsername)
                 .append(", exerciseStatuses=").append(exerciseTracker)

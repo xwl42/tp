@@ -162,6 +162,10 @@ public class AddCommandParserTest {
         // invalid address
         assertParseFailure(parser, validExpectedPersonString + INVALID_ADDRESS_DESC,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_ADDRESS));
+
+        // invalid address
+        assertParseFailure(parser, validExpectedPersonString + INVALID_GITHUB_USERNAME_DESC,
+                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_GITHUB_USERNAME));
     }
 
     @Test

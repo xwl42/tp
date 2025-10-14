@@ -95,8 +95,8 @@ public class TypicalPersons {
             .withLabAttendanceList(new LabList().toString())
             .build();
     public static final Person IDA = new PersonBuilder().withStudentId("A1231238X")
-            .withName("Ida Mueller").
-            withPhone("8482131")
+            .withName("Ida Mueller")
+            .withPhone("8482131")
             .withEmail("hans@example.com")
             .withAddress("chicago ave")
             .withGithubUsername("Ida")
@@ -117,8 +117,8 @@ public class TypicalPersons {
             .withName(VALID_NAME_BOB)
             .withPhone(VALID_PHONE_BOB)
             .withEmail(VALID_EMAIL_BOB)
-            .withAddress(VALID_ADDRESS_BOB).
-            withTags(VALID_TAG_HUSBAND, VALID_TAG_FRIEND)
+            .withAddress(VALID_ADDRESS_BOB)
+            .withTags(VALID_TAG_HUSBAND, VALID_TAG_FRIEND)
             .withGithubUsername(VALID_GITHUB_USERNAME_BOB)
             .withLabAttendanceList(new LabList().toString())
             .build();

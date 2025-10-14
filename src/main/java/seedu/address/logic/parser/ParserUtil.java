@@ -1,7 +1,7 @@
 package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.address.logic.parser.MarkExerciseCommandParser.INVALID_STATUES_FORMAT;
+import static seedu.address.logic.parser.MarkExerciseCommandParser.INVALID_STATUS_FORMAT;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -186,7 +186,7 @@ public class ParserUtil {
         case "I": return Status.IN_PROGRESS;
         case "O": return Status.OVERDUE;
         default:
-            throw new ParseException(INVALID_STATUES_FORMAT + Arrays.toString(Status.values()));
+            throw new ParseException(INVALID_STATUS_FORMAT + Arrays.toString(Status.values()));
         }
     }
 

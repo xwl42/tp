@@ -16,7 +16,7 @@ import seedu.address.model.person.Status;
  * Parser of the mark exercise command
  */
 public class MarkExerciseCommandParser implements Parser<MarkExerciseCommand> {
-    public static final String INVALID_STATUES_FORMAT = "Invalid status. Must be one of: ";
+    public static final String INVALID_STATUS_FORMAT = "Invalid status. Must be one of: ";
     private static final String EMPTY_PREFIX_FORMAT = "Prefix %s : has empty value!";
 
     /**
@@ -27,7 +27,7 @@ public class MarkExerciseCommandParser implements Parser<MarkExerciseCommand> {
      */
     public MarkExerciseCommand parse(String args) throws ParseException {
         ArgumentMultimap argMultimap =
-                ArgumentTokenizer.tokenize(args, PREFIX_EXERCISE_INDEX, PREFIX_STATUS);;
+                ArgumentTokenizer.tokenize(args, PREFIX_EXERCISE_INDEX, PREFIX_STATUS);
         Index personIndex;
         Index exerciseIndex;
         Status status;
@@ -51,7 +51,7 @@ public class MarkExerciseCommandParser implements Parser<MarkExerciseCommand> {
         try {
             status = ParserUtil.parseStatus(statusString.trim().toUpperCase());
         } catch (IllegalArgumentException e) {
-            throw new ParseException(INVALID_STATUES_FORMAT
+            throw new ParseException(INVALID_STATUS_FORMAT
                     + Arrays.toString(Status.values()));
         }
 

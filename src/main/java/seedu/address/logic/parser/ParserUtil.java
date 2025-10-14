@@ -12,6 +12,10 @@ import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.GithubUsername;
+import seedu.address.model.person.Lab;
+import seedu.address.model.person.LabAttendance;
+import seedu.address.model.person.LabAttendanceList;
+import seedu.address.model.person.LabList;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.Status;
@@ -170,5 +174,32 @@ public class ParserUtil {
             // fallback for full names
             return Status.valueOf(code.toUpperCase());
         }
+    }
+
+    /**
+     * Parses a {@code String labAttendanceListString} into an {@code LabAttendanceList}.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws ParseException if the given {@code labAttendanceListString} is invalid.
+     */
+    public static LabAttendanceList parseLabAttendanceList(String labAttendanceList) throws ParseException {
+        requireNonNull(labAttendanceList);
+        String trimmed = labAttendanceList.trim();
+        if (!LabList.isValidLabList(trimmed)) {
+            throw new ParseException(LabList.MESSAGE_CONSTRAINTS);
+        }
+
+        LabAttendance[] labs = new LabAttendance[LabList.NUMBER_OF_LABS];
+        String[] parts = trimmed.split("\\s+");
+
+        for (int i = 0; i < labs.length; i++) {
+            String status = parts[i * 2 + 1];
+
+            labs[i] = new Lab(i + 1);
+            if (status.equals("Y")) {
+                labs[i].markAsAttended();
+            }
+        }
+        return new LabList(labs);
     }
 }

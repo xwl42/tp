@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import seedu.address.model.AddressBook;
+import seedu.address.model.person.LabList;
 import seedu.address.model.person.Person;
 
 /**
@@ -32,6 +33,7 @@ public class TypicalPersons {
             .withPhone("94351253")
             .withTags("friends")
             .withGithubUsername("Alice")
+            .withLabAttendanceList(new LabList().toString())
             .build();
     public static final Person BENSON = new PersonBuilder().withStudentId("A1231231X")
             .withName("Benson Meier")
@@ -39,38 +41,49 @@ public class TypicalPersons {
             .withEmail("johnd@example.com")
             .withPhone("98765432")
             .withGithubUsername("Benson")
+            .withLabAttendanceList(new LabList().toString())
             .withTags("owesMoney", "friends").build();
     public static final Person CARL = new PersonBuilder().withStudentId("A1231232X")
             .withName("Carl Kurz")
             .withPhone("95352563")
             .withEmail("heinz@example.com")
             .withAddress("wall street")
-            .withGithubUsername("Carl").build();
+            .withGithubUsername("Carl")
+            .withLabAttendanceList(new LabList().toString())
+            .build();
     public static final Person DANIEL = new PersonBuilder().withStudentId("A1231233X")
             .withName("Daniel Meier")
             .withPhone("87652533")
             .withEmail("cornelia@example.com")
             .withAddress("10th street")
             .withGithubUsername("Daniel")
-            .withTags("friends").build();
+            .withTags("friends")
+            .withLabAttendanceList(new LabList().toString())
+            .build();
     public static final Person ELLE = new PersonBuilder().withStudentId("A1231234X")
             .withName("Elle Meyer")
             .withPhone("9482224")
             .withEmail("werner@example.com")
             .withAddress("michegan ave")
-            .withGithubUsername("Elle").build();
+            .withGithubUsername("Elle")
+            .withLabAttendanceList(new LabList().toString())
+            .build();
     public static final Person FIONA = new PersonBuilder().withStudentId("A1231235X")
             .withName("Fiona Kunz")
             .withPhone("9482427")
             .withEmail("lydia@example.com")
             .withAddress("little tokyo")
-            .withGithubUsername("Fiona").build();
+            .withGithubUsername("Fiona")
+            .withLabAttendanceList(new LabList().toString())
+            .build();
     public static final Person GEORGE = new PersonBuilder().withStudentId("A1231236X")
             .withName("George Best")
             .withPhone("9482442")
             .withEmail("anna@example.com")
             .withAddress("4th street")
-            .withGithubUsername("George").build();
+            .withGithubUsername("George")
+            .withLabAttendanceList(new LabList().toString())
+            .build();
 
     // Manually added
     public static final Person HOON = new PersonBuilder().withStudentId("A1231237X")
@@ -78,13 +91,17 @@ public class TypicalPersons {
             .withPhone("8482424")
             .withEmail("stefan@example.com")
             .withAddress("little india")
-            .withGithubUsername("Hoon").build();
+            .withGithubUsername("Hoon")
+            .withLabAttendanceList(new LabList().toString())
+            .build();
     public static final Person IDA = new PersonBuilder().withStudentId("A1231238X")
             .withName("Ida Mueller").
             withPhone("8482131")
             .withEmail("hans@example.com")
             .withAddress("chicago ave")
-            .withGithubUsername("Ida").build();
+            .withGithubUsername("Ida")
+            .withLabAttendanceList(new LabList().toString())
+            .build();
 
     // Manually added - Person's details found in {@code CommandTestUtil}
     public static final Person AMY = new PersonBuilder().withStudentId("A1231239X")
@@ -93,14 +110,18 @@ public class TypicalPersons {
             .withEmail(VALID_EMAIL_AMY)
             .withAddress(VALID_ADDRESS_AMY)
             .withTags(VALID_TAG_FRIEND)
-            .withGithubUsername(VALID_GITHUB_USERNAME_AMY).build();
+            .withGithubUsername(VALID_GITHUB_USERNAME_AMY)
+            .withLabAttendanceList(new LabList().toString())
+            .build();
     public static final Person BOB = new PersonBuilder().withStudentId("A1231240X")
             .withName(VALID_NAME_BOB)
             .withPhone(VALID_PHONE_BOB)
             .withEmail(VALID_EMAIL_BOB)
             .withAddress(VALID_ADDRESS_BOB).
             withTags(VALID_TAG_HUSBAND, VALID_TAG_FRIEND)
-            .withGithubUsername(VALID_GITHUB_USERNAME_BOB).build();
+            .withGithubUsername(VALID_GITHUB_USERNAME_BOB)
+            .withLabAttendanceList(new LabList().toString())
+            .build();
 
     public static final String KEYWORD_MATCHING_MEIER = "Meier"; // A keyword that matches MEIER
 

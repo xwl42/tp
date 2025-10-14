@@ -1,7 +1,9 @@
 package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.parser.MarkExerciseCommandParser.INVALID_STATUES_FORMAT;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -41,7 +43,18 @@ public class ParserUtil {
         }
         return Index.fromOneBased(Integer.parseInt(trimmedIndex));
     }
-
+    /**
+     * Parses {@code zeroBasedIndex} into an {@code Index} and returns it. Leading and trailing whitespaces will be
+     * trimmed.
+     * @throws ParseException if the specified index is invalid (not non-zero unsigned integer).
+     */
+    public static Index parseZeroBasedIndex(String zeroBasedIndex) throws ParseException {
+        String trimmedIndex = zeroBasedIndex.trim();
+        if (!StringUtil.isNonZeroUnsignedInteger(trimmedIndex)) {
+            throw new ParseException(MESSAGE_INVALID_INDEX);
+        }
+        return Index.fromZeroBased(Integer.parseInt(trimmedIndex));
+    }
     /**
      * Parses a {@code String studentId} into a {@code StudentId}.
      * Leading and trailing whitespaces will be trimmed.
@@ -164,15 +177,14 @@ public class ParserUtil {
      * @param code first letter of status
      * @return status represented by code
      */
-    public static Status parseStatus(String code) {
+    public static Status parseStatus(String code) throws ParseException {
         switch (code.toUpperCase()) {
         case "D": return Status.DONE;
         case "N": return Status.NOT_DONE;
         case "I": return Status.IN_PROGRESS;
         case "O": return Status.OVERDUE;
         default:
-            // fallback for full names
-            return Status.valueOf(code.toUpperCase());
+            throw new ParseException(INVALID_STATUES_FORMAT + Arrays.toString(Status.values()));
         }
     }
 

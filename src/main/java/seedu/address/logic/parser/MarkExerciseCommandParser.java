@@ -16,7 +16,8 @@ import seedu.address.model.person.Status;
  * Parser of the mark exercise command
  */
 public class MarkExerciseCommandParser implements Parser<MarkExerciseCommand> {
-    private static final String INVALID_STATUES_FORMAT = "Invalid status. Must be one of: ";
+    public static final String INVALID_STATUES_FORMAT = "Invalid status. Must be one of: ";
+    private static final String EMPTY_PREFIX_FORMAT = "Prefix %s : has empty value!";
 
     /**
      * Parse the user input into a mark exercise command
@@ -26,8 +27,7 @@ public class MarkExerciseCommandParser implements Parser<MarkExerciseCommand> {
      */
     public MarkExerciseCommand parse(String args) throws ParseException {
         ArgumentMultimap argMultimap =
-                ArgumentTokenizer.tokenize(args, PREFIX_EXERCISE_INDEX, PREFIX_STATUS);
-
+                ArgumentTokenizer.tokenize(args, PREFIX_EXERCISE_INDEX, PREFIX_STATUS);;
         Index personIndex;
         Index exerciseIndex;
         Status status;
@@ -36,10 +36,14 @@ public class MarkExerciseCommandParser implements Parser<MarkExerciseCommand> {
         // Parse the person index (from the command preamble)
         try {
             personIndex = ParserUtil.parseIndex(argMultimap.getPreamble());
-            exerciseIndex = Index.fromZeroBased(
-                    Integer.parseInt(argMultimap.getValue(PREFIX_EXERCISE_INDEX).get())
+            exerciseIndex = ParserUtil.parseZeroBasedIndex(
+                    argMultimap.getValue(PREFIX_EXERCISE_INDEX).orElseThrow(() -> new ParseException(
+                            String.format(EMPTY_PREFIX_FORMAT, PREFIX_STATUS)
+                    ))
             );
-            statusString = argMultimap.getValue(PREFIX_STATUS).get();
+            statusString = argMultimap.getValue(PREFIX_STATUS).orElseThrow(() -> new ParseException(
+                    String.format(EMPTY_PREFIX_FORMAT, PREFIX_STATUS)
+            ));
         } catch (IllegalValueException ive) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                     MarkExerciseCommand.MESSAGE_USAGE), ive);

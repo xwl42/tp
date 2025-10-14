@@ -163,7 +163,9 @@ Examples:
 
 Clears **all** entries from the address book, leaving it completely empty.
 <box type="warning" seamless>
-**Caution:** This command will **permanently** remove all entries from the address book.
+
+**Caution:**
+This command will **permanently** remove all entries from the address book.
 </box>
 
 Format: `clear`

@@ -3,6 +3,7 @@ package seedu.address.logic.parser;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.MarkExerciseCommandParser.INVALID_STATUES_FORMAT;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -13,6 +14,7 @@ import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
+import seedu.address.model.person.ExerciseTracker;
 import seedu.address.model.person.GithubUsername;
 import seedu.address.model.person.Lab;
 import seedu.address.model.person.LabAttendance;
@@ -213,5 +215,32 @@ public class ParserUtil {
             }
         }
         return new LabList(labs);
+    }
+    /**
+     * Parses a {@code String exerciseTrackerString} into an {@code ExerciseTracker}.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws ParseException if the given {@code exerciseTrackerString} is invalid.
+     */
+    public static ExerciseTracker parseExerciseTracker(String exerciseTrackerString) throws ParseException {
+        requireNonNull(exerciseTrackerString);
+        String trimmed = exerciseTrackerString.trim();
+        if (!ExerciseTracker.isValidExerciseTracker(trimmed)) {
+            throw new ParseException(ExerciseTracker.MESSAGE_CONSTRAINTS);
+        }
+        Status[] statuses = new Status[ExerciseTracker.NUMBER_OF_EXERCISES];
+        String[] parts = trimmed.split("\\s+");
+
+        for (int i = 0; i < statuses.length; i++) {
+            // Assuming format like: "ex 1 DONE ex 2 NOT_DONE ..." or similar
+            String statusString = parts[i * 2 + 1];
+
+            try {
+                statuses[i] = Status.valueOf(statusString);
+            } catch (IllegalArgumentException e) {
+                throw new ParseException("Invalid status: " + statusString);
+            }
+        }
+        return new ExerciseTracker(new ArrayList<>(Arrays.asList(statuses)));
     }
 }

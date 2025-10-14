@@ -283,7 +283,9 @@ public class EditCommand extends Command {
                     && Objects.equals(email, otherEditPersonDescriptor.email)
                     && Objects.equals(address, otherEditPersonDescriptor.address)
                     && Objects.equals(tags, otherEditPersonDescriptor.tags)
-                    && Objects.equals(githubUsername, otherEditPersonDescriptor.githubUsername);
+                    && Objects.equals(githubUsername, otherEditPersonDescriptor.githubUsername)
+                    && Objects.equals(exerciseTracker, otherEditPersonDescriptor.exerciseTracker)
+                    && Objects.equals(labAttendanceList, otherEditPersonDescriptor.labAttendanceList);
         }
 
         @Override
@@ -296,6 +298,8 @@ public class EditCommand extends Command {
                     .add("address", address)
                     .add("tags", tags)
                     .add("githubUsername", githubUsername)
+                    .add("exerciseTracker", exerciseTracker)
+                    .add("labAttendanceList", labAttendanceList)
                     .toString();
         }
     }

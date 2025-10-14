@@ -225,22 +225,21 @@ public class ParserUtil {
     public static ExerciseTracker parseExerciseTracker(String exerciseTrackerString) throws ParseException {
         requireNonNull(exerciseTrackerString);
         String trimmed = exerciseTrackerString.trim();
+
         if (!ExerciseTracker.isValidExerciseTracker(trimmed)) {
             throw new ParseException(ExerciseTracker.MESSAGE_CONSTRAINTS);
         }
+
         Status[] statuses = new Status[ExerciseTracker.NUMBER_OF_EXERCISES];
         String[] parts = trimmed.split("\\s+");
 
-        for (int i = 0; i < statuses.length; i++) {
-            // Assuming format like: "ex 1 DONE ex 2 NOT_DONE ..." or similar
-            String statusString = parts[i * 2 + 1];
-
-            try {
-                statuses[i] = Status.valueOf(statusString);
-            } catch (IllegalArgumentException e) {
-                throw new ParseException("Invalid status: " + statusString);
-            }
+        // Now we have 3 tokens per exercise: "ex", "0:", "N"
+        for (int i = 0; i < ExerciseTracker.NUMBER_OF_EXERCISES; i++) {
+            String statusString = parts[i * 3 + 2];
+            statuses[i] = parseStatus(statusString);
         }
+
         return new ExerciseTracker(new ArrayList<>(Arrays.asList(statuses)));
     }
+
 }

@@ -162,7 +162,7 @@ Examples:
 ### Clearing all entries : `clear`
 
 Clears **all** entries from the address book, leaving it completely empty.
-<box type="caution" seamless>
+<box type="warning" seamless>
 **Caution:** This command will **permanently** remove all entries from the address book.
 </box>
 
@@ -220,3 +220,4 @@ Action     | Format, Examples
 **Find**   | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
 **List**   | `list`
 **Help**   | `help`
+**Mark Attendance** | `marka INDEX l/LABNUMBER` <br> e.g. `marka 2 l/7`

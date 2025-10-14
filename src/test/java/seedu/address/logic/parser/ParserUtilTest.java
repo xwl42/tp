@@ -28,6 +28,7 @@ public class ParserUtilTest {
     private static final String INVALID_ADDRESS = " ";
     private static final String INVALID_EMAIL = "example.com";
     private static final String INVALID_TAG = "#friend";
+    private static final String INVALID_GITHUB_USERNAME = "--ab";
 
     private static final String VALID_STUDENTID = "A1231230T";
     private static final String VALID_NAME = "Rachel Walker";
@@ -36,6 +37,8 @@ public class ParserUtilTest {
     private static final String VALID_EMAIL = "rachel@example.com";
     private static final String VALID_TAG_1 = "friend";
     private static final String VALID_TAG_2 = "neighbour";
+    private static final String VALID_GITHUB_USERNAME = "TestUsername";
+
 
     private static final String WHITESPACE = " \t\r\n";
 
@@ -222,4 +225,31 @@ public class ParserUtilTest {
 
         assertEquals(expectedTagSet, actualTagSet);
     }
+
+    @Test
+    public void parseGithubUsername_null_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> ParserUtil.parseGithubUsername((String) null));
+    }
+
+    @Test
+    public void parseGithubUsername_invalidValue_throwsParseException() {
+        // invalid format (e.g. starts with a dash or double dash)
+        assertThrows(ParseException.class, () -> ParserUtil.parseGithubUsername(INVALID_GITHUB_USERNAME));
+    }
+
+    @Test
+    public void parseGithubUsername_validValueWithoutWhitespace_returnsGithubUsername() throws Exception {
+        seedu.address.model.person.GithubUsername expectedGithubUsername =
+                new seedu.address.model.person.GithubUsername(VALID_GITHUB_USERNAME);
+        assertEquals(expectedGithubUsername, ParserUtil.parseGithubUsername(VALID_GITHUB_USERNAME));
+    }
+
+    @Test
+    public void parseGithubUsername_validValueWithWhitespace_returnsTrimmedGithubUsername() throws Exception {
+        String githubUsernameWithWhitespace = WHITESPACE + VALID_GITHUB_USERNAME + WHITESPACE;
+        seedu.address.model.person.GithubUsername expectedGithubUsername =
+                new seedu.address.model.person.GithubUsername(VALID_GITHUB_USERNAME);
+        assertEquals(expectedGithubUsername, ParserUtil.parseGithubUsername(githubUsernameWithWhitespace));
+    }
+
 }

@@ -14,6 +14,8 @@ import seedu.address.logic.parser.ParserUtil;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.ExerciseTracker;
 import seedu.address.model.person.GithubUsername;
+import seedu.address.model.person.LabAttendanceList;
+import seedu.address.model.person.LabList;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
@@ -35,6 +37,7 @@ class JsonAdaptedPerson {
     private final List<JsonAdaptedTag> tags = new ArrayList<>();
     private final String githubUsername;
     private final List<String> exerciseStatuses = new ArrayList<>();
+    private final String labAttendanceList;
 
     /**
      * Constructs a {@code JsonAdaptedPerson} with the given person details.
@@ -46,7 +49,8 @@ class JsonAdaptedPerson {
                              @JsonProperty("email") String email,
                              @JsonProperty("tags") List<JsonAdaptedTag> tags,
                              @JsonProperty("githubUsername") String githubUsername,
-                             @JsonProperty("exerciseStatuses") List<String> exerciseStatuses) {
+                             @JsonProperty("exerciseStatuses") List<String> exerciseStatuses,
+                             @JsonProperty("labAttendanceList") String labAttendanceList) {
         this.studentId = studentId;
         this.name = name;
         this.phone = phone;
@@ -58,6 +62,7 @@ class JsonAdaptedPerson {
             this.tags.addAll(tags);
         }
         this.githubUsername = githubUsername;
+        this.labAttendanceList = labAttendanceList;
     }
 
     /**
@@ -65,8 +70,8 @@ class JsonAdaptedPerson {
      */
     public JsonAdaptedPerson(String studentId, String name, String phone,
                              String email, List<JsonAdaptedTag> tags,
-                             String githubUsername) {
-        this(studentId, name, phone, email, tags, githubUsername, new ArrayList<>());
+                             String githubUsername, String labAttendanceList) {
+        this(studentId, name, phone, email, tags, githubUsername, new ArrayList<>(), labAttendanceList);
     }
 
     /**
@@ -87,6 +92,7 @@ class JsonAdaptedPerson {
                 .map(Object::toString)
                 .collect(Collectors.toList()));
         githubUsername = source.getGithubUsername().value;
+        labAttendanceList = source.getLabAttendanceList().toString();
     }
 
     /**
@@ -151,7 +157,18 @@ class JsonAdaptedPerson {
         }
         final GithubUsername modelGithubUsername = new GithubUsername(githubUsername);
 
+        if (labAttendanceList == null) {
+            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT,
+                    LabAttendanceList.class.getSimpleName()));
+        }
+
+        if (!LabList.isValidLabList(labAttendanceList)) {
+            throw new IllegalValueException(LabList.MESSAGE_CONSTRAINTS);
+        }
+        final LabAttendanceList modelLabAttendanceList = ParserUtil.parseLabAttendanceList(labAttendanceList);
+
         return new Person(modelStudentId, modelName, modelPhone, modelEmail,
-                 modelTags, modelGithubUsername, new ExerciseTracker(exerciseStatusList));
+                modelTags, modelGithubUsername,
+                new ExerciseTracker(exerciseStatusList), modelLabAttendanceList);
     }
 }

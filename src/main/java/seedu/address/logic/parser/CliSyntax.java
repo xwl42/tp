@@ -14,5 +14,6 @@ public class CliSyntax {
     public static final Prefix PREFIX_EXERCISE_INDEX = new Prefix("ei/");
     public static final Prefix PREFIX_STATUS = new Prefix("s/");
     public static final Prefix PREFIX_GITHUB_USERNAME = new Prefix("g/");
+    public static final Prefix PREFIX_LAB_NUMBER = new Prefix("l/");
 
 }

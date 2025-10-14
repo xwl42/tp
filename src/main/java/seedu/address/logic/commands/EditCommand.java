@@ -23,7 +23,9 @@ import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Email;
+import seedu.address.model.person.ExerciseTracker;
 import seedu.address.model.person.GithubUsername;
+import seedu.address.model.person.LabAttendanceList;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
@@ -104,10 +106,14 @@ public class EditCommand extends Command {
         Email updatedEmail = editPersonDescriptor.getEmail().orElse(personToEdit.getEmail());
         Set<Tag> updatedTags = editPersonDescriptor.getTags().orElse(personToEdit.getTags());
         GithubUsername updatedGithubUsername = editPersonDescriptor.getGithubUsername()
-                                                                    .orElse(personToEdit.getGithubUsername());
+                .orElse(personToEdit.getGithubUsername());
+        ExerciseTracker updatedExerciseTracker = editPersonDescriptor.getExerciseTracker()
+                .orElse(personToEdit.getExerciseTracker());
+        LabAttendanceList updatedLabAttendanceList = editPersonDescriptor.getLabAttendanceList()
+                .orElse(personToEdit.getLabAttendanceList());
 
         return new Person(updatedStudentId, updatedName, updatedPhone, updatedEmail,
-                updatedTags, updatedGithubUsername);
+                 updatedTags, updatedGithubUsername, updatedExerciseTracker, updatedLabAttendanceList);
     }
 
     @Override
@@ -145,6 +151,8 @@ public class EditCommand extends Command {
         private Email email;
         private Set<Tag> tags;
         private GithubUsername githubUsername;
+        private ExerciseTracker exerciseTracker;
+        private LabAttendanceList labAttendanceList;
 
         public EditPersonDescriptor() {}
 
@@ -159,6 +167,8 @@ public class EditCommand extends Command {
             setEmail(toCopy.email);
             setTags(toCopy.tags);
             setGithubUsername(toCopy.githubUsername);
+            setExerciseTracker(toCopy.exerciseTracker);
+            setLabAttendanceList(toCopy.labAttendanceList);
         }
 
         /**
@@ -198,6 +208,24 @@ public class EditCommand extends Command {
 
         public Optional<Email> getEmail() {
             return Optional.ofNullable(email);
+        }
+
+
+
+        public void setExerciseTracker(ExerciseTracker exerciseTracker) {
+            this.exerciseTracker = exerciseTracker;
+        }
+
+        public Optional<ExerciseTracker> getExerciseTracker() {
+            return Optional.ofNullable(exerciseTracker);
+        }
+
+        public void setLabAttendanceList(LabAttendanceList labAttendanceList) {
+            this.labAttendanceList = labAttendanceList;
+        }
+
+        public Optional<LabAttendanceList> getLabAttendanceList() {
+            return Optional.ofNullable(labAttendanceList);
         }
 
         /**
@@ -241,7 +269,10 @@ public class EditCommand extends Command {
                     && Objects.equals(name, otherEditPersonDescriptor.name)
                     && Objects.equals(phone, otherEditPersonDescriptor.phone)
                     && Objects.equals(email, otherEditPersonDescriptor.email)
-                    && Objects.equals(tags, otherEditPersonDescriptor.tags);
+                    && Objects.equals(tags, otherEditPersonDescriptor.tags)
+                    && Objects.equals(githubUsername, otherEditPersonDescriptor.githubUsername)
+                    && Objects.equals(exerciseTracker, otherEditPersonDescriptor.exerciseTracker)
+                    && Objects.equals(labAttendanceList, otherEditPersonDescriptor.labAttendanceList);
         }
 
         @Override
@@ -253,6 +284,8 @@ public class EditCommand extends Command {
                     .add("email", email)
                     .add("tags", tags)
                     .add("githubUsername", githubUsername)
+                    .add("exerciseTracker", exerciseTracker)
+                    .add("labAttendanceList", labAttendanceList)
                     .toString();
         }
     }

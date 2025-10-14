@@ -46,6 +46,8 @@ public class Messages {
                 .append(person.getEmail())
                 .append("; GitHub Username: ")
                 .append(person.getGithubUsername())
+                .append("; Lab Attendance List: ")
+                .append(person.getLabAttendanceList())
                 .append("; Tags: ");
         person.getTags().forEach(builder::append);
         return builder.toString();

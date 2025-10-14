@@ -3,9 +3,13 @@ package seedu.address.testutil;
 import java.util.HashSet;
 import java.util.Set;
 
+import seedu.address.logic.parser.ParserUtil;
+import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.ExerciseTracker;
 import seedu.address.model.person.GithubUsername;
+import seedu.address.model.person.LabAttendanceList;
+import seedu.address.model.person.LabList;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
@@ -24,6 +28,7 @@ public class PersonBuilder {
     public static final String DEFAULT_EMAIL = "amy@gmail.com";
     public static final String DEFAULT_ADDRESS = "123, Jurong West Ave 6, #08-111";
     public static final String DEFAULT_GITHUB_USERNAME = "TestUsername";
+    public static final String DEFAULT_LAB_ATTENDANCE_LIST = new LabList().toString();
 
     private StudentId studentId;
     private Name name;
@@ -32,6 +37,7 @@ public class PersonBuilder {
     private Set<Tag> tags;
     private ExerciseTracker exerciseTracker;
     private GithubUsername githubUsername;
+    private LabAttendanceList labAttendanceList;
 
     /**
      * Creates a {@code PersonBuilder} with the default details.
@@ -44,6 +50,7 @@ public class PersonBuilder {
         tags = new HashSet<>();
         exerciseTracker = new ExerciseTracker();
         githubUsername = new GithubUsername(DEFAULT_GITHUB_USERNAME);
+        labAttendanceList = new LabList();
     }
 
     /**
@@ -57,6 +64,7 @@ public class PersonBuilder {
         tags = new HashSet<>(personToCopy.getTags());
         exerciseTracker = personToCopy.getExerciseTracker();
         githubUsername = personToCopy.getGithubUsername();
+        labAttendanceList = personToCopy.getLabAttendanceList();
     }
 
     /**
@@ -108,6 +116,30 @@ public class PersonBuilder {
     }
 
     /**
+     * Sets the {@code LabAttendanceList} of the {@code Person} that we are building.
+     */
+    public PersonBuilder withLabAttendanceList(String labListString) {
+        try {
+            labAttendanceList = ParserUtil.parseLabAttendanceList(labListString);
+        } catch (ParseException e) {
+            throw new IllegalArgumentException("Invalid Lab Attendance List format"); // For developers
+        }
+        return this;
+    }
+
+    /**
+     * Sets the {@code exerciseTracker} of the {@code Person} that we are building.
+     */
+    public PersonBuilder withExerciseTracker(String exerciseTrackerString) {
+        try {
+            exerciseTracker = ParserUtil.parseExerciseTracker(exerciseTrackerString);
+        } catch (ParseException e) {
+            throw new IllegalArgumentException("Invalid Exercise Tracker List format"); // For developers
+        }
+        return this;
+    }
+
+    /**
      * builds a person using the fields
      * @return the person that is built
      */
@@ -118,6 +150,7 @@ public class PersonBuilder {
                 email,
                 tags,
                 githubUsername,
-                exerciseTracker);
+                exerciseTracker,
+                labAttendanceList);
     }
 }

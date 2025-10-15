@@ -43,7 +43,7 @@ public class ExerciseTrackerTest {
     @Test
     public void mark_validIndex_updatesStatus() {
         Index index = Index.fromZeroBased(3);
-        tracker.mark(index, Status.DONE);
+        tracker.markExercise(index, Status.DONE);
         assertEquals(Status.DONE, tracker.getStatuses().get(3));
     }
 
@@ -62,7 +62,7 @@ public class ExerciseTrackerTest {
     @Test
     public void equals_differentStatuses_returnsFalse() {
         ExerciseTracker other = new ExerciseTracker();
-        other.mark(Index.fromZeroBased(1), Status.DONE);
+        other.markExercise(Index.fromZeroBased(1), Status.DONE);
         assertFalse(tracker.equals(other));
     }
 

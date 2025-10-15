@@ -52,7 +52,7 @@ public class ParserUtil {
      */
     public static Index parseZeroBasedIndex(String zeroBasedIndex) throws ParseException {
         String trimmedIndex = zeroBasedIndex.trim();
-        if (!StringUtil.isNonZeroUnsignedInteger(trimmedIndex)) {
+        if (!StringUtil.isNonNegativeUnsignedInteger(trimmedIndex)) {
             throw new ParseException(MESSAGE_INVALID_INDEX);
         }
         return Index.fromZeroBased(Integer.parseInt(trimmedIndex));

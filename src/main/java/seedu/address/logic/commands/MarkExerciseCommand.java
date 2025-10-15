@@ -3,6 +3,7 @@ package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
+import static seedu.address.model.person.ExerciseTracker.NUMBER_OF_EXERCISES;
 
 import java.util.List;
 
@@ -29,6 +30,9 @@ public class MarkExerciseCommand extends Command {
             + "s/ [EXERCISE STATUS]\n";
     public static final String MESSAGE_MARK_EXERCISE =
             "Exercise %d marked as %s for student %d (%s)";
+    public static final String MESSAGE_INDEX_OUT_OF_BOUNDS =
+            "Index out of bounds! Index should be a number from 0 to %d";
+    private static final int HIGHEST_INDEX = NUMBER_OF_EXERCISES - 1;
     private final Status status;
     private final Index studentIndex;
     private final Index exerciseIndex;
@@ -63,7 +67,13 @@ public class MarkExerciseCommand extends Command {
             throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
         }
         Person student = lastShownList.get(studentIndex.getZeroBased());
-        student.getExerciseTracker().mark(exerciseIndex, status);
+        try {
+            student.getExerciseTracker().markExercise(exerciseIndex, status);
+        } catch (IndexOutOfBoundsException iob) {
+            throw new CommandException(
+                    String.format(MESSAGE_INDEX_OUT_OF_BOUNDS, HIGHEST_INDEX)
+            );
+        }
         model.setPerson(student, student);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
         return new CommandResult(String.format(MESSAGE_MARK_EXERCISE,

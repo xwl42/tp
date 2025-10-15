@@ -58,7 +58,15 @@ public class ExerciseTracker {
         return statuses;
     }
 
-    public void mark(Index index, Status status) {
+    /**
+     * Marks the exercise at the given index with the status
+     * @param index of the exercise
+     * @param status to mark the exercise with
+     */
+    public void markExercise(Index index, Status status) {
+        if (index.getZeroBased() < 0 || index.getZeroBased() >= NUMBER_OF_EXERCISES) {
+            throw new IndexOutOfBoundsException("Index should be between 0 and " + (NUMBER_OF_EXERCISES - 1));
+        }
         statuses.set(index.getZeroBased(), status);
     }
 

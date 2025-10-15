@@ -54,7 +54,6 @@ public class MarkAttendanceCommand extends Command {
         if (index.getZeroBased() >= lastShownList.size()) {
             throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
         }
-
         Person personToEdit = lastShownList.get(index.getZeroBased());
         LabAttendanceList labAttendanceList = ((LabList) personToEdit.getLabAttendanceList()).copy();
         try {

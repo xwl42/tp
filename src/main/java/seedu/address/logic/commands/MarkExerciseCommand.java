@@ -96,7 +96,7 @@ public class MarkExerciseCommand extends Command {
         MarkExerciseCommand e = (MarkExerciseCommand) other;
         return studentIndex.equals(e.getStudentIndex())
                 && status.equals(e.getStatus())
-                && exerciseIndex == e.getExerciseIndex();
+                && exerciseIndex.equals(e.getExerciseIndex());
     }
 }
 

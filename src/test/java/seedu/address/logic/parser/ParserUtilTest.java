@@ -15,6 +15,9 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Email;
+import seedu.address.model.person.LabAttendanceList;
+import seedu.address.model.person.LabList;
+import seedu.address.model.person.LabListTest;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.StudentId;
@@ -24,7 +27,6 @@ public class ParserUtilTest {
     private static final String INVALID_STUDENTID = "B010X";
     private static final String INVALID_NAME = "R@chel";
     private static final String INVALID_PHONE = "+651234";
-    private static final String INVALID_ADDRESS = " ";
     private static final String INVALID_EMAIL = "example.com";
     private static final String INVALID_TAG = "#friend";
     private static final String INVALID_GITHUB_USERNAME = "--ab";
@@ -32,11 +34,12 @@ public class ParserUtilTest {
     private static final String VALID_STUDENTID = "A1231230T";
     private static final String VALID_NAME = "Rachel Walker";
     private static final String VALID_PHONE = "123456";
-    private static final String VALID_ADDRESS = "123 Main Street #0505";
     private static final String VALID_EMAIL = "rachel@example.com";
     private static final String VALID_TAG_1 = "friend";
     private static final String VALID_TAG_2 = "neighbour";
     private static final String VALID_GITHUB_USERNAME = "TestUsername";
+    private static final String VALID_LAB_LIST = "L1: Y L2: N L3: N L4: N L5: N L6: N L7: Y L8: N L9: N L10: N ";
+
 
 
     private static final String WHITESPACE = " \t\r\n";
@@ -229,4 +232,25 @@ public class ParserUtilTest {
         assertEquals(expectedGithubUsername, ParserUtil.parseGithubUsername(githubUsernameWithWhitespace));
     }
 
+    @Test
+    public void parseLabAttendanceList_null_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> ParserUtil.parseGithubUsername(null));
+    }
+
+    @Test
+    public void parseLabAttendanceList_invalid_throwsParseException() {
+        assertThrows(ParseException.class, () -> ParserUtil.parseLabAttendanceList(LabListTest.INVALID_LAB_LIST_LENGTH));
+        assertThrows(ParseException.class, () -> ParserUtil.parseLabAttendanceList(LabListTest.INVALID_LAB_LIST_MISSING_COLON));
+        assertThrows(ParseException.class, () -> ParserUtil.parseLabAttendanceList(LabListTest.INVALID_LAB_LIST_STATUS));
+    }
+
+    @Test
+    public void parseLabAttendanceList_valid_success() throws ParseException {
+        LabAttendanceList labAttendanceList = new LabList();
+        labAttendanceList.markLabAsAttended(0);
+        labAttendanceList.markLabAsAttended(6);
+
+        LabAttendanceList labAttendanceListFromParser = ParserUtil.parseLabAttendanceList(VALID_LAB_LIST);
+        assertEquals(labAttendanceList, labAttendanceListFromParser);
+    }
 }

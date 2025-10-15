@@ -162,9 +162,9 @@ Format: `marke INDEX ei/EXERCISENUMBER s/STATUSLETTER`
 
 | Letter | Status Name  | Meaning |
     |--------|---------------|----------|
-    | `D/d`  | Done | The exercise is completed. |
-    | `N/n`  | Not Done | The exercise has not been completed. |
-    | `O/o`  | Overdue | The exercise is overdue or late. |
+    | `D`/`d`  | Done | The exercise is completed. |
+    | `N`/`n`  | Not Done | The exercise has not been completed. |
+    | `O`/`o`  | Overdue | The exercise is overdue or late. |
 * Each exercise only has **one status**.
 
 Example:

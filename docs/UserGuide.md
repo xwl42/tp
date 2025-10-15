@@ -8,7 +8,30 @@
 
 AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized for use via a  Line Interface** (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, AB3 can get your contact management tasks done faster than traditional GUI apps.
 
-<!-- * Table of Contents -->
+---
+## Table of Contents
+
+1. [Quick start](#quick-start)
+2. [Features](#features)
+    1. [Viewing help : `help`](#viewing-help--help)
+    2. [Adding a person : `add`](#adding-a-person-add)
+    3. [Listing all persons : `list`](#listing-all-persons--list)
+    4. [Editing a person : `edit`](#editing-a-person--edit)
+    5. [Marking Lab Attendance : `marka`](#marking-lab-attendance--marka)
+    6. [Marking Exercise Status : `marke`](#marking-exercise-status-marke)
+    7. [Locating persons by name : `find`](#locating-persons-by-name-find)
+    8. [Deleting a person : `delete`](#deleting-a-person--delete)
+    9. [Clearing all entries : `clear`](#clearing-all-entries--clear)
+    10. [Exiting the program : `exit`](#exiting-the-program--exit)
+    11. [Saving the data](#saving-the-data)
+    12. [Editing the data file](#editing-the-data-file)
+    13. [Archiving data files (coming in v2.0)](#archiving-data-files-coming-in-v20)
+3. [FAQ](#faq)
+4. [Known issues](#known-issues)
+5. [Command summary](#command-summary)
+
+---
+
 <page-nav-print />
 
 --------------------------------------------------------------------------------------------------------------------
@@ -114,7 +137,7 @@ Examples:
 *  `edit 1 p/91234567 e/johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
 *  `edit 2 n/Betsy Crower t/` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
 
-### Marking Lab Attendance
+### Marking Lab Attendance: `marka`
 
 Marks the lab attendance of an existing person in the address book.
 
@@ -126,6 +149,28 @@ Format: `marka INDEX l/LABNUMBER`
 
 Example:
 * `marka 2 l/7` marks Lab 7 of the second person as attended.
+
+### Marking Exercise Status: `marke`
+
+Marks the exercise status of an existing person in the address book.
+
+Format: `marke INDEX ei/EXERCISENUMBER s/STATUSLETTER`
+
+* Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
+* `EXERCISE` represents the lab session to mark attendance for. It **must be between 0 and 9 (inclusive)**.
+* `STATUS` represents the status to mark the exercise with. It **must be a letter chosen from the following**:
+---
+| Letter | Status Name  | Meaning |
+    |---------|---------------|----------|
+    | `D` | Done | The exercise is completed. |
+    | `N` | Not Done | The exercise has not been completed. |
+    | `I` | In Progress | The exercise is currently being worked on. |
+    | `O` | Overdue | The exercise is overdue or late. |
+---
+* Each exercise only has **one status**.
+
+Example:
+* `marke 2 ei/7 s/d` marks Lab 7 of the second person as attended.
 
 ### Locating persons by name: `find`
 
@@ -223,3 +268,6 @@ Action     | Format, Examples
 **List**   | `list`
 **Help**   | `help`
 **Mark Attendance** | `marka INDEX l/LABNUMBER` <br> e.g. `marka 2 l/7`
+**Mark Exercise** | `marke INDEX ei/EXERCISENUMBER s/STATUSLETTER` <br> e.g. `marke 2 ei/7 s/d`
+
+

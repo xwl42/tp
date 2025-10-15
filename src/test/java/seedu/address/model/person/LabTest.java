@@ -38,21 +38,26 @@ public class LabTest {
     public void equals() {
         Lab labAttendance1 = new Lab(1);
         Lab labAttendance2 = new Lab(1);
-        Lab labAttendance3 = new Lab(1);
+        Lab labAttendance3 = new Lab(2);
 
+        // Same object
+        assertEquals(labAttendance1, labAttendance1);
+
+        // Object with same lab data fields
         assertEquals(labAttendance1, labAttendance2);
 
-        assertEquals(labAttendance1, labAttendance2);
+        // Object with different lab number field
+        assertNotEquals(labAttendance1, labAttendance3);
 
+        // Object with same lab isAttended field
         labAttendance1.markAsAttended();
         assertNotEquals(labAttendance1, labAttendance2);
 
+        // Object with same lab data fields
         labAttendance2.markAsAttended();
         assertEquals(labAttendance1, labAttendance2);
 
         assertNotEquals(labAttendance1, null);
-
-        assertNotEquals(labAttendance1, labAttendance3);
     }
 
     @Test

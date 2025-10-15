@@ -145,6 +145,9 @@ public class AddCommandParserTest {
         assertParseFailure(parser, validExpectedPersonString + INVALID_PHONE_DESC,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PHONE));
 
+        // invalid GitHub username
+        assertParseFailure(parser, validExpectedPersonString + INVALID_GITHUB_USERNAME_DESC,
+                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_GITHUB_USERNAME));
     }
 
     @Test
@@ -179,7 +182,6 @@ public class AddCommandParserTest {
         assertParseFailure(parser, STUDENTID_DESC_BOB + NAME_DESC_BOB
                         + PHONE_DESC_BOB + VALID_EMAIL_BOB + GITHUB_USERNAME_DESC_BOB,
                 expectedMessage);
-
 
         // missing GitHub username prefix
         assertParseFailure(parser, STUDENTID_DESC_BOB + NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
@@ -216,8 +218,8 @@ public class AddCommandParserTest {
 
         // invalid tag
         assertParseFailure(parser, STUDENTID_DESC_BOB + NAME_DESC_BOB + PHONE_DESC_BOB
-                + EMAIL_DESC_BOB
-                + INVALID_TAG_DESC + VALID_TAG_FRIEND + GITHUB_USERNAME_DESC_BOB, Tag.MESSAGE_CONSTRAINTS);
+                + EMAIL_DESC_BOB + INVALID_TAG_DESC
+                + VALID_TAG_FRIEND + GITHUB_USERNAME_DESC_BOB, Tag.MESSAGE_CONSTRAINTS);
 
         // invalid GitHub username
         assertParseFailure(parser, STUDENTID_DESC_BOB + NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB

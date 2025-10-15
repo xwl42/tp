@@ -159,18 +159,16 @@ Format: `marke INDEX ei/EXERCISENUMBER s/STATUSLETTER`
 * Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
 * `EXERCISE` represents the lab session to mark attendance for. It **must be between 0 and 9 (inclusive)**.
 * `STATUS` represents the status to mark the exercise with. It **must be a letter chosen from the following**:
----
+
 | Letter | Status Name  | Meaning |
-    |---------|---------------|----------|
-    | `D` | Done | The exercise is completed. |
-    | `N` | Not Done | The exercise has not been completed. |
-    | `I` | In Progress | The exercise is currently being worked on. |
-    | `O` | Overdue | The exercise is overdue or late. |
----
+    |--------|---------------|----------|
+    | `D/d`  | Done | The exercise is completed. |
+    | `N/n`  | Not Done | The exercise has not been completed. |
+    | `O/o`  | Overdue | The exercise is overdue or late. |
 * Each exercise only has **one status**.
 
 Example:
-* `marke 2 ei/7 s/d` marks Lab 7 of the second person as attended.
+* `marke 2 ei/7 s/d` marks exercise 7 of the second person as done.
 
 ### Locating persons by name: `find`
 

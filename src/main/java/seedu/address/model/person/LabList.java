@@ -122,4 +122,8 @@ public class LabList implements LabAttendanceList {
         }
         return true;
     }
+
+    public LabAttendance[] getLabs() {
+        return labs;
+    }
 }

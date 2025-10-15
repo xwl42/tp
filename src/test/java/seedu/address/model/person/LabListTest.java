@@ -11,9 +11,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class LabListTest {
-    public static final String INVALID_LAB_LIST_STATUS = "L1: L L2: N L3: N L4: N L5: N L6: N L7: N L8: N L9: N L10: N ";
+    public static final String INVALID_LAB_LIST_STATUS =
+            "L1: L L2: N L3: N L4: N L5: N L6: N L7: N L8: N L9: N L10: N ";
     public static final String INVALID_LAB_LIST_LENGTH = "L1: N L2: N L3: N ";
-    public static final String INVALID_LAB_LIST_MISSING_COLON = "L1 Y L2 N L3 N L4: N L5: N L6: N L7: N L8: N L9: N L10: N ";
+    public static final String INVALID_LAB_LIST_MISSING_COLON =
+            "L1 Y L2 N L3 N L4: N L5: N L6: N L7: N L8: N L9: N L10: N ";
     private LabAttendance[] labs;
 
     @BeforeEach

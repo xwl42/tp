@@ -239,9 +239,12 @@ public class ParserUtilTest {
 
     @Test
     public void parseLabAttendanceList_invalid_throwsParseException() {
-        assertThrows(ParseException.class, () -> ParserUtil.parseLabAttendanceList(LabListTest.INVALID_LAB_LIST_LENGTH));
-        assertThrows(ParseException.class, () -> ParserUtil.parseLabAttendanceList(LabListTest.INVALID_LAB_LIST_MISSING_COLON));
-        assertThrows(ParseException.class, () -> ParserUtil.parseLabAttendanceList(LabListTest.INVALID_LAB_LIST_STATUS));
+        assertThrows(ParseException.class, () -> ParserUtil.parseLabAttendanceList(
+                LabListTest.INVALID_LAB_LIST_LENGTH));
+        assertThrows(ParseException.class, () -> ParserUtil.parseLabAttendanceList(
+                LabListTest.INVALID_LAB_LIST_MISSING_COLON));
+        assertThrows(ParseException.class, () -> ParserUtil.parseLabAttendanceList(
+                LabListTest.INVALID_LAB_LIST_STATUS));
     }
 
     @Test

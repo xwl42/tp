@@ -1,10 +1,14 @@
 package seedu.address.logic.commands;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_LAB;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
+import static seedu.address.testutil.TypicalIndexes.INDEX_HUNDRED_LAB;
+import static seedu.address.testutil.TypicalIndexes.INDEX_HUNDRED_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_LAB;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
@@ -12,6 +16,7 @@ import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.Messages;
+import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
@@ -26,7 +31,7 @@ public class MarkAttendanceTest {
     private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
     @Test
-    public void execute_markLab1_success() {
+    public void execute_markLab_success() {
         Person firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         LabAttendanceList labAttendanceList = new LabList();
         labAttendanceList.markLabAsAttended(0);
@@ -45,27 +50,52 @@ public class MarkAttendanceTest {
     }
 
     @Test
+    public void execute_invalidPersonIndex_throwsCommandException() {
+        MarkAttendanceCommand markAttendanceCommand = new MarkAttendanceCommand(INDEX_HUNDRED_PERSON, INDEX_FIRST_LAB);
+        assertThrows(CommandException.class, () -> markAttendanceCommand.execute(model));
+    }
+
+    @Test
+    public void execute_invalidLabNumber_throwsCommandException() {
+        MarkAttendanceCommand markAttendanceCommand = new MarkAttendanceCommand(INDEX_FIRST_PERSON, INDEX_HUNDRED_LAB);
+        assertThrows(CommandException.class, () -> markAttendanceCommand.execute(model));
+    }
+
+    @Test
+    public void execute_labAlreadyMarked_throwsCommandException() {
+        Person firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        LabAttendanceList labAttendanceList = new LabList();
+        labAttendanceList.markLabAsAttended(0);
+        Person editedPerson = new PersonBuilder(firstPerson)
+                .withLabAttendanceList(labAttendanceList.toString()).build();
+        model.setPerson(firstPerson, editedPerson);
+
+        MarkAttendanceCommand markAttendanceCommand = new MarkAttendanceCommand(INDEX_FIRST_PERSON, INDEX_FIRST_LAB);
+        assertThrows(CommandException.class, () -> markAttendanceCommand.execute(model));
+    }
+
+    @Test
     public void equals() {
         final MarkAttendanceCommand standardCommand = new MarkAttendanceCommand(INDEX_FIRST_PERSON, INDEX_FIRST_LAB);
 
         // same values -> returns true
         MarkAttendanceCommand commandWithSameValues = new MarkAttendanceCommand(INDEX_FIRST_PERSON, INDEX_FIRST_LAB);
-        assertTrue(standardCommand.equals(commandWithSameValues));
+        assertEquals(standardCommand, commandWithSameValues);
 
         // same object -> returns true
-        assertTrue(standardCommand.equals(standardCommand));
+        assertEquals(standardCommand, standardCommand);
 
         // null -> returns false
-        assertFalse(standardCommand.equals(null));
+        assertNotEquals(standardCommand, null);
 
         // different types -> returns false
-        assertFalse(standardCommand.equals(new ClearCommand()));
+        assertNotEquals(new ClearCommand(), standardCommand);
 
         // different index -> returns false
-        assertFalse(standardCommand.equals(new MarkAttendanceCommand(INDEX_SECOND_PERSON, INDEX_FIRST_LAB)));
+        assertNotEquals(new MarkAttendanceCommand(INDEX_SECOND_PERSON, INDEX_FIRST_LAB), standardCommand);
 
         // different remark -> returns false
-        assertFalse(standardCommand.equals(new MarkAttendanceCommand(INDEX_FIRST_PERSON, INDEX_SECOND_LAB)));
+        assertNotEquals(new MarkAttendanceCommand(INDEX_FIRST_PERSON, INDEX_SECOND_LAB), standardCommand);
     }
 
 }

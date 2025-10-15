@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.MarkAttendanceCommand;
 
-// TODO: Refactor the test cases later
 public class MarkAttendanceCommandParserTest {
     private MarkAttendanceCommandParser parser = new MarkAttendanceCommandParser();
     private final Index validLabNumber = INDEX_FIRST_LAB;
@@ -37,6 +36,6 @@ public class MarkAttendanceCommandParserTest {
 
         //No Lab Number
         assertParseFailure(parser, MarkAttendanceCommand.COMMAND_WORD
-                + " " + INDEX_FIRST_PERSON + " " + PREFIX_LAB_NUMBER + validLabNumber.getOneBased(), expectedMessage);
+                + " " + INDEX_FIRST_PERSON, expectedMessage);
     }
 }

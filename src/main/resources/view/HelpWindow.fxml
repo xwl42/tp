@@ -66,8 +66,8 @@
                            <VBox id="add">
                               <children>
                                  <Label text="Command: add" />
-                                 <Label text="Format: add i/ID n/NAME g/GITHUB NAME [t/TAG]..." />
-                                 <Label text="Parameters: i/ - Student ID AXXXXXXXY  n/ - Student's Name  g/ - Student's GitHub Username  t/ - Optional Tags" wrapText="true" />
+                                 <Label text="Format: add i/ID n/NAME p/PHONE e/EMAIL g/GITHUB NAME [t/TAG]..." />
+                                 <Label text="Parameters: i/ - Student ID AXXXXXXXY  n/ - Student's Name p/ - Phone number e/ - Email  g/ - Student's GitHub Username  t/ - Optional Tags" wrapText="true" />
                                  <Label text="Description: Adds a new student." wrapText="true" />
                               </children>
                               <padding>
@@ -118,9 +118,9 @@
                             </VBox>
                             <VBox id="markLab">
                                 <children>
-                                    <Label text="Command: mark" />
-                                    <Label text="Format: mark /student STUDENTNAME /ln LABNUMBER" />
-                                    <Label text="Parameters: STUDENTNAME - Name of student  LABNUMBER - Number of lab you wish to mark attendance for" wrapText="true" />
+                                    <Label text="Command: marka" />
+                                    <Label text="Format: marka INDEX l/LABNUMBER" />
+                                    <Label text="Parameters: INDEX - Index of student in list  LABNUMBER - Number of lab you wish to mark attendance for" wrapText="true" />
                                     <Label text="Description: Mark attendance of a student for a specific lab." wrapText="true" />
                                 </children>
                                 <padding>
@@ -129,9 +129,10 @@
                             </VBox>
                             <VBox id="markEx">
                                 <children>
-                                    <Label text="Command: mark" />
-                                    <Label text="Format: mark /student STUDENTNAME /ex EXERCISENUMBER" />
-                                    <Label text="Parameters: STUDENTNAME - Name of student  EXERCISENUMBER - Number of exercise you wish to mark as completed" wrapText="true" />
+                                    <Label text="Command: marke" />
+                                    <Label text="Format: marke INDEX ei/EXERCISENUMBER s/STATUS" />
+                                    <Label text="Parameters: INDEX - Index of student in list  EXERCISENUMBER - Number of exercise you wish to mark as completed
+                                    STATUS - Choose from D(done), N(not done), O(overdue)" wrapText="true" />
                                     <Label text="Description: Mark completion an exercise as completed for a specific student." wrapText="true" />
                                 </children>
                                 <padding>

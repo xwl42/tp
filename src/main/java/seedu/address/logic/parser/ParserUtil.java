@@ -167,7 +167,6 @@ public class ParserUtil {
         switch (code.toUpperCase()) {
         case "D": return Status.DONE;
         case "N": return Status.NOT_DONE;
-        case "I": return Status.IN_PROGRESS;
         case "O": return Status.OVERDUE;
         default:
             throw new ParseException(INVALID_STATUS_FORMAT + Arrays.toString(Status.values()));

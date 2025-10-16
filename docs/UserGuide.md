@@ -121,8 +121,9 @@ Error Messages:
   `Invalid command format! 
 add: Adds a person to the address book. Parameters: i/STUDENTID n/NAME p/PHONE e/EMAIL g/GITHUB_USERNAME [t/TAG]...
 Example: add i/A1234567X n/John Doe p/98765432 e/johnd@example.com g/JohnDoe t/friends t/owesMoney`
-* Same Student ID: \
+* Duplicate Identifier (Student ID): \
     `This person already exists in the address book`
+
 ### Listing all persons : `list`
 
 Shows a list of all persons in the address book.

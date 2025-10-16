@@ -24,10 +24,10 @@ public class MarkExerciseCommand extends Command {
             + ": Marks the exercise status of the person identified "
             + "by the index number used in the last person listing. "
             + "Existing exercise status will be updated based on the input.\n"
-            + "Parameters: INDEX (must be a positive integer) "
+            + "Parameters: INDEX (must be a positive integer) ei/EXERCISEINDEX s/STATUS \n"
             + "Example: " + COMMAND_WORD + " 1 "
-            + "ei/ [EXERCISE INDEX]\n"
-            + "s/ [EXERCISE STATUS]\n";
+            + "ei/1 "
+            + "s/d \n";
     public static final String MESSAGE_MARK_EXERCISE =
             "Exercise %d marked as %s for student %d (%s)";
     public static final String MESSAGE_INDEX_OUT_OF_BOUNDS =

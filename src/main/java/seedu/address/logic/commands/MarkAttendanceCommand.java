@@ -23,7 +23,7 @@ public class MarkAttendanceCommand extends Command {
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Marks the specific lab of the person identified "
             + "by the index number used in the last person listing.\n"
             + "Parameters: INDEX (must be a positive integer) "
-            + PREFIX_LAB_NUMBER + "[LAB NUMBER]\n"
+            + PREFIX_LAB_NUMBER + "LABNUMBER\n"
             + "Example: " + COMMAND_WORD + " 1 "
             + PREFIX_LAB_NUMBER + "1";
 

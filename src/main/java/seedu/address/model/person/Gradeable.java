@@ -1,9 +1,11 @@
 package seedu.address.model.person;
 
+import seedu.address.model.person.exceptions.InvalidScoreException;
+
 /**
  * Represents an object that has a grade field.
  */
 public interface Gradeable {
-    double getGrade();
-    void setGrade(double grade);
+    double getScore();
+    void setScore(double score) throws InvalidScoreException;
 }

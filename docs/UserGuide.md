@@ -4,10 +4,12 @@
   pageNav: 3
 ---
 
-# AB-3 User Guide
+# LambdaLab User Guide
 
-AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized for use via a  Line Interface** (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, AB3 can get your contact management tasks done faster than traditional GUI apps.
-
+LambdaLab is a desktop app for **CS2030S Teaching Assistants** to **manage student records**, optimised for use via a 
+Command Line Interface (CLI) while still having an intuitive Graphical User Interface (GUI). If you are a fast typer, 
+LambdaLab can help you track student information, lab attendance, and exercise submissions even faster than traditional 
+spreadsheets or GUI apps.
 ---
 ## Table of Contents
 
@@ -38,23 +40,35 @@ AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized fo
 
 ## Quick start
 
-1. Ensure you have Java `17` or above installed in your Computer.<br>
-   **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
+1. Ensure you have **Java 17** or above installed in your Computer.<br>
+> **Checking your Java version:**
+> * Open a command terminal
+> * Type `java -version` and press Enter
+> * If Java is installed, you'll see the version number (e.g., `java version "17.0.1"`)
+> * The first number should be 17 or higher
+>
+> **If Java is not installed or the version is below 17:**
+> * Download and install Java 17 by following the guide:
+>   * [for Windows users](https://se-education.org/guides/tutorials/javaInstallationWindows.html)
+>   * [for Mac users](https://se-education.org/guides/tutorials/javaInstallationMac.html)
+>   * [for Linus users](https://se-education.org/guides/tutorials/javaInstallationLinux.html)
+> * After installation, restart your terminal and verify the version again
 
-1. Download the latest `.jar` file from [here](https://github.com/se-edu/addressbook-level3/releases).
+2. Download the latest `.jar` file from [here](https://github.com/AY2526S1-CS2103T-T09-3/tp/releases).
 
-1. Copy the file to the folder you want to use as the _home folder_ for your AddressBook.
+3. Copy the `.jar` file to the folder you want to use as the _home folder_ for your LambdaLab.
 
-1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar addressbook.jar` command to run the application.<br>
-   A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
+4. Open a command terminal, `cd` into the folder you put the `.jar` file in, and use the `java -jar addressbook.jar` command to run the application.<br>
+   A GUI similar to the below should appear in a few seconds. Note that the app contains some sample data and the layout 
+   is explained in coloured boxes.<br>
    ![Ui](images/Ui.png)
 
-1. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
+5. Type your command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
    Some example commands you can try:
 
    * `list` : Lists all contacts.
 
-   * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01` : Adds a contact named `John Doe` to the Address Book.
+   * `add i/A1234567X n/John Doe p/98765432 e/johnd@example.com g/JohnDoe t/ModelStudent`: Adds a student named `John Doe` to the record.
 
    * `delete 3` : Deletes the 3rd contact shown in the current list.
 
@@ -62,7 +76,7 @@ AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized fo
 
    * `exit` : Exits the app.
 
-1. Refer to the [Features](#features) below for details of each command.
+6. Refer to the [Features](#features) below for details of each command.
 
 --------------------------------------------------------------------------------------------------------------------
 

@@ -17,7 +17,7 @@ spreadsheets or GUI apps.
 2. [Features](#features)
     1. [Viewing help : `help`](#viewing-help--help)
     2. [Adding a person : `add`](#adding-a-person-add)
-    3. [Listing all persons : `list`](#listing-all-persons--list)
+    3. [Listing all students : `list`](#listing-all-persons--list)
     4. [Editing a person : `edit`](#editing-a-person--edit)
     5. [Marking Lab Attendance : `marka`](#marking-lab-attendance--marka)
     6. [Marking Exercise Status : `marke`](#marking-exercise-status-marke)

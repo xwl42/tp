@@ -14,7 +14,7 @@ AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized fo
 1. [Quick start](#quick-start)
 2. [Features](#features)
     1. [Viewing help : `help`](#viewing-help--help)
-    2. [Adding a person : `add`](#adding-a-person-add)
+    2. [Adding a student : `add`](#adding-a-student-add)
     3. [Listing all persons : `list`](#listing-all-persons--list)
     4. [Editing a person : `edit`](#editing-a-person--edit)
     5. [Marking Lab Attendance : `marka`](#marking-lab-attendance--marka)
@@ -99,21 +99,32 @@ Shows a message explaining how to access the help page.
 Format: `help`
 
 
-### Adding a person: `add`
+### Adding a student: `add`
 
-Adds a person to the address book.
+Adds a student to the address book.
 
-Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​`
+Format: `add i/STUDENTID n/NAME p/PHONE e/EMAIL g/GITHUB_USERNAME [t/TAG]…​`
 
 <box type="tip" seamless>
 
-**Tip:** A person can have any number of tags (including 0)
+**Tip:** A student can have any number of tags (including 0)
 </box>
 
 Examples:
-* `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`
-* `add n/Betsy Crowe t/friend e/betsycrowe@example.com a/Newgate Prison p/1234567 t/criminal`
+* Compulsory fields only: `add i/A1234567X n/John Doe p/98765432 e/johnd@example.com g/JohnDoe`
+* Optional fields included: `add i/A1234567X n/John Doe p/98765432 e/johnd@example.com g/JohnDoe t/modelStudent`
+* Fields in different order: `add g/JohnDoe i/A1234567X  p/98765432 t/modelStudent n/John Doe e/johnd@example.com`
 
+Outputs:
+* Success Message \
+    `New person added: StudentId: A1234567X; Name: John Doe; Phone: 98765432; Email: johnd@example.com; GitHub Username: JohnDoe; Lab Attendance List: L1: N L2: N L3: N L4: N L5: N L6: N L7: N L8: N L9: N L10: N ; Tags: [modelStudent]`
+* Failure Messages
+  * Missing fields: \
+    `Invalid command format! 
+add: Adds a person to the address book. Parameters: i/STUDENTID n/NAME p/PHONE e/EMAIL g/GITHUB_USERNAME [t/TAG]...
+Example: add i/A1234567X n/John Doe p/98765432 e/johnd@example.com g/JohnDoe t/friends t/owesMoney`
+  * Same Student ID: \
+      `This person already exists in the address book"`
 ### Listing all persons : `list`
 
 Shows a list of all persons in the address book.

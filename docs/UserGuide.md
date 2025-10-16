@@ -36,7 +36,6 @@ spreadsheets or GUI apps.
 
 <page-nav-print />
 
---------------------------------------------------------------------------------------------------------------------
 
 ## Quick start
 
@@ -63,16 +62,18 @@ spreadsheets or GUI apps.
    is explained in coloured boxes.<br>
    ![Ui](images/Ui.png)
 
-5. Type your command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
+5. Type your command in the command box and press Enter to execute it. <br>
    Some example commands you can try:
 
-   * `list` : Lists all contacts.
+   * `help` : Shows the help window that explains the command usage. 
+
+   * `list` : Lists all students' records.
 
    * `add i/A1234567X n/John Doe p/98765432 e/johnd@example.com g/JohnDoe t/ModelStudent`: Adds a student named `John Doe` to the record.
 
-   * `delete 3` : Deletes the 3rd contact shown in the current list.
+   * `delete 3` : Deletes the 3rd student's record shown in the current list.
 
-   * `clear` : Deletes all contacts.
+   * `clear` : Deletes all students' records.
 
    * `exit` : Exits the app.
 

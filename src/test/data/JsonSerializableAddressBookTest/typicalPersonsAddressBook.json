@@ -23,12 +23,12 @@
       ],
       "labAttendanceList": "L1: N L2: N L3: N L4: N L5: N L6: N L7: N L8: N L9: N L10: N ",
       "gradeMap" : {
-        "midterms" : {
-          "name" : "midterms",
+        "midterm" : {
+          "name" : "midterm",
           "score" : -1.0
         },
-        "finals" : {
-          "name" : "finals",
+        "final" : {
+          "name" : "final",
           "score" : -1.0
         },
         "pe2" : {
@@ -63,12 +63,12 @@
       ],
       "labAttendanceList": "L1: N L2: N L3: N L4: N L5: N L6: N L7: N L8: N L9: N L10: N ",
       "gradeMap" : {
-        "midterms" : {
-          "name" : "midterms",
+        "midterm" : {
+          "name" : "midterm",
           "score" : -1.0
         },
-        "finals" : {
-          "name" : "finals",
+        "final" : {
+          "name" : "final",
           "score" : -1.0
         },
         "pe2" : {
@@ -103,12 +103,12 @@
       ],
       "labAttendanceList": "L1: N L2: N L3: N L4: N L5: N L6: N L7: N L8: N L9: N L10: N ",
       "gradeMap" : {
-        "midterms" : {
-          "name" : "midterms",
+        "midterm" : {
+          "name" : "midterm",
           "score" : -1.0
         },
-        "finals" : {
-          "name" : "finals",
+        "final" : {
+          "name" : "final",
           "score" : -1.0
         },
         "pe2" : {
@@ -143,12 +143,12 @@
       ],
       "labAttendanceList": "L1: N L2: N L3: N L4: N L5: N L6: N L7: N L8: N L9: N L10: N ",
       "gradeMap" : {
-        "midterms" : {
-          "name" : "midterms",
+        "midterm" : {
+          "name" : "midterm",
           "score" : -1.0
         },
-        "finals" : {
-          "name" : "finals",
+        "final" : {
+          "name" : "final",
           "score" : -1.0
         },
         "pe2" : {
@@ -183,12 +183,12 @@
       ],
       "labAttendanceList": "L1: N L2: N L3: N L4: N L5: N L6: N L7: N L8: N L9: N L10: N ",
       "gradeMap" : {
-        "midterms" : {
-          "name" : "midterms",
+        "midterm" : {
+          "name" : "midterm",
           "score" : -1.0
         },
-        "finals" : {
-          "name" : "finals",
+        "final" : {
+          "name" : "final",
           "score" : -1.0
         },
         "pe2" : {
@@ -223,12 +223,12 @@
       ],
       "labAttendanceList": "L1: N L2: N L3: N L4: N L5: N L6: N L7: N L8: N L9: N L10: N ",
       "gradeMap" : {
-        "midterms" : {
-          "name" : "midterms",
+        "midterm" : {
+          "name" : "midterm",
           "score" : -1.0
         },
-        "finals" : {
-          "name" : "finals",
+        "final" : {
+          "name" : "final",
           "score" : -1.0
         },
         "pe2" : {
@@ -263,12 +263,12 @@
       ],
       "labAttendanceList": "L1: N L2: N L3: N L4: N L5: N L6: N L7: N L8: N L9: N L10: N ",
       "gradeMap" : {
-        "midterms" : {
-          "name" : "midterms",
+        "midterm" : {
+          "name" : "midterm",
           "score" : -1.0
         },
-        "finals" : {
-          "name" : "finals",
+        "final" : {
+          "name" : "final",
           "score" : -1.0
         },
         "pe2" : {

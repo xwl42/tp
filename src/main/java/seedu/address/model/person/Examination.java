@@ -34,7 +34,8 @@ public class Examination implements Gradeable {
     public void setScore(double inputScore) throws InvalidScoreException {
         if (inputScore < 0 || inputScore > maxScore) {
             throw new InvalidScoreException(
-                    String.format(INVALID_SCORE_FORMAT, inputScore, maxScore)
+                    String.format(INVALID_SCORE_FORMAT, inputScore, maxScore),
+                    maxScore
             );
         }
         this.score = Optional.of(inputScore);

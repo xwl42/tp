@@ -1,12 +1,12 @@
 package seedu.address.model.person;
 
+import static seedu.address.logic.parser.GradeCommandParser.MESSAGE_INVALID_EXAM_NAME_FORMAT;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
 import seedu.address.model.person.exceptions.InvalidExamNameException;
-
-import static seedu.address.logic.parser.GradeCommandParser.MESSAGE_INVALID_EXAM_NAME_FORMAT;
 
 /**
  * Wraps a HashMap with String keys and Gradeable values.

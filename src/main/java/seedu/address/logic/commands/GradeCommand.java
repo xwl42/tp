@@ -33,7 +33,7 @@ public class GradeCommand extends Command {
             + "Example: " + COMMAND_WORD + " 1 "
             + PREFIX_EXAM_NAME + "midterm "
             + PREFIX_SCORE + "30.5";
-    private static final String MESSAGE_GRADE_SUCCESS = "%s of %s graded with score %.1f";
+    public static final String MESSAGE_GRADE_SUCCESS = "%s of %s graded with score %.1f";
     private static final String MESSAGE_FAILURE_INVALID_SCORE =
             "%.1f is invalid! Grade the exam with a number in between 0 and %.1f (inclusive)";
     private static final String MESSAGE_FAILURE_INVALID_NAME =

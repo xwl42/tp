@@ -62,7 +62,7 @@ public class NameTest {
     @Test
     public void compareTo() {
         Name albert = new Name("Albert");
-        Name albert2 = new Name("Albert");
+        Name albert2 = new Name("albert");
         Name ben = new Name("Ben");
 
         assertTrue(albert.compareTo(ben) < 0);

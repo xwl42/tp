@@ -71,8 +71,4 @@ public class Examination implements Gradeable {
     public String getName() {
         return name;
     }
-
-    public double getMaxScore() {
-        return maxScore;
-    }
 }

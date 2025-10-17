@@ -4,6 +4,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
+import seedu.address.model.person.exceptions.InvalidExamNameException;
+
+import static seedu.address.logic.parser.GradeCommandParser.MESSAGE_INVALID_EXAM_NAME_FORMAT;
+
 /**
  * Wraps a HashMap with String keys and Gradeable values.
  */
@@ -57,7 +61,12 @@ public class GradeMap {
     public void gradeExam(String name, double score) throws InvalidExamNameException {
         Gradeable exam = gradeableHashMap.get(name);
         if (exam == null) {
-            throw new InvalidExamNameException();
+            throw new InvalidExamNameException(
+                    String.format(MESSAGE_INVALID_EXAM_NAME_FORMAT,
+                        name,
+                        Arrays.toString(VALID_EXAM_NAMES)
+                    )
+            );
         }
         exam.setScore(score);
     }

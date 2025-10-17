@@ -18,7 +18,6 @@ import seedu.address.model.person.Status;
 public class MarkExerciseCommandParser implements Parser<MarkExerciseCommand> {
     public static final String INVALID_STATUS_FORMAT = "Invalid status. Must be one of: ";
     private static final String EMPTY_PREFIX_FORMAT = "Prefix %s : has empty value!";
-
     /**
      * Parse the user input into a mark exercise command
      * @param args user input

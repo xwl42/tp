@@ -28,14 +28,14 @@ public class GradeCommand extends Command {
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": grades the specific exam of the person identified "
             + "by the index number used in the last person listing.\n"
             + "Parameters: INDEX (must be a positive integer) "
-            + PREFIX_LAB_NUMBER + "EXAMNAME\n"
+            + PREFIX_EXAM_NAME + " EXAM_NAME "
+            + PREFIX_SCORE + " SCORE\n"
             + "Example: " + COMMAND_WORD + " 1 "
-            + PREFIX_EXAM_NAME + "midterm"
+            + PREFIX_EXAM_NAME + "midterm "
             + PREFIX_SCORE + "30.5";
-
     private static final String MESSAGE_GRADE_SUCCESS = "%s of %s graded with score %.1f";
     private static final String MESSAGE_FAILURE_INVALID_SCORE =
-            "%f is invalid! Grade the exam with a number in between 0 and %.1f (inclusive)";
+            "%.1f is invalid! Grade the exam with a number in between 0 and %.1f (inclusive)";
     private static final String MESSAGE_FAILURE_INVALID_NAME =
             "%s is invalid! Here are the valid exam names %s";
     private final Index index;
@@ -80,6 +80,7 @@ public class GradeCommand extends Command {
                     )
             );
         }
+        model.setPerson(personToGrade, personToGrade);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
         return new CommandResult(String.format(MESSAGE_GRADE_SUCCESS,
                 examName,

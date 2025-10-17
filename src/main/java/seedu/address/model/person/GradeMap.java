@@ -30,5 +30,17 @@ public class GradeMap {
                 .map(Object::toString)
                 .collect(Collectors.joining(", "));
     }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true; // same reference
+        }
+        if (!(obj instanceof GradeMap)) {
+            return false; // different type
+        }
+        GradeMap other = (GradeMap) obj;
+        return this.gradeableHashMap.equals(other.gradeableHashMap);
+    }
+
 }
 

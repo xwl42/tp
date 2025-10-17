@@ -45,4 +45,17 @@ public class Examination implements Gradeable {
         return String.format("%s: %s",
                 name, score.map(Object::toString).orElse("NA"));
     }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof Examination)) {
+            return false;
+        }
+        Examination other = (Examination) obj;
+        return this.name.equals(other.name)
+                && Double.compare(this.maxScore, other.maxScore) == 0
+                && this.score.equals(other.score);
+    }
 }

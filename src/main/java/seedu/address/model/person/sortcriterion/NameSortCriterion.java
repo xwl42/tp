@@ -5,7 +5,7 @@ import java.util.Comparator;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 
-public class NameSortCriterion extends SortCriterion{
+public class NameSortCriterion extends SortCriterion {
     public static final String CRITERION_KEYWORD = "name";
 
     @Override
@@ -23,7 +23,7 @@ public class NameSortCriterion extends SortCriterion{
     }
 
     @Override
-    public String getCriterionKeyword() {
+    public String toString() {
         return CRITERION_KEYWORD;
     }
 }

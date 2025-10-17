@@ -21,15 +21,9 @@ public abstract class SortCriterion {
      */
     public abstract String getDisplayString();
 
-    /**
-     * Returns the keyword/identifier for this criterion.
-     */
-    public abstract String getCriterionKeyword();
 
     @Override
-    public String toString() {
-        return getCriterionKeyword();
-    }
+    public abstract String toString();
 
     @Override
     public boolean equals(Object other) {

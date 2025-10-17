@@ -13,8 +13,10 @@ import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Email;
+import seedu.address.model.person.Examination;
 import seedu.address.model.person.ExerciseTracker;
 import seedu.address.model.person.GithubUsername;
+import seedu.address.model.person.GradeMap;
 import seedu.address.model.person.Lab;
 import seedu.address.model.person.LabAttendance;
 import seedu.address.model.person.LabAttendanceList;
@@ -23,6 +25,7 @@ import seedu.address.model.person.Name;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.Status;
 import seedu.address.model.person.StudentId;
+import seedu.address.model.person.exceptions.InvalidScoreException;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -223,6 +226,34 @@ public class ParserUtil {
         }
 
         return new ExerciseTracker(new ArrayList<>(Arrays.asList(statuses)));
+    }
+
+    /**
+     * parses a {@code gradeMapString} into a {@code gradeMap}
+     * @throws ParseException if the given {@code exerciseTrackerString} is invalid
+     */
+    public static GradeMap parseGradeMap(String input) throws ParseException {
+        GradeMap gradeMap = new GradeMap();
+
+        for (String entry : input.split(",")) {
+            String[] parts = entry.trim().split(":");
+            if (parts.length != 2) {
+                continue;
+            }
+            String name = parts[0].trim().toLowerCase();
+            String scoreStr = parts[1].trim();
+            Examination exam = new Examination(name);
+            if (!scoreStr.equalsIgnoreCase("NA")) {
+                try {
+                    exam.setScore(Double.parseDouble(scoreStr));
+                } catch (InvalidScoreException e) {
+                    throw new ParseException(e.getMessage());
+                }
+            }
+            gradeMap.putExam(name, exam);
+        }
+
+        return gradeMap;
     }
 
 }

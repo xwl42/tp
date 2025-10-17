@@ -104,7 +104,10 @@ public class PersonTest {
                 + ", github username=" + ALICE.getGithubUsername()
                 + ", exerciseStatuses=" + ALICE.getExerciseTracker()
                 + ", lab attendance list=" + ALICE.getLabAttendanceList()
+                + ", gradeMap=" + ALICE.getGradeMap()
                 + "}";
         assertEquals(expected, ALICE.toString());
     }
 }
+//, gradeMap=finals: NA, midterms: NA, pe2: NA, pe1: NA
+//, grades=finals: NA, midterms: NA, pe2: NA, pe1: NA

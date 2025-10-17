@@ -25,6 +25,7 @@ import seedu.address.model.Model;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.ExerciseTracker;
 import seedu.address.model.person.GithubUsername;
+import seedu.address.model.person.GradeMap;
 import seedu.address.model.person.LabAttendanceList;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
@@ -111,9 +112,10 @@ public class EditCommand extends Command {
                 .orElse(personToEdit.getExerciseTracker());
         LabAttendanceList updatedLabAttendanceList = editPersonDescriptor.getLabAttendanceList()
                 .orElse(personToEdit.getLabAttendanceList());
-
+        GradeMap updatedGradeMap = editPersonDescriptor.getGradeMap()
+                .orElse(personToEdit.getGradeMap());
         return new Person(updatedStudentId, updatedName, updatedPhone, updatedEmail,
-                 updatedTags, updatedGithubUsername, updatedExerciseTracker, updatedLabAttendanceList);
+                 updatedTags, updatedGithubUsername, updatedExerciseTracker, updatedLabAttendanceList, updatedGradeMap);
     }
 
     @Override
@@ -153,6 +155,8 @@ public class EditCommand extends Command {
         private GithubUsername githubUsername;
         private ExerciseTracker exerciseTracker;
         private LabAttendanceList labAttendanceList;
+
+        private GradeMap gradeMap;
 
         public EditPersonDescriptor() {}
 
@@ -210,8 +214,6 @@ public class EditCommand extends Command {
             return Optional.ofNullable(email);
         }
 
-
-
         public void setExerciseTracker(ExerciseTracker exerciseTracker) {
             this.exerciseTracker = exerciseTracker;
         }
@@ -226,6 +228,10 @@ public class EditCommand extends Command {
 
         public Optional<LabAttendanceList> getLabAttendanceList() {
             return Optional.ofNullable(labAttendanceList);
+        }
+
+        public Optional<GradeMap> getGradeMap() {
+            return Optional.ofNullable(gradeMap);
         }
 
         /**

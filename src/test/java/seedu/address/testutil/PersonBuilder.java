@@ -8,6 +8,7 @@ import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.ExerciseTracker;
 import seedu.address.model.person.GithubUsername;
+import seedu.address.model.person.GradeMap;
 import seedu.address.model.person.LabAttendanceList;
 import seedu.address.model.person.LabList;
 import seedu.address.model.person.Name;
@@ -29,6 +30,8 @@ public class PersonBuilder {
     public static final String DEFAULT_ADDRESS = "123, Jurong West Ave 6, #08-111";
     public static final String DEFAULT_GITHUB_USERNAME = "TestUsername";
     public static final String DEFAULT_LAB_ATTENDANCE_LIST = new LabList().toString();
+    public static final String DEFAULT_GRADEMAP = new GradeMap().toString();
+
 
     private StudentId studentId;
     private Name name;
@@ -38,6 +41,7 @@ public class PersonBuilder {
     private ExerciseTracker exerciseTracker;
     private GithubUsername githubUsername;
     private LabAttendanceList labAttendanceList;
+    private GradeMap gradeMap;
 
     /**
      * Creates a {@code PersonBuilder} with the default details.
@@ -51,6 +55,7 @@ public class PersonBuilder {
         exerciseTracker = new ExerciseTracker();
         githubUsername = new GithubUsername(DEFAULT_GITHUB_USERNAME);
         labAttendanceList = new LabList();
+        gradeMap = new GradeMap();
     }
 
     /**
@@ -65,6 +70,7 @@ public class PersonBuilder {
         exerciseTracker = personToCopy.getExerciseTracker();
         githubUsername = personToCopy.getGithubUsername();
         labAttendanceList = personToCopy.getLabAttendanceList();
+        gradeMap = personToCopy.getGradeMap();
     }
 
     /**
@@ -140,6 +146,18 @@ public class PersonBuilder {
     }
 
     /**
+     * Sets the {@code gradeMap} of the {@code Person} that we are building.
+     */
+    public PersonBuilder withGradeMap(String gradeMapString) {
+        try {
+            gradeMap = ParserUtil.parseGradeMap(gradeMapString);
+        } catch (ParseException e) {
+            throw new IllegalArgumentException("Invalid Exercise Tracker List format"); // For developers
+        }
+        return this;
+    }
+
+    /**
      * builds a person using the fields
      * @return the person that is built
      */
@@ -151,6 +169,8 @@ public class PersonBuilder {
                 tags,
                 githubUsername,
                 exerciseTracker,
-                labAttendanceList);
+                labAttendanceList,
+                gradeMap
+                );
     }
 }

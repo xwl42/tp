@@ -49,8 +49,8 @@ public class Person {
      * Initialises a new person object, but with a specific list of exercise statuses
      */
     public Person(StudentId studentId, Name name, Phone phone, Email email, Set<Tag> tags,
-                  GithubUsername githubUsername, ExerciseTracker exerciseTracker, LabAttendanceList labAttendanceList,
-                  GradeMap gradeMap) {
+                  GithubUsername githubUsername, ExerciseTracker exerciseTracker,
+                  LabAttendanceList labAttendanceList, GradeMap gradeMap) {
         requireAllNonNull(name, phone, email, tags, githubUsername, exerciseTracker, labAttendanceList);
         this.studentId = studentId;
         this.name = name;
@@ -160,7 +160,7 @@ public class Person {
                 .add("github username", githubUsername)
                 .add("exerciseStatuses", exerciseTracker)
                 .add("lab attendance list", labAttendanceList)
-                .add("grades", gradeMap)
+                .add("gradeMap", gradeMap)
                 .toString();
     }
 }

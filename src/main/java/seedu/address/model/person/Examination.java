@@ -1,7 +1,7 @@
 package seedu.address.model.person;
+import java.util.Optional;
 
 import seedu.address.model.person.exceptions.InvalidScoreException;
-import java.util.Optional;
 
 /**
  * Represents a graded examination.
@@ -16,12 +16,12 @@ public class Examination implements Gradeable {
 
     /**
      * Sets the fields accordingly.
+     *
      * @param name the name of the examination
-     * @param maxScore the maximum achievable score for the examination
      */
-    public Examination(String name, double maxScore) {
+    public Examination(String name) {
         this.name = name;
-        this.maxScore = maxScore;
+        this.maxScore = getMaxScoreFor(name);
         this.score = Optional.empty();
     }
 
@@ -57,5 +57,21 @@ public class Examination implements Gradeable {
         return this.name.equals(other.name)
                 && Double.compare(this.maxScore, other.maxScore) == 0
                 && this.score.equals(other.score);
+    }
+    public static double getMaxScoreFor(String name) {
+        return switch (name.toLowerCase()) {
+        case "pe1" -> 40.0;
+        case "midterms" -> 60.0;
+        case "pe2" -> 40.0;
+        case "finals" -> 100.0;
+        default -> throw new IllegalArgumentException("Unknown exam: " + name);
+        };
+    }
+    public String getName() {
+        return name;
+    }
+
+    public double getMaxScore() {
+        return maxScore;
     }
 }

@@ -15,6 +15,7 @@ import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.ExerciseTracker;
 import seedu.address.model.person.GithubUsername;
+import seedu.address.model.person.GradeMap;
 import seedu.address.model.person.Lab;
 import seedu.address.model.person.LabAttendance;
 import seedu.address.model.person.LabAttendanceList;
@@ -224,5 +225,4 @@ public class ParserUtil {
 
         return new ExerciseTracker(new ArrayList<>(Arrays.asList(statuses)));
     }
-
 }

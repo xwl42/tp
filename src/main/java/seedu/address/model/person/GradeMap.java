@@ -1,6 +1,7 @@
 package seedu.address.model.person;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -9,16 +10,15 @@ import java.util.stream.Collectors;
 public class GradeMap {
     private final HashMap<String, Gradeable> gradeableHashMap;
     private final String[] assessments = {"pe1", "midterms", "pe2", "finals"};
-    private final double[] maxScores = {40.0, 60.0, 40.0, 100.0};
     /**
      * Fills the hashmap with the keys
      */
     public GradeMap() {
         gradeableHashMap = new HashMap<>();
-        for (int i = 0; i < assessments.length; i++) {
+        for (String assessment : assessments) {
             gradeableHashMap.put(
-                    assessments[i],
-                    new Examination(assessments[i], maxScores[i])
+                    assessment,
+                    new Examination(assessment)
             );
         }
     }
@@ -42,5 +42,12 @@ public class GradeMap {
         return this.gradeableHashMap.equals(other.gradeableHashMap);
     }
 
+    public HashMap<String, Gradeable> getGradeableHashMap() {
+        return gradeableHashMap;
+    }
+
+    public void putExam(String key, Examination exam) {
+        gradeableHashMap.put(key, exam);
+    }
 }
 

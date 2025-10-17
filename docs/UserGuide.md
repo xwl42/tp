@@ -4,10 +4,12 @@
   pageNav: 3
 ---
 
-# AB-3 User Guide
+# LambdaLab User Guide
 
-AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized for use via a  Line Interface** (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, AB3 can get your contact management tasks done faster than traditional GUI apps.
-
+LambdaLab is a desktop app for **CS2030S Teaching Assistants** to **manage student records**, optimised for use via a 
+Command Line Interface (CLI) while still having an intuitive Graphical User Interface (GUI). If you are a fast typer, 
+LambdaLab can help you track student information, lab attendance, and exercise submissions even faster than traditional 
+spreadsheets or GUI apps.
 ---
 ## Table of Contents
 
@@ -15,7 +17,7 @@ AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized fo
 2. [Features](#features)
     1. [Viewing help : `help`](#viewing-help--help)
     2. [Adding a person : `add`](#adding-a-person-add)
-    3. [Listing all persons : `list`](#listing-all-persons--list)
+    3. [Listing all students : `list`](#listing-all-persons--list)
     4. [Editing a person : `edit`](#editing-a-person--edit)
     5. [Marking Lab Attendance : `marka`](#marking-lab-attendance--marka)
     6. [Marking Exercise Status : `marke`](#marking-exercise-status-marke)
@@ -34,35 +36,48 @@ AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized fo
 
 <page-nav-print />
 
---------------------------------------------------------------------------------------------------------------------
 
 ## Quick start
 
-1. Ensure you have Java `17` or above installed in your Computer.<br>
-   **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
+1. Ensure you have **Java 17** or above installed in your Computer.<br>
+> **Checking your Java version:**
+> * Open a command terminal
+> * Type `java -version` and press Enter
+> * If Java is installed, you'll see the version number (e.g., `java version "17.0.1"`)
+> * The first number should be 17 or higher
+>
+> **If Java is not installed or the version is below 17:**
+> * Download and install Java 17 by following the guide:
+>   * [for Windows users](https://se-education.org/guides/tutorials/javaInstallationWindows.html)
+>   * [for Mac users](https://se-education.org/guides/tutorials/javaInstallationMac.html)
+>   * [for Linus users](https://se-education.org/guides/tutorials/javaInstallationLinux.html)
+> * After installation, restart your terminal and verify the version again
 
-1. Download the latest `.jar` file from [here](https://github.com/se-edu/addressbook-level3/releases).
+2. Download the latest `.jar` file from [here](https://github.com/AY2526S1-CS2103T-T09-3/tp/releases).
 
-1. Copy the file to the folder you want to use as the _home folder_ for your AddressBook.
+3. Copy the `.jar` file to the folder you want to use as the _home folder_ for your LambdaLab.
 
-1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar addressbook.jar` command to run the application.<br>
-   A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
+4. Open a command terminal, `cd` into the folder you put the `.jar` file in, and use the `java -jar addressbook.jar` command to run the application.<br>
+   A GUI similar to the below should appear in a few seconds. Note that the app contains some sample data and the layout 
+   is explained in coloured boxes.<br>
    ![Ui](images/Ui.png)
 
-1. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
+5. Type your command in the command box and press Enter to execute it. <br>
    Some example commands you can try:
 
-   * `list` : Lists all contacts.
+   * `help` : Shows the help window that explains the command usage. 
 
-   * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01` : Adds a contact named `John Doe` to the Address Book.
+   * `list` : Lists all students' records.
 
-   * `delete 3` : Deletes the 3rd contact shown in the current list.
+   * `add i/A1234567X n/John Doe p/98765432 e/johnd@example.com g/JohnDoe t/ModelStudent`: Adds a student named `John Doe` to the record.
 
-   * `clear` : Deletes all contacts.
+   * `delete 3` : Deletes the 3rd student's record shown in the current list.
+
+   * `clear` : Deletes all students' records.
 
    * `exit` : Exits the app.
 
-1. Refer to the [Features](#features) below for details of each command.
+6. Refer to the [Features](#features) below for details of each command.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -114,9 +129,9 @@ Examples:
 * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`
 * `add n/Betsy Crowe t/friend e/betsycrowe@example.com a/Newgate Prison p/1234567 t/criminal`
 
-### Listing all persons : `list`
+### Listing all students : `list`
 
-Shows a list of all persons in the address book.
+Shows a list of all students and their information.
 
 Format: `list`
 
@@ -267,5 +282,6 @@ Action     | Format, Examples
 **Help**   | `help`
 **Mark Attendance** | `marka INDEX l/LABNUMBER` <br> e.g. `marka 2 l/7`
 **Mark Exercise** | `marke INDEX ei/EXERCISENUMBER s/STATUSLETTER` <br> e.g. `marke 2 ei/7 s/d`
+**Exit**   | `exit`
 
 

@@ -3,18 +3,25 @@ package seedu.address.logic.commands;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.logic.commands.GradeCommand.MESSAGE_GRADE_SUCCESS;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_HUNDRED_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
+import java.nio.file.Path;
+import java.util.function.Predicate;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import javafx.collections.ObservableList;
+import seedu.address.commons.core.GuiSettings;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
+import seedu.address.model.ReadOnlyAddressBook;
+import seedu.address.model.ReadOnlyUserPrefs;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.person.GradeMap;
 import seedu.address.model.person.Person;
@@ -23,29 +30,37 @@ import seedu.address.model.person.exceptions.InvalidScoreException;
 import seedu.address.testutil.PersonBuilder;
 
 public class GradeCommandTest {
+    private Model model;
+    @BeforeEach
+    public void setUp() {
+        model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+    }
 
-    private final Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
     @Test
     public void execute_validExam_success() throws Exception {
-        Person firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        GradeMap gradeMap = new GradeMap();
-        gradeMap.gradeExam("midterms", 30.0);
+        // Arrange
+        ModelStubWithTypicalPersons modelStub = new ModelStubWithTypicalPersons();
+        Person firstPerson = modelStub.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+
+        GradeMap updatedGradeMap = new GradeMap();
+        updatedGradeMap.gradeExam("midterms", 30.0);
         Person editedPerson = new PersonBuilder(firstPerson)
-                .withGradeMap(gradeMap.toString())
+                .withGradeMap(updatedGradeMap.toString())
                 .build();
+
         GradeCommand gradeCommand = new GradeCommand(INDEX_FIRST_PERSON, "midterms", 30.0);
-
         String expectedMessage = String.format(MESSAGE_GRADE_SUCCESS,
-                "midterms",
-                editedPerson.getName(),
-                30.0);
+                "midterms", editedPerson.getName(), 30.0);
 
-        Model expectedModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
-        Person firstPersonExpected = expectedModel.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        expectedModel.setPerson(firstPersonExpected, editedPerson);
+        // Act
+        CommandResult commandResult = gradeCommand.execute(modelStub);
 
-        assertCommandSuccess(gradeCommand, model, expectedMessage, expectedModel);
+        // Assert
+        assertEquals(expectedMessage, commandResult.getFeedbackToUser());
+        assertEquals(editedPerson, modelStub.getFilteredPersonList()
+                .get(INDEX_FIRST_PERSON.getZeroBased()));
     }
+
 
     @Test
     public void execute_invalidExamName_throwsCommandException() {
@@ -99,5 +114,100 @@ public class GradeCommandTest {
 
         // different score -> returns false
         assertNotEquals(new GradeCommand(INDEX_FIRST_PERSON, "midterms", 90.0), standardCommand);
+    }
+    private class ModelStubWithTypicalPersons extends ModelStub {
+        private final ObservableList<Person> persons =
+                javafx.collections.FXCollections.observableArrayList(getTypicalAddressBook().getPersonList());
+
+        @Override
+        public ObservableList<Person> getFilteredPersonList() {
+            return persons;
+        }
+
+        @Override
+        public void setPerson(Person target, Person editedPerson) {
+            int index = persons.indexOf(target);
+            if (index == -1) {
+                throw new AssertionError("Person not found in model stub.");
+            }
+            persons.set(index, editedPerson);
+        }
+        @Override
+        public void updateFilteredPersonList(Predicate<Person> predicate) {
+            // no-op, required because GradeCommand calls this method
+        }
+
+    }
+
+    private class ModelStub implements Model {
+        @Override
+        public void setUserPrefs(ReadOnlyUserPrefs userPrefs) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public ReadOnlyUserPrefs getUserPrefs() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public GuiSettings getGuiSettings() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void setGuiSettings(GuiSettings guiSettings) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public Path getAddressBookFilePath() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void setAddressBookFilePath(Path addressBookFilePath) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void addPerson(Person person) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void setAddressBook(ReadOnlyAddressBook newData) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public ReadOnlyAddressBook getAddressBook() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public boolean hasPerson(Person person) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void deletePerson(Person target) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void setPerson(Person target, Person editedPerson) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public ObservableList<Person> getFilteredPersonList() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void updateFilteredPersonList(Predicate<Person> predicate) {
+            throw new AssertionError("This method should not be called.");
+        }
     }
 }

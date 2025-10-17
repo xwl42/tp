@@ -1,7 +1,7 @@
 package seedu.address.model.person;
 
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -24,10 +24,8 @@ public class GradeMap {
     }
     @Override
     public String toString() {
-        return gradeableHashMap
-                .values()
-                .stream()
-                .map(Object::toString)
+        return Arrays.stream(assessments)
+                .map(a -> gradeableHashMap.get(a).toString())
                 .collect(Collectors.joining(", "));
     }
     @Override

@@ -46,6 +46,8 @@ public class PersonCard extends UiPart<Region> {
     private Label githubUsername;
     @FXML
     private Label labAttendanceList;
+    @FXML
+    private Label gradeMap;
 
     /**
      * Creates a {@code PersonCode} with the given {@code Person} and index to display.
@@ -64,5 +66,6 @@ public class PersonCard extends UiPart<Region> {
                 .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
         githubUsername.setText(person.getGithubUsername().value);
         labAttendanceList.setText(person.getLabAttendanceList().toString());
+        gradeMap.setText(person.getGradeMap().toString());
     }
 }

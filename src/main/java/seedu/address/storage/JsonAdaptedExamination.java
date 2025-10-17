@@ -39,7 +39,7 @@ public class JsonAdaptedExamination {
      */
     public Examination toModelType() {
         Examination exam = new Examination(name);
-        if (score != null) {
+        if (score != null && score >= 0) {
             try {
                 exam.setScore(score);
             } catch (InvalidScoreException e) {

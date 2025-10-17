@@ -11,7 +11,6 @@ import seedu.address.model.person.Status;
  * Jackson-friendly version of {@link Status}.
  */
 class JsonAdaptedStatus {
-
     private final String statusName;
 
     /**

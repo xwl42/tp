@@ -35,9 +35,7 @@
       <Label fx:id="exerciseStatus" styleClass="cell_small_label" text="\$exstats" />
       <Label fx:id="githubUsername" styleClass="cell_small_label" text="\$githubUsername" />
       <Label fx:id="labAttendanceList" styleClass="cell_small_label" text="\$labAttendanceList" />
-
-
-
+      <Label fx:id="gradeMap" styleClass="cell_small_label" text="\$gradeMap" />
     </VBox>
   </GridPane>
 </HBox>

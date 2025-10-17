@@ -109,5 +109,3 @@ public class PersonTest {
         assertEquals(expected, ALICE.toString());
     }
 }
-//, gradeMap=finals: NA, midterms: NA, pe2: NA, pe1: NA
-//, grades=finals: NA, midterms: NA, pe2: NA, pe1: NA

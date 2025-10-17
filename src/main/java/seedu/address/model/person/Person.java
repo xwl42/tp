@@ -61,6 +61,7 @@ public class Person {
         this.githubUsername = githubUsername;
         this.labAttendanceList = labAttendanceList;
         this.gradeMap = gradeMap;
+        System.out.println(gradeMap);
     }
 
     public StudentId getStudentId() {

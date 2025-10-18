@@ -7,9 +7,12 @@ import seedu.address.model.person.exceptions.InvalidScoreException;
  * Represents a graded examination.
  */
 public class Examination implements Gradeable {
+    public static final double MAX_PE1_SCORE = 40.0;
+    public static final double MAX_MIDTERM_SCORE = 60.0;
+    public static final double MAX_PE2_SCORE = 40.0;
+    public static final double MAX_FINAL_SCORE = 100.0;
     private static final String INVALID_SCORE_FORMAT =
             "%.1f is invalid as a score. Input a number from 0 to %.1f";
-
     private final String name;
     private final double maxScore;
     private Optional<Double> score;
@@ -61,10 +64,10 @@ public class Examination implements Gradeable {
     }
     public static double getMaxScoreFor(String name) {
         return switch (name.toLowerCase()) {
-        case "pe1" -> 40.0;
-        case "midterms" -> 60.0;
-        case "pe2" -> 40.0;
-        case "finals" -> 100.0;
+        case "pe1" -> MAX_PE1_SCORE;
+        case "midterm" -> MAX_MIDTERM_SCORE;
+        case "pe2" -> MAX_PE2_SCORE;
+        case "final" -> MAX_FINAL_SCORE;
         default -> throw new IllegalArgumentException("Unknown exam: " + name);
         };
     }

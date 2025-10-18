@@ -12,7 +12,7 @@ import seedu.address.model.person.exceptions.InvalidExamNameException;
  * Wraps a HashMap with String keys and Gradeable values.
  */
 public class GradeMap {
-    public static final String[] VALID_EXAM_NAMES = {"pe1", "midterms", "pe2", "finals"};
+    public static final String[] VALID_EXAM_NAMES = {"pe1", "midterm", "pe2", "final"};
     private final HashMap<String, Gradeable> gradeableHashMap;
     /**
      * Fills the hashmap with the keys

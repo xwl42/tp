@@ -11,6 +11,7 @@ import java.util.Set;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.StringUtil;
+import seedu.address.logic.commands.SortCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Examination;
@@ -26,6 +27,9 @@ import seedu.address.model.person.Phone;
 import seedu.address.model.person.Status;
 import seedu.address.model.person.StudentId;
 import seedu.address.model.person.exceptions.InvalidScoreException;
+import seedu.address.model.person.sortcriterion.NameSortCriterion;
+import seedu.address.model.person.sortcriterion.SortCriterion;
+import seedu.address.model.person.sortcriterion.StudentIdSortCriterion;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -256,4 +260,25 @@ public class ParserUtil {
         return gradeMap;
     }
 
+    /**
+     * Parses a {@code String criterionString} into a {@code SortCriterion}.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws ParseException if the given {@code criterionString} is not a valid criterion.
+     */
+    public static SortCriterion parseSortCriterion(String criterionString) throws ParseException {
+        requireNonNull(criterionString);
+        String trimmedCriterion = criterionString.trim().toLowerCase();
+
+        switch (trimmedCriterion) {
+        case NameSortCriterion.CRITERION_KEYWORD:
+            return new NameSortCriterion();
+
+        case StudentIdSortCriterion.CRITERION_KEYWORD:
+            return new StudentIdSortCriterion();
+
+        default:
+            throw new ParseException(SortCriterion.MESSAGE_CONSTRAINTS);
+        }
+    }
 }

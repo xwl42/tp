@@ -17,7 +17,7 @@ public class StudentIdSortCriterion extends SortCriterion {
 
     @Override
     public String getDisplayString() {
-        return "student Id";
+        return "student id";
     }
 
     @Override

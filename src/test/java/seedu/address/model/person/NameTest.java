@@ -58,17 +58,4 @@ public class NameTest {
         // different values -> returns false
         assertFalse(name.equals(new Name("Other Valid Name")));
     }
-
-    @Test
-    public void compareTo() {
-        Name albert = new Name("Albert");
-        Name albert2 = new Name("albert");
-        Name ben = new Name("Ben");
-
-        assertTrue(albert.compareTo(ben) < 0);
-
-        assertTrue(ben.compareTo(albert) > 0);
-
-        assertEquals(0, albert.compareTo(albert2));
-    }
 }

@@ -9,7 +9,10 @@ import seedu.address.logic.commands.SortCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.sortcriterion.SortCriterion;
 
-public class SortCommandParser implements Parser<SortCommand>{
+/**
+ * Parses input arguments and creates a new {@code SortCommand} object.
+ */
+public class SortCommandParser implements Parser<SortCommand> {
 
     /**
      * Parse the given {@code String} of arguments in the context of the {@code SortCommand}

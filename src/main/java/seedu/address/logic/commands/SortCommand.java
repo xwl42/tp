@@ -14,8 +14,8 @@ public class SortCommand extends Command {
     public static final String COMMAND_WORD = "sort";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Sorts the students in the display list "
-            + "by the specified criterion"
-            + "Parameters: " + PREFIX_SORT_CRITERION + "SORTCRITERION\n"
+            + "by the specified criterion\n"
+            + "Parameters: " + PREFIX_SORT_CRITERION + "SORTCRITERION (must be one of 'name', 'id'\n"
             + "Example: " + COMMAND_WORD + "name";
 
     public static final String MESSAGE_ARGUMENTS = "Sort Criterion: %1$s";

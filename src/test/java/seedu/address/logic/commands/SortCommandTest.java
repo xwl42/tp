@@ -18,8 +18,9 @@ import seedu.address.model.person.sortcriterion.StudentIdSortCriterion;
 public class SortCommandTest {
     private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
-    private static final SortCriterion nameSortCriterion = new NameSortCriterion();
-    private static final SortCriterion studentIdSortCriterion = new StudentIdSortCriterion();
+    private final SortCriterion nameSortCriterion = new NameSortCriterion();
+    private final SortCriterion studentIdSortCriterion = new StudentIdSortCriterion();
+
 
     @Test
     public void execute() {
@@ -33,7 +34,7 @@ public class SortCommandTest {
         final SortCommand standardCommand = new SortCommand(nameSortCriterion);
 
         // Same values
-        SortCommand commandWithSameValues =  new SortCommand(nameSortCriterion);
+        SortCommand commandWithSameValues = new SortCommand(nameSortCriterion);
         assertEquals(standardCommand, commandWithSameValues);
 
         // Same object

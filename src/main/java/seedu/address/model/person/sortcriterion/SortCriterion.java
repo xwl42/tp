@@ -34,9 +34,4 @@ public abstract class SortCriterion {
         // Two criteria are equal if they're of the same class
         return other != null && this.getClass().equals(other.getClass());
     }
-
-    @Override
-    public int hashCode() {
-        return this.getClass().hashCode();
-    }
 }

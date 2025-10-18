@@ -16,9 +16,9 @@ public class SortCommand extends Command {
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Sorts the students in the display list "
             + "by the specified criterion\n"
             + "Parameters: " + PREFIX_SORT_CRITERION + "SORTCRITERION (must be one of 'name', 'id'\n"
-            + "Example: " + COMMAND_WORD + "name";
+            + "Example: " + COMMAND_WORD + " " + PREFIX_SORT_CRITERION + "name";
 
-    public static final String MESSAGE_ARGUMENTS = "Sort Criterion: %1$s";
+    public static final String MESSAGE_SUCCESS = "Sorted all students by %s";
 
     private final SortCriterion sortCriterion;
 
@@ -33,7 +33,10 @@ public class SortCommand extends Command {
 
     @Override
     public CommandResult execute(Model model) throws CommandException {
-        throw new CommandException(String.format(MESSAGE_ARGUMENTS, sortCriterion.toString()));
+        requireNonNull(model);
+        model.sortPersonList(sortCriterion.getComparator());
+        return new CommandResult(
+                String.format(MESSAGE_SUCCESS, sortCriterion.getDisplayString()));
     }
 
     @Override

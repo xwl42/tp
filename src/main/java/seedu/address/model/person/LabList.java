@@ -34,10 +34,6 @@ public class LabList implements LabAttendanceList {
         return labAttendanceList;
     }
 
-    /**
-     * Marks the specified lab session as attended.
-     * @param index the zero-based index of the lab session.
-     */
     @Override
     public void markLabAsAttended(int index) throws IndexOutOfBoundsException {
         if (index < 0 || index >= NUMBER_OF_LABS) {
@@ -125,5 +121,16 @@ public class LabList implements LabAttendanceList {
 
     public LabAttendance[] getLabs() {
         return labs;
+    }
+
+    @Override
+    public double calculateLabAttendance() {
+        double count = 0;
+        for (LabAttendance lab: labs) {
+            if (lab.isAttended()) {
+                count++;
+            }
+        }
+        return count / NUMBER_OF_LABS * 100;
     }
 }

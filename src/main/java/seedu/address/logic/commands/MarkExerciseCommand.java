@@ -74,6 +74,7 @@ public class MarkExerciseCommand extends Command {
                     String.format(MESSAGE_INDEX_OUT_OF_BOUNDS, HIGHEST_INDEX)
             );
         }
+        model.saveAddressBook();
         model.setPerson(student, student);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
         return new CommandResult(String.format(MESSAGE_MARK_EXERCISE,

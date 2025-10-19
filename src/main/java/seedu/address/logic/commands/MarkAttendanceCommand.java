@@ -70,6 +70,7 @@ public class MarkAttendanceCommand extends Command {
                 personToEdit.getGithubUsername(), personToEdit.getExerciseTracker(),
                 labAttendanceList, personToEdit.getGradeMap());
 
+        model.saveAddressBook();
         model.setPerson(personToEdit, editedPerson);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
 

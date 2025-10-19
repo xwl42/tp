@@ -3,7 +3,7 @@ package seedu.address.model.person;
 /**
  * Represents a collection of lab attendance statuses.
  */
-public interface LabAttendanceList {
+public interface LabAttendanceList extends Comparable<LabAttendanceList> {
 
     /**
      * Marks the specified lab session as attended.

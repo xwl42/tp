@@ -133,4 +133,9 @@ public class LabList implements LabAttendanceList {
         }
         return count / NUMBER_OF_LABS * 100;
     }
+
+    @Override
+    public int compareTo(LabAttendanceList other) {
+        return Double.compare(this.calculateLabAttendance(), other.calculateLabAttendance());
+    }
 }

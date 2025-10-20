@@ -24,10 +24,11 @@ spreadsheets or GUI apps.
     7. [Locating persons by name : `find`](#locating-persons-by-name-find)
     8. [Deleting a person : `delete`](#deleting-a-person--delete)
     9. [Clearing all entries : `clear`](#clearing-all-entries--clear)
-    10. [Exiting the program : `exit`](#exiting-the-program--exit)
-    11. [Saving the data](#saving-the-data)
-    12. [Editing the data file](#editing-the-data-file)
-    13. [Archiving data files (coming in v2.0)](#archiving-data-files-coming-in-v20)
+   10. [Undoing the last command : `undo`](#undoing-the-last-command--undo)
+   11. [Exiting the program : `exit`](#exiting-the-program--exit)
+   12. [Saving the data](#saving-the-data)
+   13. [Editing the data file](#editing-the-data-file)
+   14. [Archiving data files (coming in v2.0)](#archiving-data-files-coming-in-v20)
 3. [FAQ](#faq)
 4. [Known issues](#known-issues)
 5. [Command summary](#command-summary)
@@ -220,13 +221,43 @@ Examples:
 ### Clearing all entries : `clear`
 
 Clears **all** entries from the address book, leaving it completely empty.
+
+Format: `clear`
+
 <box type="warning" seamless>
 
 **Caution:**
-This command will **permanently** remove all entries from the address book.
+This command will remove **all** entries from the address book. If mistakenly performed, type `undo` **immediately**
+before using another data-modifying command.
 </box>
 
-Format: `clear`
+### Undoing the last command : `undo`
+
+Reverses the **most recent** command that modified student data in LambdaLab.
+
+Format: `undo`
+
+* Only commands that change student data can be undone (e.g., `add`, `delete`, `edit`, `marka`, `marke`, `clear`)
+* Commands that do not modify data cannot be undone (e.g., `help`, `list`, `find`, `exit`)
+* Can only undo the very last command that modified data
+* If there is no command to undo, an error message will be displayed
+
+<box type="warning" seamless>
+
+**Caution:**
+This command only undoes the **most recent** data-modifying command. You cannot undo multiple commands or skip 
+back to earlier changes. 
+</box>
+
+<box type="tip" seamless>
+
+**Tip:** Use `undo` immediately after making a mistake to quickly restore your previous data state.
+</box>
+
+Examples:
+* `delete 2` followed by `undo` restores the deleted student back to the list
+* `edit 1 n/Wrong Name` followed by `undo` reverts the student's name to its original value
+* `add n/John Doe p/12345678 e/john@u.nus.edu a/College Avenue` followed by `undo` removes the newly added student
 
 ### Exiting the program : `exit`
 

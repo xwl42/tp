@@ -4,6 +4,9 @@ import java.util.Comparator;
 
 import seedu.address.model.person.Person;
 
+/**
+ * Sorts students by their exercise progress in descending order.
+ */
 public class ExerciseSortCriterion extends SortCriterion {
     public static final String CRITERION_KEYWORD = "ex";
 

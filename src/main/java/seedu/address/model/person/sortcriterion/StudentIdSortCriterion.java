@@ -5,7 +5,7 @@ import java.util.Comparator;
 import seedu.address.model.person.Person;
 
 /**
- * Sorts persons by their student ID in ascending order.
+ * Sorts student by their student ID in ascending order.
  */
 public class StudentIdSortCriterion extends SortCriterion {
     public static final String CRITERION_KEYWORD = "id";

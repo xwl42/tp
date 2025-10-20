@@ -51,7 +51,6 @@ public class GradeCommand extends Command {
         this.examName = examName;
         this.score = score;
     }
-
     @Override
     public CommandResult execute(Model model) throws CommandException {
         List<Person> lastShownList = model.getFilteredPersonList();
@@ -60,9 +59,13 @@ public class GradeCommand extends Command {
             throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
         }
         Person personToGrade = lastShownList.get(index.getZeroBased());
-        GradeMap gradeMap = personToGrade.getGradeMap();
+
+        model.saveAddressBook(); // Save before modification
+
+        GradeMap updatedGradeMap = personToGrade.getGradeMap().copy(); // Create copy
+
         try {
-            gradeMap.gradeExam(examName, score);
+            updatedGradeMap.gradeExam(examName, score); // Modify the copy
         } catch (InvalidExamNameException iene) {
             throw new CommandException(
                     String.format(
@@ -79,13 +82,28 @@ public class GradeCommand extends Command {
                     )
             );
         }
-        model.setPerson(personToGrade, personToGrade);
+
+        // Create a NEW Person with the updated GradeMap
+        Person gradedPerson = new Person(
+                personToGrade.getStudentId(),
+                personToGrade.getName(),
+                personToGrade.getPhone(),
+                personToGrade.getEmail(),
+                personToGrade.getTags(),
+                personToGrade.getGithubUsername(),
+                personToGrade.getExerciseTracker(),
+                personToGrade.getLabAttendanceList(),
+                updatedGradeMap // Use the modified copy here
+        );
+
+        model.setPerson(personToGrade, gradedPerson); // Replace old with new
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+
         return new CommandResult(String.format(MESSAGE_GRADE_SUCCESS,
                 examName,
-                personToGrade.getName(),
+                gradedPerson.getName(),
                 score
-                )
+        )
         );
     }
 

@@ -346,6 +346,7 @@ Action     | Format, Examples
 **Help**   | `help`
 **Mark Attendance** | `marka INDEX l/LABNUMBER` <br> e.g. `marka 2 l/7`
 **Mark Exercise** | `marke INDEX ei/EXERCISENUMBER s/STATUSLETTER` <br> e.g. `marke 2 ei/7 s/d`
+**Undo** | `undo`
 **Exit**   | `exit`
 
 

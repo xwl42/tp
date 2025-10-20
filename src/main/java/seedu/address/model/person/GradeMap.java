@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.stream.Collectors;
 
 import seedu.address.model.person.exceptions.InvalidExamNameException;
+import seedu.address.model.person.exceptions.InvalidScoreException;
 
 /**
  * Wraps a HashMap with String keys and Gradeable values.
@@ -69,6 +70,32 @@ public class GradeMap {
             );
         }
         exam.setScore(score);
+    }
+
+    /**
+     * Returns a deep copy of this GradeMap.
+     * @return a new GradeMap with copied data
+     */
+    public GradeMap copy() {
+        GradeMap newGradeMap = new GradeMap();
+
+        for (String examName : VALID_EXAM_NAMES) {
+            Gradeable original = this.gradeableHashMap.get(examName);
+            Gradeable copied = newGradeMap.gradeableHashMap.get(examName);
+
+            if (original instanceof Examination) {
+                Examination originalExam = (Examination) original;
+                if (originalExam.getScore() != -1.0) {
+                    try {
+                        copied.setScore(originalExam.getScore());
+                    } catch (InvalidScoreException e) {
+                        throw new RuntimeException("Unexpected error copying valid score", e);
+                    }
+                }
+            }
+        }
+
+        return newGradeMap;
     }
 }
 

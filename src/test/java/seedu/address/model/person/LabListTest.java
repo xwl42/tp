@@ -151,4 +151,19 @@ public class LabListTest {
         labList.markLabAsAttended(7);
         assertTrue(LabList.isValidLabList(labList.toString()));
     }
+
+    @Test
+    public void calculateLabAttendance() {
+        LabAttendanceList labAttendanceList = new LabList(labs);
+        assertEquals(0.0 / LabList.NUMBER_OF_LABS * 100, labAttendanceList.calculateLabAttendance());
+
+        labAttendanceList.markLabAsAttended(0);
+        assertEquals(1.0 / LabList.NUMBER_OF_LABS * 100, labAttendanceList.calculateLabAttendance());
+
+        labAttendanceList.markLabAsAttended(1);
+        labAttendanceList.markLabAsAttended(2);
+        labAttendanceList.markLabAsAttended(3);
+        assertEquals(4.0 / LabList.NUMBER_OF_LABS * 100, labAttendanceList.calculateLabAttendance());
+
+    }
 }

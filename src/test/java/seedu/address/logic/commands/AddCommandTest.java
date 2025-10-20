@@ -160,6 +160,21 @@ public class AddCommandTest {
         }
 
         @Override
+        public void saveAddressBook() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public boolean canUndoAddressBook() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void undoAddressBook() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public void sortPersonList(Comparator<Person> comparator) {
             throw new AssertionError("This method should not be called.");
         }
@@ -204,6 +219,11 @@ public class AddCommandTest {
         @Override
         public ReadOnlyAddressBook getAddressBook() {
             return new AddressBook();
+        }
+
+        @Override
+        public void saveAddressBook() {
+            // Do nothing - this is a stub for testing
         }
     }
 

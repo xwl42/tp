@@ -27,6 +27,7 @@ import seedu.address.model.person.Status;
 import seedu.address.model.person.StudentId;
 import seedu.address.model.person.exceptions.InvalidScoreException;
 import seedu.address.model.person.sortcriterion.LabSortCriterion;
+import seedu.address.model.person.sortcriterion.ExerciseSortCriterion;
 import seedu.address.model.person.sortcriterion.NameSortCriterion;
 import seedu.address.model.person.sortcriterion.SortCriterion;
 import seedu.address.model.person.sortcriterion.StudentIdSortCriterion;
@@ -279,6 +280,9 @@ public class ParserUtil {
 
         case LabSortCriterion.CRITERION_KEYWORD:
             return new LabSortCriterion();
+
+        case ExerciseSortCriterion.CRITERION_KEYWORD:
+            return new ExerciseSortCriterion();
 
         default:
             throw new ParseException(SortCriterion.MESSAGE_CONSTRAINTS);

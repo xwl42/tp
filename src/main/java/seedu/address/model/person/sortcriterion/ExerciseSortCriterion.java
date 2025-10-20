@@ -5,19 +5,19 @@ import java.util.Comparator;
 import seedu.address.model.person.Person;
 
 /**
- * Sorts student by their student ID in ascending order.
+ * Sorts students by their exercise progress in descending order.
  */
-public class StudentIdSortCriterion extends SortCriterion {
-    public static final String CRITERION_KEYWORD = "id";
+public class ExerciseSortCriterion extends SortCriterion {
+    public static final String CRITERION_KEYWORD = "ex";
 
     @Override
     public Comparator<Person> getComparator() {
-        return Comparator.comparing(Person::getStudentId);
+        return Comparator.comparing(Person::getExerciseTracker, Comparator.reverseOrder());
     }
 
     @Override
     public String getDisplayString() {
-        return "student id";
+        return "exercise progress";
     }
 
     @Override

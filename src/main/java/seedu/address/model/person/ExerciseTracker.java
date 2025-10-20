@@ -1,5 +1,9 @@
 package seedu.address.model.person;
 
+import static seedu.address.model.person.Status.DONE;
+import static seedu.address.model.person.Status.NOT_DONE;
+import static seedu.address.model.person.Status.OVERDUE;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.stream.Collectors;
@@ -10,10 +14,13 @@ import seedu.address.commons.core.index.Index;
 /**
  * Represents a Person's address in the address book.
  */
-public class ExerciseTracker {
+public class ExerciseTracker implements Comparable<ExerciseTracker> {
 
     public static final String MESSAGE_CONSTRAINTS = "Exercise tracker takes in statuses";
     public static final int NUMBER_OF_EXERCISES = 10;
+    public static final double WEIGHT_DONE = 1;
+    public static final double WEIGHT_OVERDUE = -0.5;
+
     public final ArrayList<Status> statuses;
 
     /**
@@ -21,7 +28,7 @@ public class ExerciseTracker {
      */
     public ExerciseTracker() {
         this.statuses = new ArrayList<>(
-                Collections.nCopies(NUMBER_OF_EXERCISES, Status.NOT_DONE)
+                Collections.nCopies(NUMBER_OF_EXERCISES, NOT_DONE)
         );
     }
     /**
@@ -54,6 +61,7 @@ public class ExerciseTracker {
     public int hashCode() {
         return statuses.hashCode();
     }
+
     public ArrayList<Status> getStatuses() {
         return statuses;
     }
@@ -68,6 +76,36 @@ public class ExerciseTracker {
             throw new IndexOutOfBoundsException("Index should be between 0 and " + (NUMBER_OF_EXERCISES - 1));
         }
         statuses.set(index.getZeroBased(), status);
+    }
+
+    /**
+     * Calculate a student's exercise progress as percentage
+     * @return the progress between -50.0 and 100.0.
+     */
+    public double calculateProgress() {
+        double count = 0;
+        for (int i = 0; i < NUMBER_OF_EXERCISES; i++) {
+            Status status = statuses.get(i);
+            switch (status) {
+            case DONE:
+                count += WEIGHT_DONE;
+                break;
+            case OVERDUE:
+                count += WEIGHT_OVERDUE;
+                break;
+            case NOT_DONE:
+                break;
+
+            default:
+                throw new IllegalStateException("Unexpected status: " + status);
+            }
+        }
+        return count / NUMBER_OF_EXERCISES * 100.0;
+    }
+
+    @Override
+    public int compareTo(ExerciseTracker other) {
+        return Double.compare(this.calculateProgress(), other.calculateProgress());
     }
 
     /**

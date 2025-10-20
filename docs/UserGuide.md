@@ -21,14 +21,15 @@ spreadsheets or GUI apps.
     4. [Editing a student : `edit`](#editing-a-student--edit)
     5. [Marking Lab Attendance : `marka`](#marking-lab-attendance--marka)
     6. [Marking Exercise Status : `marke`](#marking-exercise-status-marke)
-    7. [Locating students by name : `find`](#locating-students-by-name-find)
+    7. [Locating persons by name : `find`](#locating-persons-by-name-find)
     8. [Sorting students:`sort`](#sorting-the-students-sort)
     9. [Deleting a student : `delete`](#deleting-a-student--delete)
     10. [Clearing all entries : `clear`](#clearing-all-entries--clear)
-    11. [Exiting the program : `exit`](#exiting-the-program--exit)
-    12. [Saving the data](#saving-the-data)
-    13. [Editing the data file](#editing-the-data-file)
-    14. [Archiving data files (coming in v2.0)](#archiving-data-files-coming-in-v20)
+    11. [Undoing the last command : `undo`](#undoing-the-last-command--undo)
+    12. [Exiting the program : `exit`](#exiting-the-program--exit)
+    13. [Saving the data](#saving-the-data)
+    14. [Editing the data file](#editing-the-data-file)
+    15. [Archiving data files (coming in v2.0)](#archiving-data-files-coming-in-v20)
 3. [FAQ](#faq)
 4. [Known issues](#known-issues)
 5. [Command summary](#command-summary)
@@ -121,7 +122,7 @@ Format: `help`
 
 Adds a student to the address book.
 
-Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​`
+Format: `add i/STUDENTID n/NAME p/PHONE e/EMAIL g/GITHUB_USERNAME [t/TAG]…​`
 
 <box type="tip" seamless>
 
@@ -129,8 +130,18 @@ Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​`
 </box>
 
 Examples:
-* `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`
-* `add n/Betsy Crowe t/friend e/betsycrowe@example.com a/Newgate Prison p/1234567 t/criminal`
+* Compulsory fields only: `add i/A1234567X n/John Doe p/98765432 e/johnd@example.com g/JohnDoe`
+* Optional fields included: `add i/A1234567X n/John Doe p/98765432 e/johnd@example.com g/JohnDoe t/modelStudent`
+* Fields in different order: `add g/JohnDoe i/A1234567X  p/98765432 t/modelStudent n/John Doe e/johnd@example.com`
+
+Error Messages:
+
+* Missing fields: \
+  `Invalid command format! 
+add: Adds a person to the address book. Parameters: i/STUDENTID n/NAME p/PHONE e/EMAIL g/GITHUB_USERNAME [t/TAG]...
+Example: add i/A1234567X n/John Doe p/98765432 e/johnd@example.com g/JohnDoe t/friends t/owesMoney`
+* Duplicate Identifier (Student ID): \
+    `This person already exists in the address book`
 
 ### Listing all students : `list`
 
@@ -243,24 +254,65 @@ Deletes the specified student from the address book.
 
 Format: `delete INDEX`
 
-* Deletes the student at the specified `INDEX`.
-* The index refers to the index number shown in the displayed student list.
-* The index **must be a positive integer** 1, 2, 3, …​
+* Deletes the person at the specified `INDEX`. The index refers to the index number shown in the **displayed** person list. The index **must be a positive integer** 1, 2, 3, …​
 
 Examples:
 * `list` followed by `delete 2` deletes the 2nd student in the address book.
 * `find Betsy` followed by `delete 1` deletes the 1st student in the results of the `find` command.
 
+Error Messages:
+
+* Missing fields & Non-positive index: \
+  `Invalid command format! 
+    delete: Deletes the person identified by the index number used in the displayed person list.
+    Parameters: INDEX (must be a positive integer)
+    Example: delete 1`
+*  Index out of range: \
+  `The person index provided is invalid`
+
 ### Clearing all entries : `clear`
 
 Clears **all** entries from the address book, leaving it completely empty.
+
+Format: `clear`
+
 <box type="warning" seamless>
 
 **Caution:**
-This command will **permanently** remove all entries from the address book.
+This command will remove **all** entries from the address book. If mistakenly performed, type `undo` **immediately**
+before using another data-modifying command.
 </box>
 
-Format: `clear`
+### Undoing the last command : `undo`
+
+Reverses the **most recent** command that modified student data in LambdaLab.
+
+Format: `undo`
+
+* Only commands that change student data can be undone (e.g., `add`, `delete`, `edit`, `marka`, `marke`, `clear`)
+* Commands that do not modify data cannot be undone (e.g., `help`, `list`, `find`, `exit`)
+* It undos and can only undo the **very last** command that modified data
+* If there is no command to undo, an error message will be displayed
+
+<box type="warning" seamless>
+
+**Caution:**
+This command only undoes the **most recent** data-modifying command. You cannot undo multiple commands or skip 
+back to earlier changes. 
+</box>
+
+<box type="tip" seamless>
+
+**Tip:** Use `undo` immediately after making a mistake to quickly restore your previous data state.
+</box>
+
+Examples:
+* `delete 2` followed by `undo` restores the deleted student back to the list
+* `edit 1 n/Wrong Name` followed by `undo` reverts the student's name to its original value
+* `add n/John Doe p/12345678 e/john@u.nus.edu a/College Avenue` followed by `undo` removes the newly added student
+* `delete 2` followed by `list` followed by `undo` still restores the deleted student back to the list
+* `delete 1` followed by `edit 1 n/Wrong Name` followed by 2 consecutive `undo`s only reverts the student's name 
+to its original value, but cannot restore the deleted student back to the list
 
 ### Exiting the program : `exit`
 
@@ -317,6 +369,7 @@ Action     | Format, Examples
 **Mark Attendance** | `marka INDEX l/LABNUMBER` <br> e.g. `marka 2 l/7`
 **Mark Exercise** | `marke INDEX ei/EXERCISENUMBER s/STATUSLETTER` <br> e.g. `marke 2 ei/7 s/d`
 **Sort**    | `sort`
+**Undo** | `undo`
 **Exit**   | `exit`
 
 

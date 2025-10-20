@@ -19,9 +19,9 @@ spreadsheets or GUI apps.
     2. [Adding a student : `add`](#adding-a-student-add)
     3. [Listing all students : `list`](#listing-all-students--list)
     4. [Editing a student : `edit`](#editing-a-student--edit)
-    5. [Marking Lab Attendance : `marka`](#marking-lab-attendance--marka)
+    5. [Marking Lab Attendance : `marka`](#marking-lab-attendance-marka)
     6. [Marking Exercise Status : `marke`](#marking-exercise-status-marke)
-    7. [Locating persons by name : `find`](#locating-persons-by-name-find)
+    7. [Locating students by name : `find`](#locating-students-by-name-find)
     8. [Sorting students:`sort`](#sorting-the-students-sort)
     9. [Deleting a student : `delete`](#deleting-a-student--delete)
     10. [Clearing all entries : `clear`](#clearing-all-entries--clear)
@@ -138,10 +138,10 @@ Error Messages:
 
 * Missing fields: \
   `Invalid command format! 
-add: Adds a person to the address book. Parameters: i/STUDENTID n/NAME p/PHONE e/EMAIL g/GITHUB_USERNAME [t/TAG]...
+add: Adds a student to the address book. Parameters: i/STUDENTID n/NAME p/PHONE e/EMAIL g/GITHUB_USERNAME [t/TAG]...
 Example: add i/A1234567X n/John Doe p/98765432 e/johnd@example.com g/JohnDoe t/friends t/owesMoney`
 * Duplicate Identifier (Student ID): \
-    `This person already exists in the address book`
+    `This student already exists in the address book`
 
 ### Listing all students : `list`
 
@@ -155,8 +155,8 @@ Edits an existing student in the address book.
 
 Format: `edit INDEX [i/STUDENT ID] [n/NAME] [p/PHONE] [e/EMAIL] [g/GITHUB USERNAME] [t/TAG]…​`
 
-* Edits the person at the specified `INDEX`. 
-The index refers to the index number shown in the displayed person list. 
+* Edits the student at the specified `INDEX`. 
+The index refers to the index number shown in the displayed student list. 
 The index **must be a positive integer** 1, 2, 3, …​
 * You must provide at least 1 of the optional fields.
 * Existing values will be updated to the input values.
@@ -164,10 +164,10 @@ The index **must be a positive integer** 1, 2, 3, …​
 <box type="warning" seamless>
 
 **Caution:** 
-When editing tags, the existing tags of the person will be removed 
+When editing tags, the existing tags of the student will be removed 
 i.e adding of tags is not cumulative.
 
-You can remove all the person’s tags by typing `t/` without
+You can remove all the student’s tags by typing `t/` without
 specifying any tags after it.
 
 </box>
@@ -254,7 +254,7 @@ Deletes the specified student from the address book.
 
 Format: `delete INDEX`
 
-* Deletes the person at the specified `INDEX`. The index refers to the index number shown in the **displayed** person list. The index **must be a positive integer** 1, 2, 3, …​
+* Deletes the student at the specified `INDEX`. The index refers to the index number shown in the **displayed** student list. The index **must be a positive integer** 1, 2, 3, …​
 
 Examples:
 * `list` followed by `delete 2` deletes the 2nd student in the address book.
@@ -264,11 +264,11 @@ Error Messages:
 
 * Missing fields & Non-positive index: \
   `Invalid command format! 
-    delete: Deletes the person identified by the index number used in the displayed person list.
+    delete: Deletes the student identified by the index number used in the displayed student list.
     Parameters: INDEX (must be a positive integer)
     Example: delete 1`
 *  Index out of range: \
-  `The person index provided is invalid`
+  `The student index provided is invalid`
 
 ### Clearing all entries : `clear`
 

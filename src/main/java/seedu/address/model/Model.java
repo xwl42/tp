@@ -84,4 +84,19 @@ public interface Model {
      * @throws NullPointerException if {@code predicate} is null.
      */
     void updateFilteredPersonList(Predicate<Person> predicate);
+
+    /**
+     * Saves the current state of the address book.
+     */
+    void saveAddressBook();
+
+    /**
+     * Returns true if the model has a previous address book state to restore.
+     */
+    boolean canUndoAddressBook();
+
+    /**
+     * Restores the model's address book to its previous state.
+     */
+    void undoAddressBook();
 }

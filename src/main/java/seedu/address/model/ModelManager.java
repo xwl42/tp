@@ -22,6 +22,7 @@ public class ModelManager implements Model {
     private final AddressBook addressBook;
     private final UserPrefs userPrefs;
     private final FilteredList<Person> filteredPersons;
+    private ReadOnlyAddressBook previousAddressBookState;
 
     /**
      * Initializes a ModelManager with the given addressBook and userPrefs.
@@ -34,6 +35,7 @@ public class ModelManager implements Model {
         this.addressBook = new AddressBook(addressBook);
         this.userPrefs = new UserPrefs(userPrefs);
         filteredPersons = new FilteredList<>(this.addressBook.getPersonList());
+        this.previousAddressBookState = null;
     }
 
     public ModelManager() {
@@ -125,6 +127,37 @@ public class ModelManager implements Model {
     public void updateFilteredPersonList(Predicate<Person> predicate) {
         requireNonNull(predicate);
         filteredPersons.setPredicate(predicate);
+    }
+
+    //=========== Undo Command =============================================================
+
+    /**
+     * Saves the current address book state before making changes.
+     */
+    @Override
+    public void saveAddressBook() {
+        previousAddressBookState = new AddressBook(addressBook);
+    }
+
+    /**
+     * Returns true if there is a previous state to undo to.
+     */
+    @Override
+    public boolean canUndoAddressBook() {
+        return previousAddressBookState != null;
+    }
+
+    /**
+     * Restores the address book to its previous state.
+     */
+    @Override
+    public void undoAddressBook() {
+        if (!canUndoAddressBook()) {
+            throw new IllegalStateException("No previous state to undo!");
+        }
+
+        setAddressBook(previousAddressBookState);
+        previousAddressBookState = null; // Clear after undo
     }
 
     @Override

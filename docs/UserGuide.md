@@ -22,12 +22,13 @@ spreadsheets or GUI apps.
     5. [Marking Lab Attendance : `marka`](#marking-lab-attendance--marka)
     6. [Marking Exercise Status : `marke`](#marking-exercise-status-marke)
     7. [Locating persons by name : `find`](#locating-persons-by-name-find)
-    8. [Deleting a person : `delete`](#deleting-a-person--delete)
-    9. [Clearing all entries : `clear`](#clearing-all-entries--clear)
-    10. [Exiting the program : `exit`](#exiting-the-program--exit)
-    11. [Saving the data](#saving-the-data)
-    12. [Editing the data file](#editing-the-data-file)
-    13. [Archiving data files (coming in v2.0)](#archiving-data-files-coming-in-v20)
+    8. [Sorting students:`sort`]  ()
+    9. [Deleting a person : `delete`](#deleting-a-person--delete)
+    10. [Clearing all entries : `clear`](#clearing-all-entries--clear)
+    11. [Exiting the program : `exit`](#exiting-the-program--exit)
+    12. [Saving the data](#saving-the-data)
+    13. [Editing the data file](#editing-the-data-file)
+    14. [Archiving data files (coming in v2.0)](#archiving-data-files-coming-in-v20)
 3. [FAQ](#faq)
 4. [Known issues](#known-issues)
 5. [Command summary](#command-summary)
@@ -135,7 +136,7 @@ Shows a list of all students and their information.
 
 Format: `list`
 
-### Editing a person : `edit`
+### Editing a student : `edit`
 
 Edits an existing person in the address book.
 
@@ -175,17 +176,17 @@ Format: `marke INDEX ei/EXERCISENUMBER s/STATUSLETTER`
 * `EXERCISE` represents the lab session to mark attendance for. It **must be between 0 and 9 (inclusive)**.
 * `STATUS` represents the status to mark the exercise with. It **must be a letter chosen from the following**:
 
-| Letter | Status Name  | Meaning |
-    |--------|---------------|----------|
-    | `D`/`d`  | Done | The exercise is completed. |
-    | `N`/`n`  | Not Done | The exercise has not been completed. |
-    | `O`/`o`  | Overdue | The exercise is overdue or late. |
+| Letter  | Status Name | Meaning                              |
+|---------|-------------|--------------------------------------|
+| `D`/`d` | Done        | The exercise is completed.           |
+| `N`/`n` | Not Done    | The exercise has not been completed. |
+| `O`/`o` | Overdue     | The exercise is overdue or late.     |
 * Each exercise only has **one status**.
 
 Example:
 * `marke 2 ei/7 s/d` marks exercise 7 of the second person as done.
 
-### Locating persons by name: `find`
+### Locating students by name: `find`
 
 Finds persons whose names contain any of the given keywords.
 
@@ -203,7 +204,28 @@ Examples:
 * `find alex david` returns `Alex Yeoh`, `David Li`<br>
   ![result for 'find alex david'](images/findAlexDavidResult.png)
 
-### Deleting a person : `delete`
+### Sorting the students: `sort`
+
+Sorts the student by a specified criterion.
+
+Format: `sort c/SORTCRITERION`
+
+* `SORTCRITERION` determines how the student list should be sorted. It must be one of the following:
+  * `name` Sorts students by their name (alphabetically)
+  * `id` Sorts students by their Student Id
+  * `lab` Sorts students by their Lab Attendance Rate (Highest to lowest)
+  * `ex` Sorts students by their progress in their exercises (Highest to lowest)
+
+<box type="tip" seamless>
+
+**Tip:** The criterion is case-insensitive!
+</box>
+
+Examples:
+`sort c/name` sorts the students by their name.
+`sorts c/lab` sorts the students by their lab attendance rate.
+
+### Deleting a student : `delete`
 
 Deletes the specified person from the address book.
 

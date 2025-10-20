@@ -25,4 +25,11 @@ public class UndoCommand extends Command {
         model.undoAddressBook();
         return new CommandResult(MESSAGE_SUCCESS);
     }
+
+    @Override
+    public boolean equals(Object other) {
+        // All UndoCommands are considered equal since they have no internal state
+        return other == this
+                || (other instanceof UndoCommand);
+    }
 }

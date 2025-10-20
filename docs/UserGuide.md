@@ -239,7 +239,7 @@ Format: `undo`
 
 * Only commands that change student data can be undone (e.g., `add`, `delete`, `edit`, `marka`, `marke`, `clear`)
 * Commands that do not modify data cannot be undone (e.g., `help`, `list`, `find`, `exit`)
-* Can only undo the very last command that modified data
+* It undos and can only undo the **very last** command that modified data
 * If there is no command to undo, an error message will be displayed
 
 <box type="warning" seamless>
@@ -258,6 +258,9 @@ Examples:
 * `delete 2` followed by `undo` restores the deleted student back to the list
 * `edit 1 n/Wrong Name` followed by `undo` reverts the student's name to its original value
 * `add n/John Doe p/12345678 e/john@u.nus.edu a/College Avenue` followed by `undo` removes the newly added student
+* `delete 2` followed by `list` followed by `undo` still restores the deleted student back to the list
+* `delete 1` followed by `edit 1 n/Wrong Name` followed by 2 consecutive `undo`s only reverts the student's name 
+to its original value, but cannot restore the deleted student back to the list
 
 ### Exiting the program : `exit`
 

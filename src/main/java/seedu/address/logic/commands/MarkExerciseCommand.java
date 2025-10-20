@@ -11,6 +11,7 @@ import seedu.address.commons.core.index.Index;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
+import seedu.address.model.person.ExerciseTracker;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Status;
 
@@ -59,30 +60,54 @@ public class MarkExerciseCommand extends Command {
     public Status getStatus() {
         return status;
     }
+
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
         List<Person> lastShownList = model.getFilteredPersonList();
+
         if (studentIndex.getZeroBased() >= lastShownList.size()) {
             throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
         }
+
         Person student = lastShownList.get(studentIndex.getZeroBased());
+
+        model.saveAddressBook();
+
+        // Create a copy of the ExerciseTracker
+        ExerciseTracker updatedExerciseTracker = student.getExerciseTracker().copy();
+
         try {
-            student.getExerciseTracker().markExercise(exerciseIndex, status);
+            updatedExerciseTracker.markExercise(exerciseIndex, status); // Modify the copy
         } catch (IndexOutOfBoundsException iob) {
             throw new CommandException(
                     String.format(MESSAGE_INDEX_OUT_OF_BOUNDS, HIGHEST_INDEX)
             );
         }
-        model.saveAddressBook();
-        model.setPerson(student, student);
+
+        // Create a NEW Person with the updated ExerciseTracker
+        Person updatedStudent = new Person(
+                student.getStudentId(),
+                student.getName(),
+                student.getPhone(),
+                student.getEmail(),
+                student.getTags(),
+                student.getGithubUsername(),
+                updatedExerciseTracker, // Use the modified copy
+                student.getLabAttendanceList(),
+                student.getGradeMap()
+        );
+
+        model.setPerson(student, updatedStudent);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+
         return new CommandResult(String.format(MESSAGE_MARK_EXERCISE,
                 exerciseIndex.getZeroBased(),
                 status,
                 studentIndex.getOneBased(),
-                student.getName()));
+                updatedStudent.getName()));
     }
+
     @Override
     public boolean equals(Object other) {
         if (other == this) {

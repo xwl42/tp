@@ -16,14 +16,14 @@ spreadsheets or GUI apps.
 1. [Quick start](#quick-start)
 2. [Features](#features)
     1. [Viewing help : `help`](#viewing-help--help)
-    2. [Adding a person : `add`](#adding-a-person-add)
-    3. [Listing all students : `list`](#listing-all-persons--list)
-    4. [Editing a person : `edit`](#editing-a-person--edit)
+    2. [Adding a student : `add`](#adding-a-student-add)
+    3. [Listing all students : `list`](#listing-all-students--list)
+    4. [Editing a student : `edit`](#editing-a-student--edit)
     5. [Marking Lab Attendance : `marka`](#marking-lab-attendance--marka)
     6. [Marking Exercise Status : `marke`](#marking-exercise-status-marke)
-    7. [Locating persons by name : `find`](#locating-persons-by-name-find)
-    8. [Sorting students:`sort`]  ()
-    9. [Deleting a person : `delete`](#deleting-a-person--delete)
+    7. [Locating students by name : `find`](#locating-students-by-name-find)
+    8. [Sorting students:`sort`](#sorting-the-students-sort)
+    9. [Deleting a student : `delete`](#deleting-a-student--delete)
     10. [Clearing all entries : `clear`](#clearing-all-entries--clear)
     11. [Exiting the program : `exit`](#exiting-the-program--exit)
     12. [Saving the data](#saving-the-data)
@@ -115,15 +115,15 @@ Shows a message explaining how to access the help page.
 Format: `help`
 
 
-### Adding a person: `add`
+### Adding a student: `add`
 
-Adds a person to the address book.
+Adds a student to the address book.
 
 Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​`
 
 <box type="tip" seamless>
 
-**Tip:** A person can have any number of tags (including 0)
+**Tip:** A student can have any number of tags (including 0)
 </box>
 
 Examples:
@@ -138,41 +138,41 @@ Format: `list`
 
 ### Editing a student : `edit`
 
-Edits an existing person in the address book.
+Edits an existing student in the address book.
 
 Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`
 
-* Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
+* Edits the student at the specified `INDEX`. The index refers to the index number shown in the displayed student list. The index **must be a positive integer** 1, 2, 3, …​
 * At least one of the optional fields must be provided.
 * Existing values will be updated to the input values.
-* When editing tags, the existing tags of the person will be removed i.e adding of tags is not cumulative.
-* You can remove all the person’s tags by typing `t/` without
+* When editing tags, the existing tags of the student will be removed i.e adding of tags is not cumulative.
+* You can remove all the student’s tags by typing `t/` without
     specifying any tags after it.
 
 Examples:
-*  `edit 1 p/91234567 e/johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
-*  `edit 2 n/Betsy Crower t/` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
+*  `edit 1 p/91234567 e/johndoe@example.com` Edits the phone number and email address of the 1st student to be `91234567` and `johndoe@example.com` respectively.
+*  `edit 2 n/Betsy Crower t/` Edits the name of the 2nd student to be `Betsy Crower` and clears all existing tags.
 
 ### Marking Lab Attendance: `marka`
 
-Marks the lab attendance of an existing person in the address book.
+Marks the lab attendance of an existing student in the address book.
 
 Format: `marka INDEX l/LABNUMBER`
 
-* Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
+* Edits the student at the specified `INDEX`. The index refers to the index number shown in the displayed student list. The index **must be a positive integer** 1, 2, 3, …​
 * `LABNUMBER` represents the lab session to mark attendance for. It **must be between 1 and 10 (inclusive)**.
 * Attendance can only be **marked once per lab**.
 
 Example:
-* `marka 2 l/7` marks Lab 7 of the second person as attended.
+* `marka 2 l/7` marks Lab 7 of the second student as attended.
 
 ### Marking Exercise Status: `marke`
 
-Marks the exercise status of an existing person in the address book.
+Marks the exercise status of an existing student in the address book.
 
 Format: `marke INDEX ei/EXERCISENUMBER s/STATUSLETTER`
 
-* Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
+* Edits the student at the specified `INDEX`. The index refers to the index number shown in the displayed student list. The index **must be a positive integer** 1, 2, 3, …​
 * `EXERCISE` represents the lab session to mark attendance for. It **must be between 0 and 9 (inclusive)**.
 * `STATUS` represents the status to mark the exercise with. It **must be a letter chosen from the following**:
 
@@ -184,11 +184,11 @@ Format: `marke INDEX ei/EXERCISENUMBER s/STATUSLETTER`
 * Each exercise only has **one status**.
 
 Example:
-* `marke 2 ei/7 s/d` marks exercise 7 of the second person as done.
+* `marke 2 ei/7 s/d` marks exercise 7 of the second student as done.
 
 ### Locating students by name: `find`
 
-Finds persons whose names contain any of the given keywords.
+Finds students whose names contain any of the given keywords.
 
 Format: `find KEYWORD [MORE_KEYWORDS]`
 
@@ -196,7 +196,7 @@ Format: `find KEYWORD [MORE_KEYWORDS]`
 * The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
 * Only the name is searched.
 * Only full words will be matched e.g. `Han` will not match `Hans`
-* Persons matching at least one keyword will be returned (i.e. `OR` search).
+* Students matching at least one keyword will be returned (i.e. `OR` search).
   e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
 
 Examples:
@@ -227,17 +227,17 @@ Examples:
 
 ### Deleting a student : `delete`
 
-Deletes the specified person from the address book.
+Deletes the specified student from the address book.
 
 Format: `delete INDEX`
 
-* Deletes the person at the specified `INDEX`.
-* The index refers to the index number shown in the displayed person list.
+* Deletes the student at the specified `INDEX`.
+* The index refers to the index number shown in the displayed student list.
 * The index **must be a positive integer** 1, 2, 3, …​
 
 Examples:
-* `list` followed by `delete 2` deletes the 2nd person in the address book.
-* `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
+* `list` followed by `delete 2` deletes the 2nd student in the address book.
+* `find Betsy` followed by `delete 1` deletes the 1st student in the results of the `find` command.
 
 ### Clearing all entries : `clear`
 
@@ -304,6 +304,7 @@ Action     | Format, Examples
 **Help**   | `help`
 **Mark Attendance** | `marka INDEX l/LABNUMBER` <br> e.g. `marka 2 l/7`
 **Mark Exercise** | `marke INDEX ei/EXERCISENUMBER s/STATUSLETTER` <br> e.g. `marke 2 ei/7 s/d`
+**Sort**    | `sort`
 **Exit**   | `exit`
 
 

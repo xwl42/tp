@@ -26,7 +26,7 @@ public interface TimeslotsStorage {
      *
      * @throws DataLoadingException if the loading of data from preference file failed.
      */
-    Optional<UserPrefs> readTimeslots() throws DataLoadingException;
+    Optional<Timeslots> readTimeslots() throws DataLoadingException;
 
     /**
      * Saves the given {@link seedu.address.model.ReadOnlyTimeslots} to the storage.

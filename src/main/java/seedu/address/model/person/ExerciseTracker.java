@@ -61,6 +61,7 @@ public class ExerciseTracker implements Comparable<ExerciseTracker> {
     public int hashCode() {
         return statuses.hashCode();
     }
+
     public ArrayList<Status> getStatuses() {
         return statuses;
     }
@@ -79,7 +80,7 @@ public class ExerciseTracker implements Comparable<ExerciseTracker> {
 
     /**
      * Calculate a student's exercise progress as percentage
-     * @return the progress between 0.0 and 100.0.
+     * @return the progress between -50.0 and 100.0.
      */
     public double calculateProgress() {
         double count = 0;

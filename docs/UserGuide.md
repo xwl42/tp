@@ -124,7 +124,7 @@ Format: `help`
 
 ### Adding a student: `add`
 
-Adds a student to the address book.
+Adds a student to LambdaLab.
 
 Format: `add i/STUDENTID n/NAME p/PHONE e/EMAIL g/GITHUB_USERNAME [t/TAG]…​`
 
@@ -142,7 +142,7 @@ Examples:
 
 * Missing fields:  
 Duplicate Identifier (Student ID):  
-  `This student already exists in the address book`
+  `This student already exists in LambdaLab`
 </box>
 
 ### Listing all students : `list`
@@ -153,7 +153,7 @@ Format: `list`
 
 ### Editing a student : `edit`
 
-Edits an existing student in the address book.
+Edits an existing student in LambdaLab.
 
 Format: `edit INDEX [i/STUDENT ID] [n/NAME] [p/PHONE] [e/EMAIL] [g/GITHUB USERNAME] [t/TAG]…​`
 
@@ -180,7 +180,7 @@ Examples:
 
 ### Marking Lab Attendance: `marka`
 
-Marks the lab attendance of an existing student in the address book.
+Marks the lab attendance of an existing student in LambdaLab.
 
 Format: `marka INDEX l/LABNUMBER`
 
@@ -193,7 +193,7 @@ Example:
 
 ### Marking Exercise Status: `marke`
 
-Marks the exercise status of an existing student in the address book.
+Marks the exercise status of an existing student in LambdaLab.
 
 Format: `marke INDEX ei/EXERCISENUMBER s/STATUSLETTER`
 
@@ -209,7 +209,7 @@ Format: `marke INDEX ei/EXERCISENUMBER s/STATUSLETTER`
 * Each exercise only has **one status**.
 
 Example:
-* `marke 2 ei/7 s/d` marks exercise 7 of the second student as done.
+* `marke 2 ei/7 s/d` marks exercise 7 of the 2nd student as done.
 
 ### Assigning Assessment Score: `grade`
 
@@ -232,7 +232,7 @@ Format: `grade INDEX en/EXAMNAME sc/SCORE`
 | `final`     | 100           |
 
 #### Example
-* `grade 2 en/midterm sc/55` sets the **midterm** score of the **second student** in the list to **55**.
+* `grade 2 en/midterm sc/55` sets the **midterm** score of the **2nd student** in the list to **55**.
 
 
 ### Locating students by name: `find`
@@ -260,10 +260,10 @@ Sorts the student by a specified criterion.
 Format: `sort c/SORTCRITERION`
 
 * `SORTCRITERION` determines how the student list should be sorted. It must be one of the following:
-  * `name` Sorts students by their name (alphabetically)
-  * `id` Sorts students by their Student Id
-  * `lab` Sorts students by their Lab Attendance Rate (Highest to lowest)
-  * `ex` Sorts students by their progress in their exercises (Highest to lowest)
+  * `name` sorts students by their name (alphabetically)
+  * `id` sorts students by their Student Id
+  * `lab` sorts students by their Lab Attendance Rate (Highest to lowest)
+  * `ex` sorts students by their progress in their exercises (Highest to lowest)
 
 <box type="tip" seamless>
 
@@ -272,18 +272,18 @@ Format: `sort c/SORTCRITERION`
 
 Examples:
 `sort c/name` sorts the students by their name.
-`sorts c/lab` sorts the students by their lab attendance rate.
+`sort c/lab` sorts the students by their lab attendance rate.
 
 ### Deleting a student : `delete`
 
-Deletes the specified student from the address book.
+Deletes the specified student from LambdaLab.
 
 Format: `delete INDEX`
 
 * Deletes the student at the specified `INDEX`. The index refers to the index number shown in the **displayed** student list. The index **must be a positive integer** 1, 2, 3, …​
 
 Examples:
-* `list` followed by `delete 2` deletes the 2nd student in the address book.
+* `list` followed by `delete 2` deletes the 2nd student in the LambdaLab.
 * `find Betsy` followed by `delete 1` deletes the 1st student in the results of the `find` command.
 
 <box type="warning" seamless>
@@ -297,14 +297,14 @@ Examples:
 
 ### Clearing all entries : `clear`
 
-Clears **all** entries from the address book, leaving it completely empty.
+Clears **all** entries from LambdaLab, leaving it completely empty.
 
 Format: `clear`
 
 <box type="warning" seamless>
 
 **Caution:**
-This command will remove **all** entries from the address book. If mistakenly performed, type `undo` **immediately**
+This command will remove **all** entries from LambdaLab. If mistakenly performed, type `undo` **immediately**
 before using another data-modifying command.
 </box>
 
@@ -392,17 +392,17 @@ Format: `exit`
 
 ### Saving the data
 
-AddressBook data are saved in the hard disk automatically after any command that changes the data. There is no need to save manually.
+LambdaLab data are saved in the hard disk automatically after any command that changes the data. There is no need to save manually.
 
 ### Editing the data file
 
-AddressBook data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.
+LambdaLab data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.
 
 <box type="warning" seamless>
 
 **Caution:**
-If your changes to the data file makes its format invalid, AddressBook will discard all data and start with an empty data file at the next run.  Hence, it is recommended to take a backup of the file before editing it.<br>
-Furthermore, certain edits can cause the AddressBook to behave in unexpected ways (e.g., if a value entered is outside the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
+If your changes to the data file makes its format invalid, LambdaLab will discard all data and start with an empty data file at the next run.  Hence, it is recommended to take a backup of the file before editing it.<br>
+Furthermore, certain edits can cause the LambdaLab to behave in unexpected ways (e.g., if a value entered is outside the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
 </box>
 
 ### Archiving data files `[coming in v2.0]`

@@ -134,14 +134,16 @@ Examples:
 * Optional fields included: `add i/A1234567X n/John Doe p/98765432 e/johnd@example.com g/JohnDoe t/modelStudent`
 * Fields in different order: `add g/JohnDoe i/A1234567X  p/98765432 t/modelStudent n/John Doe e/johnd@example.com`
 
-Error Messages:
+<box type="warning" seamless>
 
-* Missing fields: \
+* Missing fields:  
   `Invalid command format! 
-add: Adds a student to the address book. Parameters: i/STUDENTID n/NAME p/PHONE e/EMAIL g/GITHUB_USERNAME [t/TAG]...
-Example: add i/A1234567X n/John Doe p/98765432 e/johnd@example.com g/JohnDoe t/friends t/owesMoney`
-* Duplicate Identifier (Student ID): \
-    `This student already exists in the address book`
+  add: Adds a student to the address book. Parameters: i/STUDENTID n/NAME p/PHONE e/EMAIL g/GITHUB_USERNAME [t/TAG]...
+  Example: add i/A1234567X n/John Doe p/98765432 e/johnd@example.com g/JohnDoe t/friends t/owesMoney`
+
+* Duplicate Identifier (Student ID):  
+  `This student already exists in the address book`
+</box>
 
 ### Listing all students : `list`
 
@@ -260,15 +262,17 @@ Examples:
 * `list` followed by `delete 2` deletes the 2nd student in the address book.
 * `find Betsy` followed by `delete 1` deletes the 1st student in the results of the `find` command.
 
-Error Messages:
+<box type="warning" seamless>
 
-* Missing fields & Non-positive index: \
+* Missing fields & Non-positive index:  
   `Invalid command format! 
     delete: Deletes the student identified by the index number used in the displayed student list.
     Parameters: INDEX (must be a positive integer)
     Example: delete 1`
-*  Index out of range: \
+
+* Index out of range:  
   `The student index provided is invalid`
+</box>
 
 ### Clearing all entries : `clear`
 

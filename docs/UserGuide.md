@@ -140,11 +140,7 @@ Examples:
 <box type="warning" seamless>
 
 * Missing fields:  
-  `Invalid command format! 
-  add: Adds a student to the address book. Parameters: i/STUDENTID n/NAME p/PHONE e/EMAIL g/GITHUB_USERNAME [t/TAG]...
-  Example: add i/A1234567X n/John Doe p/98765432 e/johnd@example.com g/JohnDoe t/friends t/owesMoney`
-
-* Duplicate Identifier (Student ID):  
+Duplicate Identifier (Student ID):  
   `This student already exists in the address book`
 </box>
 
@@ -272,9 +268,6 @@ Examples:
     delete: Deletes the student identified by the index number used in the displayed student list.
     Parameters: INDEX (must be a positive integer)
     Example: delete 1`
-
-* Index out of range:  
-  `The student index provided is invalid`
 </box>
 
 ### Clearing all entries : `clear`
@@ -330,8 +323,6 @@ Format: `block-timeslot ts/START_DATETIME te/END_DATETIME`
 * Accepted datetime formats:
   * ISO_LOCAL_DATE_TIME: `2023-10-01T09:00:00`
   * Human-friendly: `d MMM uuuu, HH:mm` (e.g. `4 Oct 2025, 10:00`) or `d MMM uuuu HH:mm` (e.g. `4 Oct 2025 10:00`)
-* If the end time is not after the start time, the command will fail and display an invalid-timeslot message.
-* If a timeslot that exactly matches an existing one is added, a duplicate-timeslot error will be shown.
 
 Examples:
 * `block-timeslot ts/2025-10-04T10:00:00 te/2025-10-04T13:00:00`
@@ -351,8 +342,8 @@ Example:
 * The command shows merged ranges in a human-friendly date/time format.
   * Example:
     ```
-    4 Oct 2025, 10:00:00 AM -> 4 Oct 2025, 13:00:OO PM
-    6 Oct 2025, 09:00:OO AM -> 6 Oct 2025, 11:30:OO AM
+    4 Oct 2025, 10:00 -> 4 Oct 2025, 13:00
+    6 Oct 2025, 09:00 -> 6 Oct 2025, 11:30
     ```
 * The UI may also visualise these ranges in the Timetable Window view if available.
 

@@ -26,10 +26,13 @@ spreadsheets or GUI apps.
     9. [Deleting a student : `delete`](#deleting-a-student--delete)
     10. [Clearing all entries : `clear`](#clearing-all-entries--clear)
     11. [Undoing the last command : `undo`](#undoing-the-last-command--undo)
-    12. [Exiting the program : `exit`](#exiting-the-program--exit)
-    13. [Saving the data](#saving-the-data)
-    14. [Editing the data file](#editing-the-data-file)
-    15. [Archiving data files (coming in v2.0)](#archiving-data-files-coming-in-v20)
+    12. [Blocking a timeslot : `block-timeslot`](#blocking-a-timeslot--block-timeslot)
+    13. [Retrieving merged timeslot ranges : `get-timeslots`](#retrieving-merged-timeslot-ranges--get-timeslots)
+    14. [Clearing all timeslots : `clear-timeslots`](#clearing-all-timeslots--clear-timeslots)
+    15. [Exiting the program : `exit`](#exiting-the-program--exit)
+    16. [Saving the data](#saving-the-data)
+    17. [Editing the data file](#editing-the-data-file)
+    18. [Archiving data files (coming in v2.0)](#archiving-data-files-coming-in-v20)
 3. [FAQ](#faq)
 4. [Known issues](#known-issues)
 5. [Command summary](#command-summary)
@@ -317,6 +320,53 @@ Examples:
 * `delete 2` followed by `list` followed by `undo` still restores the deleted student back to the list
 * `delete 1` followed by `edit 1 n/Wrong Name` followed by 2 consecutive `undo`s only reverts the student's name 
 to its original value, but cannot restore the deleted student back to the list
+
+### Blocking a timeslot : `block-timeslot`
+
+Adds a timeslot to the application's timeslot store.
+
+Format: `block-timeslot ts/START_DATETIME te/END_DATETIME`
+
+* Accepted datetime formats:
+  * ISO_LOCAL_DATE_TIME: `2023-10-01T09:00:00`
+  * Human-friendly: `d MMM uuuu, HH:mm` (e.g. `4 Oct 2025, 10:00`) or `d MMM uuuu HH:mm` (e.g. `4 Oct 2025 10:00`)
+* If the end time is not after the start time, the command will fail and display an invalid-timeslot message.
+* If a timeslot that exactly matches an existing one is added, a duplicate-timeslot error will be shown.
+
+Examples:
+* `block-timeslot ts/2025-10-04T10:00:00 te/2025-10-04T13:00:00`
+* `block-timeslot ts/4 Oct 2025, 10:00 te/4 Oct 2025, 13:00`
+
+### Retrieving merged timeslot ranges : `get-timeslots`
+
+Displays merged timeslot ranges derived from stored timeslots. Overlapping or adjacent timeslots are merged
+and presented as continuous ranges for easier viewing.
+
+Format: `get-timeslots`
+
+Example:
+* `get-timeslots`
+
+
+* The command shows merged ranges in a human-friendly date/time format.
+  * Example:
+    ```
+    4 Oct 2025, 10:00:00 AM -> 4 Oct 2025, 13:00:OO PM
+    6 Oct 2025, 09:00:OO AM -> 6 Oct 2025, 11:30:OO AM
+    ```
+* The UI may also visualise these ranges in the Timetable Window view if available.
+
+
+### Clearing all timeslots : `clear-timeslots`
+
+Removes all stored timeslots (does not affect student records).
+
+Format: `clear-timeslots`
+
+<box type="warning" seamless>
+**Caution:** This will permanently remove all stored timeslots. There is no multi-step undo for timeslot clearing;
+use immediately after a mistaken action if your environment supports undo of other operations.
+</box>
 
 ### Exiting the program : `exit`
 

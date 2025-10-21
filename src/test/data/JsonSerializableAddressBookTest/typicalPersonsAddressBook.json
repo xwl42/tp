@@ -7,7 +7,7 @@
       "phone": "94351253",
       "email": "alice@example.com",
       "address": "123, Jurong West Ave 6, #08-111",
-      "tags": ["friends"],
+      "tags": ["upcomingConsultation"],
       "githubUsername": "Alice",
       "exerciseStatuses": [
         "N",
@@ -47,7 +47,7 @@
       "phone": "98765432",
       "email": "johnd@example.com",
       "address": "311, Clementi Ave 2, #02-25",
-      "tags": ["owesMoney", "friends"],
+      "tags": ["hadConsultation"],
       "githubUsername": "Benson",
       "exerciseStatuses": [
         "N",
@@ -127,7 +127,7 @@
       "phone": "87652533",
       "email": "cornelia@example.com",
       "address": "10th street",
-      "tags": ["friends"],
+      "tags": ["upcomingConsultation"],
       "githubUsername": "Daniel",
       "exerciseStatuses": [
         "N",

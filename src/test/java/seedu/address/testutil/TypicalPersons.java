@@ -29,7 +29,7 @@ public class TypicalPersons {
             .withName("Alice Pauline")
             .withEmail("alice@example.com")
             .withPhone("94351253")
-            .withTags("friends")
+            .withTags("upcomingConsultation")
             .withGithubUsername("Alice")
             .withLabAttendanceList(new LabList().toString())
             .withExerciseTracker(new ExerciseTracker().toString())
@@ -42,7 +42,7 @@ public class TypicalPersons {
             .withGithubUsername("Benson")
             .withLabAttendanceList(new LabList().toString())
             .withExerciseTracker(new ExerciseTracker().toString())
-            .withTags("owesMoney", "friends").build();
+            .withTags("hadConsultation").build();
 
     public static final Person CARL = new PersonBuilder().withStudentId("A1231232X")
             .withName("Carl Kurz")
@@ -60,7 +60,7 @@ public class TypicalPersons {
             .withEmail("cornelia@example.com")
 
             .withGithubUsername("Daniel")
-            .withTags("friends")
+            .withTags("upcomingConsultation")
             .withLabAttendanceList(new LabList().toString())
             .withExerciseTracker(new ExerciseTracker().toString())
             .build();

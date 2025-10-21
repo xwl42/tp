@@ -5,11 +5,20 @@ import java.util.function.Predicate;
 
 import seedu.address.model.person.Person;
 
+/**
+ *  A {@code Predicate} over {@code Person} that OR-combines multiple field-level predicates.
+ */
 public class PersonContainsKeywordsPredicate implements Predicate<Person> {
 
     private Predicate<Person> combinedPredicate;
     private final List<Predicate<Person>> predicates;
 
+    /**
+     * Constructs a predicate that matches a {@code Person} if any of the provided predicates match.
+     *
+     * @param predicates a non-empty list of individual field {@code Predicate}
+     *                  targeting different {@code Person} fields.
+     */
     public PersonContainsKeywordsPredicate(List<Predicate<Person>> predicates) {
         this.predicates = predicates;
         combinedPredicate = predicates.get(0);

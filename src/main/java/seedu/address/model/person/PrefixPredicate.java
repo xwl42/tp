@@ -20,12 +20,22 @@ import seedu.address.model.person.keywordpredicate.StudentIdContainsKeywordsPred
 import seedu.address.model.person.keywordpredicate.TagContainsKeywordsPredicate;
 
 
-
+/**
+ * Binds a {@link Prefix} (e.g., {@code n/}, {@code e/}) to a predicate “builder” for a {@link Person}
+ * and tracks whether that field has been selected as a search target.
+ */
 public class PrefixPredicate {
     private Prefix prefix;
     private PredicateWrapper predicateWrapper;
     private boolean isSelected;
 
+    /**
+     * Creates a {@code PrefixPredicate}.
+     *
+     * @param prefix the CLI prefix that identifies the target field.
+     * @param predicateWrapper a factory that, given keywords, builds a field-level predicate.
+     * @param isSelected initial selection state, usually false
+     */
     public PrefixPredicate(Prefix prefix, PredicateWrapper predicateWrapper, boolean isSelected) {
         this.prefix = prefix;
         this.predicateWrapper = predicateWrapper;
@@ -83,6 +93,10 @@ public class PrefixPredicate {
         isSelected = set;
     }
 
+    /**
+     * Functional interface for building field-level predicates from a list of keywords.
+     * Enables lazy building of only predicates that are selected.
+     */
     public interface PredicateWrapper {
 
         public Predicate<Person> buildPredicate(List<String> keywords);

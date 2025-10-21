@@ -7,6 +7,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import seedu.address.logic.commands.BlockTimeslotCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -28,7 +30,15 @@ public class BlockTimeslotCommandParser implements Parser<BlockTimeslotCommand> 
     private static LocalDateTime parseFlexibleDateTime(String input) throws DateTimeParseException {
         Objects.requireNonNull(input);
         String trimmed = input.trim();
-        // try ISO first (used for JSON/standard)
+
+        // try ISO first (accepts strings like 2025-10-04T10:00:00)
+        try {
+            return LocalDateTime.parse(trimmed, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        } catch (DateTimeParseException e) {
+            // fall through to other formatters
+        }
+
+        // try Timeslot's configured formatter
         try {
             return LocalDateTime.parse(trimmed, Timeslot.FORMATTER);
         } catch (DateTimeParseException e) {
@@ -47,14 +57,28 @@ public class BlockTimeslotCommandParser implements Parser<BlockTimeslotCommand> 
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args,
                 CliSyntax.PREFIX_TIMESLOT_START, CliSyntax.PREFIX_TIMESLOT_END);
 
-        if (!argMultimap.getPreamble().isEmpty()
-                || !argMultimap.getValue(CliSyntax.PREFIX_TIMESLOT_START).isPresent()
-                || !argMultimap.getValue(CliSyntax.PREFIX_TIMESLOT_END).isPresent()) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, BlockTimeslotCommand.MESSAGE_USAGE));
+        String startStr = null;
+        String endStr = null;
+
+        // Prefer values from the tokenizer if present
+        if (argMultimap.getValue(CliSyntax.PREFIX_TIMESLOT_START).isPresent()
+                && argMultimap.getValue(CliSyntax.PREFIX_TIMESLOT_END).isPresent()) {
+            startStr = argMultimap.getValue(CliSyntax.PREFIX_TIMESLOT_START).get();
+            endStr = argMultimap.getValue(CliSyntax.PREFIX_TIMESLOT_END).get();
+        } else {
+            // Fallback: try to extract "ts/<start> te/<end>" from raw args (allows spaces/commas inside)
+            Pattern p = Pattern.compile("(?i)\\bts/(.+?)\\s+te/(.+)$");
+            Matcher m = p.matcher(args.trim());
+            if (m.find()) {
+                startStr = m.group(1).trim();
+                endStr = m.group(2).trim();
+            }
         }
 
-        String startStr = argMultimap.getValue(CliSyntax.PREFIX_TIMESLOT_START).get();
-        String endStr = argMultimap.getValue(CliSyntax.PREFIX_TIMESLOT_END).get();
+        if (startStr == null || endStr == null) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                    BlockTimeslotCommand.MESSAGE_USAGE));
+        }
 
         try {
             LocalDateTime start = parseFlexibleDateTime(startStr);
@@ -63,7 +87,7 @@ public class BlockTimeslotCommandParser implements Parser<BlockTimeslotCommand> 
             return new BlockTimeslotCommand(ts);
         } catch (DateTimeException | IllegalArgumentException e) {
             throw new ParseException("Invalid timeslot datetime or range. Accepted formats:\n"
-                    + " - ISO: " + Timeslot.FORMATTER + " (e.g. 2023-10-01T09:00:00)\n"
+                    + " - ISO: " + DateTimeFormatter.ISO_LOCAL_DATE_TIME + " (e.g. 2023-10-01T09:00:00)\n"
                     + " - Human: d MMM uuuu, HH:mm or d MMM uuuu HH:mm (e.g. 4 Oct 2025, 10:00 or 4 Oct 2025 10:00)\n"
                     + "Ensure end is after start and prefixes are ts/ and te/. Example:\n"
                     + "  block-timeslot ts/4 Oct 2025, 10:00 te/4 Oct 2025, 13:00");

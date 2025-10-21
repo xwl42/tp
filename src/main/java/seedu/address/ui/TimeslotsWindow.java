@@ -10,6 +10,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.NumberBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Insets;
@@ -46,6 +47,11 @@ public class TimeslotsWindow {
     private static final double PIXELS_PER_MINUTE = 1.0; // 60 minutes => 60px per hour (adjust if needed)
     private static final double TIMELINE_WIDTH = HOURS * 60 * PIXELS_PER_MINUTE; // total px width for timeline
     private static final double ROW_HEIGHT = 64;
+
+    // New shared layout constants to ensure exact alignment between header and rows
+    private static final double DAY_LABEL_WIDTH = 90; // left column width used by day labels
+    private static final double ROW_SPACING = 8;     // spacing used between day label and timeline
+    private static final double BODY_PADDING = 8;   // must match VBox body padding used in renderWeek
 
     /**
      * Shows the merged timeslot ranges in a new window laid out as a timetable.
@@ -86,7 +92,7 @@ public class TimeslotsWindow {
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
         topRow.setAlignment(Pos.CENTER_LEFT);
-        topRow.setSpacing(8);
+        topRow.setSpacing(ROW_SPACING);
         topRow.getChildren().addAll(header, spacer, prevWeekBtn, nextWeekBtn);
 
         // timeline width property shared by all timeline panes so they resize together
@@ -94,7 +100,8 @@ public class TimeslotsWindow {
 
         // hours header (kept same as existing) - now takes timelineWidth
         HBox hoursHeader = buildHoursHeader(timelineWidth);
-        hoursHeader.setPadding(new Insets(8, 0, 8, 80)); // leave space for day labels
+        // no padding here — buildHoursHeader now inserts a left placeholder matching the day label column
+        // so ticks align exactly with the timelines.
 
         // render initial week
         renderWeek(root, weekStartRef[0], mergedRanges, topRow, hoursHeader, timelineWidth);
@@ -160,14 +167,28 @@ public class TimeslotsWindow {
         header.setAlignment(Pos.CENTER_LEFT);
         header.setSpacing(0);
 
+        // left placeholder to align with dayLabel (minWidth = DAY_LABEL_WIDTH + ROW_SPACING + BODY_PADDING)
+        Region leftGap = new Region();
+        leftGap.setMinWidth(DAY_LABEL_WIDTH + ROW_SPACING + BODY_PADDING);
+        leftGap.setPrefWidth(DAY_LABEL_WIDTH + ROW_SPACING + BODY_PADDING);
+        header.getChildren().add(leftGap);
+
         Pane timeline = new Pane();
         // bind timeline width to the shared property so it grows/shrinks with the window
         timeline.prefWidthProperty().bind(timelineWidth);
         timeline.setPrefHeight(24);
 
         for (int h = 0; h <= HOURS; h++) {
-            double x = h * 60 * PIXELS_PER_MINUTE;
-            Line tick = new Line(x, 0, x, 24);
+            // position ratio relative to base TIMELINE_WIDTH so positions scale
+            double baseX = h * 60 * PIXELS_PER_MINUTE;
+            double ratio = baseX / TIMELINE_WIDTH; // baseX / TIMELINE_WIDTH in [0,1]
+            NumberBinding xBind = timelineWidth.multiply(ratio);
+
+            Line tick = new Line();
+            tick.startXProperty().bind(xBind);
+            tick.endXProperty().bind(xBind);
+            tick.setStartY(0);
+            tick.setEndY(24);
             // softer tick color
             tick.setStroke(Color.web("#c5d0da"));
             tick.setStrokeWidth(1);
@@ -176,7 +197,7 @@ public class TimeslotsWindow {
             if (h < HOURS) {
                 Label hourLabel = new Label(String.format("%02d:00", START_HOUR + h));
                 hourLabel.setStyle("-fx-text-fill: #556070; -fx-font-size: 11px;");
-                hourLabel.setLayoutX(x + 4);
+                hourLabel.layoutXProperty().bind(xBind.add(4));
                 hourLabel.setLayoutY(2);
                 timeline.getChildren().add(hourLabel);
             }
@@ -190,13 +211,15 @@ public class TimeslotsWindow {
     private static HBox buildDayRowForDate(LocalDate date, List<LocalDateTime[]> ranges,
             DoubleProperty timelineWidth) {
         HBox row = new HBox();
-        row.setSpacing(8);
+        row.setSpacing(ROW_SPACING);
         row.setAlignment(Pos.CENTER_LEFT);
+        // set the same padding here as used when creating the body so layout offsets match
+        row.setPadding(new Insets(0, 0, 0, 0));
 
         String dayLabelText = String.format("%s %s", date.getDayOfWeek().toString().substring(0, 3),
                 date.format(DateTimeFormatter.ofPattern("MM/dd")));
         Label dayLabel = new Label(dayLabelText);
-        dayLabel.setMinWidth(90);
+        dayLabel.setMinWidth(DAY_LABEL_WIDTH);
         dayLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #333333;");
 
         Pane timeline = new Pane();
@@ -207,10 +230,17 @@ public class TimeslotsWindow {
         timeline.setPrefHeight(ROW_HEIGHT);
         timeline.setOpacity(0.98);
 
-        // add hour divider lines lightly
+        // add hour divider lines lightly (positions scale with timelineWidth)
         for (int h = 0; h <= HOURS; h++) {
-            double x = h * 60 * PIXELS_PER_MINUTE;
-            Line divider = new Line(x, 0, x, ROW_HEIGHT);
+            double baseX = h * 60 * PIXELS_PER_MINUTE;
+            double ratio = baseX / TIMELINE_WIDTH;
+            NumberBinding xBind = timelineWidth.multiply(ratio);
+
+            Line divider = new Line();
+            divider.startXProperty().bind(xBind);
+            divider.endXProperty().bind(xBind);
+            divider.setStartY(0);
+            divider.setEndY(ROW_HEIGHT);
             divider.setStroke(Color.web("#e6eef6"));
             divider.setStrokeWidth(0.8);
             timeline.getChildren().add(divider);
@@ -237,10 +267,19 @@ public class TimeslotsWindow {
                     double durationMinutes = (renderEnd.getHour() * 60 + renderEnd.getMinute())
                             - (renderStart.getHour() * 60 + renderStart.getMinute());
 
-                    double x = Math.max(0, minutesFromStart * PIXELS_PER_MINUTE);
-                    double w = Math.max(4, durationMinutes * PIXELS_PER_MINUTE);
+                    // Compute ratios relative to base timeline so they scale with timelineWidth
+                    double xRatio = (minutesFromStart * PIXELS_PER_MINUTE) / TIMELINE_WIDTH;
+                    double wRatio = (durationMinutes * PIXELS_PER_MINUTE) / TIMELINE_WIDTH;
 
-                    Rectangle block = new Rectangle(x, 8, w, ROW_HEIGHT - 16);
+                    NumberBinding xBind = timelineWidth.multiply(xRatio);
+                    NumberBinding wBind = timelineWidth.multiply(wRatio);
+
+                    Rectangle block = new Rectangle();
+                    // bind position and size so block scales with timelineWidth
+                    block.xProperty().bind(xBind);
+                    block.yProperty().set(8);
+                    block.widthProperty().bind(wBind);
+                    block.setHeight(ROW_HEIGHT - 16);
                     block.setArcWidth(8);
                     block.setArcHeight(8);
                     block.setFill(pickColorForDay(date.getDayOfWeek()));
@@ -253,7 +292,8 @@ public class TimeslotsWindow {
                             renderEnd.format(DateTimeFormatter.ofPattern("HH:mm")));
                     Label bl = new Label(labelText);
                     bl.setStyle("-fx-text-fill: #1f2a2f; -fx-font-size: 11px;");
-                    bl.setLayoutX(x + 6);
+                    // bind label position to block.x + 6 so it follows scaling
+                    bl.layoutXProperty().bind(xBind.add(6));
                     bl.setLayoutY(12);
 
                     Tooltip tooltip = new Tooltip(start.format(FORMATTER) + "\n" + end.format(FORMATTER));

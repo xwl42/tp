@@ -52,6 +52,7 @@ public class TimeslotsWindow {
     private static final double DAY_LABEL_WIDTH = 90; // left column width used by day labels
     private static final double ROW_SPACING = 8;     // spacing used between day label and timeline
     private static final double BODY_PADDING = 8;   // must match VBox body padding used in renderWeek
+    private static final double TOP_CONTAINER_SPACING = 24; // increased vertical gap between header and hours
 
     /**
      * Shows the merged timeslot ranges in a new window laid out as a timetable.
@@ -157,7 +158,11 @@ public class TimeslotsWindow {
         sp.setPrefViewportWidth(Math.min(TIMELINE_WIDTH + 120, 1000));
         sp.setPrefViewportHeight(ROW_HEIGHT * 5 + 200);
 
-        root.setTop(new VBox(topRow, hoursHeader));
+        // place topRow and hoursHeader in a container with larger vertical spacing
+        VBox topContainer = new VBox(TOP_CONTAINER_SPACING, topRow, hoursHeader);
+        topContainer.setSpacing(TOP_CONTAINER_SPACING);
+        root.setTop(topContainer);
+
         root.setCenter(sp);
     }
 

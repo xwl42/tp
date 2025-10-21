@@ -9,7 +9,7 @@ import seedu.address.model.person.Person;
  * Subclasses define specific sorting behaviors.
  */
 public abstract class SortCriterion {
-    public static final String MESSAGE_CONSTRAINTS = "Sort Criterion should be one of: name, id";
+    public static final String MESSAGE_CONSTRAINTS = "Sort Criterion should be one of: name, id, lab, ex";
 
     /**
      * Returns the comparator for sorting Person objects according to this criterion.

@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.exceptions.DataLoadingException;
 import seedu.address.model.ReadOnlyAddressBook;
+import seedu.address.model.ReadOnlyTimeslots;
 import seedu.address.model.ReadOnlyUserPrefs;
 import seedu.address.model.UserPrefs;
 
@@ -19,13 +20,16 @@ public class StorageManager implements Storage {
     private static final Logger logger = LogsCenter.getLogger(StorageManager.class);
     private AddressBookStorage addressBookStorage;
     private UserPrefsStorage userPrefsStorage;
+    private TimeslotsStorage timeslotStorage;
 
     /**
      * Creates a {@code StorageManager} with the given {@code AddressBookStorage} and {@code UserPrefStorage}.
      */
-    public StorageManager(AddressBookStorage addressBookStorage, UserPrefsStorage userPrefsStorage) {
+    public StorageManager(AddressBookStorage addressBookStorage, UserPrefsStorage userPrefsStorage,
+                          TimeslotsStorage timeslotStorage) {
         this.addressBookStorage = addressBookStorage;
         this.userPrefsStorage = userPrefsStorage;
+        this.timeslotStorage = timeslotStorage;
     }
 
     // ================ UserPrefs methods ==============================
@@ -73,6 +77,35 @@ public class StorageManager implements Storage {
     public void saveAddressBook(ReadOnlyAddressBook addressBook, Path filePath) throws IOException {
         logger.fine("Attempting to write to data file: " + filePath);
         addressBookStorage.saveAddressBook(addressBook, filePath);
+    }
+
+    // ================ Timeslots methods ==============================
+
+    @Override
+    public Path getTimeslotsFilePath() {
+        return timeslotStorage.getTimeslotsFilePath();
+    }
+
+    @Override
+    public Optional<ReadOnlyTimeslots> readTimeslots() throws DataLoadingException {
+        return readTimeslots(timeslotStorage.getTimeslotsFilePath());
+    }
+
+    @Override
+    public Optional<ReadOnlyTimeslots> readTimeslots(Path filePath) throws DataLoadingException {
+        logger.fine("Attempting to read timeslots data from file: " + filePath);
+        return timeslotStorage.readTimeslots(filePath);
+    }
+
+    @Override
+    public void saveTimeslots(ReadOnlyTimeslots timeslots) throws IOException {
+        saveTimeslots(timeslots, timeslotStorage.getTimeslotsFilePath());
+    }
+
+    @Override
+    public void saveTimeslots(ReadOnlyTimeslots timeslots, Path filePath) throws IOException {
+        logger.fine("Attempting to write timeslots data to file: " + filePath);
+        timeslotStorage.saveTimeslots(timeslots, filePath);
     }
 
 }

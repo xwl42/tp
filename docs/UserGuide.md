@@ -27,10 +27,13 @@ spreadsheets or GUI apps.
     9. [Deleting a student : `delete`](#deleting-a-student-delete)
     10. [Clearing all entries : `clear`](#clearing-all-entries-clear)
     11. [Undoing the last command : `undo`](#undoing-the-last-command-undo)
-    12. [Exiting the program : `exit`](#exiting-the-program-exit)
-    13. [Saving the data](#saving-the-data)
-    14. [Editing the data file](#editing-the-data-file)
-    15. [Archiving data files (coming in v2.0)](#archiving-data-files-coming-in-v20)
+    12. [Blocking a timeslot : `block-timeslot`](#blocking-a-timeslot-block-timeslot)
+    13. [Retrieving merged timeslot ranges : `get-timeslots`](#retrieving-merged-timeslot-ranges-get-timeslots)
+    14. [Clearing all timeslots : `clear-timeslots`](#clearing-all-timeslots-clear-timeslots)
+    15. [Exiting the program : `exit`](#exiting-the-program-exit)
+    16. [Saving the data](#saving-the-data)
+    17. [Editing the data file](#editing-the-data-file)
+    18. [Archiving data files (coming in v2.0)](#archiving-data-files-coming-in-v20)
 3. [FAQ](#faq)
 4. [Known issues](#known-issues)
 5. [Command summary](#command-summary)
@@ -135,14 +138,12 @@ Examples:
 * Optional fields included: `add i/A1234567X n/John Doe p/98765432 e/johnd@example.com g/JohnDoe t/modelStudent`
 * Fields in different order: `add g/JohnDoe i/A1234567X  p/98765432 t/modelStudent n/John Doe e/johnd@example.com`
 
-Error Messages:
+<box type="warning" seamless>
 
-* Missing fields: \
-  `Invalid command format! 
-add: Adds a student to LambdaLab. Parameters: i/STUDENTID n/NAME p/PHONE e/EMAIL g/GITHUB_USERNAME [t/TAG]...
-Example: add i/A1234567X n/John Doe p/98765432 e/johnd@example.com g/JohnDoe t/ModelStudent`
-* Duplicate Identifier (Student ID): \
-    `This student already exists in LambdaLab`
+* Missing fields:  
+Duplicate Identifier (Student ID):  
+  `This student already exists in LambdaLab`
+</box>
 
 ### Listing all students : `list`
 
@@ -285,15 +286,14 @@ Examples:
 * `list` followed by `delete 2` deletes the 2nd student in the LambdaLab.
 * `find Betsy` followed by `delete 1` deletes the 1st student in the results of the `find` command.
 
-Error Messages:
+<box type="warning" seamless>
 
-* Missing fields & Non-positive index: \
+* Missing fields & Non-positive index:  
   `Invalid command format! 
     delete: Deletes the student identified by the index number used in the displayed student list.
     Parameters: INDEX (must be a positive integer)
     Example: delete 1`
-*  Index out of range: \
-  `The student index provided is invalid`
+</box>
 
 ### Clearing all entries : `clear`
 
@@ -338,6 +338,51 @@ Examples:
 * `delete 2` followed by `list` followed by `undo` still restores the deleted student back to the list
 * `delete 1` followed by `edit 1 n/Wrong Name` followed by 2 consecutive `undo`s only reverts the student's name 
 to its original value, but cannot restore the deleted student back to the list
+
+### Blocking a timeslot : `block-timeslot`
+
+Adds a timeslot to the application's timeslot store.
+
+Format: `block-timeslot ts/START_DATETIME te/END_DATETIME`
+
+* Accepted datetime formats:
+  * ISO_LOCAL_DATE_TIME: `2023-10-01T09:00:00`
+  * Human-friendly: `d MMM uuuu, HH:mm` (e.g. `4 Oct 2025, 10:00`) or `d MMM uuuu HH:mm` (e.g. `4 Oct 2025 10:00`)
+
+Examples:
+* `block-timeslot ts/2025-10-04T10:00:00 te/2025-10-04T13:00:00`
+* `block-timeslot ts/4 Oct 2025, 10:00 te/4 Oct 2025, 13:00`
+
+### Retrieving merged timeslot ranges : `get-timeslots`
+
+Displays merged timeslot ranges derived from stored timeslots. Overlapping or adjacent timeslots are merged and presented as continuous ranges for easier viewing.
+
+Format: `get-timeslots`
+
+Example:
+* `get-timeslots`
+
+* Allows the user to keep track of their unavailable timings for easier scheduling of consultations with students
+* The command shows merged ranges in a human-friendly date/time format.
+  * Example:
+    ```
+    4 Oct 2025, 10:00 -> 4 Oct 2025, 13:00
+    6 Oct 2025, 09:00 -> 6 Oct 2025, 11:30
+    ```
+- The UI can also display these ranges in the Timetable window (when available). Note that the Timetable view only shows timeslots between 08:00 and 23:00.
+  ![Timetable window](images/timetableWindow.png)
+
+
+### Clearing all timeslots : `clear-timeslots`
+
+Removes all stored timeslots (does not affect student records).
+
+Format: `clear-timeslots`
+
+<box type="warning" seamless>
+**Caution:** This will permanently remove all stored timeslots. There is no multi-step undo for timeslot clearing;
+use immediately after a mistaken action if your environment supports undo of other operations.
+</box>
 
 ### Exiting the program : `exit`
 
@@ -444,6 +489,9 @@ Action     | Format, Examples
 **Sort**    | `sort`
 **Undo** | `undo`
 **Grade**| `grade`
+**Block timeslot** | `block-timeslot ts/START_DATETIME te/END_DATETIME` <br> e.g. `block-timeslot ts/2025-10-04T10:00:00 te/2025-10-04T13:00:00`
+**Get timeslots** | `get-timeslots` — displays merged timeslot ranges
+**Clear timeslots** | `clear-timeslots` — removes all stored timeslots
 **Exit**   | `exit`
 
 

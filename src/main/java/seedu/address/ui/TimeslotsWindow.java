@@ -50,8 +50,8 @@ public class TimeslotsWindow {
 
     // New shared layout constants to ensure exact alignment between header and rows
     private static final double DAY_LABEL_WIDTH = 90; // left column width used by day labels
-    private static final double ROW_SPACING = 8;     // spacing used between day label and timeline
-    private static final double BODY_PADDING = 8;   // must match VBox body padding used in renderWeek
+    private static final double ROW_SPACING = 8; // spacing used between day label and timeline
+    private static final double BODY_PADDING = 8; // must match VBox body padding used in renderWeek
     private static final double TOP_CONTAINER_SPACING = 24; // increased vertical gap between header and hours
 
     /**
@@ -129,8 +129,7 @@ public class TimeslotsWindow {
         stage.show();
 
         // Bind timelineWidth to scene width (minimum remains TIMELINE_WIDTH). Subtract left label area and padding.
-        timelineWidth.bind(Bindings.createDoubleBinding(
-                () -> Math.max(scene.getWidth() - 120, TIMELINE_WIDTH),
+        timelineWidth.bind(Bindings.createDoubleBinding(() -> Math.max(scene.getWidth() - 120, TIMELINE_WIDTH),
                 scene.widthProperty()));
 
         // After showing, bind the ScrollPane viewport to the scene size so it grows/shrinks with the window.

@@ -21,6 +21,7 @@ spreadsheets or GUI apps.
     4. [Editing a student : `edit`](#editing-a-student--edit)
     5. [Marking Lab Attendance : `marka`](#marking-lab-attendance-marka)
     6. [Marking Exercise Status : `marke`](#marking-exercise-status-marke)
+    7. [Assigning Assessment Score: `grade`](#assigning-assessment-score-grade)
     7. [Locating students by name : `find`](#locating-students-by-name-find)
     8. [Sorting students:`sort`](#sorting-the-students-sort)
     9. [Deleting a student : `delete`](#deleting-a-student--delete)
@@ -209,6 +210,30 @@ Format: `marke INDEX ei/EXERCISENUMBER s/STATUSLETTER`
 Example:
 * `marke 2 ei/7 s/d` marks exercise 7 of the second student as done.
 
+### Assigning Assessment Score: `grade`
+
+Assigns the score for a specific assessment of an existing student in the address book.
+
+Format: `grade INDEX en/EXAMNAME sc/SCORE`
+
+#### Description
+- Edits the student at the specified INDEX. The index refers to the index number shown in the displayed student list. The index **must be a positive integer** 1, 2, 3, …​
+- `EXAMNAME` specifies the name of the assessment.
+- `SCORE` specifies the score to assign for that assessment.  
+  It **must be between 0 and the assessment’s maximum achievable score (inclusive)**.
+
+#### Supported Assessments
+| Assessment | Maximum Score |
+|-------------|---------------|
+| `pe1`       | 40            |
+| `midterm`   | 60            |
+| `pe2`       | 40            |
+| `final`     | 100           |
+
+#### Example
+* `grade 2 en/midterm sc/55` Sets the **midterm** score of the **second student** in the list to **55**.
+
+
 ### Locating students by name: `find`
 
 Finds students whose names contain any of the given keywords.
@@ -269,7 +294,6 @@ Error Messages:
     Example: delete 1`
 *  Index out of range: \
   `The student index provided is invalid`
-
 ### Clearing all entries : `clear`
 
 Clears **all** entries from the address book, leaving it completely empty.
@@ -370,6 +394,7 @@ Action     | Format, Examples
 **Mark Exercise** | `marke INDEX ei/EXERCISENUMBER s/STATUSLETTER` <br> e.g. `marke 2 ei/7 s/d`
 **Sort**    | `sort`
 **Undo** | `undo`
+**Grade**| `grade`
 **Exit**   | `exit`
 
 

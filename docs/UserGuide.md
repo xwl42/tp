@@ -491,8 +491,8 @@ Action     | Format, Examples
 **Undo** | `undo`
 **Grade**| `grade`
 **Block timeslot** | `block-timeslot ts/START_DATETIME te/END_DATETIME` <br> e.g. `block-timeslot ts/2025-10-04T10:00:00 te/2025-10-04T13:00:00`
-**Get timeslots** | `get-timeslots` — displays merged timeslot ranges
-**Clear timeslots** | `clear-timeslots` — removes all stored timeslots
+**Get timeslots** | `get-timeslots` 
+**Clear timeslots** | `clear-timeslots` 
 **Exit**   | `exit`
 
 

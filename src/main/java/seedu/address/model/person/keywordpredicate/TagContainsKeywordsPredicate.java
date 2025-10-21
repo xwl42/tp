@@ -3,7 +3,6 @@ package seedu.address.model.person.keywordpredicate;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.person.Person;

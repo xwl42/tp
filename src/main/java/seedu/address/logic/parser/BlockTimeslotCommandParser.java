@@ -2,6 +2,7 @@ package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 
+import java.text.ParseException;
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -11,7 +12,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import seedu.address.logic.commands.BlockTimeslotCommand;
-import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.timeslot.Timeslot;
 
 /**
@@ -19,7 +19,7 @@ import seedu.address.model.timeslot.Timeslot;
  */
 public class BlockTimeslotCommandParser implements Parser<BlockTimeslotCommand> {
 
-    // Alternate human-friendly formats:
+    // Alternate user-friendly formats:
     // with comma: "1 Jan 2025, 10:00"
     private static final DateTimeFormatter ALTERNATE_WITH_COMMA =
             DateTimeFormatter.ofPattern("d MMM uuuu, HH:mm");
@@ -42,11 +42,11 @@ public class BlockTimeslotCommandParser implements Parser<BlockTimeslotCommand> 
         try {
             return LocalDateTime.parse(trimmed, Timeslot.FORMATTER);
         } catch (DateTimeParseException e) {
-            // try human-friendly with comma
+            // try user-friendly with comma
             try {
                 return LocalDateTime.parse(trimmed, ALTERNATE_WITH_COMMA);
             } catch (DateTimeParseException ex2) {
-                // try human-friendly without comma
+                // try user-friendly without comma
                 return LocalDateTime.parse(trimmed, ALTERNATE_NO_COMMA);
             }
         }

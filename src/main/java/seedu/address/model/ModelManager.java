@@ -23,6 +23,9 @@ public class ModelManager implements Model {
     private final UserPrefs userPrefs;
     private final FilteredList<Person> filteredPersons;
 
+    // Add timeslots managed by the model
+    private final Timeslots timeslots;
+
     /**
      * Initializes a ModelManager with the given addressBook and userPrefs.
      */
@@ -33,6 +36,22 @@ public class ModelManager implements Model {
 
         this.addressBook = new AddressBook(addressBook);
         this.userPrefs = new UserPrefs(userPrefs);
+        this.timeslots = new Timeslots(); // default empty timeslots
+        filteredPersons = new FilteredList<>(this.addressBook.getPersonList());
+    }
+
+    /**
+     * Initializes a ModelManager with the given addressBook, timeslots and userPrefs.
+     */
+    public ModelManager(ReadOnlyAddressBook addressBook, ReadOnlyTimeslots timeslots, ReadOnlyUserPrefs userPrefs) {
+        requireAllNonNull(addressBook, timeslots, userPrefs);
+
+        logger.fine("Initializing with address book: " + addressBook + ", timeslots: " + timeslots
+                + " and user prefs " + userPrefs);
+
+        this.addressBook = new AddressBook(addressBook);
+        this.userPrefs = new UserPrefs(userPrefs);
+        this.timeslots = new Timeslots(timeslots);
         filteredPersons = new FilteredList<>(this.addressBook.getPersonList());
     }
 
@@ -127,6 +146,18 @@ public class ModelManager implements Model {
         filteredPersons.setPredicate(predicate);
     }
 
+    /**
+     * Timeslots accessors
+     */
+    public ReadOnlyTimeslots getTimeslots() {
+        return timeslots;
+    }
+
+    public void setTimeslots(ReadOnlyTimeslots newData) {
+        requireNonNull(newData);
+        this.timeslots.resetData(newData);
+    }
+
     @Override
     public boolean equals(Object other) {
         if (other == this) {
@@ -141,6 +172,7 @@ public class ModelManager implements Model {
         ModelManager otherModelManager = (ModelManager) other;
         return addressBook.equals(otherModelManager.addressBook)
                 && userPrefs.equals(otherModelManager.userPrefs)
-                && filteredPersons.equals(otherModelManager.filteredPersons);
+                && filteredPersons.equals(otherModelManager.filteredPersons)
+                && timeslots.equals(otherModelManager.timeslots);
     }
 }

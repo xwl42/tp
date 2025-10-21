@@ -19,7 +19,9 @@ import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.ReadOnlyAddressBook;
+import seedu.address.model.ReadOnlyTimeslots;
 import seedu.address.model.ReadOnlyUserPrefs;
+import seedu.address.model.Timeslots;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.util.SampleDataUtil;
 import seedu.address.storage.AddressBookStorage;
@@ -63,7 +65,11 @@ public class MainApp extends Application {
         TimeslotsStorage timeslotsStorage = new JsonTimeslotsStorage(userPrefs.getTimeslotsFilePath());
         storage = new StorageManager(addressBookStorage, userPrefsStorage, timeslotsStorage);
 
-        model = initModelManager(storage, userPrefs);
+        // Load timeslots first
+        Timeslots initialTimeslots = initTimeslots(storage);
+
+        // Initialize model manager with address book and timeslots
+        model = initModelManager(storage, userPrefs, initialTimeslots);
 
         logic = new LogicManager(model, storage);
 
@@ -75,7 +81,7 @@ public class MainApp extends Application {
      * The data from the sample address book will be used instead if {@code storage}'s address book is not found,
      * or an empty address book will be used instead if errors occur when reading {@code storage}'s address book.
      */
-    private Model initModelManager(Storage storage, ReadOnlyUserPrefs userPrefs) {
+    private Model initModelManager(Storage storage, ReadOnlyUserPrefs userPrefs, ReadOnlyTimeslots timeslots) {
         logger.info("Using data file : " + storage.getAddressBookFilePath());
 
         Optional<ReadOnlyAddressBook> addressBookOptional;
@@ -93,7 +99,33 @@ public class MainApp extends Application {
             initialData = new AddressBook();
         }
 
-        return new ModelManager(initialData, userPrefs);
+        return new ModelManager(initialData, timeslots, userPrefs);
+    }
+
+    /**
+     * Loads Timeslots from {@code storage}. If not present or loading fails, returns an empty Timeslots.
+     */
+    private Timeslots initTimeslots(Storage storage) {
+        logger.info("Using timeslots file : " + storage.getTimeslotsFilePath());
+
+        Optional<ReadOnlyTimeslots> timeslotsOptional;
+        Timeslots initialTimeslots;
+        try {
+            timeslotsOptional = storage.readTimeslots();
+            if (!timeslotsOptional.isPresent()) {
+                logger.info("Creating a new data file " + storage.getTimeslotsFilePath()
+                        + " populated with an empty Timeslots.");
+            }
+            // Convert ReadOnlyTimeslots (if present) into a concrete Timeslots instance.
+            initialTimeslots = timeslotsOptional
+                    .map(ts -> new Timeslots(ts))
+                    .orElseGet(Timeslots::new);
+        } catch (DataLoadingException e) {
+            logger.warning("Data file at " + storage.getTimeslotsFilePath() + " could not be loaded."
+                    + " Will be starting with an empty Timeslots.");
+            initialTimeslots = new Timeslots();
+        }
+        return initialTimeslots;
     }
 
     private void initLogging(Config config) {

@@ -415,6 +415,9 @@ Action     | Format, Examples
 **Mark Exercise** | `marke INDEX ei/EXERCISENUMBER s/STATUSLETTER` <br> e.g. `marke 2 ei/7 s/d`
 **Sort**    | `sort`
 **Undo** | `undo`
+**Block timeslot** | `block-timeslot ts/START_DATETIME te/END_DATETIME` <br> e.g. `block-timeslot ts/2025-10-04T10:00:00 te/2025-10-04T13:00:00`
+**Get timeslots** | `get-timeslots` — displays merged ranges
+**Clear timeslots** | `clear-timeslots` — removes all stored timeslots
 **Exit**   | `exit`
 
 

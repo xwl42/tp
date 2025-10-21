@@ -212,12 +212,12 @@ Example:
 
 ### Assigning Assessment Score: `grade`
 
-Assigns the score for a specific assessment of an existing student in the address book.
+Assigns the score for a specific assessment of an existing student in LambdaLab.
 
 Format: `grade INDEX en/EXAMNAME sc/SCORE`
 
 #### Description
-- Edits the student at the specified INDEX. The index refers to the index number shown in the displayed student list. The index **must be a positive integer** 1, 2, 3, …​
+- Edits the student at the specified `INDEX`. The index refers to the index number shown in the displayed student list. The index **must be a positive integer** 1, 2, 3, …​
 - `EXAMNAME` specifies the name of the assessment.
 - `SCORE` specifies the score to assign for that assessment.  
   It **must be between 0 and the assessment’s maximum achievable score (inclusive)**.
@@ -231,7 +231,7 @@ Format: `grade INDEX en/EXAMNAME sc/SCORE`
 | `final`     | 100           |
 
 #### Example
-* `grade 2 en/midterm sc/55` Sets the **midterm** score of the **second student** in the list to **55**.
+* `grade 2 en/midterm sc/55` sets the **midterm** score of the **second student** in the list to **55**.
 
 
 ### Locating students by name: `find`

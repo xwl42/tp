@@ -13,6 +13,7 @@ import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.person.Person;
+import seedu.address.model.timeslot.Timeslot;
 
 /**
  * Represents the in-memory model of the address book data.
@@ -196,6 +197,17 @@ public class ModelManager implements Model {
     public void setTimeslots(ReadOnlyTimeslots newData) {
         requireNonNull(newData);
         this.timeslots.resetData(newData);
+    }
+
+    // Add/has helpers for timeslots
+    public void addTimeslot(Timeslot t) {
+        requireNonNull(t);
+        this.timeslots.addTimeslot(t);
+    }
+
+    public boolean hasTimeslot(Timeslot t) {
+        requireNonNull(t);
+        return this.timeslots.hasTimeslot(t);
     }
 
     @Override

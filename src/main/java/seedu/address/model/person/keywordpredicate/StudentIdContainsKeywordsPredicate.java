@@ -19,8 +19,10 @@ public class StudentIdContainsKeywordsPredicate implements Predicate<Person> {
 
     @Override
     public boolean test(Person person) {
+        String id = person.getStudentId().toString().toLowerCase();
         return keywords.stream()
-                .anyMatch(keyword -> StringUtil.containsWordIgnoreCase(person.getStudentId().toString(), keyword));
+                .map(String::toLowerCase)
+                .anyMatch(id::contains);
     }
 
     @Override

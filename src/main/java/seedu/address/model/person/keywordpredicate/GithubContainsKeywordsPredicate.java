@@ -19,8 +19,10 @@ public class GithubContainsKeywordsPredicate implements Predicate<Person> {
 
     @Override
     public boolean test(Person person) {
+        String github = person.getGithubUsername().toString().toLowerCase();
         return keywords.stream()
-                .anyMatch(keyword -> StringUtil.containsWordIgnoreCase(person.getGithubUsername().toString(), keyword));
+                .map(String::toLowerCase)
+                .anyMatch(github::contains);
     }
 
     @Override

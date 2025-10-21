@@ -1,4 +1,11 @@
 package seedu.address.model;
 
-public class ReadOnlyTimeslots {
+import javafx.collections.ObservableList;
+import seedu.address.model.timeslot.Timeslot;
+
+/**
+ * Unmodifiable view of a timeslots list.
+ */
+public interface ReadOnlyTimeslots {
+    ObservableList<Timeslot> getTimeslotList();
 }

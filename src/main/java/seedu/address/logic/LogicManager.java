@@ -25,10 +25,11 @@ import seedu.address.ui.TimeslotsWindow;
  * The main LogicManager of the app.
  */
 public class LogicManager implements Logic {
-    private static final String FILE_OPS_ERROR_FORMAT = "Could not save data due to the following error: %s";
+    // make these constants public so test code can reference them
+    public static final String FILE_OPS_ERROR_FORMAT = "Could not save data to file: %s";
 
-    private static final String FILE_OPS_PERMISSION_ERROR_FORMAT =
-            "Could not save data to file %s due to insufficient permissions to write to the file or the folder.";
+    public static final String FILE_OPS_PERMISSION_ERROR_FORMAT =
+            "Could not save data to file due to permission issues: %s";
 
     private final Logger logger = LogsCenter.getLogger(LogicManager.class);
 

@@ -6,16 +6,21 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -38,7 +43,6 @@ public class TimeslotsWindow {
     private static final double PIXELS_PER_MINUTE = 1.0; // 60 minutes => 60px per hour (adjust if needed)
     private static final double TIMELINE_WIDTH = HOURS * 60 * PIXELS_PER_MINUTE; // total px width for timeline
     private static final double ROW_HEIGHT = 64;
-    private static final String[] DAY_LABELS = {"MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"};
 
     /**
      * Shows the merged timeslot ranges in a new window laid out as a timetable.
@@ -46,7 +50,7 @@ public class TimeslotsWindow {
      */
     public static void showMerged(List<LocalDateTime[]> mergedRanges) {
         Stage stage = new Stage();
-        stage.setTitle("Next Week Schedule");
+        stage.setTitle("Consultation Schedule");
         stage.initModality(Modality.NONE);
 
         BorderPane root = new BorderPane();
@@ -55,19 +59,64 @@ public class TimeslotsWindow {
         Label header = new Label("Timetable");
         header.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
         BorderPane.setAlignment(header, Pos.CENTER);
-        root.setTop(header);
 
-        // Hours header (top row)
+        // Navigation controls
+        Button nextWeekBtn = new Button("Next Week");
+        Button prevWeekBtn = new Button("Previous Week");
+
+        // Determine initial week start: use earliest timeslot start (its Monday) if available,
+        // otherwise fallback to current week's Monday.
+        LocalDate[] weekStartRef = new LocalDate[1];
+        weekStartRef[0] = Optional.ofNullable(mergedRanges)
+                .filter(l -> !l.isEmpty())
+                .flatMap(l -> l.stream()
+                        .map(r -> r[0]) // start LocalDateTime
+                        .filter(Objects::nonNull)
+                        .map(LocalDateTime::toLocalDate)
+                        .min(LocalDate::compareTo)
+                )
+                .orElse(LocalDate.now())
+                .with(DayOfWeek.MONDAY);
+
+        // top row: header + spacer + navigation buttons
+        HBox topRow = new HBox();
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        topRow.setAlignment(Pos.CENTER_LEFT);
+        topRow.setSpacing(8);
+        topRow.getChildren().addAll(header, spacer, prevWeekBtn, nextWeekBtn);
+
+        // hours header (kept same as existing)
         HBox hoursHeader = buildHoursHeader();
         hoursHeader.setPadding(new Insets(8, 0, 8, 80)); // leave space for day labels
-        root.setTop(new VBox(header, hoursHeader));
 
-        // Body: one row per day with timeline pane
+        // render initial week
+        renderWeek(root, weekStartRef[0], mergedRanges, topRow, hoursHeader);
+
+        // button actions: adjust weekStart and re-render
+        nextWeekBtn.setOnAction(e -> {
+            weekStartRef[0] = weekStartRef[0].plusWeeks(1);
+            renderWeek(root, weekStartRef[0], mergedRanges, topRow, hoursHeader);
+        });
+        prevWeekBtn.setOnAction(e -> {
+            weekStartRef[0] = weekStartRef[0].minusWeeks(1);
+            renderWeek(root, weekStartRef[0], mergedRanges, topRow, hoursHeader);
+        });
+
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    // Renders the given week starting at weekStart (Monday) into root using provided topRow and hoursHeader nodes.
+    private static void renderWeek(BorderPane root, LocalDate weekStart, List<LocalDateTime[]> ranges,
+            HBox topRow, HBox hoursHeader) {
+        // Body: one row per day with timeline pane for the week starting at weekStart
         VBox body = new VBox(6);
         body.setPadding(new Insets(8));
-        for (int i = 0; i < DAY_LABELS.length; i++) {
-            DayOfWeek dow = DayOfWeek.of(((i + 1) % 7 == 0) ? 7 : (i + 1)); // 1=MON ... 7=SUN
-            HBox row = buildDayRow(DAY_LABELS[i], dow, mergedRanges);
+        for (int i = 0; i < 7; i++) { // 7 days in a week
+            LocalDate date = weekStart.plusDays(i);
+            HBox row = buildDayRowForDate(date, ranges);
             body.getChildren().add(row);
         }
 
@@ -76,11 +125,8 @@ public class TimeslotsWindow {
         sp.setPrefViewportWidth(Math.min(TIMELINE_WIDTH + 120, 1000));
         sp.setPrefViewportHeight(ROW_HEIGHT * 5 + 200);
 
+        root.setTop(new VBox(topRow, hoursHeader));
         root.setCenter(sp);
-
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
     }
 
     // build the top hours labels and vertical tick lines
@@ -113,14 +159,16 @@ public class TimeslotsWindow {
         return header;
     }
 
-    // build one row: day label + timeline pane with colored blocks
-    private static HBox buildDayRow(String dayLabelText, DayOfWeek dow, List<LocalDateTime[]> ranges) {
+    // New: buildDayRowForDate renders a row for a given LocalDate (shows label with date)
+    private static HBox buildDayRowForDate(LocalDate date, List<LocalDateTime[]> ranges) {
         HBox row = new HBox();
         row.setSpacing(8);
         row.setAlignment(Pos.CENTER_LEFT);
 
+        String dayLabelText = String.format("%s %s", date.getDayOfWeek().toString().substring(0, 3), 
+                date.format(DateTimeFormatter.ofPattern("MM/dd")));
         Label dayLabel = new Label(dayLabelText);
-        dayLabel.setMinWidth(60);
+        dayLabel.setMinWidth(90);
         dayLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #333333;");
 
         Pane timeline = new Pane();
@@ -138,7 +186,7 @@ public class TimeslotsWindow {
             timeline.getChildren().add(divider);
         }
 
-        // Place a block for each visible portion of each timeslot that intersects this day and the displayed window
+        // Place a block for each visible portion of each timeslot that intersects this date and the displayed window
         if (ranges != null) {
             for (LocalDateTime[] range : ranges) {
                 LocalDateTime start = range[0];
@@ -147,70 +195,48 @@ public class TimeslotsWindow {
                     continue;
                 }
 
-                // iterate each date the range spans and render the portion that falls on that date & within START_HOUR..END_HOUR
-                LocalDate current = start.toLocalDate();
-                LocalDate endDate = end.toLocalDate();
-                while (!current.isAfter(endDate)) {
-                    if (current.getDayOfWeek() == dow) {
-                        LocalDateTime dayWindowStart = LocalDateTime.of(current, LocalTime.of(START_HOUR, 0));
-                        // Use midnight of the next day as the exclusive end to avoid LocalTime.of(24,0) error
-                        LocalDateTime dayWindowEnd = LocalDateTime.of(current.plusDays(1), LocalTime.MIDNIGHT);
+                // Compute the portion of [start,end) that falls on 'date'
+                LocalDateTime dayWindowStart = LocalDateTime.of(date, LocalTime.of(START_HOUR, 0));
+                LocalDateTime dayWindowEnd = LocalDateTime.of(date.plusDays(1), LocalTime.MIDNIGHT);
 
-                        LocalDateTime renderStart = start.isAfter(dayWindowStart) ? start : dayWindowStart;
-                        LocalDateTime renderEnd = end.isBefore(dayWindowEnd) ? end : dayWindowEnd;
+                LocalDateTime renderStart = start.isAfter(dayWindowStart) ? start : dayWindowStart;
+                LocalDateTime renderEnd = end.isBefore(dayWindowEnd) ? end : dayWindowEnd;
 
-                        if (renderStart.isBefore(renderEnd)) {
-                            double minutesFromStart = (renderStart.getHour() * 60 + renderStart.getMinute()) - START_HOUR * 60;
-                            double durationMinutes = (renderEnd.getHour() * 60 + renderEnd.getMinute())
-                                    - (renderStart.getHour() * 60 + renderStart.getMinute());
+                if (renderStart.isBefore(renderEnd)) {
+                    double minutesFromStart = (renderStart.getHour() * 60 + renderStart.getMinute()) - START_HOUR * 60;
+                    double durationMinutes = (renderEnd.getHour() * 60 + renderEnd.getMinute())
+                            - (renderStart.getHour() * 60 + renderStart.getMinute());
 
-                            double x = Math.max(0, minutesFromStart * PIXELS_PER_MINUTE);
-                            double w = Math.max(4, durationMinutes * PIXELS_PER_MINUTE);
+                    double x = Math.max(0, minutesFromStart * PIXELS_PER_MINUTE);
+                    double w = Math.max(4, durationMinutes * PIXELS_PER_MINUTE);
 
-                            Rectangle block = new Rectangle(x, 8, w, ROW_HEIGHT - 16);
-                            block.setArcWidth(8);
-                            block.setArcHeight(8);
-                            block.setFill(pickColorForDay(dow));
-                            // softer stroke for blocks
-                            block.setStroke(Color.web("#d0d7de"));
-                            block.setStrokeWidth(1);
+                    Rectangle block = new Rectangle(x, 8, w, ROW_HEIGHT - 16);
+                    block.setArcWidth(8);
+                    block.setArcHeight(8);
+                    block.setFill(pickColorForDay(date.getDayOfWeek()));
+                    // softer stroke for blocks
+                    block.setStroke(Color.web("#d0d7de"));
+                    block.setStrokeWidth(1);
 
-                            String labelText = String.format("%s - %s",
-                                    renderStart.format(DateTimeFormatter.ofPattern("HH:mm")),
-                                    renderEnd.format(DateTimeFormatter.ofPattern("HH:mm")));
-                            Label bl = new Label(labelText);
-                            bl.setStyle("-fx-text-fill: #1f2a2f; -fx-font-size: 11px;");
-                            bl.setLayoutX(x + 6);
-                            bl.setLayoutY(12);
+                    String labelText = String.format("%s - %s",
+                            renderStart.format(DateTimeFormatter.ofPattern("HH:mm")),
+                            renderEnd.format(DateTimeFormatter.ofPattern("HH:mm")));
+                    Label bl = new Label(labelText);
+                    bl.setStyle("-fx-text-fill: #1f2a2f; -fx-font-size: 11px;");
+                    bl.setLayoutX(x + 6);
+                    bl.setLayoutY(12);
 
-                            Tooltip tooltip = new Tooltip(start.format(FORMATTER) + "\n" + end.format(FORMATTER));
-                            Tooltip.install(block, tooltip);
-                            Tooltip.install(bl, tooltip);
+                    Tooltip tooltip = new Tooltip(start.format(FORMATTER) + "\n" + end.format(FORMATTER));
+                    Tooltip.install(block, tooltip);
+                    Tooltip.install(bl, tooltip);
 
-                            timeline.getChildren().addAll(block, bl);
-                        }
-                    }
-                    current = current.plusDays(1);
+                    timeline.getChildren().addAll(block, bl);
                 }
             }
         }
 
         row.getChildren().addAll(dayLabel, timeline);
         return row;
-    }
-
-    // crude check for ranges that span the circular week (rare) - keep conservative
-    private static boolean spansDay(DayOfWeek dow, LocalDateTime start, LocalDateTime end) {
-        // if start is before this dow and end is after this dow (in week order)
-        int s = start.getDayOfWeek().getValue();
-        int e = end.getDayOfWeek().getValue();
-        int d = dow.getValue();
-        if (s <= e) {
-            return s <= d && d <= e;
-        } else {
-            // wraps week boundary
-            return d >= s || d <= e;
-        }
     }
 
     // pick a pleasant color for the day (cycled)

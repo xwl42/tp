@@ -330,15 +330,14 @@ Examples:
 
 ### Retrieving merged timeslot ranges : `get-timeslots`
 
-Displays merged timeslot ranges derived from stored timeslots. Overlapping or adjacent timeslots are merged
-and presented as continuous ranges for easier viewing.
+Displays merged timeslot ranges derived from stored timeslots. Overlapping or adjacent timeslots are merged and presented as continuous ranges for easier viewing.
 
 Format: `get-timeslots`
 
 Example:
 * `get-timeslots`
 
-
+* Allows the user to keep track of their unavailable timings for easier scheduling of consultations with students
 * The command shows merged ranges in a human-friendly date/time format.
   * Example:
     ```

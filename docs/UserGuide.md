@@ -33,7 +33,6 @@ spreadsheets or GUI apps.
     15. [Exiting the program : `exit`](#exiting-the-program-exit)
     16. [Saving the data](#saving-the-data)
     17. [Editing the data file](#editing-the-data-file)
-    18. [Archiving data files (coming in v2.0)](#archiving-data-files-coming-in-v20)
 3. [FAQ](#faq)
 4. [Known issues](#known-issues)
 5. [Command summary](#command-summary)
@@ -117,9 +116,10 @@ Opens a Help window that provides a link to the User Guide.
 
 It also gives a brief explanation of each command.
 
+Format: `help`
+
 ![help message](images/helpMessage2.png)
 
-Format: `help`
 
 
 ### Adding a student: `add`
@@ -141,8 +141,7 @@ Examples:
 
 <box type="warning" seamless>
 
-* Missing fields:  
-Duplicate Identifier (Student ID):  
+Duplicate Identifier (Student ID) will cause the below error:  
   `This student already exists in LambdaLab`
 </box>
 
@@ -289,7 +288,7 @@ Examples:
 
 <box type="warning" seamless>
 
-* Missing fields & Non-positive index:  
+Missing fields or Non-positive index will cause the below error:  
   `Invalid command format! 
     delete: Deletes the student identified by the index number used in the displayed student list.
     Parameters: INDEX (must be a positive integer)
@@ -353,6 +352,7 @@ Format: `block-timeslot ts/START_DATETIME te/END_DATETIME`
 Examples:
 * `block-timeslot ts/2025-10-04T10:00:00 te/2025-10-04T13:00:00`
 * `block-timeslot ts/4 Oct 2025, 10:00 te/4 Oct 2025, 13:00`
+* `block-timeslot ts/4 Oct 2025 10:00 te/4 Oct 2025 13:00`
 
 ### Retrieving merged timeslot ranges : `get-timeslots`
 
@@ -360,10 +360,7 @@ Displays merged timeslot ranges derived from stored timeslots. Overlapping or ad
 
 Format: `get-timeslots`
 
-Example:
-* `get-timeslots`
-
-* Allows the user to keep track of their unavailable timings for easier scheduling of consultations with students
+* Allows the user to keep track of their unavailable timings for easier scheduling of consultations with students.
 * The command shows merged ranges in a human-friendly date/time format.
   * Example:
     ```
@@ -406,9 +403,6 @@ If your changes to the data file makes its format invalid, LambdaLab will discar
 Furthermore, certain edits can cause the LambdaLab to behave in unexpected ways (e.g., if a value entered is outside the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
 </box>
 
-### Archiving data files `[coming in v2.0]`
-
-_Details coming soon ..._
 
 --------------------------------------------------------------------------------------------------------------------
 

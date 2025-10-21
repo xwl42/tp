@@ -8,10 +8,10 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
-import seedu.address.model.timeslot.Timeslot;
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.ReadOnlyTimeslots;
 import seedu.address.model.Timeslots;
+import seedu.address.model.timeslot.Timeslot;
 
 /**
  * An Immutable Timeslots that is serializable to JSON format.

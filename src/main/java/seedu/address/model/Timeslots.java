@@ -7,8 +7,8 @@ import java.util.Objects;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import seedu.address.model.timeslot.Timeslot;
 import seedu.address.commons.util.ToStringBuilder;
+import seedu.address.model.timeslot.Timeslot;
 
 /**
  * Wraps all data at the timeslots level.
@@ -49,14 +49,25 @@ public class Timeslots implements ReadOnlyTimeslots {
 
     //// timeslot-level operations
 
-    public boolean hasTimeslot(Timeslot timeslot) {
-        requireNonNull(timeslot);
-        return times.contains(timeslot);
-    }
-
+    /**
+     * Adds a timeslot to this Timeslots collection.
+     *
+     * @param t timeslot to add; must not be null.
+     */
     public void addTimeslot(Timeslot t) {
         requireNonNull(t);
         times.add(t);
+    }
+
+    /**
+     * Checks whether the given timeslot is present in this Timeslots collection.
+     *
+     * @param t timeslot to check; must not be null.
+     * @return true if present, false otherwise.
+     */
+    public boolean hasTimeslot(Timeslot t) {
+        requireNonNull(t);
+        return times.contains(t);
     }
 
     public void setTimeslot(Timeslot target, Timeslot editedTimeslot) {

@@ -21,5 +21,5 @@ public class CliSyntax {
 
     // Timeslot prefixes
     public static final Prefix PREFIX_TIMESLOT_START = new Prefix("ts/"); // e.g. ts/2023-10-01T09:00:00
-    public static final Prefix PREFIX_TIMESLOT_END = new Prefix("te/");   // e.g. te/2023-10-01T10:00:00
+    public static final Prefix PREFIX_TIMESLOT_END = new Prefix("te/"); // e.g. te/2023-10-01T10:00:00
 }

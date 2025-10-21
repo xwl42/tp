@@ -165,7 +165,7 @@ public class TimeslotsWindow {
         row.setSpacing(8);
         row.setAlignment(Pos.CENTER_LEFT);
 
-        String dayLabelText = String.format("%s %s", date.getDayOfWeek().toString().substring(0, 3), 
+        String dayLabelText = String.format("%s %s", date.getDayOfWeek().toString().substring(0, 3),
                 date.format(DateTimeFormatter.ofPattern("MM/dd")));
         Label dayLabel = new Label(dayLabelText);
         dayLabel.setMinWidth(90);
@@ -243,13 +243,13 @@ public class TimeslotsWindow {
     private static Color pickColorForDay(DayOfWeek dow) {
         // Pastel/soft palette for reduced contrast and easier viewing
         return switch (dow) {
-        case MONDAY -> Color.web("#9ec5ff");    // soft blue
-        case TUESDAY -> Color.web("#b8e6d8");   // mint
+        case MONDAY -> Color.web("#9ec5ff"); // soft blue
+        case TUESDAY -> Color.web("#b8e6d8"); // mint
         case WEDNESDAY -> Color.web("#ffd9a8"); // peach
-        case THURSDAY -> Color.web("#d6d5ff");  // lavender
-        case FRIDAY -> Color.web("#f6cfe6");    // light pink
-        case SATURDAY -> Color.web("#d9f5d7");  // light green
-        case SUNDAY -> Color.web("#f7eddc");    // light cream
+        case THURSDAY -> Color.web("#d6d5ff"); // lavender
+        case FRIDAY -> Color.web("#f6cfe6"); // light pink
+        case SATURDAY -> Color.web("#d9f5d7"); // light green
+        case SUNDAY -> Color.web("#f7eddc"); // light cream
         default -> Color.web("#cbd5df");
         };
     }

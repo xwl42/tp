@@ -199,12 +199,22 @@ public class ModelManager implements Model {
         this.timeslots.resetData(newData);
     }
 
-    // Add/has helpers for timeslots
+    /**
+     * Adds the given {@code Timeslot} to the model's timeslot collection.
+     *
+     * @param t the timeslot to add (must not be null).
+     */
     public void addTimeslot(Timeslot t) {
         requireNonNull(t);
         this.timeslots.addTimeslot(t);
     }
 
+    /**
+     * Returns true if the model already contains the given {@code Timeslot}.
+     *
+     * @param t timeslot to check presence for (must not be null).
+     * @return true if present.
+     */
     public boolean hasTimeslot(Timeslot t) {
         requireNonNull(t);
         return this.timeslots.hasTimeslot(t);

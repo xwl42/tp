@@ -27,23 +27,44 @@ public class CommandResult {
 
     /**
      * Constructs a {@code CommandResult} with the specified fields.
+     *
+     * @param feedbackToUser the feedback message to be shown to the user; must not be null.
+     * @param showHelp whether help should be shown.
+     * @param exit whether the application should exit.
      */
     public CommandResult(String feedbackToUser, boolean showHelp, boolean exit) {
         this(feedbackToUser, showHelp, exit, null);
     }
 
     /**
-     * Constructs a {@code CommandResult} with the specified {@code feedbackToUser},
-     * and other fields set to their default value.
+     * Constructs a {@code CommandResult} with the specified {@code feedbackToUser}.
+     * Other flags are set to their default values.
+     *
+     * @param feedbackToUser the feedback message to be shown to the user; must not be null.
      */
     public CommandResult(String feedbackToUser) {
         this(feedbackToUser, false, false, null);
     }
 
+    /**
+     * Constructs a {@code CommandResult} with the specified feedback and an optional
+     * payload of merged timeslot ranges.
+     *
+     * @param feedbackToUser non-null feedback message to be displayed to the user.
+     * @param timeslotRanges optional list of merged timeslot ranges; may be null.
+     */
     public CommandResult(String feedbackToUser, List<LocalDateTime[]> timeslotRanges) {
         this(feedbackToUser, false, false, timeslotRanges);
     }
 
+    /**
+     * Constructs a {@code CommandResult} with all fields specified.
+     *
+     * @param feedbackToUser non-null feedback message to be shown to the user.
+     * @param showHelp whether help should be shown.
+     * @param exit whether the application should exit.
+     * @param timeslotRanges optional list of merged timeslot ranges; may be null.
+     */
     public CommandResult(String feedbackToUser, boolean showHelp, boolean exit, List<LocalDateTime[]> timeslotRanges) {
         this.feedbackToUser = Objects.requireNonNull(feedbackToUser);
         this.showHelp = showHelp;
@@ -51,20 +72,40 @@ public class CommandResult {
         this.timeslotRanges = timeslotRanges;
     }
 
+    /**
+     * Returns the feedback message to be shown to the user.
+     *
+     * @return the feedback message.
+     */
     public String getFeedbackToUser() {
         return feedbackToUser;
     }
 
+    /**
+     * Returns whether help should be shown to the user.
+     *
+     * @return true if help should be shown, false otherwise.
+     */
     public boolean isShowHelp() {
         return showHelp;
     }
 
+    /**
+     * Returns whether the application should exit.
+     *
+     * @return true if the application should exit, false otherwise.
+     */
     public boolean isExit() {
         return exit;
     }
 
     /**
      * Returns the merged timeslot ranges payload, or null if not present.
+     *
+     * Each element of the returned list (if non-null) is a {@code LocalDateTime[]} of length 2
+     * representing {start, end}.
+     *
+     * @return list of merged timeslot ranges or null.
      */
     public List<LocalDateTime[]> getTimeslotRanges() {
         return timeslotRanges;

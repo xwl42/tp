@@ -28,11 +28,23 @@ public class BlockTimeslotCommand extends Command {
 
     private final Timeslot toAdd;
 
+    /**
+     * Creates a BlockTimeslotCommand that will add the specified {@code Timeslot}.
+     *
+     * @param timeslot the timeslot to add; must not be null.
+     */
     public BlockTimeslotCommand(Timeslot timeslot) {
         requireNonNull(timeslot);
         this.toAdd = timeslot;
     }
 
+    /**
+     * Executes the block-timeslot command, adding the timeslot to the model.
+     *
+     * @param model the model to add the timeslot to.
+     * @return the command result with feedback.
+     * @throws CommandException if the model does not support timeslot modification or a duplicate exists.
+     */
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);

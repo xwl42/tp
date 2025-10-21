@@ -5,8 +5,8 @@ import java.time.LocalDateTime;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import seedu.address.model.timeslot.Timeslot;
 import seedu.address.commons.exceptions.IllegalValueException;
+import seedu.address.model.timeslot.Timeslot;
 
 /**
  * Jackson-friendly version of {@link Timeslot}.

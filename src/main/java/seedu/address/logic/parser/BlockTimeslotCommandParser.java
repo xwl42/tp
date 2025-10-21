@@ -9,8 +9,6 @@ import java.time.format.DateTimeParseException;
 import java.util.Objects;
 
 import seedu.address.logic.commands.BlockTimeslotCommand;
-import seedu.address.logic.parser.CliSyntax;
-import seedu.address.logic.parser.Parser;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.timeslot.Timeslot;
 

@@ -18,12 +18,14 @@ import java.util.function.Predicate;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Person;
-import seedu.address.model.person.StudentIdMatchesPredicate;
+import seedu.address.model.person.PrefixPredicate;
 import seedu.address.model.person.keywordpredicate.EmailContainsKeywordsPredicate;
 import seedu.address.model.person.keywordpredicate.GithubContainsKeywordsPredicate;
 import seedu.address.model.person.keywordpredicate.NameContainsKeywordsPredicate;
 import seedu.address.model.person.keywordpredicate.PersonContainsKeywordsPredicate;
+import seedu.address.model.person.keywordpredicate.PhoneContainsKeywordsPredicate;
 import seedu.address.model.person.keywordpredicate.StudentIdContainsKeywordsPredicate;
+import seedu.address.model.person.keywordpredicate.TagContainsKeywordsPredicate;
 
 /**
  * Parses input arguments and creates a new FindCommand object
@@ -39,7 +41,7 @@ public class FindCommandParser implements Parser<FindCommand> {
 
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, PREFIX_STUDENTID, PREFIX_NAME,
-                        PREFIX_EMAIL, PREFIX_GITHUB_USERNAME);
+                        PREFIX_EMAIL, PREFIX_GITHUB_USERNAME, PREFIX_PHONE, PREFIX_TAG);
         String[] preamble = argMultimap.getPreamble().trim().split("\\s+");
         List<String> keywords = Arrays.asList(preamble);
 
@@ -54,28 +56,26 @@ public class FindCommandParser implements Parser<FindCommand> {
     }
 
     private List<Predicate<Person>> selectPredicates(ArgumentMultimap argMultimap, List<String> keywords) {
-        List<Prefix> fields = List.of(PREFIX_STUDENTID, PREFIX_NAME, PREFIX_EMAIL, PREFIX_GITHUB_USERNAME);
-        List<Boolean> fieldsSelected = Arrays.asList(FALSE, FALSE, FALSE, FALSE);
-        List<Predicate<Person>> predicatesList = List.of(
-                new StudentIdContainsKeywordsPredicate(keywords),
-                new NameContainsKeywordsPredicate(keywords),
-                new EmailContainsKeywordsPredicate(keywords),
-                new GithubContainsKeywordsPredicate(keywords)
-        );
 
+        List<PrefixPredicate> prefixPredicates = PrefixPredicate.getAllPrefixPredicate();
         boolean isSeleceted = false;
         List<Predicate<Person>> predicates = new ArrayList<>();
 
-        for (int i = 0; i < fields.size(); i++) {
-            if (argMultimap.getValue(fields.get(i)).isPresent()) {
-                fieldsSelected.set(i, TRUE);
+        for (int i = 0; i < prefixPredicates.size(); i++) {
+            PrefixPredicate prefixPredicate = prefixPredicates.get(i);
+            if (argMultimap.getValue(
+                    prefixPredicate.getPrefix()).isPresent()) {
+                prefixPredicate.setIsSelected(TRUE);
                 isSeleceted = true;
             }
         }
 
-        for (int i = 0; i < fields.size(); i++) {
-            if (!isSeleceted || fieldsSelected.get(i)) {
-                predicates.add(predicatesList.get(i));
+        for (int i = 0; i < prefixPredicates.size(); i++) {
+            PrefixPredicate prefixPredicate = prefixPredicates.get(i);
+            if (!isSeleceted || prefixPredicate.getIsSelected()) {
+                predicates.add(prefixPredicate
+                        .getPredicateWrapper()
+                        .buildPredicate(keywords));
             }
         }
 

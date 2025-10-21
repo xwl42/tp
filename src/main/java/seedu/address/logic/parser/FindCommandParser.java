@@ -13,7 +13,6 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 import seedu.address.logic.commands.FindCommand;
@@ -43,6 +42,12 @@ public class FindCommandParser implements Parser<FindCommand> {
                         PREFIX_EMAIL, PREFIX_GITHUB_USERNAME);
         String[] preamble = argMultimap.getPreamble().trim().split("\\s+");
         List<String> keywords = Arrays.asList(preamble);
+
+        if (keywords.isEmpty() || keywords.get(0).isEmpty()) {
+            throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+        }
+
         List<Predicate<Person>> predicates = selectPredicates(argMultimap, keywords);
 
         return new FindCommand(new PersonContainsKeywordsPredicate(predicates));

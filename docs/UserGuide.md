@@ -288,7 +288,7 @@ Examples:
 
 <box type="warning" seamless>
 
-Missing fields or Non-positive index causes the below error:  
+Missing fields or Non-positive index will cause the below error:  
   `Invalid command format! 
     delete: Deletes the student identified by the index number used in the displayed student list.
     Parameters: INDEX (must be a positive integer)

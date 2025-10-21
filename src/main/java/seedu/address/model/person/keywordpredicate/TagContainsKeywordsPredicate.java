@@ -1,10 +1,13 @@
 package seedu.address.model.person.keywordpredicate;
 
 import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.person.Person;
+import seedu.address.model.tag.Tag;
 
 
 /**
@@ -19,10 +22,14 @@ public class TagContainsKeywordsPredicate implements Predicate<Person> {
 
     @Override
     public boolean test(Person person) {
-        String id = person.getTags().toString().toLowerCase();
+        Set<Tag> ids = person.getTags();
         return keywords.stream()
                 .map(String::toLowerCase)
-                .anyMatch(id::contains);
+                .anyMatch(keyword ->
+                        ids.stream()
+                            .map(Tag::getTagName)
+                            .map(String::toLowerCase)
+                            .anyMatch(tag -> tag.contains(keyword)));
     }
 
     @Override

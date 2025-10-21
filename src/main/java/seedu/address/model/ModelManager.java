@@ -13,6 +13,7 @@ import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.person.Person;
+import seedu.address.model.timeslot.Timeslot;
 
 /**
  * Represents the in-memory model of the address book data.
@@ -25,6 +26,9 @@ public class ModelManager implements Model {
     private final FilteredList<Person> filteredPersons;
     private ReadOnlyAddressBook previousAddressBookState;
 
+    // Add timeslots managed by the model
+    private Timeslots timeslots;
+
     /**
      * Initializes a ModelManager with the given addressBook and userPrefs.
      */
@@ -35,6 +39,22 @@ public class ModelManager implements Model {
 
         this.addressBook = new AddressBook(addressBook);
         this.userPrefs = new UserPrefs(userPrefs);
+        this.timeslots = new Timeslots(); // default empty timeslots
+        filteredPersons = new FilteredList<>(this.addressBook.getPersonList());
+    }
+
+    /**
+     * Initializes a ModelManager with the given addressBook, timeslots and userPrefs.
+     */
+    public ModelManager(ReadOnlyAddressBook addressBook, ReadOnlyTimeslots timeslots, ReadOnlyUserPrefs userPrefs) {
+        requireAllNonNull(addressBook, timeslots, userPrefs);
+
+        logger.fine("Initializing with address book: " + addressBook + ", timeslots: " + timeslots
+                + " and user prefs " + userPrefs);
+
+        this.addressBook = new AddressBook(addressBook);
+        this.userPrefs = new UserPrefs(userPrefs);
+        this.timeslots = new Timeslots(timeslots);
         filteredPersons = new FilteredList<>(this.addressBook.getPersonList());
         this.previousAddressBookState = null;
     }
@@ -167,6 +187,50 @@ public class ModelManager implements Model {
         previousAddressBookState = null; // Clear after undo
     }
 
+    /**
+     * Timeslots accessors
+     */
+    public ReadOnlyTimeslots getTimeslots() {
+        return timeslots;
+    }
+
+    public void setTimeslots(ReadOnlyTimeslots newData) {
+        requireNonNull(newData);
+        this.timeslots.resetData(newData);
+    }
+
+    /**
+     * Adds the given {@code Timeslot} to the model's timeslot collection.
+     *
+     * @param t the timeslot to add (must not be null).
+     */
+    public void addTimeslot(Timeslot t) {
+        requireNonNull(t);
+        this.timeslots.addTimeslot(t);
+    }
+
+    /**
+     * Returns true if the model already contains the given {@code Timeslot}.
+     *
+     * @param t timeslot to check presence for (must not be null).
+     * @return true if present.
+     */
+    public boolean hasTimeslot(Timeslot t) {
+        requireNonNull(t);
+        return this.timeslots.hasTimeslot(t);
+    }
+
+    /**
+     * Clears all timeslots stored in the model.
+     */
+    @Override
+    public void clearTimeslots() {
+        // Replace with the appropriate Timeslots API if different in your codebase.
+        // If Timeslots has a clear() or resetData(...) method, call that instead.
+        requireNonNull(this.timeslots);
+        this.timeslots = new Timeslots();
+    }
+
     @Override
     public boolean equals(Object other) {
         if (other == this) {
@@ -181,6 +245,7 @@ public class ModelManager implements Model {
         ModelManager otherModelManager = (ModelManager) other;
         return addressBook.equals(otherModelManager.addressBook)
                 && userPrefs.equals(otherModelManager.userPrefs)
-                && filteredPersons.equals(otherModelManager.filteredPersons);
+                && filteredPersons.equals(otherModelManager.filteredPersons)
+                && timeslots.equals(otherModelManager.timeslots);
     }
 }

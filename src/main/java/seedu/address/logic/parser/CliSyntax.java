@@ -18,4 +18,8 @@ public class CliSyntax {
     public static final Prefix PREFIX_EXAM_NAME = new Prefix("en/");
     public static final Prefix PREFIX_SCORE = new Prefix("sc/");
     public static final Prefix PREFIX_SORT_CRITERION = new Prefix("c/");
+
+    // Timeslot prefixes
+    public static final Prefix PREFIX_TIMESLOT_START = new Prefix("ts/"); // e.g. ts/2023-10-01T09:00:00
+    public static final Prefix PREFIX_TIMESLOT_END = new Prefix("te/"); // e.g. te/2023-10-01T10:00:00
 }

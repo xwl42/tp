@@ -106,4 +106,9 @@ public interface Model {
      * @throws NullPointerException if {@code comparator} is null.
      */
     void sortPersonList(Comparator<Person> comparator);
+
+    /**
+     * Clears all timeslots stored in the model.
+     */
+    void clearTimeslots();
 }

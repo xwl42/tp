@@ -20,7 +20,7 @@ public class Exercise {
 
     @Override
     public String toString() {
-        return String.format("Ex %d: %s", number, status);
+        return String.format("ex %d: %s", number, status);
     }
 
     public void markStatus(Status status) {
@@ -35,9 +35,14 @@ public class Exercise {
             return false;
         }
         Exercise otherExercise = (Exercise) other;
-        return number == otherExercise.number
-                && Objects.equals(status, otherExercise.status);
+        return number == otherExercise.number && status == otherExercise.status;
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(number, status);
+    }
+
 
     public Status getStatus() {
         return status;

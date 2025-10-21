@@ -24,7 +24,7 @@ public class ExerciseTracker implements Comparable<ExerciseTracker> {
      */
     public ExerciseTracker() {
         for (int i = 0; i < NUMBER_OF_EXERCISES; i++) {
-            exercises.add(new Exercise(i, NOT_DONE));;
+            exercises.add(new Exercise(i, NOT_DONE));
         }
     }
     /**
@@ -32,18 +32,23 @@ public class ExerciseTracker implements Comparable<ExerciseTracker> {
      * Each index corresponds to an exercise number.
      */
     public ExerciseTracker(ArrayList<Status> statuses) {
-        if (statuses.size() != NUMBER_OF_EXERCISES) {
-            throw new IllegalArgumentException("Expected " + NUMBER_OF_EXERCISES + " statuses, got " + statuses.size());
+        if (statuses.size() > NUMBER_OF_EXERCISES) {
+            throw new IllegalArgumentException("Too many statuses! Expected at most " + NUMBER_OF_EXERCISES);
         }
-        exercises = new ArrayList<>();
+        this.exercises = new ArrayList<>();
         for (int i = 0; i < statuses.size(); i++) {
             exercises.add(new Exercise(i, statuses.get(i)));
+        }
+        for (int i = statuses.size(); i < NUMBER_OF_EXERCISES; i++) {
+            exercises.add(new Exercise(i, NOT_DONE));
         }
     }
 
     @Override
     public String toString() {
-        return exercises.stream().map(Exercise::toString).collect(Collectors.joining(" "));
+        return exercises.stream()
+                .map(Exercise::toString)
+                .collect(Collectors.joining(" "));
     }
 
     @Override

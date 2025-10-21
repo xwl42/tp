@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -86,37 +89,59 @@ public class TimeslotsWindow {
         topRow.setSpacing(8);
         topRow.getChildren().addAll(header, spacer, prevWeekBtn, nextWeekBtn);
 
-        // hours header (kept same as existing)
-        HBox hoursHeader = buildHoursHeader();
+        // timeline width property shared by all timeline panes so they resize together
+        DoubleProperty timelineWidth = new SimpleDoubleProperty(TIMELINE_WIDTH);
+
+        // hours header (kept same as existing) - now takes timelineWidth
+        HBox hoursHeader = buildHoursHeader(timelineWidth);
         hoursHeader.setPadding(new Insets(8, 0, 8, 80)); // leave space for day labels
 
         // render initial week
-        renderWeek(root, weekStartRef[0], mergedRanges, topRow, hoursHeader);
+        renderWeek(root, weekStartRef[0], mergedRanges, topRow, hoursHeader, timelineWidth);
 
         // button actions: adjust weekStart and re-render
         nextWeekBtn.setOnAction(e -> {
             weekStartRef[0] = weekStartRef[0].plusWeeks(1);
-            renderWeek(root, weekStartRef[0], mergedRanges, topRow, hoursHeader);
+            renderWeek(root, weekStartRef[0], mergedRanges, topRow, hoursHeader, timelineWidth);
         });
         prevWeekBtn.setOnAction(e -> {
             weekStartRef[0] = weekStartRef[0].minusWeeks(1);
-            renderWeek(root, weekStartRef[0], mergedRanges, topRow, hoursHeader);
+            renderWeek(root, weekStartRef[0], mergedRanges, topRow, hoursHeader, timelineWidth);
         });
 
         Scene scene = new Scene(root);
         stage.setScene(scene);
+
+        // allow user to resize the window
+        stage.setResizable(true);
+        // set sensible minimum size so layout remains usable
+        stage.setMinWidth(600);
+        stage.setMinHeight(400);
+
         stage.show();
+
+        // Bind timelineWidth to scene width (minimum remains TIMELINE_WIDTH). Subtract left label area and padding.
+        timelineWidth.bind(Bindings.createDoubleBinding(
+                () -> Math.max(scene.getWidth() - 120, TIMELINE_WIDTH),
+                scene.widthProperty()));
+
+        // After showing, bind the ScrollPane viewport to the scene size so it grows/shrinks with the window.
+        if (root.getCenter() instanceof ScrollPane) {
+            ScrollPane sp = (ScrollPane) root.getCenter();
+            sp.prefViewportWidthProperty().bind(scene.widthProperty().subtract(120));
+            sp.prefViewportHeightProperty().bind(scene.heightProperty().subtract(140));
+        }
     }
 
     // Renders the given week starting at weekStart (Monday) into root using provided topRow and hoursHeader nodes.
     private static void renderWeek(BorderPane root, LocalDate weekStart, List<LocalDateTime[]> ranges,
-            HBox topRow, HBox hoursHeader) {
+            HBox topRow, HBox hoursHeader, DoubleProperty timelineWidth) {
         // Body: one row per day with timeline pane for the week starting at weekStart
         VBox body = new VBox(6);
         body.setPadding(new Insets(8));
         for (int i = 0; i < 7; i++) { // 7 days in a week
             LocalDate date = weekStart.plusDays(i);
-            HBox row = buildDayRowForDate(date, ranges);
+            HBox row = buildDayRowForDate(date, ranges, timelineWidth);
             body.getChildren().add(row);
         }
 
@@ -129,14 +154,16 @@ public class TimeslotsWindow {
         root.setCenter(sp);
     }
 
-    // build the top hours labels and vertical tick lines
-    private static HBox buildHoursHeader() {
+    // build the top hours labels and vertical tick lines; timelineWidth drives the timeline Pane width
+    private static HBox buildHoursHeader(DoubleProperty timelineWidth) {
         HBox header = new HBox();
         header.setAlignment(Pos.CENTER_LEFT);
         header.setSpacing(0);
 
         Pane timeline = new Pane();
-        timeline.setPrefSize(TIMELINE_WIDTH, 24);
+        // bind timeline width to the shared property so it grows/shrinks with the window
+        timeline.prefWidthProperty().bind(timelineWidth);
+        timeline.setPrefHeight(24);
 
         for (int h = 0; h <= HOURS; h++) {
             double x = h * 60 * PIXELS_PER_MINUTE;
@@ -160,7 +187,8 @@ public class TimeslotsWindow {
     }
 
     // New: buildDayRowForDate renders a row for a given LocalDate (shows label with date)
-    private static HBox buildDayRowForDate(LocalDate date, List<LocalDateTime[]> ranges) {
+    private static HBox buildDayRowForDate(LocalDate date, List<LocalDateTime[]> ranges,
+            DoubleProperty timelineWidth) {
         HBox row = new HBox();
         row.setSpacing(8);
         row.setAlignment(Pos.CENTER_LEFT);
@@ -174,7 +202,9 @@ public class TimeslotsWindow {
         Pane timeline = new Pane();
         // light background and subtle border for low contrast
         timeline.setStyle("-fx-background-color: #fbfcfd; -fx-border-color: #e6eef6; -fx-border-radius: 4;");
-        timeline.setPrefSize(TIMELINE_WIDTH, ROW_HEIGHT);
+        // bind timeline width to the shared property so it scales with the window width
+        timeline.prefWidthProperty().bind(timelineWidth);
+        timeline.setPrefHeight(ROW_HEIGHT);
         timeline.setOpacity(0.98);
 
         // add hour divider lines lightly

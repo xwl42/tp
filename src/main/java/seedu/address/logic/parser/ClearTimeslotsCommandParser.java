@@ -14,7 +14,9 @@ public class ClearTimeslotsCommandParser implements Parser<ClearTimeslotsCommand
     public ClearTimeslotsCommand parse(String args) throws ParseException {
         String trimmed = args == null ? "" : args.trim();
         if (!trimmed.isEmpty()) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, ClearTimeslotsCommand.MESSAGE_USAGE));
+            String msg = String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                    ClearTimeslotsCommand.MESSAGE_USAGE);
+            throw new ParseException(msg);
         }
         return new ClearTimeslotsCommand();
     }

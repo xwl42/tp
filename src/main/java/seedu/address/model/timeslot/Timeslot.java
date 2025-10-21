@@ -15,7 +15,7 @@ public class Timeslot {
     // Use ISO for storage/serialization so existing JSON files remain compatible.
     public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
-    // Separate, user-friendly formatter for display in the UI and user-facing messages.
+    // Separate, human-friendly formatter for display in the UI and user-facing messages.
     public static final DateTimeFormatter DISPLAY_FORMATTER = DateTimeFormatter.ofPattern("d MMM uuuu, HH:mm");
 
     private final LocalDateTime start;

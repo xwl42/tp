@@ -154,7 +154,6 @@ public class ExerciseTracker implements Comparable<ExerciseTracker> {
      * @return a new ExerciseTracker with copied data
      */
     public ExerciseTracker copy() {
-        // Create a new ArrayList with copies of all statuses
         ArrayList<Status> copiedStatuses = new ArrayList<>(this.statuses);
         return new ExerciseTracker(copiedStatuses);
     }

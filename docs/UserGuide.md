@@ -10,7 +10,7 @@ LambdaLab is a desktop app for **CS2030S Teaching Assistants** to **manage stude
 Command Line Interface (CLI) while still having an intuitive Graphical User Interface (GUI). If you are a fast typer, 
 LambdaLab can help you track student information, lab attendance, and exercise submissions even faster than traditional 
 spreadsheets or GUI apps.
----
+
 ## Table of Contents
 
 1. [Quick start](#quick-start)
@@ -21,6 +21,7 @@ spreadsheets or GUI apps.
     4. [Editing a student : `edit`](#editing-a-student-edit)
     5. [Marking Lab Attendance : `marka`](#marking-lab-attendance-marka)
     6. [Marking Exercise Status : `marke`](#marking-exercise-status-marke)
+    7. [Assigning Assessment Score: `grade`](#assigning-assessment-score-grade)
     7. [Locating students by name : `find`](#locating-students-by-name-find)
     8. [Sorting students:`sort`](#sorting-the-students-sort)
     9. [Deleting a student : `delete`](#deleting-a-student-delete)
@@ -210,6 +211,30 @@ Format: `marke INDEX ei/EXERCISENUMBER s/STATUSLETTER`
 Example:
 * `marke 2 ei/7 s/d` marks exercise 7 of the second student as done.
 
+### Assigning Assessment Score: `grade`
+
+Assigns the score for a specific assessment of an existing student in LambdaLab.
+
+Format: `grade INDEX en/EXAMNAME sc/SCORE`
+
+#### Description
+- Edits the student at the specified `INDEX`. The index refers to the index number shown in the displayed student list. The index **must be a positive integer** 1, 2, 3, …​
+- `EXAMNAME` specifies the name of the assessment.
+- `SCORE` specifies the score to assign for that assessment.  
+  It **must be between 0 and the assessment’s maximum achievable score (inclusive)**.
+
+#### Supported Assessments
+| Assessment | Maximum Score |
+|-------------|---------------|
+| `pe1`       | 40            |
+| `midterm`   | 60            |
+| `pe2`       | 40            |
+| `final`     | 100           |
+
+#### Example
+* `grade 2 en/midterm sc/55` sets the **midterm** score of the **second student** in the list to **55**.
+
+
 ### Locating students by name: `find`
 
 Finds students whose names contain any of the given keywords.
@@ -297,7 +322,7 @@ Format: `undo`
 <box type="warning" seamless>
 
 **Caution:**
-This command only undoes the **most recent** data-modifying command. You cannot undo multiple commands or skip 
+This command only undoes the most recent data-modifying command. You cannot undo multiple data-modifying commands or skip 
 back to earlier changes. 
 </box>
 
@@ -389,7 +414,55 @@ _Details coming soon ..._
 ## FAQ
 
 **Q**: How do I transfer my data to another Computer?<br>
-**A**: Install the app in the other computer and overwrite the empty data file it creates with the file that contains the data of your previous AddressBook home folder.
+**A**:
+1. Locate your data file on your current computer:
+    - Navigate to the folder where your LambdaLab `.jar` file is located
+    - Look for a folder named `data`
+    - Inside, you'll find a file called `addressbook.json` - this contains all your student records
+2. Install LambdaLab on your new computer:
+    - Download the `.jar` file and place it in your desired folder
+    - Run it once to generate the initial file structure
+3. Transfer your data:
+    - Copy the `addressbook.json` file from your old computer
+    - On your new computer, navigate to `[JAR file location]/data/`
+    - Replace the empty `addressbook.json` file with your copied file
+4. Restart LambdaLab on your new computer to see all your student data
+<box type="tip" seamless>
+**Tip:** You can also backup your data regularly by copying the `addressbook.json` file to a secure location (e.g., cloud storage, USB drive).
+</box>
+
+**Q**: Can I track multiple tutorial groups in LambdaLab?<br>
+**A**: Currently, LambdaLab is designed to manage one tutorial group per data file. If you teach multiple tutorial 
+groups, you can maintain separate `.jar` files in different folders, each with its own data file.
+
+**Q**: What happens if I accidentally mark the wrong lab attendance or exercise status?<br>
+**A**: You can use the `undo` command immediately after the mistake to reverse it. Alternatively, use the `edit` 
+command or the respective `marka`/`marke` commands to update the information manually.
+
+**Q**: How do I keep track of which labs and exercises are current for CS2030S?<br>
+**A**: LambdaLab allows you to mark labs 1-10 and exercises 0-9. You'll need to refer to the CS2030S course schedule 
+to determine which labs and exercises are currently active. We recommend keeping a note of the current week's lab 
+and exercise numbers.
+
+**Q**: Can I export my student data to a spreadsheet?<br>
+**A**: Currently, data is stored in JSON format in the `data/addressbook.json` file. Advanced users can manually convert
+this to a spreadsheet format using external tools, but direct export functionality will be coming in v2.0.
+
+**Q**: What should I do if a student's information changes (e.g., github username or email)?<br>
+**A**: Use the `edit` command with the student's index number to update their information. For example:
+`edit 1 g/newUserName e/newemail@u.nus.edu`
+
+**Q**: Why can't I undo the `list` or `find` command?<br>
+**A**: The `undo` command only works for commands that modify student data. Commands like `list`, `find`, and `help` 
+only display information without changing any data, so there's nothing to undo.
+
+**Q**: How do I add GitHub usernames for students who don't have one yet?<br>
+**A**: All students must have a GitHub username when first added to LambdaLab. If a student doesn't have one yet, 
+you can use a placeholder (e.g., "pending") and update it later using the `edit` command once they create their account.
+
+**Q**: Can I mark attendance for a lab session that hasn't happened yet?<br>
+**A**: Yes, LambdaLab allows you to mark any lab from 1-10. However, we recommend marking attendance only for completed 
+lab sessions to maintain accurate records.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -404,7 +477,7 @@ _Details coming soon ..._
 
 Action     | Format, Examples
 -----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-**Add**    | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague`
+**Add**    | `add n/NAME p/PHONE_NUMBER e/EMAIL [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague`
 **Clear**  | `clear`
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
 **Edit**   | `edit INDEX [i/STUDENT ID] [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [g/GITHUB USERNAME] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
@@ -415,6 +488,7 @@ Action     | Format, Examples
 **Mark Exercise** | `marke INDEX ei/EXERCISENUMBER s/STATUSLETTER` <br> e.g. `marke 2 ei/7 s/d`
 **Sort**    | `sort`
 **Undo** | `undo`
+**Grade**| `grade`
 **Block timeslot** | `block-timeslot ts/START_DATETIME te/END_DATETIME` <br> e.g. `block-timeslot ts/2025-10-04T10:00:00 te/2025-10-04T13:00:00`
 **Get timeslots** | `get-timeslots` — displays merged timeslot ranges
 **Clear timeslots** | `clear-timeslots` — removes all stored timeslots

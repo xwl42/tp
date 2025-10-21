@@ -345,7 +345,8 @@ Example:
     4 Oct 2025, 10:00 -> 4 Oct 2025, 13:00
     6 Oct 2025, 09:00 -> 6 Oct 2025, 11:30
     ```
-* The UI may also visualise these ranges in the Timetable Window view if available.
+- The UI can also display these ranges in the Timetable window (when available). Note that the Timetable view only shows timeslots between 08:00 and 23:00.
+  ![Timetable window](images/timetableWindow.png)
 
 
 ### Clearing all timeslots : `clear-timeslots`
@@ -416,7 +417,7 @@ Action     | Format, Examples
 **Sort**    | `sort`
 **Undo** | `undo`
 **Block timeslot** | `block-timeslot ts/START_DATETIME te/END_DATETIME` <br> e.g. `block-timeslot ts/2025-10-04T10:00:00 te/2025-10-04T13:00:00`
-**Get timeslots** | `get-timeslots` — displays merged ranges
+**Get timeslots** | `get-timeslots` — displays merged timeslot ranges
 **Clear timeslots** | `clear-timeslots` — removes all stored timeslots
 **Exit**   | `exit`
 

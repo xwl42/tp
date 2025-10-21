@@ -103,7 +103,7 @@ public class MainApp extends Application {
     }
 
     /**
-     * Loads Timeslots from {@code storage}. If not present or loading fails, returns an empty Timeslots.
+     * Loads Timeslots from {@code storage}. If not present, populates with sample Timeslots and saves the file.
      */
     private Timeslots initTimeslots(Storage storage) {
         logger.info("Using timeslots file : " + storage.getTimeslotsFilePath());
@@ -114,12 +114,21 @@ public class MainApp extends Application {
             timeslotsOptional = storage.readTimeslots();
             if (!timeslotsOptional.isPresent()) {
                 logger.info("Creating a new data file " + storage.getTimeslotsFilePath()
-                        + " populated with an empty Timeslots.");
+                        + " populated with sample Timeslots.");
+                // Use sample timeslots and persist them so file is created
+                initialTimeslots = SampleDataUtil.getSampleTimeslots();
+                try {
+                    storage.saveTimeslots(initialTimeslots);
+                } catch (IOException ioe) {
+                    logger.warning("Failed to save sample timeslots to " + storage.getTimeslotsFilePath()
+                            + " : " + StringUtil.getDetails(ioe));
+                }
+            } else {
+                // Convert ReadOnlyTimeslots (if present) into a concrete Timeslots instance.
+                initialTimeslots = timeslotsOptional
+                        .map(ts -> new Timeslots(ts))
+                        .orElseGet(Timeslots::new);
             }
-            // Convert ReadOnlyTimeslots (if present) into a concrete Timeslots instance.
-            initialTimeslots = timeslotsOptional
-                    .map(ts -> new Timeslots(ts))
-                    .orElseGet(Timeslots::new);
         } catch (DataLoadingException e) {
             logger.warning("Data file at " + storage.getTimeslotsFilePath() + " could not be loaded."
                     + " Will be starting with an empty Timeslots.");

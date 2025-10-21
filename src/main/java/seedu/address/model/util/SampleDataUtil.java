@@ -1,5 +1,6 @@
 package seedu.address.model.util;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -16,9 +17,11 @@ import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.StudentId;
 import seedu.address.model.tag.Tag;
+import seedu.address.model.Timeslots;
+import seedu.address.model.timeslot.Timeslot;
 
 /**
- * Contains utility methods for populating {@code AddressBook} with sample data.
+ * Contains utility methods for populating {@code AddressBook} and {@code Timeslots} with sample data.
  */
 public class SampleDataUtil {
     public static Person[] getSamplePersons() {
@@ -71,5 +74,23 @@ public class SampleDataUtil {
         return Arrays.stream(strings)
                 .map(Tag::new)
                 .collect(Collectors.toSet());
+    }
+
+    /**
+     * Returns a sample Timeslots populated with a few sample Timeslot entries.
+     */
+    public static Timeslots getSampleTimeslots() {
+        Timeslots sample = new Timeslots();
+        // Sample timeslots (ISO_LOCAL_DATE_TIME)
+        // 2023-10-01 09:00 - 10:00
+        sample.addTimeslot(new Timeslot(LocalDateTime.of(2023, 10, 1, 9, 0),
+                LocalDateTime.of(2023, 10, 1, 10, 0)));
+        // 2023-10-01 09:30 - 11:00 (overlaps previous)
+        sample.addTimeslot(new Timeslot(LocalDateTime.of(2023, 10, 1, 9, 30),
+                LocalDateTime.of(2023, 10, 1, 11, 0)));
+        // 2023-10-02 14:00 - 15:00 (separate)
+        sample.addTimeslot(new Timeslot(LocalDateTime.of(2023, 10, 2, 14, 0),
+                LocalDateTime.of(2023, 10, 2, 15, 0)));
+        return sample;
     }
 }

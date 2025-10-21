@@ -18,7 +18,7 @@ import seedu.address.model.timeslot.Timeslot;
 import seedu.address.storage.TimeslotsStorage;
 
 /**
- * Command to obtain and display merged timeslot ranges.
+ * Command to obtain and provide merged timeslot ranges.
  */
 public class GetTimeslotCommand extends Command {
 
@@ -49,7 +49,7 @@ public class GetTimeslotCommand extends Command {
 
         ArrayList<LocalDateTime[]> merged = mergeOverlappingTimeslots(list);
 
-        // Build human-readable lines
+        // Build human-readable lines for feedback
         StringBuilder sb = new StringBuilder();
         for (LocalDateTime[] range : merged) {
             sb.append(String.format("%s -> %s%n",
@@ -60,7 +60,8 @@ public class GetTimeslotCommand extends Command {
             sb.append("No timeslots found.");
         }
 
-        return new CommandResult(String.format(MESSAGE_SUCCESS, sb.toString()));
+        // Return the CommandResult carrying the merged ranges payload; UI layer will handle display.
+        return new CommandResult(String.format(MESSAGE_SUCCESS, sb.toString()), merged);
     }
 
     /**

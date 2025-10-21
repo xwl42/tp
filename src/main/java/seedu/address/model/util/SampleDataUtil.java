@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import seedu.address.model.AddressBook;
 import seedu.address.model.ReadOnlyAddressBook;
+import seedu.address.model.Timeslots;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.ExerciseTracker;
 import seedu.address.model.person.GithubUsername;
@@ -17,7 +18,6 @@ import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.StudentId;
 import seedu.address.model.tag.Tag;
-import seedu.address.model.Timeslots;
 import seedu.address.model.timeslot.Timeslot;
 
 /**

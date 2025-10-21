@@ -5,14 +5,16 @@ import java.nio.file.AccessDeniedException;
 import java.nio.file.Path;
 import java.util.logging.Logger;
 
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
+import seedu.address.logic.commands.Command;
+import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.ui.TimeslotsWindow;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
-import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.AddressBookParser;
-import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.person.Person;
@@ -22,9 +24,9 @@ import seedu.address.storage.Storage;
  * The main LogicManager of the app.
  */
 public class LogicManager implements Logic {
-    public static final String FILE_OPS_ERROR_FORMAT = "Could not save data due to the following error: %s";
+    private static final String FILE_OPS_ERROR_FORMAT = "Could not save data due to the following error: %s";
 
-    public static final String FILE_OPS_PERMISSION_ERROR_FORMAT =
+    private static final String FILE_OPS_PERMISSION_ERROR_FORMAT =
             "Could not save data to file %s due to insufficient permissions to write to the file or the folder.";
 
     private final Logger logger = LogsCenter.getLogger(LogicManager.class);
@@ -56,6 +58,19 @@ public class LogicManager implements Logic {
         } catch (IOException ioe) {
             throw new CommandException(String.format(FILE_OPS_ERROR_FORMAT, ioe.getMessage()), ioe);
         }
+
+        /*
+         * If the command produced timeslot ranges payload, show the UI window here (on the JavaFX thread).
+         * We catch IllegalStateException in case JavaFX toolkit is not initialized (e.g., during some tests).
+         */
+        if (commandResult.getTimeslotRanges() != null && !commandResult.getTimeslotRanges().isEmpty()) {
+            try {
+                Platform.runLater(() -> TimeslotsWindow.showMerged(commandResult.getTimeslotRanges()));
+            } catch (IllegalStateException e) {
+                // JavaFX not initialized; ignore UI launch, command result still returned.
+            }
+        }
+
         return commandResult;
     }
 

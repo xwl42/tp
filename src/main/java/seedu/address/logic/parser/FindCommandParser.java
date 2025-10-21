@@ -1,6 +1,5 @@
 package seedu.address.logic.parser;
 
-import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
@@ -19,13 +18,7 @@ import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.PrefixPredicate;
-import seedu.address.model.person.keywordpredicate.EmailContainsKeywordsPredicate;
-import seedu.address.model.person.keywordpredicate.GithubContainsKeywordsPredicate;
-import seedu.address.model.person.keywordpredicate.NameContainsKeywordsPredicate;
 import seedu.address.model.person.keywordpredicate.PersonContainsKeywordsPredicate;
-import seedu.address.model.person.keywordpredicate.PhoneContainsKeywordsPredicate;
-import seedu.address.model.person.keywordpredicate.StudentIdContainsKeywordsPredicate;
-import seedu.address.model.person.keywordpredicate.TagContainsKeywordsPredicate;
 
 /**
  * Parses input arguments and creates a new FindCommand object

@@ -1,5 +1,16 @@
 package seedu.address.model.person;
 
+import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_GITHUB_USERNAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_STUDENTID;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Predicate;
+
 import seedu.address.logic.parser.Prefix;
 import seedu.address.model.person.keywordpredicate.EmailContainsKeywordsPredicate;
 import seedu.address.model.person.keywordpredicate.GithubContainsKeywordsPredicate;
@@ -8,16 +19,7 @@ import seedu.address.model.person.keywordpredicate.PhoneContainsKeywordsPredicat
 import seedu.address.model.person.keywordpredicate.StudentIdContainsKeywordsPredicate;
 import seedu.address.model.person.keywordpredicate.TagContainsKeywordsPredicate;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.function.Predicate;
 
-import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_GITHUB_USERNAME;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_STUDENTID;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 public class PrefixPredicate {
     private Prefix prefix;
@@ -44,7 +46,7 @@ public class PrefixPredicate {
                 ),
                 new PrefixPredicate(
                         PREFIX_EMAIL,
-                        keywords ->  new EmailContainsKeywordsPredicate(keywords),
+                        keywords -> new EmailContainsKeywordsPredicate(keywords),
                         false
                 ),
                 new PrefixPredicate(
@@ -59,7 +61,7 @@ public class PrefixPredicate {
                 ),
                 new PrefixPredicate(
                         PREFIX_TAG,
-                keywords -> new TagContainsKeywordsPredicate(keywords),
+                        keywords -> new TagContainsKeywordsPredicate(keywords),
                         false
                 )
         );

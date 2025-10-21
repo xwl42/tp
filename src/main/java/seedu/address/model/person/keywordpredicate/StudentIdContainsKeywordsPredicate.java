@@ -1,11 +1,11 @@
 package seedu.address.model.person.keywordpredicate;
 
-import seedu.address.commons.util.StringUtil;
+import java.util.List;
+import java.util.function.Predicate;
+
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.person.Person;
 
-import java.util.List;
-import java.util.function.Predicate;
 
 /**
  * Tests that a {@code Person}'s {@code StudentId} matches any of the keywords given.
@@ -36,8 +36,8 @@ public class StudentIdContainsKeywordsPredicate implements Predicate<Person> {
             return false;
         }
 
-        StudentIdContainsKeywordsPredicate otherNameContainsKeywordsPredicate = (StudentIdContainsKeywordsPredicate) other;
-        return keywords.equals(otherNameContainsKeywordsPredicate.keywords);
+        StudentIdContainsKeywordsPredicate otherPredicate = (StudentIdContainsKeywordsPredicate) other;
+        return keywords.equals(otherPredicate.keywords);
     }
 
     @Override

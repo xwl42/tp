@@ -1,12 +1,11 @@
 package seedu.address.model.person.keywordpredicate;
 
-import seedu.address.commons.util.StringUtil;
-import seedu.address.model.person.Person;
-
 import java.util.List;
 import java.util.function.Predicate;
 
-public class PersonContainsKeywordsPredicate implements Predicate<Person>{
+import seedu.address.model.person.Person;
+
+public class PersonContainsKeywordsPredicate implements Predicate<Person> {
 
     private Predicate<Person> combinedPredicate;
     private final List<Predicate<Person>> predicates;
@@ -39,10 +38,10 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person>{
             return false;
         }
 
-        PersonContainsKeywordsPredicate otherNameContainsKeywordsPredicate = (PersonContainsKeywordsPredicate) other;
+        PersonContainsKeywordsPredicate otherPredicate = (PersonContainsKeywordsPredicate) other;
         for (int i = 0; i < predicates.size(); i++) {
             if (!predicates.get(i).equals(
-                    otherNameContainsKeywordsPredicate.getPredicates().get(i))) {
+                    otherPredicate.getPredicates().get(i))) {
                 return false;
             }
         }

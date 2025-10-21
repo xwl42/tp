@@ -28,7 +28,7 @@ public class GetTimeslotCommand extends Command {
             + ": Displays merged timeslot ranges from the timeslots storage.\n"
             + "Example: " + COMMAND_WORD;
 
-    public static final String MESSAGE_SUCCESS = "Timeslot ranges (merged):%n%s";
+    public static final String MESSAGE_SUCCESS = "Blocked Timeslots:%n%s";
     public static final String MESSAGE_MODEL_UNSUPPORTED =
             "Model does not support timeslots retrieval.";
 
@@ -53,11 +53,12 @@ public class GetTimeslotCommand extends Command {
         StringBuilder sb = new StringBuilder();
         for (LocalDateTime[] range : merged) {
             sb.append(String.format("%s -> %s%n",
-                    range[0].format(Timeslot.FORMATTER),
-                    range[1].format(Timeslot.FORMATTER)));
+                    range[0].format(Timeslot.DISPLAY_FORMATTER),
+                    range[1].format(Timeslot.DISPLAY_FORMATTER)));
         }
         if (merged.isEmpty()) {
             sb.append("No timeslots found.");
+            return new CommandResult(sb.toString());
         }
 
         // Return the CommandResult carrying the merged ranges payload; UI layer will handle display.

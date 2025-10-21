@@ -86,9 +86,9 @@ public class BlockTimeslotCommandParser implements Parser<BlockTimeslotCommand> 
             Timeslot ts = new Timeslot(start, end);
             return new BlockTimeslotCommand(ts);
         } catch (DateTimeException | IllegalArgumentException e) {
-            throw new ParseException("Invalid timeslot datetime or range. Accepted formats:\n"
-                    + " - ISO: " + DateTimeFormatter.ISO_LOCAL_DATE_TIME + " (e.g. 2023-10-01T09:00:00)\n"
-                    + " - Human: d MMM uuuu, HH:mm or d MMM uuuu HH:mm (e.g. 4 Oct 2025, 10:00 or 4 Oct 2025 10:00)\n"
+            throw new ParseException("Invalid timeslot datetime or range.\n  Accepted formats:\n"
+                    + " - ISO: 2025-10-04T010:00:00\n"
+                    + " - Human: 4 Oct 2025, 10:00 or 4 Oct 2025 10:00\n"
                     + "Ensure end is after start and prefixes are ts/ and te/. Example:\n"
                     + "  block-timeslot ts/4 Oct 2025, 10:00 te/4 Oct 2025, 13:00");
         }

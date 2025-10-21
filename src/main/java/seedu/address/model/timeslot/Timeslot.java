@@ -12,7 +12,11 @@ import java.util.Objects;
  */
 public class Timeslot {
 
+    // Use ISO for storage/serialization so existing JSON files remain compatible.
     public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+
+    // Separate, human-friendly formatter for display in the UI and user-facing messages.
+    public static final DateTimeFormatter DISPLAY_FORMATTER = DateTimeFormatter.ofPattern("d MMM uuuu, HH:mm");
 
     private final LocalDateTime start;
     private final LocalDateTime end;
@@ -43,7 +47,7 @@ public class Timeslot {
 
     @Override
     public String toString() {
-        return String.format("Timeslot[start=%s, end=%s]", start.format(FORMATTER), end.format(FORMATTER));
+        return String.format("Timeslot[Start: %s, End: %s]", start.format(FORMATTER), end.format(FORMATTER));
     }
 
     @Override

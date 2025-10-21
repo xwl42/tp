@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import java.nio.file.Path;
+import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,7 +14,10 @@ import org.junit.jupiter.api.io.TempDir;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.model.AddressBook;
 import seedu.address.model.ReadOnlyAddressBook;
+import seedu.address.model.ReadOnlyTimeslots;
+import seedu.address.model.Timeslots;
 import seedu.address.model.UserPrefs;
+import seedu.address.model.timeslot.Timeslot;
 
 public class StorageManagerTest {
 
@@ -62,8 +66,29 @@ public class StorageManagerTest {
     }
 
     @Test
+    public void timeslotsReadSave() throws Exception {
+        /*
+         * Integration test that verifies StorageManager is properly wired to the
+         * {@link JsonTimeslotsStorage} class.
+         */
+        Timeslots original = new Timeslots();
+        Timeslot ts = new Timeslot(LocalDateTime.of(2025, 10, 4, 10, 0),
+                LocalDateTime.of(2025, 10, 4, 13, 0));
+        original.addTimeslot(ts);
+
+        storageManager.saveTimeslots(original);
+        ReadOnlyTimeslots retrieved = storageManager.readTimeslots().get();
+        assertEquals(original, new Timeslots(retrieved));
+    }
+
+    @Test
     public void getAddressBookFilePath() {
         assertNotNull(storageManager.getAddressBookFilePath());
+    }
+
+    @Test
+    public void getTimeslotsFilePath() {
+        assertNotNull(storageManager.getTimeslotsFilePath());
     }
 
 }

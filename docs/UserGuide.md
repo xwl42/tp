@@ -15,20 +15,22 @@ spreadsheets or GUI apps.
 
 1. [Quick start](#quick-start)
 2. [Features](#features)
-    1. [Viewing help : `help`](#viewing-help--help)
+    1. [Viewing help : `help`](#viewing-help-help)
     2. [Adding a student : `add`](#adding-a-student-add)
-    3. [Listing all students : `list`](#listing-all-students--list)
-    4. [Editing a student : `edit`](#editing-a-student--edit)
-    5. [Marking Lab Attendance : `marka`](#marking-lab-attendance--marka)
+    3. [Listing all students : `list`](#listing-all-students-list)
+    4. [Editing a student : `edit`](#editing-a-student-edit)
+    5. [Marking Lab Attendance : `marka`](#marking-lab-attendance-marka)
     6. [Marking Exercise Status : `marke`](#marking-exercise-status-marke)
+    7. [Assigning Assessment Score: `grade`](#assigning-assessment-score-grade)
     7. [Locating students by name : `find`](#locating-students-by-name-find)
-    8. [Deleting a student : `delete`](#deleting-a-student--delete)
-    9. [Clearing all entries : `clear`](#clearing-all-entries--clear)
-   10. [Undoing the last command : `undo`](#undoing-the-last-command--undo)
-   11. [Exiting the program : `exit`](#exiting-the-program--exit)
-   12. [Saving the data](#saving-the-data)
-   13. [Editing the data file](#editing-the-data-file)
-   14. [Archiving data files (coming in v2.0)](#archiving-data-files-coming-in-v20)
+    8. [Sorting students:`sort`](#sorting-the-students-sort)
+    9. [Deleting a student : `delete`](#deleting-a-student-delete)
+    10. [Clearing all entries : `clear`](#clearing-all-entries-clear)
+    11. [Undoing the last command : `undo`](#undoing-the-last-command-undo)
+    12. [Exiting the program : `exit`](#exiting-the-program-exit)
+    13. [Saving the data](#saving-the-data)
+    14. [Editing the data file](#editing-the-data-file)
+    15. [Archiving data files (coming in v2.0)](#archiving-data-files-coming-in-v20)
 3. [FAQ](#faq)
 4. [Known issues](#known-issues)
 5. [Command summary](#command-summary)
@@ -138,7 +140,7 @@ Error Messages:
 * Missing fields: \
   `Invalid command format! 
 add: Adds a student to LambdaLab. Parameters: i/STUDENTID n/NAME p/PHONE e/EMAIL g/GITHUB_USERNAME [t/TAG]...
-Example: add i/A1234567X n/John Doe p/98765432 e/johnd@example.com g/JohnDoe t/friends t/owesMoney`
+Example: add i/A1234567X n/John Doe p/98765432 e/johnd@example.com g/JohnDoe t/ModelStudent`
 * Duplicate Identifier (Student ID): \
     `This student already exists in LambdaLab`
 
@@ -194,20 +196,43 @@ Marks the exercise status of an existing student in LambdaLab.
 
 Format: `marke INDEX ei/EXERCISENUMBER s/STATUSLETTER`
 
-* Edits the student at the specified `INDEX`. The index refers to the index number shown in the displayed student list. 
-* The index **must be a positive integer** 1, 2, 3, …​
+* Edits the student at the specified `INDEX`. The index refers to the index number shown in the displayed student list. The index **must be a positive integer** 1, 2, 3, …​
 * `EXERCISE` represents the lab session to mark attendance for. It **must be between 0 and 9 (inclusive)**.
 * `STATUS` represents the status to mark the exercise with. It **must be a letter chosen from the following**:
 
-| Letter | Status Name  | Meaning |
-    |--------|---------------|----------|
-    | `D`/`d`  | Done | The exercise is completed. |
-    | `N`/`n`  | Not Done | The exercise has not been completed. |
-    | `O`/`o`  | Overdue | The exercise is overdue or late. |
+| Letter  | Status Name | Meaning                              |
+|---------|-------------|--------------------------------------|
+| `D`/`d` | Done        | The exercise is completed.           |
+| `N`/`n` | Not Done    | The exercise has not been completed. |
+| `O`/`o` | Overdue     | The exercise is overdue or late.     |
 * Each exercise only has **one status**.
 
 Example:
 * `marke 2 ei/7 s/d` marks exercise 7 of the 2nd student as done.
+
+### Assigning Assessment Score: `grade`
+
+Assigns the score for a specific assessment of an existing student in LambdaLab.
+
+Format: `grade INDEX en/EXAMNAME sc/SCORE`
+
+#### Description
+- Edits the student at the specified `INDEX`. The index refers to the index number shown in the displayed student list. The index **must be a positive integer** 1, 2, 3, …​
+- `EXAMNAME` specifies the name of the assessment.
+- `SCORE` specifies the score to assign for that assessment.  
+  It **must be between 0 and the assessment’s maximum achievable score (inclusive)**.
+
+#### Supported Assessments
+| Assessment | Maximum Score |
+|-------------|---------------|
+| `pe1`       | 40            |
+| `midterm`   | 60            |
+| `pe2`       | 40            |
+| `final`     | 100           |
+
+#### Example
+* `grade 2 en/midterm sc/55` sets the **midterm** score of the **2nd student** in the list to **55**.
+
 
 ### Locating students by name: `find`
 
@@ -219,13 +244,34 @@ Format: `find KEYWORD [MORE_KEYWORDS]`
 * The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
 * Only the name is searched.
 * Only full words will be matched e.g. `Han` will not match `Hans`
-* students matching at least one keyword will be returned (i.e. `OR` search).
+* Students matching at least one keyword will be returned (i.e. `OR` search).
   e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
 
 Examples:
 * `find John` returns `john` and `John Doe`
 * `find alex david` returns `Alex Yeoh`, `David Li`<br>
   ![result for 'find alex david'](images/findAlexDavidResult.png)
+
+### Sorting the students: `sort`
+
+Sorts the student by a specified criterion.
+
+Format: `sort c/SORTCRITERION`
+
+* `SORTCRITERION` determines how the student list should be sorted. It must be one of the following:
+  * `name` sorts students by their name (alphabetically)
+  * `id` sorts students by their Student Id
+  * `lab` sorts students by their Lab Attendance Rate (Highest to lowest)
+  * `ex` sorts students by their progress in their exercises (Highest to lowest)
+
+<box type="tip" seamless>
+
+**Tip:** The criterion is case-insensitive!
+</box>
+
+Examples:
+`sort c/name` sorts the students by their name.
+`sort c/lab` sorts the students by their lab attendance rate.
 
 ### Deleting a student : `delete`
 
@@ -386,7 +432,7 @@ lab sessions to maintain accurate records.
 
 Action     | Format, Examples
 -----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-**Add**    | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague`
+**Add**    | `add n/NAME p/PHONE_NUMBER e/EMAIL [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague`
 **Clear**  | `clear`
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
 **Edit**   | `edit INDEX [i/STUDENT ID] [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [g/GITHUB USERNAME] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
@@ -395,7 +441,9 @@ Action     | Format, Examples
 **Help**   | `help`
 **Mark Attendance** | `marka INDEX l/LABNUMBER` <br> e.g. `marka 2 l/7`
 **Mark Exercise** | `marke INDEX ei/EXERCISENUMBER s/STATUSLETTER` <br> e.g. `marke 2 ei/7 s/d`
+**Sort**    | `sort`
 **Undo** | `undo`
+**Grade**| `grade`
 **Exit**   | `exit`
 
 

@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.nio.file.Path;
+import java.util.Comparator;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
@@ -22,6 +23,7 @@ public class ModelManager implements Model {
     private final AddressBook addressBook;
     private final UserPrefs userPrefs;
     private final FilteredList<Person> filteredPersons;
+    private ReadOnlyAddressBook previousAddressBookState;
 
     // Add timeslots managed by the model
     private final Timeslots timeslots;
@@ -53,6 +55,7 @@ public class ModelManager implements Model {
         this.userPrefs = new UserPrefs(userPrefs);
         this.timeslots = new Timeslots(timeslots);
         filteredPersons = new FilteredList<>(this.addressBook.getPersonList());
+        this.previousAddressBookState = null;
     }
 
     public ModelManager() {
@@ -129,6 +132,12 @@ public class ModelManager implements Model {
         addressBook.setPerson(target, editedPerson);
     }
 
+    @Override
+    public void sortPersonList(Comparator<Person> comparator) {
+        requireNonNull(comparator);
+        addressBook.sortPersons(comparator);
+    }
+
     //=========== Filtered Person List Accessors =============================================================
 
     /**
@@ -144,6 +153,37 @@ public class ModelManager implements Model {
     public void updateFilteredPersonList(Predicate<Person> predicate) {
         requireNonNull(predicate);
         filteredPersons.setPredicate(predicate);
+    }
+
+    //=========== Undo Command =============================================================
+
+    /**
+     * Saves the current address book state before making changes.
+     */
+    @Override
+    public void saveAddressBook() {
+        previousAddressBookState = new AddressBook(addressBook);
+    }
+
+    /**
+     * Returns true if there is a previous state to undo to.
+     */
+    @Override
+    public boolean canUndoAddressBook() {
+        return previousAddressBookState != null;
+    }
+
+    /**
+     * Restores the address book to its previous state.
+     */
+    @Override
+    public void undoAddressBook() {
+        if (!canUndoAddressBook()) {
+            throw new IllegalStateException("No previous state to undo!");
+        }
+
+        setAddressBook(previousAddressBookState);
+        previousAddressBookState = null; // Clear after undo
     }
 
     /**

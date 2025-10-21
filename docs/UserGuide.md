@@ -16,18 +16,20 @@ spreadsheets or GUI apps.
 1. [Quick start](#quick-start)
 2. [Features](#features)
     1. [Viewing help : `help`](#viewing-help--help)
-    2. [Adding a person : `add`](#adding-a-person-add)
-    3. [Listing all students : `list`](#listing-all-persons--list)
-    4. [Editing a person : `edit`](#editing-a-person--edit)
-    5. [Marking Lab Attendance : `marka`](#marking-lab-attendance--marka)
+    2. [Adding a student : `add`](#adding-a-student-add)
+    3. [Listing all students : `list`](#listing-all-students--list)
+    4. [Editing a student : `edit`](#editing-a-student--edit)
+    5. [Marking Lab Attendance : `marka`](#marking-lab-attendance-marka)
     6. [Marking Exercise Status : `marke`](#marking-exercise-status-marke)
-    7. [Locating persons by name : `find`](#locating-persons-by-name-find)
-    8. [Deleting a person : `delete`](#deleting-a-person--delete)
-    9. [Clearing all entries : `clear`](#clearing-all-entries--clear)
-    10. [Exiting the program : `exit`](#exiting-the-program--exit)
-    11. [Saving the data](#saving-the-data)
-    12. [Editing the data file](#editing-the-data-file)
-    13. [Archiving data files (coming in v2.0)](#archiving-data-files-coming-in-v20)
+    7. [Locating students by name : `find`](#locating-students-by-name-find)
+    8. [Sorting students:`sort`](#sorting-the-students-sort)
+    9. [Deleting a student : `delete`](#deleting-a-student--delete)
+    10. [Clearing all entries : `clear`](#clearing-all-entries--clear)
+    11. [Undoing the last command : `undo`](#undoing-the-last-command--undo)
+    12. [Exiting the program : `exit`](#exiting-the-program--exit)
+    13. [Saving the data](#saving-the-data)
+    14. [Editing the data file](#editing-the-data-file)
+    15. [Archiving data files (coming in v2.0)](#archiving-data-files-coming-in-v20)
 3. [FAQ](#faq)
 4. [Known issues](#known-issues)
 5. [Command summary](#command-summary)
@@ -107,27 +109,39 @@ spreadsheets or GUI apps.
 
 ### Viewing help : `help`
 
-Shows a message explaining how to access the help page.
+Opens a Help window that provides a link to the User Guide.
 
-![help message](images/helpMessage.png)
+It also gives a brief explanation of each command.
+
+![help message](images/helpMessage2.png)
 
 Format: `help`
 
 
-### Adding a person: `add`
+### Adding a student: `add`
 
-Adds a person to the address book.
+Adds a student to the address book.
 
-Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​`
+Format: `add i/STUDENTID n/NAME p/PHONE e/EMAIL g/GITHUB_USERNAME [t/TAG]…​`
 
 <box type="tip" seamless>
 
-**Tip:** A person can have any number of tags (including 0)
+**Tip:** A student can have any number of tags (including 0)
 </box>
 
 Examples:
-* `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`
-* `add n/Betsy Crowe t/friend e/betsycrowe@example.com a/Newgate Prison p/1234567 t/criminal`
+* Compulsory fields only: `add i/A1234567X n/John Doe p/98765432 e/johnd@example.com g/JohnDoe`
+* Optional fields included: `add i/A1234567X n/John Doe p/98765432 e/johnd@example.com g/JohnDoe t/modelStudent`
+* Fields in different order: `add g/JohnDoe i/A1234567X  p/98765432 t/modelStudent n/John Doe e/johnd@example.com`
+
+Error Messages:
+
+* Missing fields: \
+  `Invalid command format! 
+add: Adds a student to the address book. Parameters: i/STUDENTID n/NAME p/PHONE e/EMAIL g/GITHUB_USERNAME [t/TAG]...
+Example: add i/A1234567X n/John Doe p/98765432 e/johnd@example.com g/JohnDoe t/friends t/owesMoney`
+* Duplicate Identifier (Student ID): \
+    `This student already exists in the address book`
 
 ### Listing all students : `list`
 
@@ -135,59 +149,69 @@ Shows a list of all students and their information.
 
 Format: `list`
 
-### Editing a person : `edit`
+### Editing a student : `edit`
 
-Edits an existing person in the address book.
+Edits an existing student in the address book.
 
-Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`
+Format: `edit INDEX [i/STUDENT ID] [n/NAME] [p/PHONE] [e/EMAIL] [g/GITHUB USERNAME] [t/TAG]…​`
 
-* Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
-* At least one of the optional fields must be provided.
+* Edits the student at the specified `INDEX`. 
+The index refers to the index number shown in the displayed student list. 
+The index **must be a positive integer** 1, 2, 3, …​
+* You must provide at least 1 of the optional fields.
 * Existing values will be updated to the input values.
-* When editing tags, the existing tags of the person will be removed i.e adding of tags is not cumulative.
-* You can remove all the person’s tags by typing `t/` without
-    specifying any tags after it.
+  
+<box type="warning" seamless>
+
+**Caution:** 
+When editing tags, the existing tags of the student will be removed 
+i.e adding of tags is not cumulative.
+
+You can remove all the student’s tags by typing `t/` without
+specifying any tags after it.
+
+</box>
 
 Examples:
-*  `edit 1 p/91234567 e/johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
-*  `edit 2 n/Betsy Crower t/` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
+*  `edit 1 p/91234567 e/johndoe@example.com` Edits the phone number and email address of the 1st student to be `91234567` and `johndoe@example.com` respectively.
+*  `edit 2 n/Betsy Crower t/` Edits the name of the 2nd student to be `Betsy Crower` and clears all existing tags.
 
 ### Marking Lab Attendance: `marka`
 
-Marks the lab attendance of an existing person in the address book.
+Marks the lab attendance of an existing student in the address book.
 
 Format: `marka INDEX l/LABNUMBER`
 
-* Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
+* Edits the student at the specified `INDEX`. The index refers to the index number shown in the displayed student list. The index **must be a positive integer** 1, 2, 3, …​
 * `LABNUMBER` represents the lab session to mark attendance for. It **must be between 1 and 10 (inclusive)**.
 * Attendance can only be **marked once per lab**.
 
 Example:
-* `marka 2 l/7` marks Lab 7 of the second person as attended.
+* `marka 2 l/7` marks Lab 7 of the second student as attended.
 
 ### Marking Exercise Status: `marke`
 
-Marks the exercise status of an existing person in the address book.
+Marks the exercise status of an existing student in the address book.
 
 Format: `marke INDEX ei/EXERCISENUMBER s/STATUSLETTER`
 
-* Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
+* Edits the student at the specified `INDEX`. The index refers to the index number shown in the displayed student list. The index **must be a positive integer** 1, 2, 3, …​
 * `EXERCISE` represents the lab session to mark attendance for. It **must be between 0 and 9 (inclusive)**.
 * `STATUS` represents the status to mark the exercise with. It **must be a letter chosen from the following**:
 
-| Letter | Status Name  | Meaning |
-    |--------|---------------|----------|
-    | `D`/`d`  | Done | The exercise is completed. |
-    | `N`/`n`  | Not Done | The exercise has not been completed. |
-    | `O`/`o`  | Overdue | The exercise is overdue or late. |
+| Letter  | Status Name | Meaning                              |
+|---------|-------------|--------------------------------------|
+| `D`/`d` | Done        | The exercise is completed.           |
+| `N`/`n` | Not Done    | The exercise has not been completed. |
+| `O`/`o` | Overdue     | The exercise is overdue or late.     |
 * Each exercise only has **one status**.
 
 Example:
-* `marke 2 ei/7 s/d` marks exercise 7 of the second person as done.
+* `marke 2 ei/7 s/d` marks exercise 7 of the second student as done.
 
-### Locating persons by name: `find`
+### Locating students by name: `find`
 
-Finds persons whose names contain any of the given keywords.
+Finds students whose names contain any of the given keywords.
 
 Format: `find KEYWORD [MORE_KEYWORDS]`
 
@@ -195,7 +219,7 @@ Format: `find KEYWORD [MORE_KEYWORDS]`
 * The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
 * Only the name is searched.
 * Only full words will be matched e.g. `Han` will not match `Hans`
-* Persons matching at least one keyword will be returned (i.e. `OR` search).
+* Students matching at least one keyword will be returned (i.e. `OR` search).
   e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
 
 Examples:
@@ -203,30 +227,92 @@ Examples:
 * `find alex david` returns `Alex Yeoh`, `David Li`<br>
   ![result for 'find alex david'](images/findAlexDavidResult.png)
 
-### Deleting a person : `delete`
+### Sorting the students: `sort`
 
-Deletes the specified person from the address book.
+Sorts the student by a specified criterion.
+
+Format: `sort c/SORTCRITERION`
+
+* `SORTCRITERION` determines how the student list should be sorted. It must be one of the following:
+  * `name` Sorts students by their name (alphabetically)
+  * `id` Sorts students by their Student Id
+  * `lab` Sorts students by their Lab Attendance Rate (Highest to lowest)
+  * `ex` Sorts students by their progress in their exercises (Highest to lowest)
+
+<box type="tip" seamless>
+
+**Tip:** The criterion is case-insensitive!
+</box>
+
+Examples:
+`sort c/name` sorts the students by their name.
+`sorts c/lab` sorts the students by their lab attendance rate.
+
+### Deleting a student : `delete`
+
+Deletes the specified student from the address book.
 
 Format: `delete INDEX`
 
-* Deletes the person at the specified `INDEX`.
-* The index refers to the index number shown in the displayed person list.
-* The index **must be a positive integer** 1, 2, 3, …​
+* Deletes the student at the specified `INDEX`. The index refers to the index number shown in the **displayed** student list. The index **must be a positive integer** 1, 2, 3, …​
 
 Examples:
-* `list` followed by `delete 2` deletes the 2nd person in the address book.
-* `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
+* `list` followed by `delete 2` deletes the 2nd student in the address book.
+* `find Betsy` followed by `delete 1` deletes the 1st student in the results of the `find` command.
+
+Error Messages:
+
+* Missing fields & Non-positive index: \
+  `Invalid command format! 
+    delete: Deletes the student identified by the index number used in the displayed student list.
+    Parameters: INDEX (must be a positive integer)
+    Example: delete 1`
+*  Index out of range: \
+  `The student index provided is invalid`
 
 ### Clearing all entries : `clear`
 
 Clears **all** entries from the address book, leaving it completely empty.
+
+Format: `clear`
+
 <box type="warning" seamless>
 
 **Caution:**
-This command will **permanently** remove all entries from the address book.
+This command will remove **all** entries from the address book. If mistakenly performed, type `undo` **immediately**
+before using another data-modifying command.
 </box>
 
-Format: `clear`
+### Undoing the last command : `undo`
+
+Reverses the **most recent** command that modified student data in LambdaLab.
+
+Format: `undo`
+
+* Only commands that change student data can be undone (e.g., `add`, `delete`, `edit`, `marka`, `marke`, `clear`)
+* Commands that do not modify data cannot be undone (e.g., `help`, `list`, `find`, `exit`)
+* It undos and can only undo the **very last** command that modified data
+* If there is no command to undo, an error message will be displayed
+
+<box type="warning" seamless>
+
+**Caution:**
+This command only undoes the **most recent** data-modifying command. You cannot undo multiple commands or skip 
+back to earlier changes. 
+</box>
+
+<box type="tip" seamless>
+
+**Tip:** Use `undo` immediately after making a mistake to quickly restore your previous data state.
+</box>
+
+Examples:
+* `delete 2` followed by `undo` restores the deleted student back to the list
+* `edit 1 n/Wrong Name` followed by `undo` reverts the student's name to its original value
+* `add n/John Doe p/12345678 e/john@u.nus.edu a/College Avenue` followed by `undo` removes the newly added student
+* `delete 2` followed by `list` followed by `undo` still restores the deleted student back to the list
+* `delete 1` followed by `edit 1 n/Wrong Name` followed by 2 consecutive `undo`s only reverts the student's name 
+to its original value, but cannot restore the deleted student back to the list
 
 ### Exiting the program : `exit`
 
@@ -276,12 +362,14 @@ Action     | Format, Examples
 **Add**    | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague`
 **Clear**  | `clear`
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
-**Edit**   | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
+**Edit**   | `edit INDEX [i/STUDENT ID] [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [g/GITHUB USERNAME] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
 **Find**   | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
 **List**   | `list`
 **Help**   | `help`
 **Mark Attendance** | `marka INDEX l/LABNUMBER` <br> e.g. `marka 2 l/7`
 **Mark Exercise** | `marke INDEX ei/EXERCISENUMBER s/STATUSLETTER` <br> e.g. `marke 2 ei/7 s/d`
+**Sort**    | `sort`
+**Undo** | `undo`
 **Exit**   | `exit`
 
 

@@ -1,15 +1,11 @@
 package seedu.address.logic.commands;
 
-import static java.util.Objects.requireNonNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.testutil.Assert.assertThrows;
-import static seedu.address.testutil.TypicalPersons.ALICE;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.function.Predicate;
 
@@ -17,72 +13,51 @@ import org.junit.jupiter.api.Test;
 
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
-import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
-import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.ReadOnlyUserPrefs;
 import seedu.address.model.person.Person;
-import seedu.address.testutil.PersonBuilder;
 
-public class AddCommandTest {
+public class UndoCommandTest {
 
     @Test
-    public void constructor_nullPerson_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> new AddCommand(null));
+    public void execute_undoAvailable_success() throws Exception {
+        ModelStubWithUndoAvailable modelStub = new ModelStubWithUndoAvailable();
+
+        CommandResult commandResult = new UndoCommand().execute(modelStub);
+
+        assertEquals(UndoCommand.MESSAGE_SUCCESS, commandResult.getFeedbackToUser());
+        assertTrue(modelStub.undoAddressBookCalled);
     }
 
     @Test
-    public void execute_personAcceptedByModel_addSuccessful() throws Exception {
-        ModelStubAcceptingPersonAdded modelStub = new ModelStubAcceptingPersonAdded();
-        Person validPerson = new PersonBuilder().build();
+    public void execute_noCommandToUndo_throwsCommandException() {
+        ModelStubNoUndoAvailable modelStub = new ModelStubNoUndoAvailable();
+        UndoCommand undoCommand = new UndoCommand();
 
-        CommandResult commandResult = new AddCommand(validPerson).execute(modelStub);
-
-        assertEquals(String.format(AddCommand.MESSAGE_SUCCESS, Messages.format(validPerson)),
-                commandResult.getFeedbackToUser());
-        assertEquals(Arrays.asList(validPerson), modelStub.personsAdded);
-    }
-
-    @Test
-    public void execute_duplicatePerson_throwsCommandException() {
-        Person validPerson = new PersonBuilder().build();
-        AddCommand addCommand = new AddCommand(validPerson);
-        ModelStub modelStub = new ModelStubWithPerson(validPerson);
-
-        assertThrows(CommandException.class, AddCommand.MESSAGE_DUPLICATE_PERSON, () -> addCommand.execute(modelStub));
+        assertThrows(CommandException.class, UndoCommand.MESSAGE_FAILURE, () -> undoCommand.execute(modelStub));
     }
 
     @Test
     public void equals() {
-        Person alice = new PersonBuilder().withName("Alice").build();
-        Person bob = new PersonBuilder().withName("Bob").build();
-        AddCommand addAliceCommand = new AddCommand(alice);
-        AddCommand addBobCommand = new AddCommand(bob);
+        UndoCommand undoCommand1 = new UndoCommand();
+        UndoCommand undoCommand2 = new UndoCommand();
 
         // same object -> returns true
-        assertTrue(addAliceCommand.equals(addAliceCommand));
+        assertTrue(undoCommand1.equals(undoCommand1));
 
-        // same values -> returns true
-        AddCommand addAliceCommandCopy = new AddCommand(alice);
-        assertTrue(addAliceCommand.equals(addAliceCommandCopy));
+        // different objects but same type -> returns true (all UndoCommands are equal)
+        assertTrue(undoCommand1.equals(undoCommand2));
 
         // different types -> returns false
-        assertFalse(addAliceCommand.equals(1));
+        assertFalse(undoCommand1.equals(1));
 
         // null -> returns false
-        assertFalse(addAliceCommand.equals(null));
+        assertFalse(undoCommand1.equals(null));
 
-        // different person -> returns false
-        assertFalse(addAliceCommand.equals(addBobCommand));
-    }
-
-    @Test
-    public void toStringMethod() {
-        AddCommand addCommand = new AddCommand(ALICE);
-        String expected = AddCommand.class.getCanonicalName() + "{toAdd=" + ALICE + "}";
-        assertEquals(expected, addCommand.toString());
+        // different command type -> returns false
+        assertFalse(undoCommand1.equals(new ListCommand()));
     }
 
     /**
@@ -160,11 +135,6 @@ public class AddCommandTest {
         }
 
         @Override
-        public void sortPersonList(Comparator<Person> comparator) {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
         public void saveAddressBook() {
             throw new AssertionError("This method should not be called.");
         }
@@ -178,53 +148,37 @@ public class AddCommandTest {
         public void undoAddressBook() {
             throw new AssertionError("This method should not be called.");
         }
-    }
-
-    /**
-     * A Model stub that contains a single person.
-     */
-    private class ModelStubWithPerson extends ModelStub {
-        private final Person person;
-
-        ModelStubWithPerson(Person person) {
-            requireNonNull(person);
-            this.person = person;
-        }
 
         @Override
-        public boolean hasPerson(Person person) {
-            requireNonNull(person);
-            return this.person.isSamePerson(person);
+        public void sortPersonList(Comparator<Person> comparator) {
+            throw new AssertionError("This method should not be called.");
         }
     }
 
     /**
-     * A Model stub that always accept the person being added.
+     * A Model stub where undo is available.
      */
-    private class ModelStubAcceptingPersonAdded extends ModelStub {
-        final ArrayList<Person> personsAdded = new ArrayList<>();
+    private class ModelStubWithUndoAvailable extends ModelStub {
+        private boolean undoAddressBookCalled = false;
 
         @Override
-        public boolean hasPerson(Person person) {
-            requireNonNull(person);
-            return personsAdded.stream().anyMatch(person::isSamePerson);
+        public boolean canUndoAddressBook() {
+            return true;
         }
 
         @Override
-        public void addPerson(Person person) {
-            requireNonNull(person);
-            personsAdded.add(person);
-        }
-
-        @Override
-        public ReadOnlyAddressBook getAddressBook() {
-            return new AddressBook();
-        }
-
-        @Override
-        public void saveAddressBook() {
-            // Do nothing - this is a stub for testing
+        public void undoAddressBook() {
+            undoAddressBookCalled = true;
         }
     }
 
+    /**
+     * A Model stub where no undo is available.
+     */
+    private class ModelStubNoUndoAvailable extends ModelStub {
+        @Override
+        public boolean canUndoAddressBook() {
+            return false;
+        }
+    }
 }

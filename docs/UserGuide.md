@@ -116,9 +116,10 @@ Opens a Help window that provides a link to the User Guide.
 
 It also gives a brief explanation of each command.
 
+Format: `help`
+
 ![help message](images/helpMessage2.png)
 
-Format: `help`
 
 
 ### Adding a student: `add`
@@ -140,8 +141,7 @@ Examples:
 
 <box type="warning" seamless>
 
-* Missing fields:  
-Duplicate Identifier (Student ID):  
+Duplicate Identifier (Student ID) will cause the below error:  
   `This student already exists in LambdaLab`
 </box>
 
@@ -288,7 +288,7 @@ Examples:
 
 <box type="warning" seamless>
 
-* Missing fields & Non-positive index:  
+Missing fields or Non-positive index causes the below error:  
   `Invalid command format! 
     delete: Deletes the student identified by the index number used in the displayed student list.
     Parameters: INDEX (must be a positive integer)

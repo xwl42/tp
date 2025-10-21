@@ -27,7 +27,7 @@ public class ModelManager implements Model {
     private ReadOnlyAddressBook previousAddressBookState;
 
     // Add timeslots managed by the model
-    private final Timeslots timeslots;
+    private Timeslots timeslots;
 
     /**
      * Initializes a ModelManager with the given addressBook and userPrefs.
@@ -218,6 +218,17 @@ public class ModelManager implements Model {
     public boolean hasTimeslot(Timeslot t) {
         requireNonNull(t);
         return this.timeslots.hasTimeslot(t);
+    }
+
+    /**
+     * Clears all timeslots stored in the model.
+     */
+    @Override
+    public void clearTimeslots() {
+        // Replace with the appropriate Timeslots API if different in your codebase.
+        // If Timeslots has a clear() or resetData(...) method, call that instead.
+        requireNonNull(this.timeslots);
+        this.timeslots = new Timeslots();
     }
 
     @Override

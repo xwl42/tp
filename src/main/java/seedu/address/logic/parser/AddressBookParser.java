@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import seedu.address.logic.commands.ClearTimeslotsCommand;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.BlockTimeslotCommand;
@@ -106,6 +107,9 @@ public class AddressBookParser {
 
         case BlockTimeslotCommand.COMMAND_WORD:
             return new BlockTimeslotCommandParser().parse(arguments);
+
+        case ClearTimeslotsCommand.COMMAND_WORD:
+            return new ClearTimeslotsCommandParser().parse(arguments);
 
         default:
             logger.finer("This user input caused a ParseException: " + userInput);

@@ -17,11 +17,11 @@ spreadsheets or GUI apps.
 2. [Features](#features)
     1. [Viewing help : `help`](#viewing-help--help)
     2. [Adding a student : `add`](#adding-a-student-add)
-    3. [Listing all students : `list`](#listing-all-persons--list)
-    4. [Editing a person : `edit`](#editing-a-person--edit)
+    3. [Listing all students : `list`](#listing-all-students--list)
+    4. [Editing a student : `edit`](#editing-a-student--edit)
     5. [Marking Lab Attendance : `marka`](#marking-lab-attendance--marka)
     6. [Marking Exercise Status : `marke`](#marking-exercise-status-marke)
-    7. [Locating persons by name : `find`](#locating-persons-by-name-find)
+    7. [Locating students by name : `find`](#locating-students-by-name-find)
     8. [Deleting a student : `delete`](#deleting-a-student--delete)
     9. [Clearing all entries : `clear`](#clearing-all-entries--clear)
    10. [Undoing the last command : `undo`](#undoing-the-last-command--undo)
@@ -119,7 +119,7 @@ Format: `help`
 
 ### Adding a student: `add`
 
-Adds a student to the address book.
+Adds a student to LambdaLab.
 
 Format: `add i/STUDENTID n/NAME p/PHONE e/EMAIL g/GITHUB_USERNAME [t/TAG]…​`
 
@@ -137,10 +137,10 @@ Error Messages:
 
 * Missing fields: \
   `Invalid command format! 
-add: Adds a person to the address book. Parameters: i/STUDENTID n/NAME p/PHONE e/EMAIL g/GITHUB_USERNAME [t/TAG]...
+add: Adds a student to LambdaLab. Parameters: i/STUDENTID n/NAME p/PHONE e/EMAIL g/GITHUB_USERNAME [t/TAG]...
 Example: add i/A1234567X n/John Doe p/98765432 e/johnd@example.com g/JohnDoe t/friends t/owesMoney`
 * Duplicate Identifier (Student ID): \
-    `This person already exists in the address book`
+    `This student already exists in LambdaLab`
 
 ### Listing all students : `list`
 
@@ -148,14 +148,14 @@ Shows a list of all students and their information.
 
 Format: `list`
 
-### Editing a person : `edit`
+### Editing a student : `edit`
 
-Edits an existing person in the address book.
+Edits an existing student in LambdaLab.
 
 Format: `edit INDEX [i/STUDENT ID] [n/NAME] [p/PHONE] [e/EMAIL] [g/GITHUB USERNAME] [t/TAG]…​`
 
-* Edits the person at the specified `INDEX`. 
-The index refers to the index number shown in the displayed person list. 
+* Edits the student at the specified `INDEX`. 
+The index refers to the index number shown in the displayed student list. 
 The index **must be a positive integer** 1, 2, 3, …​
 * You must provide at least 1 of the optional fields.
 * Existing values will be updated to the input values.
@@ -163,38 +163,39 @@ The index **must be a positive integer** 1, 2, 3, …​
 <box type="warning" seamless>
 
 **Caution:** 
-When editing tags, the existing tags of the person will be removed 
+When editing tags, the existing tags of the student will be removed 
 i.e adding of tags is not cumulative.
 
-You can remove all the person’s tags by typing `t/` without
+You can remove all the student’s tags by typing `t/` without
 specifying any tags after it.
 
 </box>
 
 Examples:
-*  `edit 1 p/91234567 e/johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
-*  `edit 2 n/Betsy Crower t/` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
+*  `edit 1 p/91234567 e/johndoe@example.com` Edits the phone number and email address of the 1st student to be `91234567` and `johndoe@example.com` respectively.
+*  `edit 2 n/Betsy Crower t/` Edits the name of the 2nd student to be `Betsy Crower` and clears all existing tags.
 
 ### Marking Lab Attendance: `marka`
 
-Marks the lab attendance of an existing person in the address book.
+Marks the lab attendance of an existing student in LambdaLab.
 
 Format: `marka INDEX l/LABNUMBER`
 
-* Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
+* Edits the student at the specified `INDEX`. The index refers to the index number shown in the displayed student list. The index **must be a positive integer** 1, 2, 3, …​
 * `LABNUMBER` represents the lab session to mark attendance for. It **must be between 1 and 10 (inclusive)**.
 * Attendance can only be **marked once per lab**.
 
 Example:
-* `marka 2 l/7` marks Lab 7 of the second person as attended.
+* `marka 2 l/7` marks Lab 7 of the second student as attended.
 
 ### Marking Exercise Status: `marke`
 
-Marks the exercise status of an existing person in the address book.
+Marks the exercise status of an existing student in LambdaLab.
 
 Format: `marke INDEX ei/EXERCISENUMBER s/STATUSLETTER`
 
-* Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
+* Edits the student at the specified `INDEX`. The index refers to the index number shown in the displayed student list. 
+* The index **must be a positive integer** 1, 2, 3, …​
 * `EXERCISE` represents the lab session to mark attendance for. It **must be between 0 and 9 (inclusive)**.
 * `STATUS` represents the status to mark the exercise with. It **must be a letter chosen from the following**:
 
@@ -206,11 +207,11 @@ Format: `marke INDEX ei/EXERCISENUMBER s/STATUSLETTER`
 * Each exercise only has **one status**.
 
 Example:
-* `marke 2 ei/7 s/d` marks exercise 7 of the second person as done.
+* `marke 2 ei/7 s/d` marks exercise 7 of the 2nd student as done.
 
-### Locating persons by name: `find`
+### Locating students by name: `find`
 
-Finds persons whose names contain any of the given keywords.
+Finds students whose names contain any of the given keywords.
 
 Format: `find KEYWORD [MORE_KEYWORDS]`
 
@@ -218,7 +219,7 @@ Format: `find KEYWORD [MORE_KEYWORDS]`
 * The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
 * Only the name is searched.
 * Only full words will be matched e.g. `Han` will not match `Hans`
-* Persons matching at least one keyword will be returned (i.e. `OR` search).
+* students matching at least one keyword will be returned (i.e. `OR` search).
   e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
 
 Examples:
@@ -228,36 +229,36 @@ Examples:
 
 ### Deleting a student : `delete`
 
-Deletes the specified student from the address book.
+Deletes the specified student from LambdaLab.
 
 Format: `delete INDEX`
 
-* Deletes the person at the specified `INDEX`. The index refers to the index number shown in the **displayed** person list. The index **must be a positive integer** 1, 2, 3, …​
+* Deletes the student at the specified `INDEX`. The index refers to the index number shown in the **displayed** student list. The index **must be a positive integer** 1, 2, 3, …​
 
 Examples:
-* `list` followed by `delete 2` deletes the 2nd person in the address book.
-* `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
+* `list` followed by `delete 2` deletes the 2nd student in the LambdaLab.
+* `find Betsy` followed by `delete 1` deletes the 1st student in the results of the `find` command.
 
 Error Messages:
 
 * Missing fields & Non-positive index: \
   `Invalid command format! 
-    delete: Deletes the person identified by the index number used in the displayed person list.
+    delete: Deletes the student identified by the index number used in the displayed student list.
     Parameters: INDEX (must be a positive integer)
     Example: delete 1`
 *  Index out of range: \
-  `The person index provided is invalid`
+  `The student index provided is invalid`
 
 ### Clearing all entries : `clear`
 
-Clears **all** entries from the address book, leaving it completely empty.
+Clears **all** entries from LambdaLab, leaving it completely empty.
 
 Format: `clear`
 
 <box type="warning" seamless>
 
 **Caution:**
-This command will remove **all** entries from the address book. If mistakenly performed, type `undo` **immediately**
+This command will remove **all** entries from LambdaLab. If mistakenly performed, type `undo` **immediately**
 before using another data-modifying command.
 </box>
 
@@ -300,17 +301,17 @@ Format: `exit`
 
 ### Saving the data
 
-AddressBook data are saved in the hard disk automatically after any command that changes the data. There is no need to save manually.
+LambdaLab data are saved in the hard disk automatically after any command that changes the data. There is no need to save manually.
 
 ### Editing the data file
 
-AddressBook data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.
+LambdaLab data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.
 
 <box type="warning" seamless>
 
 **Caution:**
-If your changes to the data file makes its format invalid, AddressBook will discard all data and start with an empty data file at the next run.  Hence, it is recommended to take a backup of the file before editing it.<br>
-Furthermore, certain edits can cause the AddressBook to behave in unexpected ways (e.g., if a value entered is outside the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
+If your changes to the data file makes its format invalid, LambdaLab will discard all data and start with an empty data file at the next run.  Hence, it is recommended to take a backup of the file before editing it.<br>
+Furthermore, certain edits can cause the LambdaLab to behave in unexpected ways (e.g., if a value entered is outside the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
 </box>
 
 ### Archiving data files `[coming in v2.0]`

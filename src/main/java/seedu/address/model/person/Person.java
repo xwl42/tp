@@ -98,6 +98,7 @@ public class Person {
     public ExerciseTracker getExerciseTracker() {
         return exerciseTracker;
     }
+
     public GradeMap getGradeMap() {
         return gradeMap;
     }

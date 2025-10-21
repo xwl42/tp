@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.testutil.Assert.assertThrows;
+import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_LAB;
+import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_LAB;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -79,4 +81,24 @@ public class ExerciseTrackerTest {
         assertTrue(result.contains("ex 0: N"));
         assertTrue(result.contains("ex 9: N"));
     }
+
+    @Test
+    public void calculateProgress() {
+        ExerciseTracker exerciseTracker = new ExerciseTracker();
+        assertEquals(0.0 / ExerciseTracker.NUMBER_OF_EXERCISES * 100, exerciseTracker.calculateProgress());
+
+        // TODO: Change name of the index later
+        exerciseTracker.markExercise(INDEX_FIRST_LAB, Status.DONE);
+        assertEquals(1.0 / ExerciseTracker.NUMBER_OF_EXERCISES * 100, exerciseTracker.calculateProgress());
+
+        exerciseTracker.markExercise(INDEX_SECOND_LAB, Status.DONE);
+        assertEquals(2.0 / ExerciseTracker.NUMBER_OF_EXERCISES * 100, exerciseTracker.calculateProgress());
+
+        exerciseTracker.markExercise(INDEX_SECOND_LAB, Status.OVERDUE);
+        assertEquals(0.5 / ExerciseTracker.NUMBER_OF_EXERCISES * 100, exerciseTracker.calculateProgress());
+
+        exerciseTracker.markExercise(INDEX_FIRST_LAB, Status.OVERDUE);
+        assertEquals(-1.0 / ExerciseTracker.NUMBER_OF_EXERCISES * 100, exerciseTracker.calculateProgress());
+    }
+
 }

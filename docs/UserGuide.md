@@ -130,7 +130,8 @@ Format: `add i/STUDENTID n/NAME p/PHONE e/EMAIL g/GITHUB_USERNAME [t/TAG]…​`
 
 <box type="tip" seamless>
 
-**Tip:** A student can have any number of tags (including 0)
+**Tip:** A student can have 0, 1 or more tags. 
+A tag should be alphanumeric with no space or special characters in between. 
 </box>
 
 Examples:

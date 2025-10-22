@@ -305,7 +305,7 @@ public class ParserUtil {
         if (status.isEmpty()) {
             throw new ParseException("Need status");
         }
-        String statusString = status.get();
+        String statusString = status.get().toUpperCase();
         switch (statusString) {
         case "D":
             return new Pair<>(exercise, Status.DONE);
@@ -329,7 +329,7 @@ public class ParserUtil {
         if (status.isEmpty()) {
             throw new ParseException("Need status");
         }
-        String statusString = status.get();
+        String statusString = status.get().toUpperCase();
         switch (statusString) {
         case "Y":
             return new Pair<>(labNumber, TRUE);

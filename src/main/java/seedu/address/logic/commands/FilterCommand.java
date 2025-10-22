@@ -25,7 +25,7 @@ public class FilterCommand extends Command {
             + "Exercises have status D - done, N - not done, O - overdue.\n"
             + "Lab attendance have status Y - yes, N - no.\n"
             + "Exercise index and lab index must always be followed by status.\n"
-            + "You can use both filters can be used together.\n"
+            + "You can use both filters together.\n"
             + "Parameters: [ei/EXERCISE INDEX] [s/exercise status] [l/LAB INDEX] [s/lab status]\n"
             + "Example: " + COMMAND_WORD + " ei/1 s/D \n";
 

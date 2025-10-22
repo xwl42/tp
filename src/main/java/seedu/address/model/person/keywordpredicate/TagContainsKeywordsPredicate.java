@@ -21,11 +21,11 @@ public class TagContainsKeywordsPredicate implements Predicate<Person> {
 
     @Override
     public boolean test(Person person) {
-        Set<Tag> ids = person.getTags();
+        Set<Tag> tags = person.getTags();
         return keywords.stream()
                 .map(String::toLowerCase)
                 .anyMatch(keyword ->
-                        ids.stream()
+                        tags.stream()
                             .map(Tag::getTagName)
                             .map(String::toLowerCase)
                             .anyMatch(tag -> tag.contains(keyword)));

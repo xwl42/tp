@@ -4,8 +4,11 @@ import static seedu.address.logic.parser.GradeCommandParser.MESSAGE_INVALID_EXAM
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import seedu.address.MainApp;
+import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.person.exceptions.InvalidExamNameException;
 import seedu.address.model.person.exceptions.InvalidScoreException;
 
@@ -14,6 +17,7 @@ import seedu.address.model.person.exceptions.InvalidScoreException;
  */
 public class GradeMap {
     public static final String[] VALID_EXAM_NAMES = {"pe1", "midterm", "pe2", "final"};
+    private static final Logger logger = LogsCenter.getLogger(MainApp.class);
     private final HashMap<String, Gradeable> gradeableHashMap;
     /**
      * Fills the hashmap with the keys
@@ -60,6 +64,7 @@ public class GradeMap {
      * @throws InvalidExamNameException if the exam name is not in the list of valid exam names
      */
     public void gradeExam(String name, double score) throws InvalidExamNameException {
+        logger.info(String.format("Grading %s with %.2f", name, score));
         Gradeable exam = gradeableHashMap.get(name);
         if (exam == null) {
             throw new InvalidExamNameException(
@@ -82,7 +87,6 @@ public class GradeMap {
         for (String examName : VALID_EXAM_NAMES) {
             Gradeable original = this.gradeableHashMap.get(examName);
             Gradeable copied = newGradeMap.gradeableHashMap.get(examName);
-
             if (original instanceof Examination) {
                 Examination originalExam = (Examination) original;
                 if (originalExam.getScore() != -1.0) {
@@ -94,7 +98,6 @@ public class GradeMap {
                 }
             }
         }
-
         return newGradeMap;
     }
 }

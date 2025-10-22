@@ -3,8 +3,11 @@ package seedu.address.model.person;
 import static seedu.address.model.person.Status.NOT_DONE;
 
 import java.util.ArrayList;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import seedu.address.MainApp;
+import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.core.index.Index;
 
 /**
@@ -16,6 +19,8 @@ public class ExerciseTracker implements Comparable<ExerciseTracker> {
     public static final int NUMBER_OF_EXERCISES = 10;
     public static final double WEIGHT_DONE = 1;
     public static final double WEIGHT_OVERDUE = -0.5;
+    private static final Logger logger = LogsCenter.getLogger(MainApp.class);
+
 
     private ArrayList<Exercise> exercises = new ArrayList<>();
 
@@ -26,12 +31,16 @@ public class ExerciseTracker implements Comparable<ExerciseTracker> {
         for (int i = 0; i < NUMBER_OF_EXERCISES; i++) {
             exercises.add(new Exercise(i, NOT_DONE));
         }
+        assert exercises.size() == NUMBER_OF_EXERCISES : "Exercise tracker must have exactly 10 exercises";
     }
     /**
      * Initializes exercises using a list of statuses.
      * Each index corresponds to an exercise number.
      */
     public ExerciseTracker(ArrayList<Status> statuses) {
+        assert statuses != null : "Statuses list must not be null";
+        assert statuses.size() <= NUMBER_OF_EXERCISES
+                : "Statuses list too long: " + statuses.size();
         if (statuses.size() > NUMBER_OF_EXERCISES) {
             throw new IllegalArgumentException("Too many statuses! Expected at most " + NUMBER_OF_EXERCISES);
         }
@@ -69,6 +78,7 @@ public class ExerciseTracker implements Comparable<ExerciseTracker> {
     }
 
     public ArrayList<Status> getStatuses() {
+        assert exercises != null && !exercises.isEmpty() : "Exercises must be initialized";
         return exercises.stream()
                 .map(Exercise::getStatus)
                 .collect(Collectors.toCollection(ArrayList::new));
@@ -80,6 +90,7 @@ public class ExerciseTracker implements Comparable<ExerciseTracker> {
      * @param status to mark the exercise with
      */
     public void markExercise(Index index, Status status) {
+        logger.info(String.format("Marking ex %d with %s", index.getOneBased(), status));
         if (index.getZeroBased() < 0 || index.getZeroBased() >= NUMBER_OF_EXERCISES) {
             throw new IndexOutOfBoundsException("Index should be between 0 and " + (NUMBER_OF_EXERCISES - 1));
         }
@@ -123,7 +134,6 @@ public class ExerciseTracker implements Comparable<ExerciseTracker> {
         if (exerciseTrackerString == null) {
             return false;
         }
-
         String trimmed = exerciseTrackerString.trim();
         String[] parts = trimmed.split("\\s+");
 

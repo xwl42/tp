@@ -188,7 +188,7 @@ Format: `marka INDEX l/LABNUMBER`
 * `LABNUMBER` represents the lab session to mark attendance for. It **must be between 1 and 10 (inclusive)**.
 * Attendance can only be **marked once per lab**.
 
-Example:
+Examples:
 * `marka 2 l/7` marks Lab 7 of the second student as attended.
 
 ### Marking exercise status: `marke`
@@ -208,7 +208,7 @@ Format: `marke INDEX ei/EXERCISENUMBER s/STATUSLETTER`
 | `O`/`o` | Overdue     | The exercise is overdue or late.     |
 * Each exercise only has **one status**.
 
-Example:
+Examples:
 * `marke 2 ei/7 s/d` marks exercise 7 of the 2nd student as done.
 
 ### Assigning assessment score: `grade`

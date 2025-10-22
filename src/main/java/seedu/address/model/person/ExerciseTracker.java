@@ -1,41 +1,54 @@
 package seedu.address.model.person;
 
+import static seedu.address.model.person.Status.NOT_DONE;
+
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import seedu.address.commons.core.index.Index;
 
 /**
  * Represents a Person's address in the address book.
  */
-public class ExerciseTracker {
+public class ExerciseTracker implements Comparable<ExerciseTracker> {
 
     public static final String MESSAGE_CONSTRAINTS = "Exercise tracker takes in statuses";
     public static final int NUMBER_OF_EXERCISES = 10;
-    public final ArrayList<Status> statuses;
+    public static final double WEIGHT_DONE = 1;
+    public static final double WEIGHT_OVERDUE = -0.5;
+
+    private ArrayList<Exercise> exercises = new ArrayList<>();
 
     /**
      * Initialises statuses to all be not done
      */
     public ExerciseTracker() {
-        this.statuses = new ArrayList<>(
-                Collections.nCopies(NUMBER_OF_EXERCISES, Status.NOT_DONE)
-        );
+        for (int i = 0; i < NUMBER_OF_EXERCISES; i++) {
+            exercises.add(new Exercise(i, NOT_DONE));
+        }
     }
     /**
-     * Initialises statuses to an input arraylist
+     * Initializes exercises using a list of statuses.
+     * Each index corresponds to an exercise number.
      */
     public ExerciseTracker(ArrayList<Status> statuses) {
-        this.statuses = statuses;
+        if (statuses.size() > NUMBER_OF_EXERCISES) {
+            throw new IllegalArgumentException("Too many statuses! Expected at most " + NUMBER_OF_EXERCISES);
+        }
+        this.exercises = new ArrayList<>();
+        for (int i = 0; i < statuses.size(); i++) {
+            exercises.add(new Exercise(i, statuses.get(i)));
+        }
+        for (int i = statuses.size(); i < NUMBER_OF_EXERCISES; i++) {
+            exercises.add(new Exercise(i, NOT_DONE));
+        }
     }
 
     @Override
     public String toString() {
-        return IntStream.range(0, statuses.size())
-                .mapToObj(x -> String.format("ex %d: %s ", x, statuses.get(x)))
-                .collect(Collectors.joining());
+        return exercises.stream()
+                .map(Exercise::toString)
+                .collect(Collectors.joining(" "));
     }
 
     @Override
@@ -47,15 +60,18 @@ public class ExerciseTracker {
             return false;
         }
         ExerciseTracker otherTracker = (ExerciseTracker) other;
-        return statuses.equals(otherTracker.statuses);
+        return exercises.equals(otherTracker.exercises);
     }
 
     @Override
     public int hashCode() {
-        return statuses.hashCode();
+        return exercises.hashCode();
     }
+
     public ArrayList<Status> getStatuses() {
-        return statuses;
+        return exercises.stream()
+                .map(Exercise::getStatus)
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     /**
@@ -67,7 +83,37 @@ public class ExerciseTracker {
         if (index.getZeroBased() < 0 || index.getZeroBased() >= NUMBER_OF_EXERCISES) {
             throw new IndexOutOfBoundsException("Index should be between 0 and " + (NUMBER_OF_EXERCISES - 1));
         }
-        statuses.set(index.getZeroBased(), status);
+        exercises.get(index.getZeroBased()).markStatus(status);
+    }
+
+    /**
+     * Calculate a student's exercise progress as percentage
+     * @return the progress between -50.0 and 100.0.
+     */
+    public double calculateProgress() {
+        double count = 0;
+        for (int i = 0; i < NUMBER_OF_EXERCISES; i++) {
+            Status status = exercises.get(i).getStatus();
+            switch (status) {
+            case DONE:
+                count += WEIGHT_DONE;
+                break;
+            case OVERDUE:
+                count += WEIGHT_OVERDUE;
+                break;
+            case NOT_DONE:
+                break;
+
+            default:
+                throw new IllegalStateException("Unexpected status: " + status);
+            }
+        }
+        return count / NUMBER_OF_EXERCISES * 100.0;
+    }
+
+    @Override
+    public int compareTo(ExerciseTracker other) {
+        return Double.compare(this.calculateProgress(), other.calculateProgress());
     }
 
     /**
@@ -116,8 +162,7 @@ public class ExerciseTracker {
      * @return a new ExerciseTracker with copied data
      */
     public ExerciseTracker copy() {
-        // Create a new ArrayList with copies of all statuses
-        ArrayList<Status> copiedStatuses = new ArrayList<>(this.statuses);
+        ArrayList<Status> copiedStatuses = new ArrayList<>(this.getStatuses());
         return new ExerciseTracker(copiedStatuses);
     }
 }

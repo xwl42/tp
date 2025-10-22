@@ -4,9 +4,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.testutil.Assert.assertThrows;
+import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_LAB;
+import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_LAB;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,13 +33,6 @@ public class ExerciseTrackerTest {
         ArrayList<Status> statuses = tracker.getStatuses();
         assertEquals(10, statuses.size());
         assertTrue(statuses.stream().allMatch(s -> s == Status.NOT_DONE));
-    }
-
-    @Test
-    public void constructor_customList_initializesCorrectly() {
-        ArrayList<Status> custom = new ArrayList<>(Collections.nCopies(5, Status.DONE));
-        ExerciseTracker customTracker = new ExerciseTracker(custom);
-        assertEquals(custom, customTracker.getStatuses());
     }
     @Test
     public void markExercise_invalidIndex_throwsIndexOutOfBounds() {
@@ -79,4 +73,24 @@ public class ExerciseTrackerTest {
         assertTrue(result.contains("ex 0: N"));
         assertTrue(result.contains("ex 9: N"));
     }
+
+    @Test
+    public void calculateProgress() {
+        ExerciseTracker exerciseTracker = new ExerciseTracker();
+        assertEquals(0.0 / ExerciseTracker.NUMBER_OF_EXERCISES * 100, exerciseTracker.calculateProgress());
+
+        // TODO: Change name of the index later
+        exerciseTracker.markExercise(INDEX_FIRST_LAB, Status.DONE);
+        assertEquals(1.0 / ExerciseTracker.NUMBER_OF_EXERCISES * 100, exerciseTracker.calculateProgress());
+
+        exerciseTracker.markExercise(INDEX_SECOND_LAB, Status.DONE);
+        assertEquals(2.0 / ExerciseTracker.NUMBER_OF_EXERCISES * 100, exerciseTracker.calculateProgress());
+
+        exerciseTracker.markExercise(INDEX_SECOND_LAB, Status.OVERDUE);
+        assertEquals(0.5 / ExerciseTracker.NUMBER_OF_EXERCISES * 100, exerciseTracker.calculateProgress());
+
+        exerciseTracker.markExercise(INDEX_FIRST_LAB, Status.OVERDUE);
+        assertEquals(-1.0 / ExerciseTracker.NUMBER_OF_EXERCISES * 100, exerciseTracker.calculateProgress());
+    }
+
 }

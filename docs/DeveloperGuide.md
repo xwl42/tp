@@ -1,5 +1,4 @@
----
-  layout: default.md
+ault.md
   title: "Developer Guide"
   pageNav: 3
 ---

@@ -1,4 +1,4 @@
-package seedu.address.model.person.keywordpredicate;
+package seedu.address.model.person.predicates;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -6,23 +6,22 @@ import java.util.function.Predicate;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.person.Person;
 
-
 /**
- * Tests that a {@code Person}'s {@code Phone Number} matches any of the keywords given.
+ * Tests that a {@code Person}'s {@code Name} matches any of the keywords given.
  */
-public class PhoneContainsKeywordsPredicate implements Predicate<Person> {
+public class NameContainsKeywordsPredicate implements Predicate<Person> {
     private final List<String> keywords;
 
-    public PhoneContainsKeywordsPredicate(List<String> keywords) {
+    public NameContainsKeywordsPredicate(List<String> keywords) {
         this.keywords = keywords;
     }
 
     @Override
     public boolean test(Person person) {
-        String phone = person.getPhone().toString();
+        String name = person.getName().fullName.toLowerCase();
         return keywords.stream()
                 .map(String::toLowerCase)
-                .anyMatch(phone::contains);
+                .anyMatch(name::contains);
     }
 
     @Override
@@ -32,11 +31,11 @@ public class PhoneContainsKeywordsPredicate implements Predicate<Person> {
         }
 
         // instanceof handles nulls
-        if (!(other instanceof PhoneContainsKeywordsPredicate)) {
+        if (!(other instanceof NameContainsKeywordsPredicate)) {
             return false;
         }
 
-        PhoneContainsKeywordsPredicate otherPredicate = (PhoneContainsKeywordsPredicate) other;
+        NameContainsKeywordsPredicate otherPredicate = (NameContainsKeywordsPredicate) other;
         return keywords.equals(otherPredicate.keywords);
     }
 

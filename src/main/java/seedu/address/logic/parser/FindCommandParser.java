@@ -17,8 +17,8 @@ import java.util.function.Predicate;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Person;
-import seedu.address.model.person.PrefixPredicate;
-import seedu.address.model.person.keywordpredicate.PersonContainsKeywordsPredicate;
+import seedu.address.model.person.PrefixPredicateContainer;
+import seedu.address.model.person.predicates.PersonContainsKeywordsPredicate;
 
 /**
  * Parses input arguments and creates a new FindCommand object
@@ -50,23 +50,23 @@ public class FindCommandParser implements Parser<FindCommand> {
 
     private List<Predicate<Person>> selectPredicates(ArgumentMultimap argMultimap, List<String> keywords) {
 
-        List<PrefixPredicate> prefixPredicates = PrefixPredicate.getAllPrefixPredicate();
+        List<PrefixPredicateContainer> prefixPredicateContainers = PrefixPredicateContainer.getAllPrefixPredicate();
         boolean isAnySelected = false;
         List<Predicate<Person>> predicates = new ArrayList<>();
 
-        for (int i = 0; i < prefixPredicates.size(); i++) {
-            PrefixPredicate prefixPredicate = prefixPredicates.get(i);
+        for (int i = 0; i < prefixPredicateContainers.size(); i++) {
+            PrefixPredicateContainer prefixPredicateContainer = prefixPredicateContainers.get(i);
             if (argMultimap.getValue(
-                    prefixPredicate.getPrefix()).isPresent()) {
-                prefixPredicate.setIsSelected(TRUE);
+                    prefixPredicateContainer.getPrefix()).isPresent()) {
+                prefixPredicateContainer.setIsSelected(TRUE);
                 isAnySelected = true;
             }
         }
 
-        for (int i = 0; i < prefixPredicates.size(); i++) {
-            PrefixPredicate prefixPredicate = prefixPredicates.get(i);
-            if (!isAnySelected || prefixPredicate.getIsSelected()) {
-                predicates.add(prefixPredicate
+        for (int i = 0; i < prefixPredicateContainers.size(); i++) {
+            PrefixPredicateContainer prefixPredicateContainer = prefixPredicateContainers.get(i);
+            if (!isAnySelected || prefixPredicateContainer.getIsSelected()) {
+                predicates.add(prefixPredicateContainer
                         .getPredicateWrapper()
                         .buildPredicate(keywords));
             }

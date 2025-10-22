@@ -1,4 +1,4 @@
-package seedu.address.model.person.keywordpredicate;
+package seedu.address.model.person.predicates;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -8,21 +8,21 @@ import seedu.address.model.person.Person;
 
 
 /**
- * Tests that a {@code Person}'s {@code StudentId} matches any of the keywords given.
+ * Tests that a {@code Person}'s {@code Github Username} matches any of the keywords given.
  */
-public class StudentIdContainsKeywordsPredicate implements Predicate<Person> {
+public class GithubContainsKeywordsPredicate implements Predicate<Person> {
     private final List<String> keywords;
 
-    public StudentIdContainsKeywordsPredicate(List<String> keywords) {
+    public GithubContainsKeywordsPredicate(List<String> keywords) {
         this.keywords = keywords;
     }
 
     @Override
     public boolean test(Person person) {
-        String id = person.getStudentId().toString().toLowerCase();
+        String github = person.getGithubUsername().toString().toLowerCase();
         return keywords.stream()
                 .map(String::toLowerCase)
-                .anyMatch(id::contains);
+                .anyMatch(github::contains);
     }
 
     @Override
@@ -32,11 +32,11 @@ public class StudentIdContainsKeywordsPredicate implements Predicate<Person> {
         }
 
         // instanceof handles nulls
-        if (!(other instanceof StudentIdContainsKeywordsPredicate)) {
+        if (!(other instanceof GithubContainsKeywordsPredicate)) {
             return false;
         }
 
-        StudentIdContainsKeywordsPredicate otherPredicate = (StudentIdContainsKeywordsPredicate) other;
+        GithubContainsKeywordsPredicate otherPredicate = (GithubContainsKeywordsPredicate) other;
         return keywords.equals(otherPredicate.keywords);
     }
 

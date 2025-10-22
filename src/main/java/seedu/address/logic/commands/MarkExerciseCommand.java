@@ -65,13 +65,12 @@ public class MarkExerciseCommand extends Command {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
         List<Person> lastShownList = model.getFilteredPersonList();
-
         if (studentIndex.getZeroBased() >= lastShownList.size()) {
             throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
         }
 
         Person student = lastShownList.get(studentIndex.getZeroBased());
-
+        assert student != null : "student should not be null";
         model.saveAddressBook();
 
         // Create a copy of the ExerciseTracker

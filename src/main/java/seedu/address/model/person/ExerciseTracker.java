@@ -3,8 +3,11 @@ package seedu.address.model.person;
 import static seedu.address.model.person.Status.NOT_DONE;
 
 import java.util.ArrayList;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import seedu.address.MainApp;
+import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.core.index.Index;
 
 /**
@@ -16,6 +19,8 @@ public class ExerciseTracker implements Comparable<ExerciseTracker> {
     public static final int NUMBER_OF_EXERCISES = 10;
     public static final double WEIGHT_DONE = 1;
     public static final double WEIGHT_OVERDUE = -0.5;
+    private static final Logger logger = LogsCenter.getLogger(MainApp.class);
+
 
     private ArrayList<Exercise> exercises = new ArrayList<>();
 
@@ -85,6 +90,7 @@ public class ExerciseTracker implements Comparable<ExerciseTracker> {
      * @param status to mark the exercise with
      */
     public void markExercise(Index index, Status status) {
+        logger.info(String.format("Marking ex %d with %s", index.getOneBased(), status));
         if (index.getZeroBased() < 0 || index.getZeroBased() >= NUMBER_OF_EXERCISES) {
             throw new IndexOutOfBoundsException("Index should be between 0 and " + (NUMBER_OF_EXERCISES - 1));
         }
@@ -128,7 +134,6 @@ public class ExerciseTracker implements Comparable<ExerciseTracker> {
         if (exerciseTrackerString == null) {
             return false;
         }
-
         String trimmed = exerciseTrackerString.trim();
         String[] parts = trimmed.split("\\s+");
 

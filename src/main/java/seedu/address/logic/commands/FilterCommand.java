@@ -35,8 +35,6 @@ public class FilterCommand extends Command {
         this.predicate = predicate;
     }
 
-    public FilterCommand(){predicate = (person) -> true;}
-
     @Override
     public CommandResult execute(Model model) {
         requireNonNull(model);

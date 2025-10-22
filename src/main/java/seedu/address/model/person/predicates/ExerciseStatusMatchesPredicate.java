@@ -17,7 +17,14 @@ public class ExerciseStatusMatchesPredicate implements Predicate<Person> {
     private Status status;
     private Index index;
 
-    public ExerciseStatusMatchesPredicate (Index index, Status status) {
+    /**
+     * Constructs a predicate that matches a {@code Person} if their {@code Exericse} status
+     * matches the status of the exercise stated.
+     *
+     * @param index {@code Index} of the exercise you are trying to filter for.
+     * @param status {@code Status} of the exercise chosen.
+     */
+    public ExerciseStatusMatchesPredicate(Index index, Status status) {
         this.index = index;
         this.status = status;
     }

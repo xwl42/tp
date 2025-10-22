@@ -294,7 +294,14 @@ public class ParserUtil {
         }
     }
 
-    public static Pair<String, Status> parseExerciseIndexStatus (String exerciseIndexString) throws ParseException{
+    /**
+     * Parses a {@code String} exerciseIndexString into a {@code Pair} of exercise index
+     * and exercise status.
+     *
+     * @param exerciseIndexString a string containing both the index and status as a combined string
+     * @throws ParseException if the given {@code String} does not include a status.
+     */
+    public static Pair<String, Status> parseExerciseIndexStatus(String exerciseIndexString) throws ParseException {
         ArgumentMultimap exerciseMultimap =
                 ArgumentTokenizer.tokenize(exerciseIndexString, PREFIX_STATUS);
         Optional<String> status = exerciseMultimap.getValue(PREFIX_STATUS);
@@ -318,7 +325,14 @@ public class ParserUtil {
         }
     }
 
-    public static Pair<String, Boolean> parseLabNumberStatus (String labNumberString) throws ParseException{
+    /**
+     * Parses a {@code String} labNumberString into a {@code Pair} of
+     * lab index and lab attendance status.
+     *
+     * @param labNumberString a string containing both the index and status as a combined string
+     * @throws ParseException if the given {@code String} does not include a status.
+     */
+    public static Pair<String, Boolean> parseLabNumberStatus(String labNumberString) throws ParseException {
         ArgumentMultimap exerciseMultimap =
                 ArgumentTokenizer.tokenize(labNumberString, PREFIX_STATUS);
         Optional<String> status = exerciseMultimap.getValue(PREFIX_STATUS);

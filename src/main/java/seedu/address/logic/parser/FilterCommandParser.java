@@ -43,7 +43,7 @@ public class FilterCommandParser implements Parser<FilterCommand> {
         }
 
         if (labNumberOptional.isPresent()) {
-           predicates.add(createLabFilter(labNumberOptional));
+            predicates.add(createLabFilter(labNumberOptional));
         }
 
         if (predicates.isEmpty()) {
@@ -53,17 +53,20 @@ public class FilterCommandParser implements Parser<FilterCommand> {
         return new FilterCommand(new FilterCombinedPredicate(predicates));
     }
 
-    private ExerciseStatusMatchesPredicate createExerciseFilter(Optional<String> exerciseIndexOptional) throws ParseException {
+    private ExerciseStatusMatchesPredicate createExerciseFilter(Optional<String> exerciseIndexOptional)
+            throws ParseException {
+        assert(exerciseIndexOptional.isPresent());
         String exerciseIndexStatus = exerciseIndexOptional.get();
         Pair<String, Status> indexStatusPair = ParserUtil.parseExerciseIndexStatus(exerciseIndexStatus);
         Status exerciseStatus = indexStatusPair.getValue();
         String exerciseIndexString = indexStatusPair.getKey();
         Index exerciseIndex = ParserUtil.parseZeroBasedIndex(exerciseIndexString);
-//            predicates.add(new ExerciseStatusMatchesPredicate((exerciseIndex), exerciseStatus));
         return new ExerciseStatusMatchesPredicate(exerciseIndex, exerciseStatus);
     }
 
-    private LabStatusMatchesPredicate createLabFilter(Optional<String> labNumberOptional) throws ParseException {
+    private LabStatusMatchesPredicate createLabFilter(Optional<String> labNumberOptional)
+            throws ParseException {
+        assert(labNumberOptional.isPresent());
         String labNumberStatus = labNumberOptional.get();
         Pair<String, Boolean> labNumberStatusPair = ParserUtil.parseLabNumberStatus(labNumberStatus);
         Boolean labStatus = labNumberStatusPair.getValue();

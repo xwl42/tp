@@ -7,17 +7,23 @@ import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.person.LabAttendance;
 import seedu.address.model.person.LabList;
 import seedu.address.model.person.Person;
-import seedu.address.model.person.Status;
 
 
 /**
- * Tests that a {@code Person}'s {@code Exercise status} matches the status of the exercise stated.
+ * Tests that a {@code Person}'s {@code Exercise status} matches the status of the lab stated.
  */
 public class LabStatusMatchesPredicate implements Predicate<Person> {
     private boolean status;
     private Index index;
 
-    public LabStatusMatchesPredicate (Index index, boolean status) {
+    /**
+     * Constructs a predicate that matches a {@code Person} if their {@code Lab} status
+     * matches the status of the lab stated.
+     *
+     * @param index {@code Index} of the lab you are trying to filter for.
+     * @param status {@code Status} of the lab chosen.
+     */
+    public LabStatusMatchesPredicate(Index index, boolean status) {
         this.index = index;
         this.status = status;
     }

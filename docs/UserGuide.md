@@ -378,7 +378,9 @@ Removes all stored timeslots (does not affect student records).
 Format: `clear-timeslots`
 
 <box type="warning" seamless>
-**Caution:** This will permanently remove all stored timeslots. There is no multi-step undo for timeslot clearing;
+
+**Caution:**
+This will permanently remove all stored timeslots. There is no multi-step undo for timeslot clearing;
 use immediately after a mistaken action if your environment supports undo of other operations.
 </box>
 

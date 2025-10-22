@@ -19,10 +19,12 @@ public class FindCommand extends Command {
 
     public static final String COMMAND_WORD = "find";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all persons whose names contain any of "
+    public static final String MESSAGE_USAGE = COMMAND_WORD
+            + ": Finds all persons whose specified fields contain any of "
             + "the specified keywords (case-insensitive) and displays them as a list with index numbers.\n"
-            + "Parameters: KEYWORD [MORE_KEYWORDS]...\n"
-            + "Example: " + COMMAND_WORD + " alice bob charlie";
+            + "If you do not specify any fields after the keywords, all are searched by default. \n"
+            + "Parameters: KEYWORD [MORE_KEYWORDS]... [i/] [n/] [p/] [e/] [g/] [t/]\n"
+            + "Example: " + COMMAND_WORD + " alice bob A1231234B i/ n/\n";
 
     private final Predicate<Person> predicate;
 

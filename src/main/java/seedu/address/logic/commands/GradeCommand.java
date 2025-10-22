@@ -47,6 +47,7 @@ public class GradeCommand extends Command {
      */
     public GradeCommand(Index index, String examName, double score) {
         requireAllNonNull(index, examName, score);
+        assert index.getOneBased() > 3;
         this.index = index;
         this.examName = examName;
         this.score = score;

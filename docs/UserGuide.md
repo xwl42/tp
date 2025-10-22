@@ -22,17 +22,17 @@ spreadsheets or GUI apps.
     5. [Marking lab attendance : `marka`](#marking-lab-attendance-marka)
     6. [Marking exercise status : `marke`](#marking-exercise-status-marke)
     7. [Assigning assessment score: `grade`](#assigning-assessment-score-grade)
-    7. [Locating students by name : `find`](#locating-students-by-name-find)
-    8. [Sorting students:`sort`](#sorting-the-students-sort)
-    9. [Deleting a student : `delete`](#deleting-a-student-delete)
-    10. [Clearing all entries : `clear`](#clearing-all-entries-clear)
-    11. [Undoing the last command : `undo`](#undoing-the-last-command-undo)
-    12. [Blocking a timeslot : `block-timeslot`](#blocking-a-timeslot-block-timeslot)
-    13. [Retrieving merged timeslot ranges : `get-timeslots`](#retrieving-merged-timeslot-ranges-get-timeslots)
-    14. [Clearing all timeslots : `clear-timeslots`](#clearing-all-timeslots-clear-timeslots)
-    15. [Exiting the program : `exit`](#exiting-the-program-exit)
-    16. [Saving the data](#saving-the-data)
-    17. [Editing the data file](#editing-the-data-file)
+    8. [Locating students by name : `find`](#locating-students-by-name-find)
+    9. [Sorting students:`sort`](#sorting-the-students-sort)
+    10. [Deleting a student : `delete`](#deleting-a-student-delete)
+    11. [Clearing all entries : `clear`](#clearing-all-entries-clear)
+    12. [Undoing the last command : `undo`](#undoing-the-last-command-undo)
+    13. [Blocking a timeslot : `block-timeslot`](#blocking-a-timeslot-block-timeslot)
+    14. [Retrieving merged timeslot ranges : `get-timeslots`](#retrieving-merged-timeslot-ranges-get-timeslots)
+    15. [Clearing all timeslots : `clear-timeslots`](#clearing-all-timeslots-clear-timeslots)
+    16. [Exiting the program : `exit`](#exiting-the-program-exit)
+    17. [Saving the data](#saving-the-data)
+    18. [Editing the data file](#editing-the-data-file)
 3. [FAQ](#faq)
 4. [Known issues](#known-issues)
 5. [Command summary](#command-summary)
@@ -44,7 +44,7 @@ spreadsheets or GUI apps.
 
 ## Quick start
 
-1. Ensure you have **Java 17** or above installed in your Computer.<br>
+1. Ensure you have **Java 17** or above installed on your computer.<br>
 > **Checking your Java version:**
 > * Open a command terminal
 > * Type `java -version` and press Enter
@@ -55,7 +55,7 @@ spreadsheets or GUI apps.
 > * Download and install Java 17 by following the guide:
 >   * [for Windows users](https://se-education.org/guides/tutorials/javaInstallationWindows.html)
 >   * [for Mac users](https://se-education.org/guides/tutorials/javaInstallationMac.html)
->   * [for Linus users](https://se-education.org/guides/tutorials/javaInstallationLinux.html)
+>   * [for Linux users](https://se-education.org/guides/tutorials/javaInstallationLinux.html)
 > * After installation, restart your terminal and verify the version again
 
 2. Download the latest `.jar` file from [here](https://github.com/AY2526S1-CS2103T-T09-3/tp/releases).
@@ -316,7 +316,7 @@ Format: `undo`
 
 * Only commands that change student data can be undone (e.g., `add`, `delete`, `edit`, `marka`, `marke`, `clear`)
 * Commands that do not modify data cannot be undone (e.g., `help`, `list`, `find`, `exit`)
-* It undos and can only undo the **very last** command that modified data
+* It undoes and can only undo the **very last** command that modified data
 * If there is no command to undo, an error message will be displayed
 
 <box type="warning" seamless>
@@ -360,7 +360,7 @@ Displays merged timeslot ranges derived from stored timeslots. Overlapping or ad
 
 Format: `get-timeslots`
 
-* Allows the user to keep track of their unavailable timings for easier scheduling of consultations with students.
+* Allows the user to keep track of unavailable times for easier scheduling of consultations with students.
 * The command shows merged ranges in a human-friendly date/time format.
   * Example:
     ```

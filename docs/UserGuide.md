@@ -15,22 +15,22 @@ spreadsheets or GUI apps.
 
 1. [Quick start](#quick-start)
 2. [Features](#features)
-    1. [Viewing help : `help`](#viewing-help-help)
-    2. [Adding a student : `add`](#adding-a-student-add)
-    3. [Listing all students : `list`](#listing-all-students-list)
-    4. [Editing a student : `edit`](#editing-a-student-edit)
-    5. [Marking lab attendance : `marka`](#marking-lab-attendance-marka)
-    6. [Marking exercise status : `marke`](#marking-exercise-status-marke)
+    1. [Viewing help: `help`](#viewing-help-help)
+    2. [Adding a student: `add`](#adding-a-student-add)
+    3. [Listing all students: `list`](#listing-all-students-list)
+    4. [Editing a student: `edit`](#editing-a-student-edit)
+    5. [Marking lab attendance: `marka`](#marking-lab-attendance-marka)
+    6. [Marking exercise status: `marke`](#marking-exercise-status-marke)
     7. [Assigning assessment score: `grade`](#assigning-assessment-score-grade)
-    8. [Locating students by name : `find`](#locating-students-by-name-find)
-    9. [Sorting students:`sort`](#sorting-the-students-sort)
-    10. [Deleting a student : `delete`](#deleting-a-student-delete)
-    11. [Clearing all entries : `clear`](#clearing-all-entries-clear)
-    12. [Undoing the last command : `undo`](#undoing-the-last-command-undo)
-    13. [Blocking a timeslot : `block-timeslot`](#blocking-a-timeslot-block-timeslot)
-    14. [Retrieving merged timeslot ranges : `get-timeslots`](#retrieving-merged-timeslot-ranges-get-timeslots)
-    15. [Clearing all timeslots : `clear-timeslots`](#clearing-all-timeslots-clear-timeslots)
-    16. [Exiting the program : `exit`](#exiting-the-program-exit)
+    8. [Locating students by name: `find`](#locating-students-by-name-find)
+    9. [Sorting students: `sort`](#sorting-the-students-sort)
+    10. [Deleting a student: `delete`](#deleting-a-student-delete)
+    11. [Clearing all entries: `clear`](#clearing-all-entries-clear)
+    12. [Undoing the last command: `undo`](#undoing-the-last-command-undo)
+    13. [Blocking a timeslot: `block-timeslot`](#blocking-a-timeslot-block-timeslot)
+    14. [Retrieving merged timeslot ranges: `get-timeslots`](#retrieving-merged-timeslot-ranges-get-timeslots)
+    15. [Clearing all timeslots: `clear-timeslots`](#clearing-all-timeslots-clear-timeslots)
+    16. [Exiting the program: `exit`](#exiting-the-program-exit)
     17. [Saving the data](#saving-the-data)
     18. [Editing the data file](#editing-the-data-file)
 3. [FAQ](#faq)
@@ -110,7 +110,7 @@ spreadsheets or GUI apps.
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 </box>
 
-### Viewing help : `help`
+### Viewing help: `help`
 
 Opens a Help window that provides a link to the User Guide.
 
@@ -130,8 +130,8 @@ Format: `add i/STUDENTID n/NAME p/PHONE e/EMAIL g/GITHUB_USERNAME [t/TAG]…​`
 
 <box type="tip" seamless>
 
-**Tip:** A student can have 0, 1 or more tags. 
-A tag should be alphanumeric with no space or special characters in between. 
+**Tip:** A student can have zero or more tags.  
+A tag must be alphanumeric with no spaces or special characters.
 </box>
 
 Examples:
@@ -288,7 +288,7 @@ Examples:
 
 <box type="warning" seamless>
 
-Missing fields or Non-positive index will cause the below error:  
+Missing fields or a non‑positive index will cause the following error:  
   `Invalid command format! 
     delete: Deletes the student identified by the index number used in the displayed student list.
     Parameters: INDEX (must be a positive integer)
@@ -308,16 +308,15 @@ This command will remove **all** entries from LambdaLab. If mistakenly performed
 before using another data-modifying command.
 </box>
 
-### Undoing the last command : `undo`
+### Undoing the last command: `undo`
 
-Reverses the **most recent** command that modified student data in LambdaLab.
+Reverses the most recent command that modified student data in LambdaLab.
 
 Format: `undo`
 
-* Only commands that change student data can be undone (e.g., `add`, `delete`, `edit`, `marka`, `marke`, `clear`)
-* Commands that do not modify data cannot be undone (e.g., `help`, `list`, `find`, `exit`)
-* It undoes and can only undo the **very last** command that modified data
-* If there is no command to undo, an error message will be displayed
+* Only commands that change student data can be undone (e.g., `add`, `delete`, `edit`, `marka`, `marke`, `clear`).  
+* Commands that do not modify data cannot be undone (e.g., `help`, `list`, `find`, `exit`).  
+* `undo` only reverses the very last data‑modifying command. If there is no command to undo, an error message will be displayed.
 
 <box type="warning" seamless>
 
@@ -354,7 +353,7 @@ Examples:
 * `block-timeslot ts/4 Oct 2025, 10:00 te/4 Oct 2025, 13:00`
 * `block-timeslot ts/4 Oct 2025 10:00 te/4 Oct 2025 13:00`
 
-### Retrieving merged timeslot ranges : `get-timeslots`
+### Retrieving merged timeslot ranges: `get-timeslots`
 
 Displays merged timeslot ranges derived from stored timeslots. Overlapping or adjacent timeslots are merged and presented as continuous ranges for easier viewing.
 
@@ -367,6 +366,7 @@ Format: `get-timeslots`
     4 Oct 2025, 10:00 -> 4 Oct 2025, 13:00
     6 Oct 2025, 09:00 -> 6 Oct 2025, 11:30
     ```
+
 * The UI can also display these ranges in the Timetable window (when available). Note that the Timetable view only shows timeslots between 08:00 and 23:00.
   ![Timetable window](images/timetableWindow.png)
 
@@ -474,7 +474,7 @@ lab sessions to maintain accurate records.
 
 Action     | Format, Examples
 -----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-**Add**    | `add n/NAME p/PHONE_NUMBER e/EMAIL [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague`
+**Add**    | `add i/STUDENTID n/NAME p/PHONE e/EMAIL g/GITHUB_USERNAME [t/TAG]…​` <br> e.g., `add i/A1234567X n/James Ho p/22224444 e/jamesho@example.com g/JamesHo t/friend`
 **Clear**  | `clear`
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
 **Edit**   | `edit INDEX [i/STUDENT ID] [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [g/GITHUB USERNAME] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`

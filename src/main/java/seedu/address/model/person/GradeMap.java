@@ -82,7 +82,6 @@ public class GradeMap {
         for (String examName : VALID_EXAM_NAMES) {
             Gradeable original = this.gradeableHashMap.get(examName);
             Gradeable copied = newGradeMap.gradeableHashMap.get(examName);
-
             if (original instanceof Examination) {
                 Examination originalExam = (Examination) original;
                 if (originalExam.getScore() != -1.0) {
@@ -94,7 +93,6 @@ public class GradeMap {
                 }
             }
         }
-
         return newGradeMap;
     }
 }

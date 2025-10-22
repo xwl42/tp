@@ -47,7 +47,7 @@ public class GradeCommand extends Command {
      */
     public GradeCommand(Index index, String examName, double score) {
         requireAllNonNull(index, examName, score);
-        assert index.getOneBased() > 3;
+        assert index.getOneBased() > 0;
         this.index = index;
         this.examName = examName;
         this.score = score;
@@ -67,6 +67,8 @@ public class GradeCommand extends Command {
 
         try {
             updatedGradeMap.gradeExam(examName, score); // Modify the copy
+            assert updatedGradeMap.getGradeableHashMap().get(examName) != null
+                    : "Updated GradeMap should contain the graded exam";
         } catch (InvalidExamNameException iene) {
             throw new CommandException(
                     String.format(

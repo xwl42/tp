@@ -1,14 +1,19 @@
 package seedu.address.logic.parser;
 
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_STATUS;
 import static seedu.address.logic.parser.MarkExerciseCommandParser.INVALID_STATUS_FORMAT;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
+import javafx.util.Pair;
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -286,6 +291,66 @@ public class ParserUtil {
 
         default:
             throw new ParseException(SortCriterion.MESSAGE_CONSTRAINTS);
+        }
+    }
+
+    /**
+     * Parses a {@code String} exerciseIndexString into a {@code Pair} of exercise index
+     * and exercise status.
+     *
+     * @param exerciseIndexString a string containing both the index and status as a combined string
+     * @throws ParseException if the given {@code String} does not include a status.
+     */
+    public static Pair<String, Status> parseExerciseIndexStatus(String exerciseIndexString) throws ParseException {
+        ArgumentMultimap exerciseMultimap =
+                ArgumentTokenizer.tokenize(exerciseIndexString, PREFIX_STATUS);
+        Optional<String> status = exerciseMultimap.getValue(PREFIX_STATUS);
+        String exercise = exerciseMultimap.getPreamble();
+        if (exercise.isEmpty()) {
+            throw new ParseException("Need exercise");
+        }
+        if (status.isEmpty()) {
+            throw new ParseException("Need status");
+        }
+        String statusString = status.get().toUpperCase();
+        switch (statusString) {
+        case "D":
+            return new Pair<>(exercise, Status.DONE);
+        case "N":
+            return new Pair<>(exercise, Status.NOT_DONE);
+        case "O":
+            return new Pair<>(exercise, Status.OVERDUE);
+        default:
+            throw new ParseException("Need D N O");
+        }
+    }
+
+    /**
+     * Parses a {@code String} labNumberString into a {@code Pair} of
+     * lab index and lab attendance status.
+     *
+     * @param labNumberString a string containing both the index and status as a combined string
+     * @throws ParseException if the given {@code String} does not include a status.
+     */
+    public static Pair<String, Boolean> parseLabNumberStatus(String labNumberString) throws ParseException {
+        ArgumentMultimap exerciseMultimap =
+                ArgumentTokenizer.tokenize(labNumberString, PREFIX_STATUS);
+        Optional<String> status = exerciseMultimap.getValue(PREFIX_STATUS);
+        String labNumber = exerciseMultimap.getPreamble();
+        if (labNumber.isEmpty()) {
+            throw new ParseException("Need lab number");
+        }
+        if (status.isEmpty()) {
+            throw new ParseException("Need status");
+        }
+        String statusString = status.get().toUpperCase();
+        switch (statusString) {
+        case "Y":
+            return new Pair<>(labNumber, TRUE);
+        case "N":
+            return new Pair<>(labNumber, FALSE);
+        default:
+            throw new ParseException("Need Y N");
         }
     }
 }

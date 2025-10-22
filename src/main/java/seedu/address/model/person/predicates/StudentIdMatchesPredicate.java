@@ -1,6 +1,10 @@
-package seedu.address.model.person;
+package seedu.address.model.person.predicates;
 
 import java.util.function.Predicate;
+
+import seedu.address.model.person.Person;
+import seedu.address.model.person.StudentId;
+
 
 /**
  * Tests that a {@code Person}'s {@code StudentId} matches the given student ID.

@@ -1,28 +1,34 @@
-package seedu.address.model.person.keywordpredicate;
+package seedu.address.model.person.predicates;
 
 import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
 
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.person.Person;
+import seedu.address.model.tag.Tag;
 
 
 /**
  * Tests that a {@code Person}'s {@code StudentId} matches any of the keywords given.
  */
-public class StudentIdContainsKeywordsPredicate implements Predicate<Person> {
+public class TagContainsKeywordsPredicate implements Predicate<Person> {
     private final List<String> keywords;
 
-    public StudentIdContainsKeywordsPredicate(List<String> keywords) {
+    public TagContainsKeywordsPredicate(List<String> keywords) {
         this.keywords = keywords;
     }
 
     @Override
     public boolean test(Person person) {
-        String id = person.getStudentId().toString().toLowerCase();
+        Set<Tag> ids = person.getTags();
         return keywords.stream()
                 .map(String::toLowerCase)
-                .anyMatch(id::contains);
+                .anyMatch(keyword ->
+                        ids.stream()
+                            .map(Tag::getTagName)
+                            .map(String::toLowerCase)
+                            .anyMatch(tag -> tag.contains(keyword)));
     }
 
     @Override
@@ -32,11 +38,11 @@ public class StudentIdContainsKeywordsPredicate implements Predicate<Person> {
         }
 
         // instanceof handles nulls
-        if (!(other instanceof StudentIdContainsKeywordsPredicate)) {
+        if (!(other instanceof TagContainsKeywordsPredicate)) {
             return false;
         }
 
-        StudentIdContainsKeywordsPredicate otherPredicate = (StudentIdContainsKeywordsPredicate) other;
+        TagContainsKeywordsPredicate otherPredicate = (TagContainsKeywordsPredicate) other;
         return keywords.equals(otherPredicate.keywords);
     }
 

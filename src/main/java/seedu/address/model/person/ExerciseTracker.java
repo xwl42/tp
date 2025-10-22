@@ -26,12 +26,16 @@ public class ExerciseTracker implements Comparable<ExerciseTracker> {
         for (int i = 0; i < NUMBER_OF_EXERCISES; i++) {
             exercises.add(new Exercise(i, NOT_DONE));
         }
+        assert exercises.size() == NUMBER_OF_EXERCISES : "Exercise tracker must have exactly 10 exercises";
     }
     /**
      * Initializes exercises using a list of statuses.
      * Each index corresponds to an exercise number.
      */
     public ExerciseTracker(ArrayList<Status> statuses) {
+        assert statuses != null : "Statuses list must not be null";
+        assert statuses.size() <= NUMBER_OF_EXERCISES
+                : "Statuses list too long: " + statuses.size();
         if (statuses.size() > NUMBER_OF_EXERCISES) {
             throw new IllegalArgumentException("Too many statuses! Expected at most " + NUMBER_OF_EXERCISES);
         }
@@ -69,6 +73,7 @@ public class ExerciseTracker implements Comparable<ExerciseTracker> {
     }
 
     public ArrayList<Status> getStatuses() {
+        assert exercises != null && !exercises.isEmpty() : "Exercises must be initialized";
         return exercises.stream()
                 .map(Exercise::getStatus)
                 .collect(Collectors.toCollection(ArrayList::new));

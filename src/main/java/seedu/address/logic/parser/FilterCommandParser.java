@@ -50,21 +50,31 @@ public class FilterCommandParser implements Parser<FilterCommand> {
 //        List<Predicate<Person>> predicates = new ArrayList<>();
 
         if (exerciseIndexOptional.isPresent()) {
-            String exerciseIndexStatus = exerciseIndexOptional.get();
-            Pair<String, Status> indexStatusPair = ParserUtil.parseExerciseIndexStatus(exerciseIndexStatus);
-            Status exerciseStatus = indexStatusPair.getValue();
-            String exerciseIndexString = indexStatusPair.getKey();
-            Index exerciseIndex = ParserUtil.parseZeroBasedIndex(exerciseIndexString);
-//            predicates.add(new ExerciseStatusMatchesPredicate((exerciseIndex), exerciseStatus));
-            return new FilterCommand(new ExerciseStatusMatchesPredicate((exerciseIndex), exerciseStatus));
+            return handleExerciseIndexOptional(exerciseIndexOptional);
+
         }
 
-//        if (labNumber.isPresent()) {
-//
-//        }
+        if (labNumberOptional.isPresent()) {
+            String labNumberStatus = labNumberOptional.get();
+            Pair<String, Status> labNumberStatusPair = ParserUtil.parseExerciseIndexStatus(labNumberStatus);
+            Status labStatus = labNumberStatusPair.getValue();
+            String labNumberString = labNumberStatusPair.getKey();
+            Index labNumber = ParserUtil.parseIndex(labNumberString);
+            return new FilterCommand(new LabStatusMatchesPredicate(labNumber, labStatus));
+        }
 
 
         return new FilterCommand();
+    }
+
+    private FilterCommand handleExerciseIndexOptional(Optional<String> exerciseIndexOptional) throws ParseException{
+        String exerciseIndexStatus = exerciseIndexOptional.get();
+        Pair<String, Status> indexStatusPair = ParserUtil.parseExerciseIndexStatus(exerciseIndexStatus);
+        Status exerciseStatus = indexStatusPair.getValue();
+        String exerciseIndexString = indexStatusPair.getKey();
+        Index exerciseIndex = ParserUtil.parseZeroBasedIndex(exerciseIndexString);
+//            predicates.add(new ExerciseStatusMatchesPredicate((exerciseIndex), exerciseStatus));
+        return new FilterCommand(new ExerciseStatusMatchesPredicate(exerciseIndex, exerciseStatus));
     }
 
 }

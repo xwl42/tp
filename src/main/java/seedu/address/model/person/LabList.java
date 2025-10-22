@@ -22,7 +22,7 @@ public class LabList implements LabAttendanceList {
      * @param labs an array of {@code Lab} objects representing the lab attendance records
      */
     public LabList(LabAttendance[] labs) {
-        assert(labs.length == NUMBER_OF_LABS);
+        assert labs.length == NUMBER_OF_LABS : "Wrong number of labs";
         this.labs = labs;
     }
 

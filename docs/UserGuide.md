@@ -11,28 +11,41 @@ Command Line Interface (CLI) while still having an intuitive Graphical User Inte
 LambdaLab can help you track student information, lab attendance, and exercise submissions even faster than traditional 
 spreadsheets or GUI apps.
 
+## About this guide
+
+This guide is written for CS2030S teaching assistants who need to maintain student records, mark lab attendance and exercises,
+and manage consultation timeslots. Assumed prior knowledge:
+- Comfortable using a command terminal on Windows / macOS / Linux.
+- Basic familiarity with editing plain text (copy/paste commands).
+- Understands core CS2030S concepts (labs, exercises, student identifiers).
+
+How to use this guide:
+- Quick start: run the application and try a few example commands.
+- Features: detailed command syntax, examples, and expected output.
+- Troubleshooting: common errors and remedies are highlighted near each command.
+
 ## Table of Contents
 
 1. [Quick start](#quick-start)
 2. [Features](#features)
-    1. [Viewing help : `help`](#viewing-help-help)
-    2. [Adding a student : `add`](#adding-a-student-add)
-    3. [Listing all students : `list`](#listing-all-students-list)
-    4. [Editing a student : `edit`](#editing-a-student-edit)
-    5. [Marking Lab Attendance : `marka`](#marking-lab-attendance-marka)
-    6. [Marking Exercise Status : `marke`](#marking-exercise-status-marke)
-    7. [Assigning Assessment Score: `grade`](#assigning-assessment-score-grade)
-    7. [Locating students by name : `find`](#locating-students-by-name-find)
-    8. [Sorting students:`sort`](#sorting-the-students-sort)
-    9. [Deleting a student : `delete`](#deleting-a-student-delete)
-    10. [Clearing all entries : `clear`](#clearing-all-entries-clear)
-    11. [Undoing the last command : `undo`](#undoing-the-last-command-undo)
-    12. [Blocking a timeslot : `block-timeslot`](#blocking-a-timeslot-block-timeslot)
-    13. [Retrieving merged timeslot ranges : `get-timeslots`](#retrieving-merged-timeslot-ranges-get-timeslots)
-    14. [Clearing all timeslots : `clear-timeslots`](#clearing-all-timeslots-clear-timeslots)
-    15. [Exiting the program : `exit`](#exiting-the-program-exit)
-    16. [Saving the data](#saving-the-data)
-    17. [Editing the data file](#editing-the-data-file)
+    1. [Viewing help: `help`](#viewing-help-help)
+    2. [Adding a student: `add`](#adding-a-student-add)
+    3. [Listing all students: `list`](#listing-all-students-list)
+    4. [Editing a student: `edit`](#editing-a-student-edit)
+    5. [Marking lab attendance: `marka`](#marking-lab-attendance-marka)
+    6. [Marking exercise status: `marke`](#marking-exercise-status-marke)
+    7. [Assigning assessment score: `grade`](#assigning-assessment-score-grade)
+    8. [Locating students by name: `find`](#locating-students-by-name-find)
+    9. [Sorting students: `sort`](#sorting-the-students-sort)
+    10. [Deleting a student: `delete`](#deleting-a-student-delete)
+    11. [Clearing all entries: `clear`](#clearing-all-entries-clear)
+    12. [Undoing the last command: `undo`](#undoing-the-last-command-undo)
+    13. [Blocking a timeslot: `block-timeslot`](#blocking-a-timeslot-block-timeslot)
+    14. [Retrieving merged timeslot ranges: `get-timeslots`](#retrieving-merged-timeslot-ranges-get-timeslots)
+    15. [Clearing all timeslots: `clear-timeslots`](#clearing-all-timeslots-clear-timeslots)
+    16. [Exiting the program: `exit`](#exiting-the-program-exit)
+    17. [Saving the data](#saving-the-data)
+    18. [Editing the data file](#editing-the-data-file)
 3. [FAQ](#faq)
 4. [Known issues](#known-issues)
 5. [Command summary](#command-summary)
@@ -44,7 +57,7 @@ spreadsheets or GUI apps.
 
 ## Quick start
 
-1. Ensure you have **Java 17** or above installed in your Computer.<br>
+1. Ensure you have **Java 17** or above installed on your computer.<br>
 > **Checking your Java version:**
 > * Open a command terminal
 > * Type `java -version` and press Enter
@@ -55,7 +68,7 @@ spreadsheets or GUI apps.
 > * Download and install Java 17 by following the guide:
 >   * [for Windows users](https://se-education.org/guides/tutorials/javaInstallationWindows.html)
 >   * [for Mac users](https://se-education.org/guides/tutorials/javaInstallationMac.html)
->   * [for Linus users](https://se-education.org/guides/tutorials/javaInstallationLinux.html)
+>   * [for Linux users](https://se-education.org/guides/tutorials/javaInstallationLinux.html)
 > * After installation, restart your terminal and verify the version again
 
 2. Download the latest `.jar` file from [here](https://github.com/AY2526S1-CS2103T-T09-3/tp/releases).
@@ -66,6 +79,20 @@ spreadsheets or GUI apps.
    A GUI similar to the below should appear in a few seconds. Note that the app contains some sample data and the layout 
    is explained in coloured boxes.<br>
    ![Ui](images/Ui.png)
+
+### Quick CLI tutorial
+- Click the command input box (bottom of the UI), type a command exactly as shown (prefixes like `n/`, `i/`, `ts/` are required), then press Enter.
+- Typical response types:
+  - Success message with brief summary.
+  - List output (e.g., `list`, `find`) showing matching student entries.
+  - Error message starting with `Invalid command format!` or a validation message — read it carefully and retry.
+- Example sequence:
+  1. `add i/A1234567X n/John Doe p/98765432 e/john@example.com g/johndoe`
+     - Expected output: "New student added: John Doe"
+  2. `list`
+     - Expected output: numbered list including "John Doe".
+  3. `undo`
+     - Expected: restores previous state, shows "Undo successful" or a message indicating nothing to undo.
 
 5. Type your command in the command box and press Enter to execute it. <br>
    Some example commands you can try:
@@ -110,7 +137,7 @@ spreadsheets or GUI apps.
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 </box>
 
-### Viewing help : `help`
+### Viewing help: `help`
 
 Opens a Help window that provides a link to the User Guide.
 
@@ -130,8 +157,8 @@ Format: `add i/STUDENTID n/NAME p/PHONE e/EMAIL g/GITHUB_USERNAME [t/TAG]…​`
 
 <box type="tip" seamless>
 
-**Tip:** A student can have 0, 1 or more tags. 
-A tag should be alphanumeric with no space or special characters in between. 
+**Tip:** A student can have zero or more tags.  
+A tag must be alphanumeric with no spaces or special characters.
 </box>
 
 Examples:
@@ -178,7 +205,7 @@ Examples:
 *  `edit 1 p/91234567 e/johndoe@example.com` Edits the phone number and email address of the 1st student to be `91234567` and `johndoe@example.com` respectively.
 *  `edit 2 n/Betsy Crower t/` Edits the name of the 2nd student to be `Betsy Crower` and clears all existing tags.
 
-### Marking Lab Attendance: `marka`
+### Marking lab attendance: `marka`
 
 Marks the lab attendance of an existing student in LambdaLab.
 
@@ -188,10 +215,10 @@ Format: `marka INDEX l/LABNUMBER`
 * `LABNUMBER` represents the lab session to mark attendance for. It **must be between 1 and 10 (inclusive)**.
 * Attendance can only be **marked once per lab**.
 
-Example:
+Examples:
 * `marka 2 l/7` marks Lab 7 of the second student as attended.
 
-### Marking Exercise Status: `marke`
+### Marking exercise status: `marke`
 
 Marks the exercise status of an existing student in LambdaLab.
 
@@ -208,22 +235,22 @@ Format: `marke INDEX ei/EXERCISENUMBER s/STATUSLETTER`
 | `O`/`o` | Overdue     | The exercise is overdue or late.     |
 * Each exercise only has **one status**.
 
-Example:
+Examples:
 * `marke 2 ei/7 s/d` marks exercise 7 of the 2nd student as done.
 
-### Assigning Assessment Score: `grade`
+### Assigning assessment score: `grade`
 
 Assigns the score for a specific assessment of an existing student in LambdaLab.
 
 Format: `grade INDEX en/EXAMNAME sc/SCORE`
 
-#### Description
-- Edits the student at the specified `INDEX`. The index refers to the index number shown in the displayed student list. The index **must be a positive integer** 1, 2, 3, …​
-- `EXAMNAME` specifies the name of the assessment.
-- `SCORE` specifies the score to assign for that assessment.  
+* Edits the student at the specified `INDEX`. The index refers to the index number shown in the displayed student list. The index **must be a positive integer** 1, 2, 3, …​
+* `EXAMNAME` specifies the name of the assessment.
+* `SCORE` specifies the score to assign for that assessment.  
   It **must be between 0 and the assessment’s maximum achievable score (inclusive)**.
 
-#### Supported Assessments
+Supported Assessments:
+
 | Assessment | Maximum Score |
 |-------------|---------------|
 | `pe1`       | 40            |
@@ -231,7 +258,7 @@ Format: `grade INDEX en/EXAMNAME sc/SCORE`
 | `pe2`       | 40            |
 | `final`     | 100           |
 
-#### Example
+Examples:
 * `grade 2 en/midterm sc/55` sets the **midterm** score of the **2nd student** in the list to **55**.
 
 
@@ -288,7 +315,7 @@ Examples:
 
 <box type="warning" seamless>
 
-Missing fields or Non-positive index will cause the below error:  
+Missing fields or a non‑positive index will cause the following error:  
   `Invalid command format! 
     delete: Deletes the student identified by the index number used in the displayed student list.
     Parameters: INDEX (must be a positive integer)
@@ -308,16 +335,15 @@ This command will remove **all** entries from LambdaLab. If mistakenly performed
 before using another data-modifying command.
 </box>
 
-### Undoing the last command : `undo`
+### Undoing the last command: `undo`
 
-Reverses the **most recent** command that modified student data in LambdaLab.
+Reverses the most recent command that modified student data in LambdaLab.
 
 Format: `undo`
 
-* Only commands that change student data can be undone (e.g., `add`, `delete`, `edit`, `marka`, `marke`, `clear`)
-* Commands that do not modify data cannot be undone (e.g., `help`, `list`, `find`, `exit`)
-* It undos and can only undo the **very last** command that modified data
-* If there is no command to undo, an error message will be displayed
+* Only commands that change student data can be undone (e.g., `add`, `delete`, `edit`, `marka`, `marke`, `clear`).  
+* Commands that do not modify data cannot be undone (e.g., `help`, `list`, `find`, `exit`).  
+* `undo` only reverses the very last data‑modifying command. If there is no command to undo, an error message will be displayed.
 
 <box type="warning" seamless>
 
@@ -354,20 +380,21 @@ Examples:
 * `block-timeslot ts/4 Oct 2025, 10:00 te/4 Oct 2025, 13:00`
 * `block-timeslot ts/4 Oct 2025 10:00 te/4 Oct 2025 13:00`
 
-### Retrieving merged timeslot ranges : `get-timeslots`
+### Retrieving merged timeslot ranges: `get-timeslots`
 
 Displays merged timeslot ranges derived from stored timeslots. Overlapping or adjacent timeslots are merged and presented as continuous ranges for easier viewing.
 
 Format: `get-timeslots`
 
-* Allows the user to keep track of their unavailable timings for easier scheduling of consultations with students.
+* Allows the user to keep track of unavailable times for easier scheduling of consultations with students.
 * The command shows merged ranges in a human-friendly date/time format.
   * Example:
     ```
     4 Oct 2025, 10:00 -> 4 Oct 2025, 13:00
     6 Oct 2025, 09:00 -> 6 Oct 2025, 11:30
     ```
-- The UI can also display these ranges in the Timetable window (when available). Note that the Timetable view only shows timeslots between 08:00 and 23:00.
+
+* The UI can also display these ranges in the Timetable window (when available). Note that the Timetable view only shows timeslots between 08:00 and 23:00.
   ![Timetable window](images/timetableWindow.png)
 
 
@@ -378,7 +405,9 @@ Removes all stored timeslots (does not affect student records).
 Format: `clear-timeslots`
 
 <box type="warning" seamless>
-**Caution:** This will permanently remove all stored timeslots. There is no multi-step undo for timeslot clearing;
+
+**Caution:**
+This will permanently remove all stored timeslots. There is no multi-step undo for timeslot clearing;
 use immediately after a mistaken action if your environment supports undo of other operations.
 </box>
 
@@ -472,7 +501,7 @@ lab sessions to maintain accurate records.
 
 Action     | Format, Examples
 -----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-**Add**    | `add n/NAME p/PHONE_NUMBER e/EMAIL [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague`
+**Add**    | `add i/STUDENTID n/NAME p/PHONE e/EMAIL g/GITHUB_USERNAME [t/TAG]…​` <br> e.g., `add i/A1234567X n/James Ho p/22224444 e/jamesho@example.com g/JamesHo t/friend`
 **Clear**  | `clear`
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
 **Edit**   | `edit INDEX [i/STUDENT ID] [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [g/GITHUB USERNAME] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`

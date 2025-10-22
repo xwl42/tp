@@ -19,10 +19,10 @@ public class PhoneContainsKeywordsPredicate implements Predicate<Person> {
 
     @Override
     public boolean test(Person person) {
-        String id = person.getPhone().toString().toLowerCase();
+        String phone = person.getPhone().toString();
         return keywords.stream()
                 .map(String::toLowerCase)
-                .anyMatch(id::contains);
+                .anyMatch(phone::contains);
     }
 
     @Override

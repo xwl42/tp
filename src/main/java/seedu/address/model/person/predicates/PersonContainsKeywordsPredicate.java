@@ -48,6 +48,11 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
         }
 
         PersonContainsKeywordsPredicate otherPredicate = (PersonContainsKeywordsPredicate) other;
+
+        if (predicates.size() != otherPredicate.predicates.size()) {
+            return false;
+        }
+
         for (int i = 0; i < predicates.size(); i++) {
             if (!predicates.get(i).equals(
                     otherPredicate.getPredicates().get(i))) {

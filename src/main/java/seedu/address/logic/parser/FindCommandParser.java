@@ -51,7 +51,7 @@ public class FindCommandParser implements Parser<FindCommand> {
     private List<Predicate<Person>> selectPredicates(ArgumentMultimap argMultimap, List<String> keywords) {
 
         List<PrefixPredicateContainer> prefixPredicateContainers = PrefixPredicateContainer.getAllPrefixPredicate();
-        boolean isSeleceted = false;
+        boolean isAnySelected = false;
         List<Predicate<Person>> predicates = new ArrayList<>();
 
         for (int i = 0; i < prefixPredicateContainers.size(); i++) {
@@ -59,13 +59,13 @@ public class FindCommandParser implements Parser<FindCommand> {
             if (argMultimap.getValue(
                     prefixPredicateContainer.getPrefix()).isPresent()) {
                 prefixPredicateContainer.setIsSelected(TRUE);
-                isSeleceted = true;
+                isAnySelected = true;
             }
         }
 
         for (int i = 0; i < prefixPredicateContainers.size(); i++) {
             PrefixPredicateContainer prefixPredicateContainer = prefixPredicateContainers.get(i);
-            if (!isSeleceted || prefixPredicateContainer.getIsSelected()) {
+            if (!isAnySelected || prefixPredicateContainer.getIsSelected()) {
                 predicates.add(prefixPredicateContainer
                         .getPredicateWrapper()
                         .buildPredicate(keywords));

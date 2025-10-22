@@ -13,7 +13,8 @@ public class Lab implements LabAttendance {
      * @param labNumber The lab number (must be positive)
      */
     public Lab(int labNumber) {
-        assert labNumber > 0;
+        assert labNumber > 0 : "Invalid lab number";
+        assert labNumber <= LabList.NUMBER_OF_LABS : "Lab number exceeded the maximum amount";
         this.labNumber = labNumber;
         this.isAttended = false;
     }

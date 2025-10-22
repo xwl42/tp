@@ -20,11 +20,14 @@ public class FilterCommand extends Command {
     public static final String COMMAND_WORD = "filter";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Finds all persons whose specified fields contain any of "
-            + "the specified keywords (case-insensitive) and displays them as a list with index numbers.\n"
-            + "If you do not specify any fields after the keywords, all are searched by default. \n"
-            + "Parameters: KEYWORD [MORE_KEYWORDS]... [i/] [n/] [p/] [e/] [g/] [t/]\n"
-            + "Example: " + COMMAND_WORD + " alice bob A1231234B i/ n/\n";
+            + ": Filters all persons whose exercise or lab attendance match the "
+            + "specified statuses (case-insensitive) and displays them as a list with index numbers.\n"
+            + "Exercises have status D - done, N - not done, O - overdue.\n"
+            + "Lab attendance have status Y - yes, N - no.\n"
+            + "Exercise index and lab index must always be followed by status.\n"
+            + "You can use both filters can be used together.\n"
+            + "Parameters: [ei/EXERCISE INDEX] [s/exercise status] [l/LAB INDEX] [s/lab status]\n"
+            + "Example: " + COMMAND_WORD + " ei/1 s/D \n";
 
     private final Predicate<Person> predicate;
 

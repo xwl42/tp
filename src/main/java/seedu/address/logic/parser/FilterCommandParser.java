@@ -1,33 +1,17 @@
 package seedu.address.logic.parser;
 
-import static java.lang.Boolean.TRUE;
-import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EXERCISE_INDEX;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_GITHUB_USERNAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_LAB_NUMBER;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_STATUS;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_STUDENTID;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
 
 import javafx.util.Pair;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.FilterCommand;
-import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
-import seedu.address.model.person.Person;
-import seedu.address.model.person.PrefixPredicateContainer;
 import seedu.address.model.person.Status;
 import seedu.address.model.person.predicates.ExerciseStatusMatchesPredicate;
-import seedu.address.model.person.predicates.PersonContainsKeywordsPredicate;
+import seedu.address.model.person.predicates.LabStatusMatchesPredicate;
 
 /**
  * Parses input arguments and creates a new FilterCommand object
@@ -50,24 +34,17 @@ public class FilterCommandParser implements Parser<FilterCommand> {
 //        List<Predicate<Person>> predicates = new ArrayList<>();
 
         if (exerciseIndexOptional.isPresent()) {
-            return handleExerciseIndexOptional(exerciseIndexOptional);
-
+            return createExerciseFilter(exerciseIndexOptional);
         }
 
         if (labNumberOptional.isPresent()) {
-            String labNumberStatus = labNumberOptional.get();
-            Pair<String, Status> labNumberStatusPair = ParserUtil.parseExerciseIndexStatus(labNumberStatus);
-            Status labStatus = labNumberStatusPair.getValue();
-            String labNumberString = labNumberStatusPair.getKey();
-            Index labNumber = ParserUtil.parseIndex(labNumberString);
-            return new FilterCommand(new LabStatusMatchesPredicate(labNumber, labStatus));
+           return createLabFilter(labNumberOptional);
         }
 
-
-        return new FilterCommand();
+        throw new ParseException(FilterCommand.MESSAGE_USAGE);
     }
 
-    private FilterCommand handleExerciseIndexOptional(Optional<String> exerciseIndexOptional) throws ParseException{
+    private FilterCommand createExerciseFilter(Optional<String> exerciseIndexOptional) throws ParseException {
         String exerciseIndexStatus = exerciseIndexOptional.get();
         Pair<String, Status> indexStatusPair = ParserUtil.parseExerciseIndexStatus(exerciseIndexStatus);
         Status exerciseStatus = indexStatusPair.getValue();
@@ -75,6 +52,15 @@ public class FilterCommandParser implements Parser<FilterCommand> {
         Index exerciseIndex = ParserUtil.parseZeroBasedIndex(exerciseIndexString);
 //            predicates.add(new ExerciseStatusMatchesPredicate((exerciseIndex), exerciseStatus));
         return new FilterCommand(new ExerciseStatusMatchesPredicate(exerciseIndex, exerciseStatus));
+    }
+
+    private FilterCommand createLabFilter(Optional<String> labNumberOptional) throws ParseException {
+        String labNumberStatus = labNumberOptional.get();
+        Pair<String, Boolean> labNumberStatusPair = ParserUtil.parseLabNumberStatus(labNumberStatus);
+        Boolean labStatus = labNumberStatusPair.getValue();
+        String labNumberString = labNumberStatusPair.getKey();
+        Index labNumber = ParserUtil.parseIndex(labNumberString);
+        return new FilterCommand(new LabStatusMatchesPredicate(labNumber, labStatus));
     }
 
 }

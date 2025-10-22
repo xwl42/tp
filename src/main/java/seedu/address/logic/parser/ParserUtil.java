@@ -1,5 +1,7 @@
 package seedu.address.logic.parser;
 
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_STATUS;
 import static seedu.address.logic.parser.MarkExerciseCommandParser.INVALID_STATUS_FORMAT;
@@ -313,6 +315,28 @@ public class ParserUtil {
             return new Pair<>(exercise, Status.OVERDUE);
         default:
             throw new ParseException("Need D N O");
+        }
+    }
+
+    public static Pair<String, Boolean> parseLabNumberStatus (String labNumberString) throws ParseException{
+        ArgumentMultimap exerciseMultimap =
+                ArgumentTokenizer.tokenize(labNumberString, PREFIX_STATUS);
+        Optional<String> status = exerciseMultimap.getValue(PREFIX_STATUS);
+        String labNumber = exerciseMultimap.getPreamble();
+        if (labNumber.isEmpty()) {
+            throw new ParseException("Need lab number");
+        }
+        if (status.isEmpty()) {
+            throw new ParseException("Need status");
+        }
+        String statusString = status.get();
+        switch (statusString) {
+        case "Y":
+            return new Pair<>(labNumber, TRUE);
+        case "N":
+            return new Pair<>(labNumber, FALSE);
+        default:
+            throw new ParseException("Need Y N");
         }
     }
 }

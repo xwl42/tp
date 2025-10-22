@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -76,6 +77,64 @@ public class GradeMapTest {
         String output = gradeMap.toString();
         for (String exam : GradeMap.VALID_EXAM_NAMES) {
             assertTrue(output.contains(exam));
+        }
+    }
+    @Test
+    public void copy_validGrades_createsDeepCopy() throws InvalidExamNameException {
+        gradeMap.gradeExam("midterm", 40.0);
+        gradeMap.gradeExam("final", 90.0);
+
+        GradeMap copied = gradeMap.copy();
+
+        assertNotNull(copied, "Copy should not be null");
+        assertNotSame(gradeMap, copied, "Copy should be a different object");
+        assertEquals(gradeMap, copied, "Copy should have the same content initially");
+
+        // Verify all exam entries exist
+        for (String examName : GradeMap.VALID_EXAM_NAMES) {
+            assertTrue(copied.getGradeableHashMap().containsKey(examName),
+                    "Copied GradeMap should contain " + examName);
+            assertNotNull(copied.getGradeableHashMap().get(examName),
+                    "Copied exam entry should not be null");
+        }
+
+        // Verify scores were copied correctly
+        assertEquals(
+                gradeMap.getGradeableHashMap().get("midterm").getScore(),
+                copied.getGradeableHashMap().get("midterm").getScore(),
+                1e-9,
+                "Midterm score should match after copy"
+        );
+        assertEquals(
+                gradeMap.getGradeableHashMap().get("final").getScore(),
+                copied.getGradeableHashMap().get("final").getScore(),
+                1e-9,
+                "Final score should match after copy"
+        );
+
+        // Deep copy check — modifying copy shouldn’t affect original
+        copied.gradeExam("midterm", 60.0);
+        double originalMidterm = gradeMap.getGradeableHashMap().get("midterm").getScore();
+        double copiedMidterm = copied.getGradeableHashMap().get("midterm").getScore();
+
+        assertNotEquals(
+                originalMidterm,
+                copiedMidterm,
+                "Changing copy's midterm score should not affect the original GradeMap"
+        );
+    }
+
+    @Test
+    public void copy_ungradedExams_preserveDefaultState() {
+        GradeMap copied = gradeMap.copy();
+
+        for (String examName : GradeMap.VALID_EXAM_NAMES) {
+            assertTrue(copied.getGradeableHashMap().containsKey(examName),
+                    "Copied GradeMap should contain " + examName);
+            Gradeable exam = copied.getGradeableHashMap().get(examName);
+            assertTrue(exam instanceof Examination, "Exam should be an instance of Examination");
+            double score = ((Examination) exam).getScore();
+            assertEquals(-1.0, score, "Ungraded exam should have score -1.0");
         }
     }
 }

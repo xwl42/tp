@@ -19,9 +19,9 @@ spreadsheets or GUI apps.
     2. [Adding a student : `add`](#adding-a-student-add)
     3. [Listing all students : `list`](#listing-all-students-list)
     4. [Editing a student : `edit`](#editing-a-student-edit)
-    5. [Marking Lab Attendance : `marka`](#marking-lab-attendance-marka)
-    6. [Marking Exercise Status : `marke`](#marking-exercise-status-marke)
-    7. [Assigning Assessment Score: `grade`](#assigning-assessment-score-grade)
+    5. [Marking lab attendance : `marka`](#marking-lab-attendance-marka)
+    6. [Marking exercise status : `marke`](#marking-exercise-status-marke)
+    7. [Assigning assessment score: `grade`](#assigning-assessment-score-grade)
     7. [Locating students by name : `find`](#locating-students-by-name-find)
     8. [Sorting students:`sort`](#sorting-the-students-sort)
     9. [Deleting a student : `delete`](#deleting-a-student-delete)
@@ -178,7 +178,7 @@ Examples:
 *  `edit 1 p/91234567 e/johndoe@example.com` Edits the phone number and email address of the 1st student to be `91234567` and `johndoe@example.com` respectively.
 *  `edit 2 n/Betsy Crower t/` Edits the name of the 2nd student to be `Betsy Crower` and clears all existing tags.
 
-### Marking Lab Attendance: `marka`
+### Marking lab attendance: `marka`
 
 Marks the lab attendance of an existing student in LambdaLab.
 
@@ -191,7 +191,7 @@ Format: `marka INDEX l/LABNUMBER`
 Example:
 * `marka 2 l/7` marks Lab 7 of the second student as attended.
 
-### Marking Exercise Status: `marke`
+### Marking exercise status: `marke`
 
 Marks the exercise status of an existing student in LambdaLab.
 
@@ -211,19 +211,19 @@ Format: `marke INDEX ei/EXERCISENUMBER s/STATUSLETTER`
 Example:
 * `marke 2 ei/7 s/d` marks exercise 7 of the 2nd student as done.
 
-### Assigning Assessment Score: `grade`
+### Assigning assessment score: `grade`
 
 Assigns the score for a specific assessment of an existing student in LambdaLab.
 
 Format: `grade INDEX en/EXAMNAME sc/SCORE`
 
-#### Description
-- Edits the student at the specified `INDEX`. The index refers to the index number shown in the displayed student list. The index **must be a positive integer** 1, 2, 3, …​
-- `EXAMNAME` specifies the name of the assessment.
-- `SCORE` specifies the score to assign for that assessment.  
+* Edits the student at the specified `INDEX`. The index refers to the index number shown in the displayed student list. The index **must be a positive integer** 1, 2, 3, …​
+* `EXAMNAME` specifies the name of the assessment.
+* `SCORE` specifies the score to assign for that assessment.  
   It **must be between 0 and the assessment’s maximum achievable score (inclusive)**.
 
-#### Supported Assessments
+Supported Assessments:
+
 | Assessment | Maximum Score |
 |-------------|---------------|
 | `pe1`       | 40            |
@@ -231,7 +231,7 @@ Format: `grade INDEX en/EXAMNAME sc/SCORE`
 | `pe2`       | 40            |
 | `final`     | 100           |
 
-#### Example
+Examples:
 * `grade 2 en/midterm sc/55` sets the **midterm** score of the **2nd student** in the list to **55**.
 
 
@@ -367,7 +367,7 @@ Format: `get-timeslots`
     4 Oct 2025, 10:00 -> 4 Oct 2025, 13:00
     6 Oct 2025, 09:00 -> 6 Oct 2025, 11:30
     ```
-- The UI can also display these ranges in the Timetable window (when available). Note that the Timetable view only shows timeslots between 08:00 and 23:00.
+* The UI can also display these ranges in the Timetable window (when available). Note that the Timetable view only shows timeslots between 08:00 and 23:00.
   ![Timetable window](images/timetableWindow.png)
 
 

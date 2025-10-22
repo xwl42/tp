@@ -11,6 +11,19 @@ Command Line Interface (CLI) while still having an intuitive Graphical User Inte
 LambdaLab can help you track student information, lab attendance, and exercise submissions even faster than traditional 
 spreadsheets or GUI apps.
 
+## About this guide
+
+This guide is written for CS2030S teaching assistants who need to maintain student records, mark lab attendance and exercises,
+and manage consultation timeslots. Assumed prior knowledge:
+- Comfortable using a command terminal on Windows / macOS / Linux.
+- Basic familiarity with editing plain text (copy/paste commands).
+- Understands core CS2030S concepts (labs, exercises, student identifiers).
+
+How to use this guide:
+- Quick start: run the application and try a few example commands.
+- Features: detailed command syntax, examples, and expected output.
+- Troubleshooting: common errors and remedies are highlighted near each command.
+
 ## Table of Contents
 
 1. [Quick start](#quick-start)
@@ -66,6 +79,20 @@ spreadsheets or GUI apps.
    A GUI similar to the below should appear in a few seconds. Note that the app contains some sample data and the layout 
    is explained in coloured boxes.<br>
    ![Ui](images/Ui.png)
+
+### Quick CLI tutorial
+- Click the command input box (bottom of the UI), type a command exactly as shown (prefixes like `n/`, `i/`, `ts/` are required), then press Enter.
+- Typical response types:
+  - Success message with brief summary.
+  - List output (e.g., `list`, `find`) showing matching student entries.
+  - Error message starting with `Invalid command format!` or a validation message — read it carefully and retry.
+- Example sequence:
+  1. `add i/A1234567X n/John Doe p/98765432 e/john@example.com g/johndoe`
+     - Expected output: "New student added: John Doe"
+  2. `list`
+     - Expected output: numbered list including "John Doe".
+  3. `undo`
+     - Expected: restores previous state, shows "Undo successful" or a message indicating nothing to undo.
 
 5. Type your command in the command box and press Enter to execute it. <br>
    Some example commands you can try:

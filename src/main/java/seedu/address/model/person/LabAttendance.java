@@ -11,6 +11,11 @@ public interface LabAttendance {
     public void markAsAttended();
 
     /**
+     * Marks this lab as not attended.
+     */
+    public void markAsAbsent();
+
+    /**
      * Returns whether this lab has been marked as attended.
      *
      * @return {@code true} if the lab has been marked as attended;

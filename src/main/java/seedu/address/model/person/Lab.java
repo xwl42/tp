@@ -22,9 +22,17 @@ public class Lab implements LabAttendance {
     @Override
     public void markAsAttended() throws IllegalStateException {
         if (isAttended) {
-            throw new IllegalStateException("Lab Attendance has already been marked");
+            throw new IllegalStateException("Lab Attendance has already been marked as attended");
         }
         isAttended = true;
+    }
+
+    @Override
+    public void markAsAbsent() {
+        if (!isAttended) {
+            throw new IllegalStateException("Lab Attendance has already been marked as not attended");
+        }
+        isAttended = false;
     }
 
     @Override

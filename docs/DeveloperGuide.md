@@ -147,6 +147,9 @@ The `Storage` component,
 * can save address book data, user preferences, and timeslot data in JSON format and read them back into model objects.
 * inherits from `AddressBookStorage`, `UserPrefsStorage`, and `TimeslotsStorage`, which means it can be treated as either one (if only the functionality of only one is needed).
 * depends on some classes in the Model component (because the Storage component's job is to save/retrieve objects that belong to the Model)
+* delegates JSON conversion to classes such as `JsonSerializableAddressBook` / `JsonAdaptedPerson` for the address book and `JsonSerializableTimeslots` / `JsonAdaptedTimeslot` for timeslots.
+* provides concrete implementations like `JsonAddressBookStorage`, `JsonUserPrefsStorage`, and `JsonTimeslotsStorage` which read/write files on disk.
+* `StorageManager` composes the individual storage providers (address book, prefs, timeslots) and exposes unified operations so `MainApp`, `Logic`, and other components access persistence through a single entry point. The timeslots file location is configurable via `UserPrefs` and the application will create or populate the file with sample timeslots when none is present.
 
 ### Common classes
 

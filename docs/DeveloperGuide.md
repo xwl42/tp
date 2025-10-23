@@ -4,7 +4,7 @@ title: "Developer Guide"
 pageNav: 3
 ---
 
-# AB-3 Developer Guide
+# LambdaLab Developer Guide
 
 <!-- * Table of Contents -->
 <page-nav-print />
@@ -149,7 +149,12 @@ The `Storage` component,
 * depends on some classes in the Model component (because the Storage component's job is to save/retrieve objects that belong to the Model)
 * delegates JSON conversion to classes such as `JsonSerializableAddressBook` / `JsonAdaptedPerson` for the address book and `JsonSerializableTimeslots` / `JsonAdaptedTimeslot` for timeslots.
 * provides concrete implementations like `JsonAddressBookStorage`, `JsonUserPrefsStorage`, and `JsonTimeslotsStorage` which read/write files on disk.
-* `StorageManager` composes the individual storage providers (address book, prefs, timeslots) and exposes unified operations so `MainApp`, `Logic`, and other components access persistence through a single entry point. The timeslots file location is configurable via `UserPrefs` and the application will create or populate the file with sample timeslots when none is present.
+
+The `StorageManager` class,
+* composes the individual storage providers (address book, prefs, timeslots) 
+* exposes unified operations so `MainApp`, `Logic`, and other components access persistence through a single entry point
+
+The timeslots file location is configurable via `UserPrefs` and the application will create or populate the file with sample timeslots when none is present.
 
 ### Common classes
 

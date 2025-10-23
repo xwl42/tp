@@ -360,7 +360,7 @@
 /* Base Status Label - for labs, exercises, exams */
 .status-label {
     -fx-text-fill: white;
-    -fx-padding: 2 10 2 10;
+    -fx-padding: 5 10 5 10;
     -fx-background-insets: 2 2 2 2;  /* adds margin between labels */
     -fx-border-radius: 3;
     -fx-background-radius: 3;

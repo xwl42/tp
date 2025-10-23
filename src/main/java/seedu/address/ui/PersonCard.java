@@ -101,10 +101,12 @@ public class PersonCard extends UiPart<Region> {
 
             // Apply styling based on whether the exam has been graded (score != -1)
             double score = exam.getScore();
-            if (score != -1.0) {
-                gradeLabel.getStyleClass().addAll("status-label", "exam-graded");
-            } else {
+            if (score == -1.0) {
                 gradeLabel.getStyleClass().addAll("status-label", "exam-not-graded");
+            } else if (score >= 50.0){
+                gradeLabel.getStyleClass().addAll("status-label", "exam-pass");
+            } else {
+                gradeLabel.getStyleClass().addAll("status-label", "exam-fail");
             }
 
             grades.getChildren().add(gradeLabel);

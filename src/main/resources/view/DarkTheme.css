@@ -369,7 +369,7 @@
 }
 
 
-.lab-attended, .exercise-done, .exam-graded {
+.lab-attended, .exercise-done, .exam-pass {
     -fx-text-fill: white;
     -fx-background-color: #2ecc71;  /* Green */
 }
@@ -380,7 +380,7 @@
 }
 
 /* Not Done Exercise - Red */
-.exercise-overdue {
+.exercise-overdue, .exam-fail {
     -fx-text-fill: white;
     -fx-background-color: #e74c3c;  /* Black */
 }

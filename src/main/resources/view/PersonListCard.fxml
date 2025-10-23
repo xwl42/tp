@@ -32,10 +32,10 @@
       <Label fx:id="studentId" styleClass="cell_small_label" text="\$studentId" />
       <Label fx:id="phone" styleClass="cell_small_label" text="\$phone" />
       <Label fx:id="email" styleClass="cell_small_label" text="\$email" />
-      <FlowPane fx:id="exerciseStatus"/>
       <Label fx:id="githubUsername" styleClass="cell_small_label" text="\$githubUsername" />
+      <FlowPane fx:id="exerciseStatus"/>
       <FlowPane fx:id="labAttendance"/>
-      <Label fx:id="gradeMap" styleClass="cell_small_label" text="\$gradeMap" />
+      <FlowPane fx:id="grades"/>
     </VBox>
   </GridPane>
 </HBox>

@@ -1,6 +1,7 @@
 package seedu.address.ui;
 
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 
 import javafx.fxml.FXML;
@@ -9,6 +10,8 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import seedu.address.model.person.ExerciseTracker;
+import seedu.address.model.person.GradeMap;
+import seedu.address.model.person.Gradeable;
 import seedu.address.model.person.LabAttendance;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Status;
@@ -51,7 +54,7 @@ public class PersonCard extends UiPart<Region> {
     @FXML
     private FlowPane labAttendance;
     @FXML
-    private Label gradeMap;
+    private FlowPane grades;
 
     /**
      * Creates a {@code PersonCode} with the given {@code Person} and index to display.
@@ -90,6 +93,21 @@ public class PersonCard extends UiPart<Region> {
             labLabel.getStyleClass().add(lab.isAttended() ? "lab-attended" : "lab-not-attended");
             labAttendance.getChildren().add(labLabel);
         }
-        gradeMap.setText(person.getGradeMap().toString());
+
+        HashMap<String, Gradeable> gradeableMap = person.getGradeMap().getGradeableHashMap();
+        for (String examName : GradeMap.VALID_EXAM_NAMES) {
+            Gradeable exam = gradeableMap.get(examName);
+            Label gradeLabel = new Label(examName.toUpperCase());
+
+            // Apply styling based on whether the exam has been graded (score != -1)
+            double score = exam.getScore();
+            if (score != -1.0) {
+                gradeLabel.getStyleClass().addAll("status-label", "exam-graded");
+            } else {
+                gradeLabel.getStyleClass().addAll("status-label", "exam-not-graded");
+            }
+
+            grades.getChildren().add(gradeLabel);
+        }
     }
 }

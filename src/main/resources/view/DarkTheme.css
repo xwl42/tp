@@ -361,32 +361,20 @@
 .status-label {
     -fx-text-fill: white;
     -fx-padding: 2 10 2 10;
-    -fx-background-insets: 0 2 0 2;  /* adds margin between labels */
+    -fx-background-insets: 2 2 2 2;  /* adds margin between labels */
     -fx-border-radius: 3;
     -fx-background-radius: 3;
     -fx-font-size: 10;
     -fx-font-weight: bold;
 }
 
-/* Attended Lab - Green */
-.lab-attended {
+
+.lab-attended, .exercise-done, .exam-graded {
     -fx-text-fill: white;
     -fx-background-color: #2ecc71;  /* Green */
 }
 
-/* Not Attended Lab - Black  */
-.lab-not-attended {
-    -fx-text-fill: white;
-    -fx-background-color: #454545;  /* Black */
-}
-/* Exercise Done - Green */
-.exercise-done {
-    -fx-text-fill: white;
-    -fx-background-color: #2ecc71;  /* Green */
-}
-
-/* Not Done Exercise - Black */
-.exercise-not-done {
+.lab-not-attended, .exercise-not-done, .exam-not-graded {
     -fx-text-fill: white;
     -fx-background-color: #454545;  /* Black */
 }

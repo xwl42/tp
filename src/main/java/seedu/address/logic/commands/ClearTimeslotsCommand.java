@@ -20,6 +20,7 @@ public class ClearTimeslotsCommand extends Command {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
+        model.saveAddressBook();
         model.clearTimeslots();
         return new CommandResult(MESSAGE_SUCCESS);
     }

@@ -115,7 +115,7 @@ How to use this guide:
 
 ## Features
 
-<box type="info" seamless>
+<box type="info">
 
 **Notes about the command format:**<br>
 
@@ -298,8 +298,8 @@ Format: `sort c/SORTCRITERION`
 </box>
 
 Examples:
-`sort c/name` sorts the students by their name.
-`sort c/lab` sorts the students by their lab attendance rate.
+*`sort c/name` sorts the students by their name.
+*`sort c/lab` sorts the students by their lab attendance rate.
 
 ### Deleting a student : `delete`
 

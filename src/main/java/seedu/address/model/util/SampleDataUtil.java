@@ -28,32 +28,32 @@ public class SampleDataUtil {
         return new Person[] {
             new Person(new StudentId("A1231230B"), new Name("Alex Yeoh"), new Phone("87438807"),
                     new Email("alexyeoh@example.com"),
-                    getTagSet("modelStudent"),
+                    getTagSet("friends"),
                     new GithubUsername("AlexYeoh"),
                     new ExerciseTracker(), new LabList(), new GradeMap()),
             new Person(new StudentId("A1231231B"), new Name("Bernice Yu"), new Phone("99272758"),
                     new Email("berniceyu@example.com"),
-                    getTagSet("HasJavaExperience"),
+                    getTagSet("colleagues", "friends"),
                     new GithubUsername("BerniceYu"),
                     new ExerciseTracker(), new LabList(), new GradeMap()),
             new Person(new StudentId("A1231232B"), new Name("Charlotte Oliveiro"), new Phone("93210283"),
                     new Email("charlotte@example.com"),
-                    getTagSet("StrugglingWithPECS"),
+                    getTagSet("neighbours"),
                     new GithubUsername("CharlotteOliveiro"),
                     new ExerciseTracker(), new LabList(), new GradeMap()),
             new Person(new StudentId("A1231233B"), new Name("David Li"), new Phone("91031282"),
                     new Email("lidavid@example.com"),
-                    getTagSet("HasJavaExperience"),
+                    getTagSet("family"),
                     new GithubUsername("DavidLi"),
                     new ExerciseTracker(), new LabList(), new GradeMap()),
             new Person(new StudentId("A1231234B"), new Name("Irfan Ibrahim"), new Phone("92492021"),
                     new Email("irfan@example.com"),
-                    getTagSet("NoJavaExperience"),
+                    getTagSet("classmates"),
                     new GithubUsername("IrfanIbrahim"),
                     new ExerciseTracker(), new LabList(), new GradeMap()),
             new Person(new StudentId("A1231235B"), new Name("Roy Balakrishnan"), new Phone("92624417"),
                     new Email("royb@example.com"),
-                    getTagSet("NoJavaExperience"),
+                    getTagSet("colleagues"),
                     new GithubUsername("RoyBalakrishnan"),
                     new ExerciseTracker(), new LabList(), new GradeMap())
         };
@@ -81,16 +81,44 @@ public class SampleDataUtil {
      */
     public static Timeslots getSampleTimeslots() {
         Timeslots sample = new Timeslots();
-        // Sample timeslots (ISO_LOCAL_DATE_TIME)
-        // 2023-10-01 09:00 - 10:00
-        sample.addTimeslot(new Timeslot(LocalDateTime.of(2023, 10, 1, 9, 0),
-                LocalDateTime.of(2023, 10, 1, 10, 0)));
-        // 2023-10-01 09:30 - 11:00 (overlaps previous)
-        sample.addTimeslot(new Timeslot(LocalDateTime.of(2023, 10, 1, 9, 30),
-                LocalDateTime.of(2023, 10, 1, 11, 0)));
-        // 2023-10-02 14:00 - 15:00 (separate)
-        sample.addTimeslot(new Timeslot(LocalDateTime.of(2023, 10, 2, 14, 0),
-                LocalDateTime.of(2023, 10, 2, 15, 0)));
+        // Week: Monday 6 Oct 2025 -> Sunday 12 Oct 2025
+
+        // Monday: overlapping morning slots and an afternoon slot
+        sample.addTimeslot(new Timeslot(LocalDateTime.of(2025, 10, 6, 9, 0),
+                LocalDateTime.of(2025, 10, 6, 10, 0)));
+        sample.addTimeslot(new Timeslot(LocalDateTime.of(2025, 10, 6, 9, 30),
+                LocalDateTime.of(2025, 10, 6, 11, 0)));
+        sample.addTimeslot(new Timeslot(LocalDateTime.of(2025, 10, 6, 14, 0),
+                LocalDateTime.of(2025, 10, 6, 15, 30)));
+
+        // Tuesday: two separate slots
+        sample.addTimeslot(new Timeslot(LocalDateTime.of(2025, 10, 7, 9, 0),
+                LocalDateTime.of(2025, 10, 7, 10, 0)));
+        sample.addTimeslot(new Timeslot(LocalDateTime.of(2025, 10, 7, 13, 0),
+                LocalDateTime.of(2025, 10, 7, 14, 30)));
+
+        // Wednesday: single midday slot
+        sample.addTimeslot(new Timeslot(LocalDateTime.of(2025, 10, 8, 12, 0),
+                LocalDateTime.of(2025, 10, 8, 13, 0)));
+
+        // Thursday: morning and evening slot
+        sample.addTimeslot(new Timeslot(LocalDateTime.of(2025, 10, 9, 8, 30),
+                LocalDateTime.of(2025, 10, 9, 10, 0)));
+        sample.addTimeslot(new Timeslot(LocalDateTime.of(2025, 10, 9, 18, 0),
+                LocalDateTime.of(2025, 10, 9, 19, 0)));
+
+        // Friday: longer afternoon slot
+        sample.addTimeslot(new Timeslot(LocalDateTime.of(2025, 10, 10, 15, 0),
+                LocalDateTime.of(2025, 10, 10, 17, 0)));
+
+        // Saturday: morning workshop slot
+        sample.addTimeslot(new Timeslot(LocalDateTime.of(2025, 10, 11, 10, 0),
+                LocalDateTime.of(2025, 10, 11, 12, 0)));
+
+        // Sunday: block spanning morning into early afternoon
+        sample.addTimeslot(new Timeslot(LocalDateTime.of(2025, 10, 12, 9, 0),
+                LocalDateTime.of(2025, 10, 12, 13, 0)));
+
         return sample;
     }
 }

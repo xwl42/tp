@@ -1,14 +1,17 @@
 package seedu.address.ui;
 
 import java.util.Comparator;
+import java.util.List;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
+import seedu.address.model.person.ExerciseTracker;
 import seedu.address.model.person.LabAttendance;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.Status;
 
 /**
  * An UI component that displays information of a {@code Person}.
@@ -42,7 +45,7 @@ public class PersonCard extends UiPart<Region> {
     @FXML
     private FlowPane tags;
     @FXML
-    private Label exerciseStatus;
+    private FlowPane exerciseStatus;
     @FXML
     private Label githubUsername;
     @FXML
@@ -61,16 +64,30 @@ public class PersonCard extends UiPart<Region> {
         name.setText(person.getName().fullName);
         phone.setText(person.getPhone().value);
         email.setText(person.getEmail().value);
-        exerciseStatus.setText(person.getExerciseTracker().toString());
+        List<Status> exerciseStatuses = person.getExerciseTracker().getStatuses();
+        for (int i = 0; i < exerciseStatuses.size(); i++) {
+            Label exerciseLabel = new Label("EX" + i);
+            exerciseLabel.getStyleClass().add("status-label");
+            if (exerciseStatuses.get(i).equals(Status.NOT_DONE)) {
+                exerciseLabel.getStyleClass().add("exercise-not-done");
+            } else if (exerciseStatuses.get(i).equals(Status.DONE)) {
+                exerciseLabel.getStyleClass().add("exercise-done");
+            } else if (exerciseStatuses.get(i).equals(Status.OVERDUE)) {
+                exerciseLabel.getStyleClass().add("exercise-overdue");
+            }
+            exerciseStatus.getChildren().add(exerciseLabel);
+        }
+
         person.getTags().stream()
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
         githubUsername.setText(person.getGithubUsername().value);
         LabAttendance[] labs = person.getLabAttendanceList().getLabs();
-        for (int i = 0; i < labs.length; i++) {
-            Label labLabel = new Label("L" + labs[i].getLabNumber());
+
+        for (LabAttendance lab : labs) {
+            Label labLabel = new Label("L" + lab.getLabNumber());
             labLabel.getStyleClass().add("status-label");
-            labLabel.getStyleClass().add(labs[i].isAttended() ? "lab-attended" : "lab-not-attended");
+            labLabel.getStyleClass().add(lab.isAttended() ? "lab-attended" : "lab-not-attended");
             labAttendance.getChildren().add(labLabel);
         }
         gradeMap.setText(person.getGradeMap().toString());

@@ -374,8 +374,25 @@
     -fx-background-color: #2ecc71;  /* Green */
 }
 
-/* Not Attended Lab -  */
+/* Not Attended Lab - Black  */
 .lab-not-attended {
     -fx-text-fill: white;
     -fx-background-color: #454545;  /* Black */
+}
+/* Exercise Done - Green */
+.exercise-done {
+    -fx-text-fill: white;
+    -fx-background-color: #2ecc71;  /* Green */
+}
+
+/* Not Done Exercise - Black */
+.exercise-not-done {
+    -fx-text-fill: white;
+    -fx-background-color: #454545;  /* Black */
+}
+
+/* Not Done Exercise - Red */
+.exercise-overdue {
+    -fx-text-fill: white;
+    -fx-background-color: #e74c3c;  /* Black */
 }

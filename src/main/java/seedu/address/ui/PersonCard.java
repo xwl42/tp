@@ -7,6 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
+import seedu.address.model.person.LabAttendance;
 import seedu.address.model.person.Person;
 
 /**
@@ -45,7 +46,7 @@ public class PersonCard extends UiPart<Region> {
     @FXML
     private Label githubUsername;
     @FXML
-    private Label labAttendanceList;
+    private FlowPane labAttendance;
     @FXML
     private Label gradeMap;
 
@@ -65,7 +66,14 @@ public class PersonCard extends UiPart<Region> {
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
         githubUsername.setText(person.getGithubUsername().value);
-        labAttendanceList.setText(person.getLabAttendanceList().toString());
+//        labAttendanceList.setText(person.getLabAttendanceList().toString());
+        LabAttendance[] labs = person.getLabAttendanceList().getLabs();
+        for (int i = 0; i < labs.length; i++) {
+            Label labLabel = new Label("L" + (i + 1));
+            labLabel.getStyleClass().add("status-label");
+            labLabel.getStyleClass().add(labs[i].isAttended() ? "lab-attended" : "lab-not-attended");
+            labAttendance.getChildren().add(labLabel);
+        }
         gradeMap.setText(person.getGradeMap().toString());
     }
 }

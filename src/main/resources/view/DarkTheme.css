@@ -350,3 +350,32 @@
     -fx-background-radius: 2;
     -fx-font-size: 11;
 }
+
+/* Lab Attendance FlowPane */
+#labAttendanceFlowPane {
+    -fx-hgap: 5;
+    -fx-vgap: 2;
+}
+
+/* Base Status Label - for labs, exercises, exams */
+.status-label {
+    -fx-text-fill: white;
+    -fx-padding: 2 10 2 10;
+    -fx-background-insets: 0 2 0 2;  /* adds margin between labels */
+    -fx-border-radius: 3;
+    -fx-background-radius: 3;
+    -fx-font-size: 10;
+    -fx-font-weight: bold;
+}
+
+/* Attended Lab - Green */
+.lab-attended {
+    -fx-text-fill: white;
+    -fx-background-color: #2ecc71;  /* Green */
+}
+
+/* Not Attended Lab -  */
+.lab-not-attended {
+    -fx-text-fill: white;
+    -fx-background-color: #454545;  /* Black */
+}

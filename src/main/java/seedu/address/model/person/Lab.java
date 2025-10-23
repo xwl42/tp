@@ -4,6 +4,7 @@ package seedu.address.model.person;
  * Represents a student's attendance status for a single lab session.
  */
 public class Lab implements LabAttendance {
+    public static final String MESSAGE_CONSTRAINTS = "Lab status must be y or n";
     private final int labNumber;
     private boolean isAttended;
 

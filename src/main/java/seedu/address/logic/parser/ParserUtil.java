@@ -186,6 +186,15 @@ public class ParserUtil {
         }
     }
 
+    public static boolean parseLabStatus(String labStatus) throws ParseException {
+        switch (labStatus.toLowerCase()) {
+        case "y": return true;
+        case "n": return false;
+        default:
+            throw new ParseException(Lab.MESSAGE_CONSTRAINTS);
+        }
+    }
+
     /**
      * Parses a {@code String labAttendanceListString} into an {@code LabAttendanceList}.
      * Leading and trailing whitespaces will be trimmed.

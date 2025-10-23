@@ -81,43 +81,43 @@ public class SampleDataUtil {
      */
     public static Timeslots getSampleTimeslots() {
         Timeslots sample = new Timeslots();
-        // Week: Monday 4 Oct 2025 -> Sunday 10 Oct 2025
+        // Week: Monday 6 Oct 2025 -> Sunday 12 Oct 2025
 
         // Monday: overlapping morning slots and an afternoon slot
-        sample.addTimeslot(new Timeslot(LocalDateTime.of(2025, 10, 4, 9, 0),
-                LocalDateTime.of(2025, 10, 4, 10, 0)));
-        sample.addTimeslot(new Timeslot(LocalDateTime.of(2025, 10, 4, 9, 30),
-                LocalDateTime.of(2025, 10, 4, 11, 0)));
-        sample.addTimeslot(new Timeslot(LocalDateTime.of(2025, 10, 4, 14, 0),
-                LocalDateTime.of(2025, 10, 4, 15, 30)));
+        sample.addTimeslot(new Timeslot(LocalDateTime.of(2025, 10, 6, 9, 0),
+                LocalDateTime.of(2025, 10, 6, 10, 0)));
+        sample.addTimeslot(new Timeslot(LocalDateTime.of(2025, 10, 6, 9, 30),
+                LocalDateTime.of(2025, 10, 6, 11, 0)));
+        sample.addTimeslot(new Timeslot(LocalDateTime.of(2025, 10, 6, 14, 0),
+                LocalDateTime.of(2025, 10, 6, 15, 30)));
 
         // Tuesday: two separate slots
-        sample.addTimeslot(new Timeslot(LocalDateTime.of(2025, 10, 5, 9, 0),
-                LocalDateTime.of(2025, 10, 5, 10, 0)));
-        sample.addTimeslot(new Timeslot(LocalDateTime.of(2025, 10, 5, 13, 0),
-                LocalDateTime.of(2025, 10, 5, 14, 30)));
+        sample.addTimeslot(new Timeslot(LocalDateTime.of(2025, 10, 7, 9, 0),
+                LocalDateTime.of(2025, 10, 7, 10, 0)));
+        sample.addTimeslot(new Timeslot(LocalDateTime.of(2025, 10, 7, 13, 0),
+                LocalDateTime.of(2025, 10, 7, 14, 30)));
 
         // Wednesday: single midday slot
-        sample.addTimeslot(new Timeslot(LocalDateTime.of(2025, 10, 6, 12, 0),
-                LocalDateTime.of(2025, 10, 6, 13, 0)));
+        sample.addTimeslot(new Timeslot(LocalDateTime.of(2025, 10, 8, 12, 0),
+                LocalDateTime.of(2025, 10, 8, 13, 0)));
 
         // Thursday: morning and evening slot
-        sample.addTimeslot(new Timeslot(LocalDateTime.of(2025, 10, 7, 8, 30),
-                LocalDateTime.of(2025, 10, 7, 10, 0)));
-        sample.addTimeslot(new Timeslot(LocalDateTime.of(2025, 10, 7, 18, 0),
-                LocalDateTime.of(2025, 10, 7, 19, 0)));
+        sample.addTimeslot(new Timeslot(LocalDateTime.of(2025, 10, 9, 8, 30),
+                LocalDateTime.of(2025, 10, 9, 10, 0)));
+        sample.addTimeslot(new Timeslot(LocalDateTime.of(2025, 10, 9, 18, 0),
+                LocalDateTime.of(2025, 10, 9, 19, 0)));
 
         // Friday: longer afternoon slot
-        sample.addTimeslot(new Timeslot(LocalDateTime.of(2025, 10, 8, 15, 0),
-                LocalDateTime.of(2025, 10, 8, 17, 0)));
+        sample.addTimeslot(new Timeslot(LocalDateTime.of(2025, 10, 10, 15, 0),
+                LocalDateTime.of(2025, 10, 10, 17, 0)));
 
         // Saturday: morning workshop slot
-        sample.addTimeslot(new Timeslot(LocalDateTime.of(2025, 10, 9, 10, 0),
-                LocalDateTime.of(2025, 10, 9, 12, 0)));
+        sample.addTimeslot(new Timeslot(LocalDateTime.of(2025, 10, 11, 10, 0),
+                LocalDateTime.of(2025, 10, 11, 12, 0)));
 
         // Sunday: block spanning morning into early afternoon
-        sample.addTimeslot(new Timeslot(LocalDateTime.of(2025, 10, 10, 9, 0),
-                LocalDateTime.of(2025, 10, 10, 13, 0)));
+        sample.addTimeslot(new Timeslot(LocalDateTime.of(2025, 10, 12, 9, 0),
+                LocalDateTime.of(2025, 10, 12, 13, 0)));
 
         return sample;
     }

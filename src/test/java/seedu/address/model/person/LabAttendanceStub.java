@@ -18,6 +18,11 @@ public class LabAttendanceStub implements LabAttendance {
     }
 
     @Override
+    public int getLabNumber() {
+        return 0;
+    }
+
+    @Override
     public String toString() {
         return "L" + (isAttended ? "Y" : "N");
     }

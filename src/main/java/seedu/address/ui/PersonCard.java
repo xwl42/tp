@@ -66,10 +66,9 @@ public class PersonCard extends UiPart<Region> {
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
         githubUsername.setText(person.getGithubUsername().value);
-//        labAttendanceList.setText(person.getLabAttendanceList().toString());
         LabAttendance[] labs = person.getLabAttendanceList().getLabs();
         for (int i = 0; i < labs.length; i++) {
-            Label labLabel = new Label("L" + (i + 1));
+            Label labLabel = new Label("L" + labs[i].getLabNumber());
             labLabel.getStyleClass().add("status-label");
             labLabel.getStyleClass().add(labs[i].isAttended() ? "lab-attended" : "lab-not-attended");
             labAttendance.getChildren().add(labLabel);

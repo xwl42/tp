@@ -263,6 +263,10 @@ _{more aspects and alternatives to be added}_
 
 _{Explain here how the data archiving feature will be implemented}_
 
+### Find Feature:
+
+<puml src="diagrams/findCommand/find.puml" width="250" />
+
 
 --------------------------------------------------------------------------------------------------------------------
 

@@ -155,7 +155,7 @@ Adds a student to LambdaLab.
 
 Format: `add i/STUDENTID n/NAME p/PHONE e/EMAIL g/GITHUB_USERNAME [t/TAG]…​`
 
-<box type="tip" seamless>
+<box type="tip">
 
 **Tip:** A student can have zero or more tags.  
 A tag must be alphanumeric with no spaces or special characters.
@@ -166,7 +166,7 @@ Examples:
 * Optional fields included: `add i/A1234567X n/John Doe p/98765432 e/johnd@example.com g/JohnDoe t/modelStudent`
 * Fields in different order: `add g/JohnDoe i/A1234567X  p/98765432 t/modelStudent n/John Doe e/johnd@example.com`
 
-<box type="warning" seamless>
+<box type="warning">
 
 Duplicate Identifier (Student ID) will cause the below error:  
   `This student already exists in LambdaLab`
@@ -190,7 +190,7 @@ The index **must be a positive integer** 1, 2, 3, …​
 * You must provide at least 1 of the optional fields.
 * Existing values will be updated to the input values.
   
-<box type="warning" seamless>
+<box type="warning">
 
 **Caution:** 
 When editing tags, the existing tags of the student will be removed 
@@ -292,7 +292,7 @@ Format: `sort c/SORTCRITERION`
   * `lab` sorts students by their Lab Attendance Rate (Highest to lowest)
   * `ex` sorts students by their progress in their exercises (Highest to lowest)
 
-<box type="tip" seamless>
+<box type="tip">
 
 **Tip:** The criterion is case-insensitive!
 </box>
@@ -313,7 +313,7 @@ Examples:
 * `list` followed by `delete 2` deletes the 2nd student in the LambdaLab.
 * `find Betsy` followed by `delete 1` deletes the 1st student in the results of the `find` command.
 
-<box type="warning" seamless>
+<box type="warning">
 
 Missing fields or a non‑positive index will cause the following error:  
   `Invalid command format! 
@@ -328,7 +328,7 @@ Clears **all** entries from LambdaLab, leaving it completely empty.
 
 Format: `clear`
 
-<box type="warning" seamless>
+<box type="warning">
 
 **Caution:**
 This command will remove **all** entries from LambdaLab. If mistakenly performed, type `undo` **immediately**
@@ -345,14 +345,14 @@ Format: `undo`
 * Commands that do not modify data cannot be undone (e.g., `help`, `list`, `find`, `exit`).  
 * `undo` only reverses the very last data‑modifying command. If there is no command to undo, an error message will be displayed.
 
-<box type="warning" seamless>
+<box type="warning">
 
 **Caution:**
 This command only undoes the most recent data-modifying command. You cannot undo multiple data-modifying commands or skip 
 back to earlier changes. 
 </box>
 
-<box type="tip" seamless>
+<box type="tip">
 
 **Tip:** Use `undo` immediately after making a mistake to quickly restore your previous data state.
 </box>
@@ -404,7 +404,7 @@ Removes all stored timeslots (does not affect student records).
 
 Format: `clear-timeslots`
 
-<box type="warning" seamless>
+<box type="warning">
 
 **Caution:**
 This will permanently remove all stored timeslots. There is no multi-step undo for timeslot clearing;
@@ -425,7 +425,7 @@ LambdaLab data are saved in the hard disk automatically after any command that c
 
 LambdaLab data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.
 
-<box type="warning" seamless>
+<box type="warning">
 
 **Caution:**
 If your changes to the data file makes its format invalid, LambdaLab will discard all data and start with an empty data file at the next run.  Hence, it is recommended to take a backup of the file before editing it.<br>
@@ -451,7 +451,7 @@ Furthermore, certain edits can cause the LambdaLab to behave in unexpected ways 
     - On your new computer, navigate to `[JAR file location]/data/`
     - Replace the empty `addressbook.json` file with your copied file
 4. Restart LambdaLab on your new computer to see all your student data
-<box type="tip" seamless>
+<box type="tip">
 **Tip:** You can also backup your data regularly by copying the `addressbook.json` file to a secure location (e.g., cloud storage, USB drive).
 </box>
 

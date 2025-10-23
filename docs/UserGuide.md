@@ -115,7 +115,7 @@ How to use this guide:
 
 ## Features
 
-<box type="info" seamless>
+<box type="info">
 
 **Notes about the command format:**<br>
 

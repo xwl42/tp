@@ -165,99 +165,173 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 ## **Implementation**
 
 This section describes some noteworthy details on how certain features are implemented.
+### Undo feature
 
-### \[Proposed\] Undo/redo feature
+#### Implementation
 
-#### Proposed Implementation
+The undo mechanism is facilitated by `ModelManager`. It stores a single previous state of the address book and 
+timeslots, stored internally as `previousAddressBookState` and `previousTimeslotsState`. Additionally, it implements 
+the following operations:
 
-The proposed undo/redo mechanism is facilitated by `VersionedAddressBook`. It extends `AddressBook` with an undo/redo history, stored internally as an `addressBookStateList` and `currentStatePointer`. Additionally, it implements the following operations:
+* `Model#saveAddressBook()` — Saves the current address book and timeslots state before modification.
+* `Model#undoAddressBook()` — Restores the previous address book and timeslots state.
+* `Model#canUndoAddressBook()` — Checks if there is a previous state available to undo to.
 
-* `VersionedAddressBook#commit()` — Saves the current address book state in its history.
-* `VersionedAddressBook#undo()` — Restores the previous address book state from its history.
-* `VersionedAddressBook#redo()` — Restores a previously undone address book state from its history.
+These operations are exposed in the `Model` interface as `Model#saveAddressBook()`, `Model#undoAddressBook()` and 
+`Model#canUndoAddressBook()` respectively.
 
-These operations are exposed in the `Model` interface as `Model#commitAddressBook()`, `Model#undoAddressBook()` and `Model#redoAddressBook()` respectively.
+Given below is an example usage scenario and how the undo mechanism behaves at each step.
 
-Given below is an example usage scenario and how the undo/redo mechanism behaves at each step.
+**Step 1.** The user launches the application for the first time. The `ModelManager` will be initialized with the 
+initial address book and timeslots state, with `previousAddressBookState` and `previousTimeslotsState` set to `null` 
+(no previous state to undo to).
 
-Step 1. The user launches the application for the first time. The `VersionedAddressBook` will be initialized with the initial address book state, and the `currentStatePointer` pointing to that single address book state.
+![UndoState0](images/UndoState0.png)
 
-<puml src="diagrams/UndoRedoState0.puml" alt="UndoRedoState0" />
+**Step 2.** The user executes `delete 5` command to delete the 5th person in the address book. The `delete` command 
+calls `Model#saveAddressBook()` before deleting, saving the current state. After the deletion, the current state is 
+modified but the previous state preserves the state before deletion.
 
-Step 2. The user executes `delete 5` command to delete the 5th person in the address book. The `delete` command calls `Model#commitAddressBook()`, causing the modified state of the address book after the `delete 5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is shifted to the newly inserted address book state.
-
-<puml src="diagrams/UndoRedoState1.puml" alt="UndoRedoState1" />
-
-Step 3. The user executes `add n/David …​` to add a new person. The `add` command also calls `Model#commitAddressBook()`, causing another modified address book state to be saved into the `addressBookStateList`.
-
-<puml src="diagrams/UndoRedoState2.puml" alt="UndoRedoState2" />
+![UndoState1](images/UndoState1.png)
 
 <box type="info" seamless>
 
-**Note:** If a command fails its execution, it will not call `Model#commitAddressBook()`, so the address book state will not be saved into the `addressBookStateList`.
+**Note:** If a command fails its execution, it will not call `Model#saveAddressBook()`, so the previous state will 
+not be updated.
 
 </box>
 
-Step 4. The user now decides that adding the person was a mistake, and decides to undo that action by executing the `undo` command. The `undo` command will call `Model#undoAddressBook()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous address book state, and restores the address book to that state.
+**Step 3.** The user executes `add n/John Doe …​` to add a new student. The `add` command also calls 
+`Model#saveAddressBook()` before adding, which **replaces** the previous state with the current state (ab1), 
+then adds the new student.
 
-<puml src="diagrams/UndoRedoState3.puml" alt="UndoRedoState3" />
+![UndoState2](images/UndoState2.png)
 
+**Step 4.** The user now decides that adding the student was a mistake, and decides to undo that action by 
+executing the `undo` command. The `undo` command will call `Model#undoAddressBook()`, which restores the address book 
+to the previous state (ab1) and sets both `previousAddressBookState` and `previousTimeslotsState` to `null`.
+
+![UndoState3](images/UndoState3.png)
 
 <box type="info" seamless>
 
-**Note:** If the `currentStatePointer` is at index 0, pointing to the initial AddressBook state, then there are no previous AddressBook states to restore. The `undo` command uses `Model#canUndoAddressBook()` to check if this is the case. If so, it will return an error to the user rather
-than attempting to perform the undo.
+**Note:** If `previousAddressBookState` is `null`, then there is no previous state to restore. The `undo` command 
+uses `Model#canUndoAddressBook()` to check if this is the case. If so, it will return an error to the user rather than 
+attempting to perform the undo.
+
+</box>
+
+<box type="warning" seamless>
+
+**Important:** This implementation only supports undoing **one command** at a time. After undoing once, you must 
+execute another modifying command before you can undo again. There is no redo functionality.
 
 </box>
 
 The following sequence diagram shows how an undo operation goes through the `Logic` component:
 
-<puml src="diagrams/UndoSequenceDiagram-Logic.puml" alt="UndoSequenceDiagram-Logic" />
+![UndoSequenceDiagram-Logic](images/UndoSequenceDiagram-Logic.png)
 
 <box type="info" seamless>
 
-**Note:** The lifeline for `UndoCommand` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline reaches the end of diagram.
+**Note:** The lifeline for `UndoCommand` should end at the destroy marker (X) but due to a limitation of PlantUML, 
+the lifeline reaches the end of diagram.
 
 </box>
 
 Similarly, how an undo operation goes through the `Model` component is shown below:
 
-<puml src="diagrams/UndoSequenceDiagram-Model.puml" alt="UndoSequenceDiagram-Model" />
+![UndoSequenceDiagram-Model](images/UndoSequenceDiagram-Model.png)
 
-The `redo` command does the opposite — it calls `Model#redoAddressBook()`, which shifts the `currentStatePointer` once to the right, pointing to the previously undone state, and restores the address book to that state.
+**Step 5.** The user then decides to execute the command `list`. Commands that do not modify the address book, 
+such as `list`, `find`, or `get-timeslots`, will not call `Model#saveAddressBook()`. Thus, the previous state remains `null`.
 
-<box type="info" seamless>
+![UndoState4](images/UndoState4.png)
 
-**Note:** If the `currentStatePointer` is at index `addressBookStateList.size() - 1`, pointing to the latest address book state, then there are no undone AddressBook states to restore. The `redo` command uses `Model#canRedoAddressBook()` to check if this is the case. If so, it will return an error to the user rather than attempting to perform the redo.
+**Step 6.** The user executes `clear`, which calls `Model#saveAddressBook()` before clearing. The current state (ab1) 
+is saved as the previous state, then all persons are deleted, creating a new current state.
 
-</box>
+![UndoState5](images/UndoState5.png)
 
-Step 5. The user then decides to execute the command `list`. Commands that do not modify the address book, such as `list`, will usually not call `Model#commitAddressBook()`, `Model#undoAddressBook()` or `Model#redoAddressBook()`. Thus, the `addressBookStateList` remains unchanged.
+The following activity diagram summarises what happens when a user executes a new command:
 
-<puml src="diagrams/UndoRedoState4.puml" alt="UndoRedoState4" />
+![SaveActivityDiagram](images/SaveActivityDiagram.png)
 
-Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`. Since the `currentStatePointer` is not pointing at the end of the `addressBookStateList`, all address book states after the `currentStatePointer` will be purged. Reason: It no longer makes sense to redo the `add n/David …​` command. This is the behavior that most modern desktop applications follow.
+#### Commands that support undo
 
-<puml src="diagrams/UndoRedoState5.puml" alt="UndoRedoState5" />
+The following commands call `Model#saveAddressBook()` and thus support undo:
+- `add` - Adds a student
+- `delete` - Deletes a student
+- `edit` - Edits a student
+- `clear` - Clears all students
+- `marke` - Marks an exercise
+- `marka` - Marks attendance
+- `grade` - Marks grade of an assessment
+- `block-timeslot` - Adds a timeslot
+- `clear-timeslots` - Clears all timeslots
 
-The following activity diagram summarizes what happens when a user executes a new command:
+The following commands do NOT support undo (read-only commands):
+- `list` - Lists all students
+- `find` - Finds students
+- `filter` - Filters students
+- `sort` - Sorts students base on some criteria
+- `get-timeslots` - Displays timeslots
+- `help` - Shows help
+- `exit` - Exits the application
 
-<puml src="diagrams/CommitActivityDiagram.puml" width="250" />
+#### Design considerations
 
-#### Design considerations:
+**Aspect: How undo executes:**
 
-**Aspect: How undo & redo executes:**
+* **Alternative 1 (current choice):** Saves only one previous state (address book + timeslots).
+    * Pros:
+        * Simple to implement and understand.
+        * Minimal memory usage (only doubles the data size at most).
+        * No complex state management or pointer tracking.
+    * Cons:
+        * Cannot undo multiple commands in sequence.
+        * Cannot undo a command once a new data-modifying command is executed.
+        * No redo functionality.
 
-* **Alternative 1 (current choice):** Saves the entire address book.
-  * Pros: Easy to implement.
-  * Cons: May have performance issues in terms of memory usage.
+* **Alternative 2:** Save entire history in a list with pointer.
+    * Pros:
+        * Can undo multiple commands in sequence.
+        * Supports redo functionality.
+    * Cons:
+        * More complex to implement and maintain.
+        * Higher memory usage (stores multiple states in a list).
+        * Need to carefully manage state pointer and list boundaries.
 
-* **Alternative 2:** Individual command knows how to undo/redo by
-  itself.
-  * Pros: Will use less memory (e.g. for `delete`, just save the person being deleted).
-  * Cons: We must ensure that the implementation of each individual command are correct.
+* **Alternative 3:** Individual command knows how to undo itself (Command Pattern with undo).
+    * Pros:
+        * Memory efficient (only store minimal data needed to reverse each command).
+        * Can undo multiple commands.
+        * Each command encapsulates its own undo logic.
+    * Cons:
+        * Much more complex - every command must implement its own undo logic.
+        * Must ensure correctness of each command's undo implementation.
+        * Harder to maintain and test.
+        * Increased development time for new commands.
 
-_{more aspects and alternatives to be added}_
+**Rationale for Alternative 1:** For the scope of this project, a simple single-level undo is sufficient for most use 
+cases. Users typically need to undo only their most recent action, and the simplicity of implementation outweighs the 
+benefits of a full undo/redo stack. The minimal memory overhead and straightforward logic make this approach ideal for 
+a student project with limited development time.
+
+#### Future enhancements
+
+* **Multiple undo levels:** Implement a full history stack (Alternative 2) to support undoing multiple commands in 
+sequence. This would involve storing a list of states and maintaining a current state pointer.
+
+* **Redo functionality:** Allow users to redo commands that were undone. This would require preserving the "future" 
+states after an undo operation until a new modifying command is executed.
+
+* **Selective undo:** Allow undoing specific commands in history rather than just the most recent one. This would 
+require implementing Alternative 3 with command-specific undo logic.
+
+* **Undo command confirmation:** For destructive commands like `clear`, prompt the user to confirm before executing, 
+reducing the need for undo in the first place.
+
 
 ### \[Proposed\] Data archiving
 

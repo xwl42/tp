@@ -30,7 +30,9 @@ public class MarkAttendanceCommand extends Command {
             + PREFIX_LAB_NUMBER + "1 " + PREFIX_STATUS + "y";
 
     public static final String MESSAGE_MARK_ATTENDANCE_SUCCESS = "Lab %1$d marked as attended for Student: %2$s";
+    public static final String MESSAGE_MARK_ABSENCE_SUCCESS = "Lab %1$d marked as not attended for Student: %2$s";
     public static final String MESSAGE_FAILURE_ALREADY_ATTENDED = "Lab %1$d already marked as attended";
+    public static final String MESSAGE_FAILURE_ALREADY_NOT_ATTENDED = "Lab %1$d already marked as not attended";
     public static final String MESSAGE_FAILURE_INVALID_LAB_INDEX = "The lab index provided is invalid";
 
     public static final String MESSAGE_ARGUMENTS = "Index: %1$d, Lab Number: %2$d";
@@ -70,7 +72,13 @@ public class MarkAttendanceCommand extends Command {
         } catch (IndexOutOfBoundsException iob) {
             throw new CommandException(MESSAGE_FAILURE_INVALID_LAB_INDEX);
         } catch (IllegalStateException ise) {
-            throw new CommandException(String.format(MESSAGE_FAILURE_ALREADY_ATTENDED, labNumber.getOneBased()));
+            if (isAttended) {
+                throw new CommandException(String.format(MESSAGE_FAILURE_ALREADY_ATTENDED, labNumber.getOneBased()));
+            } else {
+                throw new CommandException(String.format(MESSAGE_FAILURE_ALREADY_NOT_ATTENDED,
+                        labNumber.getOneBased()));
+            }
+
         }
 
         Person editedPerson = new Person(
@@ -83,7 +91,7 @@ public class MarkAttendanceCommand extends Command {
         model.setPerson(personToEdit, editedPerson);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
 
-        return new CommandResult(generateSuccessMessage(editedPerson));
+        return new CommandResult(generateSuccessMessage(editedPerson, isAttended));
     }
 
     @Override
@@ -99,7 +107,8 @@ public class MarkAttendanceCommand extends Command {
 
         MarkAttendanceCommand otherCommand = (MarkAttendanceCommand) other;
         return index.equals(otherCommand.index)
-                && labNumber.equals(otherCommand.labNumber);
+                && labNumber.equals(otherCommand.labNumber)
+                && isAttended == otherCommand.isAttended;
     }
 
     /**
@@ -107,8 +116,14 @@ public class MarkAttendanceCommand extends Command {
      * the remark is added to or removed from
      * {@code personToEdit}.
      */
-    private String generateSuccessMessage(Person personToEdit) {
-        return String.format(MESSAGE_MARK_ATTENDANCE_SUCCESS, labNumber.getOneBased(), Messages.format(personToEdit));
+    private String generateSuccessMessage(Person personToEdit, boolean isAttended) {
+        if (isAttended) {
+            return String.format(MESSAGE_MARK_ATTENDANCE_SUCCESS,
+                    labNumber.getOneBased(), Messages.format(personToEdit));
+        } else {
+            return String.format(MESSAGE_MARK_ABSENCE_SUCCESS,
+                    labNumber.getOneBased(), Messages.format(personToEdit));
+        }
     }
 
 

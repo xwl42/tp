@@ -186,8 +186,17 @@ public class ParserUtil {
         }
     }
 
+    /**
+     * Parses a {@code String labStatus} into a boolean value.
+     *
+     * @param labStatus The status string to parse.
+     * @return true if the status is "y", false if the status is "n".
+     * @throws ParseException if the given {@code labStatus} is invalid.
+     */
     public static boolean parseLabStatus(String labStatus) throws ParseException {
-        switch (labStatus.toLowerCase()) {
+        requireNonNull(labStatus);
+        String trimmed = labStatus.trim();
+        switch (trimmed.toLowerCase()) {
         case "y": return true;
         case "n": return false;
         default:

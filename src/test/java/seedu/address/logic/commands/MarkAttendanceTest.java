@@ -37,7 +37,8 @@ public class MarkAttendanceTest {
         Person editedPerson = new PersonBuilder(firstPerson)
                 .withLabAttendanceList(labAttendanceList.toString()).build();
 
-        MarkAttendanceCommand markAttendanceCommand = new MarkAttendanceCommand(INDEX_FIRST_PERSON, INDEX_FIRST_LAB);
+        MarkAttendanceCommand markAttendanceCommand = new MarkAttendanceCommand(
+                INDEX_FIRST_PERSON, INDEX_FIRST_LAB, true);
 
         String expectedMessage = String.format(MarkAttendanceCommand.MESSAGE_MARK_ATTENDANCE_SUCCESS,
                 INDEX_FIRST_LAB.getOneBased(), Messages.format(editedPerson));
@@ -50,13 +51,15 @@ public class MarkAttendanceTest {
 
     @Test
     public void execute_invalidPersonIndex_throwsCommandException() {
-        MarkAttendanceCommand markAttendanceCommand = new MarkAttendanceCommand(INDEX_HUNDRED_PERSON, INDEX_FIRST_LAB);
+        MarkAttendanceCommand markAttendanceCommand = new MarkAttendanceCommand(
+                INDEX_HUNDRED_PERSON, INDEX_FIRST_LAB, true);
         assertThrows(CommandException.class, () -> markAttendanceCommand.execute(model));
     }
 
     @Test
     public void execute_invalidLabNumber_throwsCommandException() {
-        MarkAttendanceCommand markAttendanceCommand = new MarkAttendanceCommand(INDEX_FIRST_PERSON, INDEX_HUNDRED_LAB);
+        MarkAttendanceCommand markAttendanceCommand = new MarkAttendanceCommand(
+                INDEX_FIRST_PERSON, INDEX_HUNDRED_LAB, true);
         assertThrows(CommandException.class, () -> markAttendanceCommand.execute(model));
     }
 
@@ -69,16 +72,19 @@ public class MarkAttendanceTest {
                 .withLabAttendanceList(labAttendanceList.toString()).build();
         model.setPerson(firstPerson, editedPerson);
 
-        MarkAttendanceCommand markAttendanceCommand = new MarkAttendanceCommand(INDEX_FIRST_PERSON, INDEX_FIRST_LAB);
+        MarkAttendanceCommand markAttendanceCommand = new MarkAttendanceCommand(
+                INDEX_FIRST_PERSON, INDEX_FIRST_LAB, true);
         assertThrows(CommandException.class, () -> markAttendanceCommand.execute(model));
     }
 
     @Test
     public void equals() {
-        final MarkAttendanceCommand standardCommand = new MarkAttendanceCommand(INDEX_FIRST_PERSON, INDEX_FIRST_LAB);
+        final MarkAttendanceCommand standardCommand = new MarkAttendanceCommand(
+                INDEX_FIRST_PERSON, INDEX_FIRST_LAB, true);
 
         // same values -> returns true
-        MarkAttendanceCommand commandWithSameValues = new MarkAttendanceCommand(INDEX_FIRST_PERSON, INDEX_FIRST_LAB);
+        MarkAttendanceCommand commandWithSameValues = new MarkAttendanceCommand(
+                INDEX_FIRST_PERSON, INDEX_FIRST_LAB, true);
         assertEquals(standardCommand, commandWithSameValues);
 
         // same object -> returns true
@@ -91,10 +97,12 @@ public class MarkAttendanceTest {
         assertNotEquals(new ClearCommand(), standardCommand);
 
         // different index -> returns false
-        assertNotEquals(new MarkAttendanceCommand(INDEX_SECOND_PERSON, INDEX_FIRST_LAB), standardCommand);
+        assertNotEquals(new MarkAttendanceCommand(
+                INDEX_SECOND_PERSON, INDEX_FIRST_LAB, true), standardCommand);
 
         // different remark -> returns false
-        assertNotEquals(new MarkAttendanceCommand(INDEX_FIRST_PERSON, INDEX_SECOND_LAB), standardCommand);
+        assertNotEquals(new MarkAttendanceCommand(
+                INDEX_FIRST_PERSON, INDEX_SECOND_LAB, true), standardCommand);
     }
 
 }

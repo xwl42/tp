@@ -9,7 +9,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
-import seedu.address.model.person.ExerciseTracker;
 import seedu.address.model.person.GradeMap;
 import seedu.address.model.person.Gradeable;
 import seedu.address.model.person.LabAttendance;
@@ -99,11 +98,10 @@ public class PersonCard extends UiPart<Region> {
             Gradeable exam = gradeableMap.get(examName);
             Label gradeLabel = new Label(examName.toUpperCase());
 
-            // Apply styling based on whether the exam has been graded (score != -1)
             double score = exam.getScore();
             if (score == -1.0) {
                 gradeLabel.getStyleClass().addAll("status-label", "exam-not-graded");
-            } else if (score >= 50.0){
+            } else if (score >= 50.0) {
                 gradeLabel.getStyleClass().addAll("status-label", "exam-pass");
             } else {
                 gradeLabel.getStyleClass().addAll("status-label", "exam-fail");

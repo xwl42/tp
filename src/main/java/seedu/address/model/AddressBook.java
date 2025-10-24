@@ -17,6 +17,7 @@ import seedu.address.model.person.UniquePersonList;
 public class AddressBook implements ReadOnlyAddressBook {
 
     private final UniquePersonList persons;
+    private Week currentWeek;
 
     /*
      * The 'unusual' code block below is a non-static initialization block, sometimes used to avoid duplication
@@ -27,6 +28,7 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     {
         persons = new UniquePersonList();
+        currentWeek = new Week(0); // Set default to week 0
     }
 
     public AddressBook() {}
@@ -56,6 +58,7 @@ public class AddressBook implements ReadOnlyAddressBook {
         requireNonNull(newData);
 
         setPersons(newData.getPersonList());
+        setCurrentWeek(newData.getCurrentWeek());
     }
 
     //// person-level operations
@@ -85,6 +88,15 @@ public class AddressBook implements ReadOnlyAddressBook {
         requireNonNull(editedPerson);
 
         persons.setPerson(target, editedPerson);
+    }
+
+    public void setCurrentWeek(Week currentWeek) {
+        requireNonNull(currentWeek);
+        this.currentWeek = currentWeek;
+    }
+
+    public Week getCurrentWeek() {
+        return currentWeek;
     }
 
     /**

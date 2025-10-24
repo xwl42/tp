@@ -91,7 +91,7 @@ public class GradeMap {
                 Examination originalExam = (Examination) original;
                 if (originalExam.getScore() != -1.0) {
                     try {
-                        copied.setScore(originalExam.getScore());
+                        copied.setPercentageScore(originalExam.getScore());
                     } catch (InvalidScoreException e) {
                         throw new RuntimeException("Unexpected error copying valid score", e);
                     }

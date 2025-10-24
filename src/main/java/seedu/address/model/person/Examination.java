@@ -41,7 +41,18 @@ public class Examination implements Gradeable {
                     maxScore
             );
         }
-        this.score = Optional.of(inputScore);
+        this.score = Optional.of(inputScore / maxScore * 100.0);
+    }
+
+    @Override
+    public void setPercentageScore(double score) {
+        if (score < 0 || score > 100.0) {
+            throw new InvalidScoreException(
+                    String.format(INVALID_SCORE_FORMAT, score, 100.0),
+                    100.0
+            );
+        }
+        this.score = Optional.of(score);
     }
 
     @Override

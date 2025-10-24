@@ -22,4 +22,6 @@ public interface LabAttendance {
      *         {@code false} otherwise
      */
     public boolean isAttended();
+
+    public int getLabNumber();
 }

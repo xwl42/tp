@@ -41,6 +41,10 @@ public class Lab implements LabAttendance {
         return isAttended;
     }
 
+    public int getLabNumber() {
+        return labNumber;
+    }
+
     @Override
     public boolean equals(Object other) {
         if (this == other) {

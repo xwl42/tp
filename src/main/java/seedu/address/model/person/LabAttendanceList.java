@@ -22,4 +22,6 @@ public interface LabAttendanceList extends Comparable<LabAttendanceList> {
      * @return the attendance rate between 0.0 and 100.0.
      */
     public double calculateLabAttendance();
+
+    LabAttendance[] getLabs();
 }

@@ -24,38 +24,39 @@ import seedu.address.model.timeslot.Timeslot;
  * Contains utility methods for populating {@code AddressBook} and {@code Timeslots} with sample data.
  */
 public class SampleDataUtil {
+    // Again, sample data current week is set to week 0
     public static Person[] getSamplePersons() {
         return new Person[] {
             new Person(new StudentId("A1231230B"), new Name("Alex Yeoh"), new Phone("87438807"),
                     new Email("alexyeoh@example.com"),
                     getTagSet("friends"),
                     new GithubUsername("AlexYeoh"),
-                    new ExerciseTracker(), new LabList(), new GradeMap()),
+                    new ExerciseTracker(), new LabList(0), new GradeMap()),
             new Person(new StudentId("A1231231B"), new Name("Bernice Yu"), new Phone("99272758"),
                     new Email("berniceyu@example.com"),
                     getTagSet("colleagues", "friends"),
                     new GithubUsername("BerniceYu"),
-                    new ExerciseTracker(), new LabList(), new GradeMap()),
+                    new ExerciseTracker(), new LabList(0), new GradeMap()),
             new Person(new StudentId("A1231232B"), new Name("Charlotte Oliveiro"), new Phone("93210283"),
                     new Email("charlotte@example.com"),
                     getTagSet("neighbours"),
                     new GithubUsername("CharlotteOliveiro"),
-                    new ExerciseTracker(), new LabList(), new GradeMap()),
+                    new ExerciseTracker(), new LabList(0), new GradeMap()),
             new Person(new StudentId("A1231233B"), new Name("David Li"), new Phone("91031282"),
                     new Email("lidavid@example.com"),
                     getTagSet("family"),
                     new GithubUsername("DavidLi"),
-                    new ExerciseTracker(), new LabList(), new GradeMap()),
+                    new ExerciseTracker(), new LabList(0), new GradeMap()),
             new Person(new StudentId("A1231234B"), new Name("Irfan Ibrahim"), new Phone("92492021"),
                     new Email("irfan@example.com"),
                     getTagSet("classmates"),
                     new GithubUsername("IrfanIbrahim"),
-                    new ExerciseTracker(), new LabList(), new GradeMap()),
+                    new ExerciseTracker(), new LabList(0), new GradeMap()),
             new Person(new StudentId("A1231235B"), new Name("Roy Balakrishnan"), new Phone("92624417"),
                     new Email("royb@example.com"),
                     getTagSet("colleagues"),
                     new GithubUsername("RoyBalakrishnan"),
-                    new ExerciseTracker(), new LabList(), new GradeMap())
+                    new ExerciseTracker(), new LabList(0), new GradeMap())
         };
     }
 

@@ -8,6 +8,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import seedu.address.commons.util.ToStringBuilder;
+import seedu.address.model.AddressBook;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -32,7 +33,7 @@ public class Person {
      * Every field must be present and not null.
      */
     public Person(StudentId studentId, Name name, Phone phone, Email email,
-                  Set<Tag> tags, GithubUsername githubUsername) {
+                  Set<Tag> tags, GithubUsername githubUsername, int currentWeek) {
         requireAllNonNull(studentId, name, phone, email, tags, githubUsername);
         this.studentId = studentId;
         this.name = name;
@@ -41,7 +42,7 @@ public class Person {
         this.tags.addAll(tags);
         this.exerciseTracker = new ExerciseTracker();
         this.githubUsername = githubUsername;
-        this.labAttendanceList = new LabList();
+        this.labAttendanceList = new LabList(currentWeek);
         this.gradeMap = new GradeMap();
     }
 

@@ -19,6 +19,10 @@ public class Week {
         this.weekNumber = weekNumber;
     }
 
+    public int getWeekNumber() {
+        return weekNumber;
+    }
+
     @Override
     public String toString() {
         return "Week " + weekNumber;

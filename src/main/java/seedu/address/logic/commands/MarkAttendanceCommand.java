@@ -61,7 +61,9 @@ public class MarkAttendanceCommand extends Command {
             throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
         }
         Person personToEdit = lastShownList.get(index.getZeroBased());
-        LabAttendanceList labAttendanceList = ((LabList) personToEdit.getLabAttendanceList()).copy();
+        LabAttendanceList labAttendanceList = ((LabList) personToEdit.getLabAttendanceList()).copy(
+                model.getCurrentWeek().getWeekNumber());
+
         try {
             if (isAttended) {
                 labAttendanceList.markLabAsAttended(labNumber.getZeroBased());

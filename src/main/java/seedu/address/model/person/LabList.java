@@ -12,8 +12,8 @@ public class LabList implements LabAttendanceList {
     /**
      * Constructs a {@code LabList} with all labs initialized to not attended.
      */
-    public LabList() {
-        this(createDefaultLabs());
+    public LabList(int currentWeek) {
+        this(createDefaultLabs(currentWeek));
     }
 
     /**
@@ -26,10 +26,10 @@ public class LabList implements LabAttendanceList {
         this.labs = labs;
     }
 
-    private static LabAttendance[] createDefaultLabs() {
+    private static LabAttendance[] createDefaultLabs(int currentWeek) {
         LabAttendance[] labAttendanceList = new LabAttendance[NUMBER_OF_LABS];
         for (int i = 0; i < NUMBER_OF_LABS; i++) {
-            labAttendanceList[i] = new Lab(i + 1, 1);
+            labAttendanceList[i] = new Lab(i + 1, currentWeek);
         }
         return labAttendanceList;
     }
@@ -74,11 +74,11 @@ public class LabList implements LabAttendanceList {
      *
      * @return a new LabList with copied attendance records
      */
-    public LabList copy() {
+    public LabList copy(int currentWeek) {
         LabAttendance[] copiedLabs = new LabAttendance[NUMBER_OF_LABS];
         for (int i = 0; i < NUMBER_OF_LABS; i++) {
             Lab originalLab = (Lab) this.labs[i];
-            Lab newLab = new Lab(i + 1, 1);
+            Lab newLab = new Lab(i + 1, currentWeek);
             if (originalLab.isAttended()) {
                 newLab.markAsAttended();
             }

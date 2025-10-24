@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Represents a contiguous range of indices
+ * Represents a contiguous range of indices, or one index
  */
 public class MultiIndex {
 
@@ -27,6 +27,16 @@ public class MultiIndex {
 
         this.lowerBound = lowerBound;
         this.upperBound = upperBound;
+    }
+
+    /**
+     * Constructs a multi index for only one index
+     * @param singleIndex the only index that multi index contains
+     */
+    public MultiIndex(Index singleIndex) {
+        requireNonNull(singleIndex);
+        this.upperBound = singleIndex;
+        this.lowerBound = singleIndex;
     }
 
     public Index getLowerBound() {

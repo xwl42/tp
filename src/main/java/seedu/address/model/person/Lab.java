@@ -4,6 +4,7 @@ package seedu.address.model.person;
  * Represents a student's attendance status for a single lab session.
  */
 public class Lab implements LabAttendance {
+    public static final String MESSAGE_CONSTRAINTS = "Lab status must be y or n";
     private final int labNumber;
     private boolean isAttended;
 
@@ -22,9 +23,17 @@ public class Lab implements LabAttendance {
     @Override
     public void markAsAttended() throws IllegalStateException {
         if (isAttended) {
-            throw new IllegalStateException("Lab Attendance has already been marked");
+            throw new IllegalStateException("Lab Attendance has already been marked as attended");
         }
         isAttended = true;
+    }
+
+    @Override
+    public void markAsAbsent() {
+        if (!isAttended) {
+            throw new IllegalStateException("Lab Attendance has already been marked as not attended");
+        }
+        isAttended = false;
     }
 
     @Override

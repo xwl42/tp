@@ -35,11 +35,19 @@ public class LabList implements LabAttendanceList {
     }
 
     @Override
-    public void markLabAsAttended(int index) throws IndexOutOfBoundsException {
+    public void markLabAsAttended(int index) {
         if (index < 0 || index >= NUMBER_OF_LABS) {
             throw new IndexOutOfBoundsException("Index should be between 0 and " + (NUMBER_OF_LABS - 1));
         }
         labs[index].markAsAttended();
+    }
+
+    @Override
+    public void markLabAsAbsent(int index) {
+        if (index < 0 || index >= NUMBER_OF_LABS) {
+            throw new IndexOutOfBoundsException("Index should be between 0 and " + (NUMBER_OF_LABS - 1));
+        }
+        labs[index].markAsAbsent();
     }
 
     @Override

@@ -13,6 +13,11 @@ public class LabAttendanceStub implements LabAttendance {
     }
 
     @Override
+    public void markAsAbsent() {
+        isAttended = false;
+    }
+
+    @Override
     public boolean isAttended() {
         return isAttended;
     }

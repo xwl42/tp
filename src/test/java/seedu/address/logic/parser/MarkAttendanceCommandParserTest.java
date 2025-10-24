@@ -2,6 +2,7 @@ package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_LAB_NUMBER;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_STATUS;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_LAB;
@@ -18,8 +19,9 @@ public class MarkAttendanceCommandParserTest {
 
     @Test
     public void parse_indexAndLabSpecified_success() {
-        String userInput = INDEX_FIRST_PERSON.getOneBased() + " " + PREFIX_LAB_NUMBER + validLabNumber.getOneBased();
-        MarkAttendanceCommand expectedCommand = new MarkAttendanceCommand(INDEX_FIRST_PERSON, validLabNumber);
+        String userInput = INDEX_FIRST_PERSON.getOneBased() + " " + PREFIX_LAB_NUMBER + validLabNumber.getOneBased()
+                + " " + PREFIX_STATUS + "y";
+        MarkAttendanceCommand expectedCommand = new MarkAttendanceCommand(INDEX_FIRST_PERSON, validLabNumber, true);
         assertParseSuccess(parser, userInput, expectedCommand);
     }
 

@@ -241,10 +241,9 @@ public class ModelManager implements Model {
      */
     @Override
     public void clearTimeslots() {
-        // Replace with the appropriate Timeslots API if different in your codebase.
-        // If Timeslots has a clear() or resetData(...) method, call that instead.
+        // Clear the existing Timeslots collection in-place so any observers retain their binding.
         requireNonNull(this.timeslots);
-        this.timeslots = new Timeslots();
+        this.timeslots.clear();
     }
 
     @Override

@@ -41,7 +41,7 @@ public class JsonAdaptedExamination {
         Examination exam = new Examination(name);
         if (score != null && score >= 0) {
             try {
-                exam.setScore(score);
+                exam.setPercentageScore(score);
             } catch (InvalidScoreException e) {
                 throw new IllegalArgumentException(e);
             }

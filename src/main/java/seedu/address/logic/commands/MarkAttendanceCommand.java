@@ -1,16 +1,13 @@
 package seedu.address.logic.commands;
 
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_LAB_NUMBER;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_STATUS;
-import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.core.index.MultiIndex;
-import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.LabAttendanceList;
@@ -20,81 +17,112 @@ import seedu.address.model.person.Person;
 /**
  * Marks the specified lab as attended or not attended for one or more persons in the address book.
  */
-public class MarkAttendanceCommand extends Command {
+public class MarkAttendanceCommand extends MultiIndexCommand {
+
     public static final String COMMAND_WORD = "marka";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Marks the specific lab of the person(s) identified "
             + "by the index number(s) used in the last person listing.\n"
             + "Parameters: INDEX (must be a positive integer or range X:Y) "
-            + PREFIX_LAB_NUMBER + "LABNUMBER "
-            + PREFIX_STATUS + "ATTENDANCESTATUS\n"
-            + "Example: " + COMMAND_WORD + " 1:5 "
-            + PREFIX_LAB_NUMBER + "1 " + PREFIX_STATUS + "y";
+            + " l/LABNUMBER s/ATTENDANCESTATUS\n"
+            + "Example: " + COMMAND_WORD + " 1:5 l/1 s/y";
 
     public static final String MESSAGE_MARK_ATTENDANCE_SUCCESS =
             "Lab %1$d marked as attended for: %2$s";
     public static final String MESSAGE_MARK_ABSENCE_SUCCESS =
             "Lab %1$d marked as not attended for: %2$s";
-    public static final String MESSAGE_FAILURE_ALREADY_ATTENDED = "Lab %1$d already marked as attended for %2$s";
+    public static final String MESSAGE_FAILURE_ALREADY_ATTENDED =
+            "Lab %1$d already marked as attended for %2$s";
     public static final String MESSAGE_FAILURE_ALREADY_NOT_ATTENDED =
             "Lab %1$d already marked as not attended for %2$s";
-    public static final String MESSAGE_FAILURE_INVALID_LAB_INDEX = "The lab index provided is invalid";
+    public static final String MESSAGE_FAILURE_INVALID_LAB_INDEX =
+            "The lab index provided is invalid";
 
-    private final MultiIndex multiIndex;
     private final Index labNumber;
     private final boolean isAttended;
+
+    private final List<Person> alreadyMarkedPersons = new ArrayList<>();
+
     /**
      * @param multiIndex range or single index of persons in the filtered list
      * @param labNumber index of the lab number to be marked
      * @param isAttended attendance status to set
      */
     public MarkAttendanceCommand(MultiIndex multiIndex, Index labNumber, boolean isAttended) {
+        super(multiIndex);
         requireAllNonNull(multiIndex, labNumber);
-        this.multiIndex = multiIndex;
         this.labNumber = labNumber;
         this.isAttended = isAttended;
     }
 
     @Override
-    public CommandResult execute(Model model) throws CommandException {
-        requireAllNonNull(model);
-        model.saveAddressBook();
-        List<Person> lastShownList = model.getFilteredPersonList();
-        List<Person> alreadyMarkedPersons = new ArrayList<>();
-        List<Person> updatedPersons = new ArrayList<>();
+    protected Person applyActionToPerson(Model model, Person personToEdit) throws CommandException {
+        LabAttendanceList labAttendanceList = ((LabList) personToEdit.getLabAttendanceList()).copy();
 
-        for (Index index : multiIndex.toIndexList()) {
-            if (index.getZeroBased() >= lastShownList.size()) {
-                throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        try {
+            if (isAttended) {
+                labAttendanceList.markLabAsAttended(labNumber.getZeroBased());
+            } else {
+                labAttendanceList.markLabAsAbsent(labNumber.getZeroBased());
             }
-
-            Person personToEdit = lastShownList.get(index.getZeroBased());
-            LabAttendanceList labAttendanceList = ((LabList) personToEdit.getLabAttendanceList()).copy();
-
-            try {
-                if (isAttended) {
-                    labAttendanceList.markLabAsAttended(labNumber.getZeroBased());
-                } else {
-                    labAttendanceList.markLabAsAbsent(labNumber.getZeroBased());
-                }
-
-            } catch (IndexOutOfBoundsException iob) {
-                throw new CommandException(MESSAGE_FAILURE_INVALID_LAB_INDEX);
-            } catch (IllegalStateException ise) {
-                alreadyMarkedPersons.add(personToEdit);
-                continue;
-            }
-
-            Person editedPerson = new Person(
-                    personToEdit.getStudentId(), personToEdit.getName(), personToEdit.getPhone(),
-                    personToEdit.getEmail(), personToEdit.getTags(),
-                    personToEdit.getGithubUsername(), personToEdit.getExerciseTracker(),
-                    labAttendanceList, personToEdit.getGradeMap());
-            model.setPerson(personToEdit, editedPerson);
-            updatedPersons.add(editedPerson);
+        } catch (IndexOutOfBoundsException e) {
+            throw new CommandException(MESSAGE_FAILURE_INVALID_LAB_INDEX);
+        } catch (IllegalStateException e) {
+            alreadyMarkedPersons.add(personToEdit);
+            return null; // skip updating
         }
-        model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
-        return new CommandResult(generateResponseMessage(alreadyMarkedPersons, updatedPersons, isAttended));
+
+        Person editedPerson = new Person(
+                personToEdit.getStudentId(), personToEdit.getName(), personToEdit.getPhone(),
+                personToEdit.getEmail(), personToEdit.getTags(),
+                personToEdit.getGithubUsername(), personToEdit.getExerciseTracker(),
+                labAttendanceList, personToEdit.getGradeMap());
+
+        model.setPerson(personToEdit, editedPerson);
+        return editedPerson;
+    }
+
+    @Override
+    protected CommandResult buildResult(List<Person> updatedPersons) {
+        return new CommandResult(generateResponseMessage(alreadyMarkedPersons, updatedPersons));
+    }
+
+    private String generateResponseMessage(List<Person> alreadyMarkedPersons, List<Person> personsEdited) {
+        String studentNamesEdited = personsEdited.stream()
+                .map(person -> person.getName().fullName)
+                .collect(Collectors.joining(", "));
+
+        String exceptionMessage = compileExceptionMessage(alreadyMarkedPersons);
+        StringBuilder result = new StringBuilder();
+
+        if (!exceptionMessage.isEmpty()) {
+            result.append(exceptionMessage).append("\n");
+        }
+
+        if (!personsEdited.isEmpty()) {
+            String successMessage = isAttended
+                    ? String.format(MESSAGE_MARK_ATTENDANCE_SUCCESS,
+                    labNumber.getOneBased(), studentNamesEdited)
+                    : String.format(MESSAGE_MARK_ABSENCE_SUCCESS,
+                    labNumber.getOneBased(), studentNamesEdited);
+            result.append(successMessage);
+        }
+
+        return result.toString().trim();
+    }
+
+    private String compileExceptionMessage(List<Person> alreadyMarkedPersons) {
+        if (alreadyMarkedPersons.isEmpty()) {
+            return "";
+        }
+
+        String names = alreadyMarkedPersons.stream()
+                .map(person -> person.getName().fullName)
+                .collect(Collectors.joining(", "));
+
+        return isAttended
+                ? String.format(MESSAGE_FAILURE_ALREADY_ATTENDED, labNumber.getOneBased(), names)
+                : String.format(MESSAGE_FAILURE_ALREADY_NOT_ATTENDED, labNumber.getOneBased(), names);
     }
 
     @Override
@@ -102,46 +130,12 @@ public class MarkAttendanceCommand extends Command {
         if (other == this) {
             return true;
         }
-
         if (!(other instanceof MarkAttendanceCommand)) {
             return false;
         }
-
         MarkAttendanceCommand otherCommand = (MarkAttendanceCommand) other;
         return multiIndex.equals(otherCommand.multiIndex)
                 && labNumber.equals(otherCommand.labNumber)
                 && isAttended == otherCommand.isAttended;
-    }
-
-    private String generateResponseMessage(List<Person> alreadyMarkedPersons,
-                                           List<Person> personsEdited, boolean isAttended) {
-        String studentNamesEdited = personsEdited.stream()
-                .map(person -> person.getName().fullName)
-                .collect(java.util.stream.Collectors.joining(", "));
-        if (personsEdited.isEmpty()) {
-            return compileExceptionMessage(alreadyMarkedPersons, isAttended);
-        }
-        if (isAttended) {
-            return compileExceptionMessage(alreadyMarkedPersons, true)
-                    + String.format(MESSAGE_MARK_ATTENDANCE_SUCCESS,
-                    labNumber.getOneBased(), studentNamesEdited);
-        } else {
-            return compileExceptionMessage(alreadyMarkedPersons, false)
-                    + String.format(MESSAGE_MARK_ABSENCE_SUCCESS,
-                    labNumber.getOneBased(), studentNamesEdited);
-        }
-    }
-    private String compileExceptionMessage(List<Person> alreadyMarkedPersons, boolean isAttended) {
-        if (alreadyMarkedPersons.isEmpty()) {
-            return "";
-        }
-        String studentNamesAlreadyMarked = alreadyMarkedPersons.stream()
-                .map(person -> person.getName().fullName)
-                .collect(java.util.stream.Collectors.joining(", "));
-        return isAttended
-                ? String.format(MESSAGE_FAILURE_ALREADY_ATTENDED,
-                labNumber.getOneBased(), studentNamesAlreadyMarked) + "\n"
-                : String.format(MESSAGE_FAILURE_ALREADY_NOT_ATTENDED,
-                labNumber.getOneBased(), studentNamesAlreadyMarked) + "\n";
     }
 }

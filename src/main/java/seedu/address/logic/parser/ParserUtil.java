@@ -45,7 +45,6 @@ import seedu.address.model.tag.Tag;
 public class ParserUtil {
 
     public static final String MESSAGE_INVALID_INDEX = "Index is not a non-zero unsigned integer.";
-
     /**
      * @param input a string that is either in the "X:Y" or "X" form
      * @return a MultiIndex instance

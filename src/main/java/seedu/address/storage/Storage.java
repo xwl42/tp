@@ -11,9 +11,9 @@ import seedu.address.model.ReadOnlyUserPrefs;
 import seedu.address.model.UserPrefs;
 
 /**
- * API of the Storage component that aggregates address book, user prefs, and timeslots storage.
+ * API of the Storage component
  */
-public interface Storage extends AddressBookStorage, UserPrefsStorage {
+public interface Storage extends AddressBookStorage, UserPrefsStorage, TimeslotsStorage {
 
     @Override
     Optional<UserPrefs> readUserPrefs() throws DataLoadingException;
@@ -30,34 +30,10 @@ public interface Storage extends AddressBookStorage, UserPrefsStorage {
     @Override
     void saveAddressBook(ReadOnlyAddressBook addressBook) throws IOException;
 
-    // ==== Timeslots persistence API ====
-
-    /**
-     * Returns the file path of the timeslots data file.
-     */
-    Path getTimeslotsFilePath();
-
-    /**
-     * Reads timeslots data from storage.
-     *
-     * @throws DataLoadingException if loading the data failed.
-     */
+    @Override
     Optional<ReadOnlyTimeslots> readTimeslots() throws DataLoadingException;
 
-    /**
-     * Reads timeslots data from the specified file path.
-     */
-    Optional<ReadOnlyTimeslots> readTimeslots(Path filePath) throws DataLoadingException;
-
-    /**
-     * Saves the given timeslots to storage.
-     *
-     * @throws IOException if writing fails.
-     */
+    @Override
     void saveTimeslots(ReadOnlyTimeslots timeslots) throws IOException;
 
-    /**
-     * Saves the given timeslots to the specified file path.
-     */
-    void saveTimeslots(ReadOnlyTimeslots timeslots, Path filePath) throws IOException;
 }

@@ -36,16 +36,25 @@ public class UnblockTimeslotCommandParser implements Parser<UnblockTimeslotComma
             throw new ParseException(msg);
         }
 
-        // Try parsing using supported formats: ISO first, then human-friendly "d MMM uuuu, HH:mm" and "d MMM uuuu HH:mm"
+        // Try parsing supported formats: ISO first, then human-friendly.
         LocalDateTime start;
         LocalDateTime end;
         try {
-            start = parseDateFlexible(startStr);
-            end = parseDateFlexible(endStr);
+            try {
+                start = LocalDateTime.parse(startStr, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+            } catch (DateTimeException e1) {
+                start = LocalDateTime.parse(startStr, DateTimeFormatter.ofPattern("d MMM uuuu, HH:mm"));
+            }
+
+            try {
+                end = LocalDateTime.parse(endStr, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+            } catch (DateTimeException e2) {
+                end = LocalDateTime.parse(endStr, DateTimeFormatter.ofPattern("d MMM uuuu, HH:mm"));
+            }
         } catch (DateTimeException e) {
             throw new ParseException("Invalid timeslot datetime or range.\nAccepted formats:\n"
                     + " - ISO_LOCAL_DATE_TIME: 2023-10-01T09:00:00\n"
-                    + " - Human-friendly: 4 Oct 2025, 10:00  OR  4 Oct 2025 10:00");
+                    + " - Human-friendly: 4 Oct 2025, 10:00");
         }
 
         if (!end.isAfter(start)) {
@@ -54,38 +63,5 @@ public class UnblockTimeslotCommandParser implements Parser<UnblockTimeslotComma
 
         Timeslot timeslot = new Timeslot(start, end);
         return new UnblockTimeslotCommand(timeslot);
-    }
-
-    /**
-     * Parse a datetime string accepting multiple formats:
-     *  - ISO_LOCAL_DATE_TIME
-     *  - "d MMM uuuu, HH:mm"
-     *  - "d MMM uuuu HH:mm" (without comma)
-     *
-     * Throws DateTimeException if none match.
-     */
-    private static LocalDateTime parseDateFlexible(String input) throws DateTimeException {
-        // try ISO first
-        try {
-            return LocalDateTime.parse(input, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-        } catch (DateTimeException ignored) {
-        }
-
-        // then try human-friendly patterns (with and without comma)
-        DateTimeFormatter[] humanFormats = new DateTimeFormatter[] {
-                DateTimeFormatter.ofPattern("d MMM uuuu, HH:mm"),
-                DateTimeFormatter.ofPattern("d MMM uuuu HH:mm")
-        };
-
-        for (DateTimeFormatter fmt : humanFormats) {
-            try {
-                return LocalDateTime.parse(input, fmt);
-            } catch (DateTimeException ignored) {
-                // try next
-            }
-        }
-
-        // none matched
-        throw new DateTimeException("Unparseable datetime: " + input);
     }
 }

@@ -8,6 +8,7 @@ import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.model.person.Person;
 import seedu.address.model.timeslot.Timeslot;
+import seedu.address.model.ReadOnlyTimeslots;
 
 /**
  * The API of the Model component.
@@ -108,8 +109,7 @@ public interface Model {
      */
     void sortPersonList(Comparator<Person> comparator);
 
-    // ==== Timeslots-related APIs ====
-
+    // ===== Timeslots-related APIs =====
     /**
      * Returns the timeslots as an unmodifiable view.
      */

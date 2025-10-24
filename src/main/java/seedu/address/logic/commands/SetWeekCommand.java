@@ -24,6 +24,7 @@ public class SetWeekCommand extends Command {
 
     @Override
     public CommandResult execute(Model model) throws CommandException {
+        model.setCurrentWeek(currentWeek);
         throw new CommandException(currentWeek.toString());
     }
 }

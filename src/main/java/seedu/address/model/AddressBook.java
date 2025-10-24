@@ -90,14 +90,6 @@ public class AddressBook implements ReadOnlyAddressBook {
         persons.setPerson(target, editedPerson);
     }
 
-    public void setCurrentWeek(Week currentWeek) {
-        requireNonNull(currentWeek);
-        this.currentWeek = currentWeek;
-    }
-
-    public Week getCurrentWeek() {
-        return currentWeek;
-    }
 
     /**
      * Removes {@code key} from this {@code AddressBook}.
@@ -113,6 +105,17 @@ public class AddressBook implements ReadOnlyAddressBook {
     public void sortPersons(Comparator<Person> comparator) {
         requireNonNull(comparator);
         persons.sort(comparator);
+    }
+
+    //// week-level operations
+
+    public void setCurrentWeek(Week currentWeek) {
+        requireNonNull(currentWeek);
+        this.currentWeek = currentWeek;
+    }
+
+    public Week getCurrentWeek() {
+        return currentWeek;
     }
 
     //// util methods
@@ -141,7 +144,8 @@ public class AddressBook implements ReadOnlyAddressBook {
         }
 
         AddressBook otherAddressBook = (AddressBook) other;
-        return persons.equals(otherAddressBook.persons);
+        return persons.equals(otherAddressBook.persons)
+                && currentWeek.equals(otherAddressBook.currentWeek);
     }
 
     @Override

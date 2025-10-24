@@ -236,6 +236,18 @@ public class ModelManager implements Model {
         this.timeslots = new Timeslots();
     }
 
+    //=========== CurrentWeek Accessors =============================================================
+
+    @Override
+    public void setCurrentWeek(Week currentWeek) {
+        addressBook.setCurrentWeek(currentWeek);
+    }
+
+    @Override
+    public Week getCurrentWeek() {
+        return addressBook.getCurrentWeek();
+    }
+
     @Override
     public boolean equals(Object other) {
         if (other == this) {

@@ -273,7 +273,7 @@ public class ParserUtil {
             Examination exam = new Examination(name);
             if (!scoreStr.equalsIgnoreCase("NA")) {
                 try {
-                    exam.setScore(Double.parseDouble(scoreStr));
+                    exam.setPercentageScore(Double.parseDouble(scoreStr));
                 } catch (InvalidScoreException e) {
                     throw new ParseException(e.getMessage());
                 }

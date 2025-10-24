@@ -69,14 +69,12 @@ public class PersonCard extends UiPart<Region> {
         List<Status> exerciseStatuses = person.getExerciseTracker().getStatuses();
         for (int i = 0; i < exerciseStatuses.size(); i++) {
             Label exerciseLabel = new Label("EX" + i);
-            exerciseLabel.getStyleClass().add("status-label");
-            if (exerciseStatuses.get(i).equals(Status.NOT_DONE)) {
-                exerciseLabel.getStyleClass().add("exercise-not-done");
-            } else if (exerciseStatuses.get(i).equals(Status.DONE)) {
-                exerciseLabel.getStyleClass().add("exercise-done");
-            } else if (exerciseStatuses.get(i).equals(Status.OVERDUE)) {
-                exerciseLabel.getStyleClass().add("exercise-overdue");
-            }
+            String statusClass = switch (exerciseStatuses.get(i)) {
+                case NOT_DONE -> "exercise-not-done";
+                case DONE -> "exercise-done";
+                case OVERDUE -> "exercise-overdue";
+            };
+            exerciseLabel.getStyleClass().addAll("status-label", statusClass);
             exerciseStatus.getChildren().add(exerciseLabel);
         }
 
@@ -88,8 +86,8 @@ public class PersonCard extends UiPart<Region> {
 
         for (LabAttendance lab : labs) {
             Label labLabel = new Label("L" + lab.getLabNumber());
-            labLabel.getStyleClass().add("status-label");
-            labLabel.getStyleClass().add(lab.isAttended() ? "lab-attended" : "lab-not-attended");
+            String statusClass = lab.isAttended() ? "lab-attended" : "lab-not-attended";
+            labLabel.getStyleClass().addAll("status-label", statusClass);
             labAttendance.getChildren().add(labLabel);
         }
 

@@ -1,8 +1,11 @@
 package seedu.address.logic.commands;
 
 
+import static java.util.Objects.requireNonNull;
+
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
+import seedu.address.model.Week;
 
 public class SetWeekCommand extends Command {
     public static final String COMMAND_WORD = "set-week";
@@ -11,8 +14,16 @@ public class SetWeekCommand extends Command {
             + "Parameters: WEEK_NUMBER (must be between 0 and 13)\n"
             + "Example: " + COMMAND_WORD + " 7";
 
+    private final Week currentWeek;
+
+    public SetWeekCommand(Week currentWeek) {
+        requireNonNull(currentWeek);
+
+        this.currentWeek = currentWeek;
+    }
+
     @Override
     public CommandResult execute(Model model) throws CommandException {
-        throw new CommandException("Hello boss");
+        throw new CommandException(currentWeek.toString());
     }
 }

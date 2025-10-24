@@ -115,7 +115,7 @@ public class AddressBookParser {
             return new FilterCommandParser().parse(arguments);
 
         case SetWeekCommand.COMMAND_WORD:
-            return new SetWeekCommand();
+            return new SetWeekCommandParser().parse(arguments);
 
         default:
             logger.finer("This user input caused a ParseException: " + userInput);

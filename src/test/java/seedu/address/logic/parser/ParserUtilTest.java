@@ -240,20 +240,20 @@ public class ParserUtilTest {
     @Test
     public void parseLabAttendanceList_invalid_throwsParseException() {
         assertThrows(ParseException.class, () -> ParserUtil.parseLabAttendanceList(
-                LabListTest.INVALID_LAB_LIST_LENGTH));
+                LabListTest.INVALID_LAB_LIST_LENGTH, 1));
         assertThrows(ParseException.class, () -> ParserUtil.parseLabAttendanceList(
-                LabListTest.INVALID_LAB_LIST_MISSING_COLON));
+                LabListTest.INVALID_LAB_LIST_MISSING_COLON, 1));
         assertThrows(ParseException.class, () -> ParserUtil.parseLabAttendanceList(
-                LabListTest.INVALID_LAB_LIST_STATUS));
+                LabListTest.INVALID_LAB_LIST_STATUS, 1));
     }
 
     @Test
     public void parseLabAttendanceList_valid_success() throws ParseException {
-        LabAttendanceList labAttendanceList = new LabList();
+        LabAttendanceList labAttendanceList = new LabList(1);
         labAttendanceList.markLabAsAttended(0);
         labAttendanceList.markLabAsAttended(6);
 
-        LabAttendanceList labAttendanceListFromParser = ParserUtil.parseLabAttendanceList(VALID_LAB_LIST);
+        LabAttendanceList labAttendanceListFromParser = ParserUtil.parseLabAttendanceList(VALID_LAB_LIST, 1);
         assertEquals(labAttendanceList, labAttendanceListFromParser);
     }
 }

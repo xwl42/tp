@@ -84,7 +84,9 @@ public class AddressBookTest {
 
     @Test
     public void toStringMethod() {
-        String expected = AddressBook.class.getCanonicalName() + "{persons=" + addressBook.getPersonList() + "}";
+        String expected = AddressBook.class.getCanonicalName() +
+                "{persons=" + addressBook.getPersonList()
+                +", currentWeek=" + addressBook.getCurrentWeek().getWeekNumber() + "}";
         assertEquals(expected, addressBook.toString());
     }
 

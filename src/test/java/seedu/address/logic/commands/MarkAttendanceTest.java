@@ -111,5 +111,4 @@ public class MarkAttendanceTest {
         assertNotEquals(new MarkAttendanceCommand(
                 new MultiIndex(INDEX_FIRST_PERSON), INDEX_SECOND_LAB, true), standardCommand);
     }
-
 }

@@ -102,6 +102,11 @@ public class AddressBookTest {
         public ObservableList<Person> getPersonList() {
             return persons;
         }
+
+        @Override
+        public Week getCurrentWeek() {
+            throw new AssertionError("This method should not be called.");
+        }
     }
 
 }

@@ -17,6 +17,7 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.ReadOnlyUserPrefs;
+import seedu.address.model.Week;
 import seedu.address.model.person.Person;
 
 public class UndoCommandTest {
@@ -156,6 +157,16 @@ public class UndoCommandTest {
 
         @Override
         public void clearTimeslots() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void setCurrentWeek(Week currentWeek) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public Week getCurrentWeek() {
             throw new AssertionError("This method should not be called.");
         }
     }

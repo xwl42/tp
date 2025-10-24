@@ -11,6 +11,7 @@ import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.index.Index;
+import seedu.address.commons.core.index.MultiIndex;
 import seedu.address.logic.commands.MarkAttendanceCommand;
 
 public class MarkAttendanceCommandParserTest {
@@ -21,7 +22,8 @@ public class MarkAttendanceCommandParserTest {
     public void parse_indexAndLabSpecified_success() {
         String userInput = INDEX_FIRST_PERSON.getOneBased() + " " + PREFIX_LAB_NUMBER + validLabNumber.getOneBased()
                 + " " + PREFIX_STATUS + "y";
-        MarkAttendanceCommand expectedCommand = new MarkAttendanceCommand(INDEX_FIRST_PERSON, validLabNumber, true);
+        MarkAttendanceCommand expectedCommand = new MarkAttendanceCommand(
+                new MultiIndex(INDEX_FIRST_PERSON), validLabNumber, true);
         assertParseSuccess(parser, userInput, expectedCommand);
     }
 

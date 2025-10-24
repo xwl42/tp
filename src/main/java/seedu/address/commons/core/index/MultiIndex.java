@@ -72,4 +72,22 @@ public class MultiIndex {
         }
         return String.format("%d:%d", lowerBound.getOneBased(), upperBound.getOneBased());
     }
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+
+        if (!(other instanceof MultiIndex otherMultiIndex)) {
+            return false;
+        }
+
+        return lowerBound.equals(otherMultiIndex.lowerBound)
+                && upperBound.equals(otherMultiIndex.upperBound);
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(lowerBound, upperBound);
+    }
 }

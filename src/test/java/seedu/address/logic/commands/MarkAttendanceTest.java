@@ -14,6 +14,7 @@ import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.address.commons.core.index.MultiIndex;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.AddressBook;
@@ -38,7 +39,7 @@ public class MarkAttendanceTest {
                 .withLabAttendanceList(labAttendanceList.toString()).build();
 
         MarkAttendanceCommand markAttendanceCommand = new MarkAttendanceCommand(
-                INDEX_FIRST_PERSON, INDEX_FIRST_LAB, true);
+                new MultiIndex(INDEX_FIRST_PERSON), INDEX_FIRST_LAB, true);
 
         String expectedMessage = String.format(MarkAttendanceCommand.MESSAGE_MARK_ATTENDANCE_SUCCESS,
                 INDEX_FIRST_LAB.getOneBased(), Messages.format(editedPerson));
@@ -52,14 +53,14 @@ public class MarkAttendanceTest {
     @Test
     public void execute_invalidPersonIndex_throwsCommandException() {
         MarkAttendanceCommand markAttendanceCommand = new MarkAttendanceCommand(
-                INDEX_HUNDRED_PERSON, INDEX_FIRST_LAB, true);
+                new MultiIndex(INDEX_HUNDRED_PERSON), INDEX_FIRST_LAB, true);
         assertThrows(CommandException.class, () -> markAttendanceCommand.execute(model));
     }
 
     @Test
     public void execute_invalidLabNumber_throwsCommandException() {
         MarkAttendanceCommand markAttendanceCommand = new MarkAttendanceCommand(
-                INDEX_FIRST_PERSON, INDEX_HUNDRED_LAB, true);
+                new MultiIndex(INDEX_FIRST_PERSON), INDEX_HUNDRED_LAB, true);
         assertThrows(CommandException.class, () -> markAttendanceCommand.execute(model));
     }
 
@@ -73,18 +74,18 @@ public class MarkAttendanceTest {
         model.setPerson(firstPerson, editedPerson);
 
         MarkAttendanceCommand markAttendanceCommand = new MarkAttendanceCommand(
-                INDEX_FIRST_PERSON, INDEX_FIRST_LAB, true);
+                new MultiIndex(INDEX_FIRST_PERSON), INDEX_FIRST_LAB, true);
         assertThrows(CommandException.class, () -> markAttendanceCommand.execute(model));
     }
 
     @Test
     public void equals() {
         final MarkAttendanceCommand standardCommand = new MarkAttendanceCommand(
-                INDEX_FIRST_PERSON, INDEX_FIRST_LAB, true);
+                new MultiIndex(INDEX_FIRST_PERSON), INDEX_FIRST_LAB, true);
 
         // same values -> returns true
         MarkAttendanceCommand commandWithSameValues = new MarkAttendanceCommand(
-                INDEX_FIRST_PERSON, INDEX_FIRST_LAB, true);
+                new MultiIndex(INDEX_FIRST_PERSON), INDEX_FIRST_LAB, true);
         assertEquals(standardCommand, commandWithSameValues);
 
         // same object -> returns true
@@ -98,11 +99,11 @@ public class MarkAttendanceTest {
 
         // different index -> returns false
         assertNotEquals(new MarkAttendanceCommand(
-                INDEX_SECOND_PERSON, INDEX_FIRST_LAB, true), standardCommand);
+                new MultiIndex(INDEX_SECOND_PERSON), INDEX_FIRST_LAB, true), standardCommand);
 
         // different remark -> returns false
         assertNotEquals(new MarkAttendanceCommand(
-                INDEX_FIRST_PERSON, INDEX_SECOND_LAB, true), standardCommand);
+                new MultiIndex(INDEX_FIRST_PERSON), INDEX_SECOND_LAB, true), standardCommand);
     }
 
 }

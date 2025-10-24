@@ -60,6 +60,7 @@ public class MarkAttendanceCommand extends Command {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireAllNonNull(model);
+        model.saveAddressBook();
         List<Person> lastShownList = model.getFilteredPersonList();
 
         List<Person> updatedPersons = new ArrayList<>();
@@ -102,10 +103,7 @@ public class MarkAttendanceCommand extends Command {
             model.setPerson(personToEdit, editedPerson);
             updatedPersons.add(editedPerson);
         }
-
-        model.saveAddressBook();
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
-
         return new CommandResult(generateResponseMessage(updatedPersons, isAttended));
     }
 

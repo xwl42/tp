@@ -12,13 +12,13 @@ public class LabTest {
 
     @Test
     public void constructor_default_isAttendedFalse() {
-        Lab labAttendance = new Lab(1);
+        Lab labAttendance = new Lab(1, 1);
         assertFalse(labAttendance.isAttended());
     }
 
     @Test
     public void markAsAttended_unmarkedLab_isAttendedTrue() {
-        Lab labAttendance = new Lab(1);
+        Lab labAttendance = new Lab(1, 1);
 
         labAttendance.markAsAttended();
         assertTrue(labAttendance.isAttended());
@@ -26,7 +26,7 @@ public class LabTest {
 
     @Test
     public void markAsAttended_markedLab_throwIllegalStateException() {
-        Lab labAttendance = new Lab(1);
+        Lab labAttendance = new Lab(1, 1);
 
         labAttendance.markAsAttended();
         assertTrue(labAttendance.isAttended());
@@ -36,9 +36,9 @@ public class LabTest {
 
     @Test
     public void equals() {
-        Lab labAttendance1 = new Lab(1);
-        Lab labAttendance2 = new Lab(1);
-        Lab labAttendance3 = new Lab(2);
+        Lab labAttendance1 = new Lab(1, 1);
+        Lab labAttendance2 = new Lab(1, 1);
+        Lab labAttendance3 = new Lab(2, 1);
 
         // Same object
         assertEquals(labAttendance1, labAttendance1);
@@ -62,7 +62,7 @@ public class LabTest {
 
     @Test
     public void toString_default_success() {
-        Lab lab = new Lab(1);
+        Lab lab = new Lab(1, 1);
         assertEquals("L1: N", lab.toString());
 
         lab.markAsAttended();

@@ -223,7 +223,7 @@ public class ParserUtil {
         for (int i = 0; i < labs.length; i++) {
             String status = parts[i * 2 + 1];
 
-            labs[i] = new Lab(i + 1);
+            labs[i] = new Lab(i + 1, 1);
             if (status.equals("Y")) {
                 labs[i].markAsAttended();
             }

@@ -29,7 +29,7 @@ public class LabList implements LabAttendanceList {
     private static LabAttendance[] createDefaultLabs() {
         LabAttendance[] labAttendanceList = new LabAttendance[NUMBER_OF_LABS];
         for (int i = 0; i < NUMBER_OF_LABS; i++) {
-            labAttendanceList[i] = new Lab(i + 1);
+            labAttendanceList[i] = new Lab(i + 1, 1);
         }
         return labAttendanceList;
     }
@@ -78,7 +78,7 @@ public class LabList implements LabAttendanceList {
         LabAttendance[] copiedLabs = new LabAttendance[NUMBER_OF_LABS];
         for (int i = 0; i < NUMBER_OF_LABS; i++) {
             Lab originalLab = (Lab) this.labs[i];
-            Lab newLab = new Lab(i + 1);
+            Lab newLab = new Lab(i + 1, 1);
             if (originalLab.isAttended()) {
                 newLab.markAsAttended();
             }

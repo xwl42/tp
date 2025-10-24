@@ -35,13 +35,15 @@ public class MarkAttendanceCommand extends Command {
             "Lab %1$d marked as attended for: %2$s";
     public static final String MESSAGE_MARK_ABSENCE_SUCCESS =
             "Lab %1$d marked as not attended for: %2$s";
-    public static final String MESSAGE_FAILURE_ALREADY_ATTENDED = "Lab %1$d already marked as attended";
-    public static final String MESSAGE_FAILURE_ALREADY_NOT_ATTENDED = "Lab %1$d already marked as not attended";
+    public static final String MESSAGE_FAILURE_ALREADY_ATTENDED = "Lab %1$d already marked as attended for %2$s";
+    public static final String MESSAGE_FAILURE_ALREADY_NOT_ATTENDED =
+            "Lab %1$d already marked as not attended for %2$s";
     public static final String MESSAGE_FAILURE_INVALID_LAB_INDEX = "The lab index provided is invalid";
 
     private final MultiIndex multiIndex;
     private final Index labNumber;
     private final boolean isAttended;
+    private final StringBuilder exceptionMessageCompiler = new StringBuilder();
 
     /**
      * @param multiIndex range or single index of persons in the filtered list
@@ -80,13 +82,16 @@ public class MarkAttendanceCommand extends Command {
             } catch (IndexOutOfBoundsException iob) {
                 throw new CommandException(MESSAGE_FAILURE_INVALID_LAB_INDEX);
             } catch (IllegalStateException ise) {
+                String message;
                 if (isAttended) {
-                    throw new CommandException(String.format(MESSAGE_FAILURE_ALREADY_ATTENDED,
-                            labNumber.getOneBased()));
+                    message = String.format(MESSAGE_FAILURE_ALREADY_ATTENDED,
+                            labNumber.getOneBased(), personToEdit.getName()) + "\n";
                 } else {
-                    throw new CommandException(String.format(MESSAGE_FAILURE_ALREADY_NOT_ATTENDED,
-                            labNumber.getOneBased()));
+                    message = String.format(MESSAGE_FAILURE_ALREADY_NOT_ATTENDED,
+                            labNumber.getOneBased(), personToEdit.getName()) + "\n";
                 }
+                exceptionMessageCompiler.append(message);
+                continue;
             }
 
             Person editedPerson = new Person(
@@ -94,7 +99,6 @@ public class MarkAttendanceCommand extends Command {
                     personToEdit.getEmail(), personToEdit.getTags(),
                     personToEdit.getGithubUsername(), personToEdit.getExerciseTracker(),
                     labAttendanceList, personToEdit.getGradeMap());
-
             model.setPerson(personToEdit, editedPerson);
             updatedPersons.add(editedPerson);
         }
@@ -102,7 +106,7 @@ public class MarkAttendanceCommand extends Command {
         model.saveAddressBook();
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
 
-        return new CommandResult(generateSuccessMessage(updatedPersons, isAttended));
+        return new CommandResult(generateResponseMessage(updatedPersons, isAttended));
     }
 
     @Override
@@ -121,16 +125,20 @@ public class MarkAttendanceCommand extends Command {
                 && isAttended == otherCommand.isAttended;
     }
 
-    private String generateSuccessMessage(List<Person> personsEdited, boolean isAttended) {
+    private String generateResponseMessage(List<Person> personsEdited, boolean isAttended) {
         String studentNames = personsEdited.stream()
                 .map(person -> person.getName().fullName)
                 .collect(java.util.stream.Collectors.joining(", "));
-
+        if (personsEdited.isEmpty()) {
+            return exceptionMessageCompiler.toString();
+        }
         if (isAttended) {
-            return String.format(MESSAGE_MARK_ATTENDANCE_SUCCESS,
+            return exceptionMessageCompiler
+                    + String.format(MESSAGE_MARK_ATTENDANCE_SUCCESS,
                     labNumber.getOneBased(), studentNames);
         } else {
-            return String.format(MESSAGE_MARK_ABSENCE_SUCCESS,
+            return exceptionMessageCompiler
+                + String.format(MESSAGE_MARK_ABSENCE_SUCCESS,
                     labNumber.getOneBased(), studentNames);
         }
     }

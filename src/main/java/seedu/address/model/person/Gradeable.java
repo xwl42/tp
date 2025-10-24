@@ -8,4 +8,5 @@ import seedu.address.model.person.exceptions.InvalidScoreException;
 public interface Gradeable {
     double getScore();
     void setScore(double score) throws InvalidScoreException;
+    void setPercentageScore(double score) throws InvalidScoreException;
 }

@@ -36,6 +36,8 @@ public class SetWeekCommand extends Command {
 
     @Override
     public CommandResult execute(Model model) throws CommandException {
+        model.saveAddressBook(); // Save current state BEFORE making changes for undo functionality
+
         model.setCurrentWeek(currentWeek);
         int currentWeekNumber = currentWeek.getWeekNumber();
 
@@ -61,9 +63,6 @@ public class SetWeekCommand extends Command {
             model.setPerson(person, updatedPerson);
             updatedCount++;
         }
-
-        model.saveAddressBook(); // For undo functionality
-
 
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
 

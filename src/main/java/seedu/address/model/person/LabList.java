@@ -120,7 +120,7 @@ public class LabList implements LabAttendanceList {
                 return false;
             }
 
-            if (!status.equals("Y") && !status.equals("N")) {
+            if (!status.equals("Y") && !status.equals("N") && !status.equals("A")) {
                 return false;
             }
         }

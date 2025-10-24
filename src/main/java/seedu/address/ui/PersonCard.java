@@ -86,7 +86,12 @@ public class PersonCard extends UiPart<Region> {
 
         for (LabAttendance lab : labs) {
             Label labLabel = new Label("L" + lab.getLabNumber());
-            String statusClass = lab.isAttended() ? "lab-attended" : "lab-not-attended";
+            String statusClass = switch (lab.getStatus()) {
+                case "Y" -> "lab-attended";
+                case "A" -> "lab-absent";
+                default -> "lab-not-attended"; // "N"
+
+            };
             labLabel.getStyleClass().addAll("status-label", statusClass);
             labAttendance.getChildren().add(labLabel);
         }

@@ -24,4 +24,10 @@ public interface LabAttendance {
     public boolean isAttended();
 
     public int getLabNumber();
+
+    /**
+     *
+     * @returns the attendance status of the lab session
+     */
+    public String getStatus();
 }

@@ -55,6 +55,7 @@ public class BlockTimeslotCommand extends Command {
         if (mm.hasTimeslot(toAdd)) {
             throw new CommandException(MESSAGE_DUPLICATE_TIMESLOT);
         }
+        model.saveAddressBook();
         mm.addTimeslot(toAdd);
         return new CommandResult(String.format(MESSAGE_SUCCESS, toAdd));
     }

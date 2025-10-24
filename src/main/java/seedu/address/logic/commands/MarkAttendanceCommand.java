@@ -69,7 +69,7 @@ public class MarkAttendanceCommand extends MultiIndexCommand {
             throw new CommandException(MESSAGE_FAILURE_INVALID_LAB_INDEX);
         } catch (IllegalStateException e) {
             alreadyMarkedPersons.add(personToEdit);
-            return null; // skip updating
+            return null;
         }
 
         Person editedPerson = new Person(

@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.index.Index;
+import seedu.address.commons.core.index.MultiIndex;
 import seedu.address.logic.commands.MarkExerciseCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Status;
@@ -32,8 +33,8 @@ public class MarkExerciseCommandParserTest {
     @Test
     public void parse_validArgs_returnsMarkExerciseCommand() throws Exception {
         String input = "1 " + PREFIX_EXERCISE_INDEX + "0 " + PREFIX_STATUS + "D";
-        MarkExerciseCommand expected = new MarkExerciseCommand(Status.DONE,
-                Index.fromOneBased(1), Index.fromZeroBased(0));
+        MarkExerciseCommand expected = new MarkExerciseCommand(
+                new MultiIndex(Index.fromZeroBased(0)), Index.fromOneBased(1), Status.DONE);
         MarkExerciseCommand result = parser.parse(input);
         assertEquals(expected, result);
     }

@@ -94,6 +94,11 @@ public class ExerciseTracker implements Comparable<ExerciseTracker> {
         if (index.getZeroBased() < 0 || index.getZeroBased() >= NUMBER_OF_EXERCISES) {
             throw new IndexOutOfBoundsException("Index should be between 0 and " + (NUMBER_OF_EXERCISES - 1));
         }
+        if (exercises.get(index.getZeroBased()).getStatus().equals(status)) {
+            throw new IllegalStateException(String.format("Ex %d already marked with %s",
+                    index.getZeroBased(),
+                    status));
+        }
         exercises.get(index.getZeroBased()).markStatus(status);
     }
 

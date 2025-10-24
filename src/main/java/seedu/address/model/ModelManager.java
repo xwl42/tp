@@ -215,6 +215,17 @@ public class ModelManager implements Model {
     }
 
     /**
+     * Removes the given {@code Timeslot} from the model's timeslot collection.
+     *
+     * @param t the timeslot to remove (must not be null).
+     */
+    @Override
+    public void removeTimeslot(Timeslot t) {
+        requireNonNull(t);
+        this.timeslots.removeTimeslot(t);
+    }
+
+    /**
      * Returns true if the model already contains the given {@code Timeslot}.
      *
      * @param t timeslot to check presence for (must not be null).

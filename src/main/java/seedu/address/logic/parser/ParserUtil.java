@@ -15,6 +15,7 @@ import java.util.Set;
 
 import javafx.util.Pair;
 import seedu.address.commons.core.index.Index;
+import seedu.address.commons.core.index.MultiIndex;
 import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Email;
@@ -44,7 +45,36 @@ import seedu.address.model.tag.Tag;
 public class ParserUtil {
 
     public static final String MESSAGE_INVALID_INDEX = "Index is not a non-zero unsigned integer.";
+    /**
+     * @param input a string that is either in the "X:Y" or "X" form
+     * @return a MultiIndex instance
+     * @throws ParseException if the input is invalid
+     */
+    public static MultiIndex parseMultiIndex(String input) throws ParseException {
+        if (input.contains(":")) {
+            return parseRange(input);
+        } else {
+            return new MultiIndex(parseIndex(input));
+        }
+    }
+    /**
+     * Parses a range input like "2:5" into a MultiIndex.
+     * */
+    private static MultiIndex parseRange(String input) throws ParseException {
+        String[] parts = input.split(":");
+        if (parts.length != 2) {
+            throw new IllegalArgumentException("Invalid range format: " + input);
+        }
 
+        Index lower = ParserUtil.parseIndex(parts[0].trim());
+        Index upper = ParserUtil.parseIndex(parts[1].trim());
+
+        if (lower.getZeroBased() > upper.getZeroBased()) {
+            throw new IllegalArgumentException("Lower bound cannot be greater than upper bound: " + input);
+        }
+
+        return new MultiIndex(lower, upper);
+    }
     /**
      * Parses {@code oneBasedIndex} into an {@code Index} and returns it. Leading and trailing whitespaces will be
      * trimmed.

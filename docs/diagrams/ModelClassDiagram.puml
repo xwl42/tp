@@ -23,6 +23,9 @@ Package Model as ModelPackage <<Rectangle>> {
   Class Name
   Class Phone
   Class Tag
+  Class Exercise
+  Class Lab
+  Class Gradeable
 
   Class I #FFFFFF
 }
@@ -43,15 +46,20 @@ AddressBook *--> "1" UniquePersonList
 UniquePersonList --> "~* all" Person
 
 ' Person field associations
-Person *--> StudentId
-Person *--> Name
-Person *--> Phone
-Person *--> Email
-Person *--> GithubUsername
-Person *--> ExerciseTracker
-Person *--> LabAttendanceList
-Person *--> GradeMap
+Person *--> "1" StudentId
+Person *--> "1" Name
+Person *--> "1" Phone
+Person *--> "1" Email
+Person *--> "1" GithubUsername
+Person *--> "1" ExerciseTracker
+Person *--> "1" LabAttendanceList
+Person *--> "1" GradeMap
 Person *--> "*" Tag
+
+' Internal associations for composite objects
+ExerciseTracker *--> "10" Exercise
+LabAttendanceList *--> "10" Lab
+GradeMap *--> "4" Gradeable
 
 Person -[hidden]up--> I
 UniquePersonList -[hidden]right-> I

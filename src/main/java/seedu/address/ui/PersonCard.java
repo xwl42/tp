@@ -70,9 +70,9 @@ public class PersonCard extends UiPart<Region> {
         for (int i = 0; i < exerciseStatuses.size(); i++) {
             Label exerciseLabel = new Label("EX" + i);
             String statusClass = switch (exerciseStatuses.get(i)) {
-                case NOT_DONE -> "exercise-not-done";
-                case DONE -> "exercise-done";
-                case OVERDUE -> "exercise-overdue";
+            case NOT_DONE -> "exercise-not-done";
+            case DONE -> "exercise-done";
+            case OVERDUE -> "exercise-overdue";
             };
             exerciseLabel.getStyleClass().addAll("status-label", statusClass);
             exerciseStatus.getChildren().add(exerciseLabel);

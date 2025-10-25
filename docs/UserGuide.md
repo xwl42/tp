@@ -32,20 +32,21 @@ How to use this guide:
     2. [Adding a student: `add`](#adding-a-student-add)
     3. [Listing all students: `list`](#listing-all-students-list)
     4. [Editing a student: `edit`](#editing-a-student-edit)
-    5. [Marking lab attendance: `marka`](#marking-lab-attendance-marka)
-    6. [Marking exercise status: `marke`](#marking-exercise-status-marke)
-    7. [Assigning assessment score: `grade`](#assigning-assessment-score-grade)
-    8. [Locating students by name: `find`](#locating-students-by-name-find)
-    9. [Sorting students: `sort`](#sorting-the-students-sort)
-    10. [Deleting a student: `delete`](#deleting-a-student-delete)
-    11. [Clearing all entries: `clear`](#clearing-all-entries-clear)
-    12. [Undoing the last command: `undo`](#undoing-the-last-command-undo)
-    13. [Blocking a timeslot: `block-timeslot`](#blocking-a-timeslot-block-timeslot)
-    14. [Retrieving merged timeslot ranges: `get-timeslots`](#retrieving-merged-timeslot-ranges-get-timeslots)
-    15. [Clearing all timeslots: `clear-timeslots`](#clearing-all-timeslots-clear-timeslots)
-    16. [Exiting the program: `exit`](#exiting-the-program-exit)
-    17. [Saving the data](#saving-the-data)
-    18. [Editing the data file](#editing-the-data-file)
+    5. [Setting current week: `set-week`](#setting-current-week-set-week)
+    6. [Marking lab attendance: `marka`](#marking-lab-attendance-marka)
+    7. [Marking exercise status: `marke`](#marking-exercise-status-marke)
+    8. [Assigning assessment score: `grade`](#assigning-assessment-score-grade)
+    9. [Locating students by name: `find`](#locating-students-by-name-find)
+    10. [Sorting students: `sort`](#sorting-the-students-sort)
+    11. [Deleting a student: `delete`](#deleting-a-student-delete)
+    12. [Clearing all entries: `clear`](#clearing-all-entries-clear)
+    13. [Undoing the last command: `undo`](#undoing-the-last-command-undo)
+    14. [Blocking a timeslot: `block-timeslot`](#blocking-a-timeslot-block-timeslot)
+    15. [Retrieving merged timeslot ranges: `get-timeslots`](#retrieving-merged-timeslot-ranges-get-timeslots)
+    16. [Clearing all timeslots: `clear-timeslots`](#clearing-all-timeslots-clear-timeslots)
+    17. [Exiting the program: `exit`](#exiting-the-program-exit)
+    18. [Saving the data](#saving-the-data)
+    19. [Editing the data file](#editing-the-data-file)
 3. [FAQ](#faq)
 4. [Known issues](#known-issues)
 5. [Command summary](#command-summary)
@@ -205,18 +206,29 @@ Examples:
 *  `edit 1 p/91234567 e/johndoe@example.com` Edits the phone number and email address of the 1st student to be `91234567` and `johndoe@example.com` respectively.
 *  `edit 2 n/Betsy Crower t/` Edits the name of the 2nd student to be `Betsy Crower` and clears all existing tags.
 
+### Setting current week: 'set-week'
+
+Sets the current week of the semester to the specified week.
+
+Format: `set-week WEEKNUMBER`
+
+* Marks the lab attendance of past labs as absent if not attended
+* Marks the overdue exercises as overdue if not complete (*to be implemented*)
+* `WEEKNUMBER` represents the NUS Semester week, and it **must be between 0 and 13 inclusive**
+
 ### Marking lab attendance: `marka`
 
 Marks the lab attendance of an existing student in LambdaLab.
 
-Format: `marka INDEX l/LABNUMBER`
+Format: `marka INDEX l/LABNUMBER s/ATTENDANCESTATUS`
 
 * Edits the student at the specified `INDEX`. The index refers to the index number shown in the displayed student list. The index **must be a positive integer** 1, 2, 3, …​
 * `LABNUMBER` represents the lab session to mark attendance for. It **must be between 1 and 10 (inclusive)**.
-* Attendance can only be **marked once per lab**.
+* `ATTENDANCESTATUS` represents the current status of the student's attendance. It **must be one of `y` or `n` (case-insensitive)**
 
 Examples:
-* `marka 2 l/7` marks Lab 7 of the second student as attended.
+* `marka 2 l/7 s/y` marks Lab 7 of the second student as attended.
+* `marka 2 l/7 s/n` marks Lab 7 of the second student as not attended.
 
 ### Marking exercise status: `marke`
 
@@ -510,6 +522,7 @@ Action     | Format, Examples
 **Help**   | `help`
 **Mark Attendance** | `marka INDEX l/LABNUMBER` <br> e.g. `marka 2 l/7`
 **Mark Exercise** | `marke INDEX ei/EXERCISENUMBER s/STATUSLETTER` <br> e.g. `marke 2 ei/7 s/d`
+**Set Week** | `set-week WEEKNUMBER` <br> e.g. `set-week 5`
 **Sort**    | `sort`
 **Undo** | `undo`
 **Grade**| `grade`

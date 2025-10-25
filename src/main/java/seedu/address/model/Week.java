@@ -12,6 +12,12 @@ public class Week {
 
     private final int weekNumber;
 
+    /**
+     * Constructs a {@code Week} with the specified week number.
+     *
+     * @param weekNumber The week number in the semester (must be between 0 and 13 inclusive)
+     * @throws IllegalStateException if the week number is not between {@code MIN_WEEK} and {@code MAX_WEEK}
+     */
     public Week(int weekNumber) {
         if (weekNumber < 0 || weekNumber > MAX_WEEK) {
             throw new IllegalStateException(MESSAGE_CONSTRAINTS);

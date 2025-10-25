@@ -26,8 +26,7 @@ public interface LabAttendance {
     public int getLabNumber();
 
     /**
-     *
-     * @returns the attendance status of the lab session
+     * @return the attendance status of the lab session
      */
     public String getStatus();
 }

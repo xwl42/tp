@@ -28,6 +28,9 @@ public class SetWeekCommand extends Command {
 
     private final Week currentWeek;
 
+    /**
+     * @param currentWeek current week of the semester
+     */
     public SetWeekCommand(Week currentWeek) {
         requireNonNull(currentWeek);
 
@@ -58,7 +61,7 @@ public class SetWeekCommand extends Command {
                     person.getTags(),
                     person.getGithubUsername(),
                     person.getExerciseTracker(),
-                    updatedLabList,  // New LabList with updated weeks
+                    updatedLabList, // New LabList with updated weeks
                     person.getGradeMap()
             );
 

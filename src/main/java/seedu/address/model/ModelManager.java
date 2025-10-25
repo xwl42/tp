@@ -241,7 +241,6 @@ public class ModelManager implements Model {
      */
     @Override
     public void clearTimeslots() {
-        // Clear the existing Timeslots collection in-place so any observers retain their binding.
         requireNonNull(this.timeslots);
         this.timeslots.clear();
     }

@@ -75,7 +75,6 @@ public class Timeslots implements ReadOnlyTimeslots {
 
     /**
      * Clears all timeslots in this collection while preserving the same ObservableList instance.
-     * This avoids replacing the backing list object (important for listeners/bindings).
      */
     public void clear() {
         times.clear();

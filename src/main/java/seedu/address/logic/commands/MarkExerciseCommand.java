@@ -1,110 +1,127 @@
 package seedu.address.logic.commands;
 
-import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 import static seedu.address.model.person.ExerciseTracker.NUMBER_OF_EXERCISES;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import seedu.address.commons.core.index.Index;
-import seedu.address.logic.Messages;
+import seedu.address.commons.core.index.MultiIndex;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.ExerciseTracker;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Status;
 
-
 /**
- * Command used to mark an exercise
+ * Marks a specific exercise as a given status for one or more students in the address book.
  */
-public class MarkExerciseCommand extends Command {
+public class MarkExerciseCommand extends MultiIndexCommand {
+
     public static final String COMMAND_WORD = "marke";
-    public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Marks the exercise status of the person identified "
-            + "by the index number used in the last person listing. "
-            + "Existing exercise status will be updated based on the input.\n"
-            + "Parameters: INDEX (must be a positive integer) ei/EXERCISEINDEX s/STATUS \n"
-            + "Example: " + COMMAND_WORD + " 1 "
-            + "ei/1 "
-            + "s/d \n";
-    public static final String MESSAGE_MARK_EXERCISE =
-            "Exercise %d marked as %s for student %d (%s)";
+
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Marks the exercise status of one or more persons "
+            + "identified by their index numbers in the last person listing.\n"
+            + "Parameters: INDEX (must be a positive integer or range X:Y) "
+            + "ei/EXERCISEINDEX s/STATUS\n"
+            + "Example: " + COMMAND_WORD + " 1:3 ei/1 s/d";
+
+    public static final String MESSAGE_MARK_EXERCISE_SUCCESS =
+            "Exercise %1$d marked as %2$s for: %3$s";
+    public static final String MESSAGE_FAILURE_ALREADY_MARKED =
+            "Exercise %1$d already marked as %2$s for %3$s";
     public static final String MESSAGE_INDEX_OUT_OF_BOUNDS =
-            "Index out of bounds! Index should be a number from 0 to %d";
+            "Exercise index out of bounds! Index should be between 0 and %d.";
+
     private static final int HIGHEST_INDEX = NUMBER_OF_EXERCISES - 1;
-    private final Status status;
-    private final Index studentIndex;
+
+    private final MultiIndex studentIndex;
     private final Index exerciseIndex;
+    private final Status status;
+    private final List<Person> alreadyMarkedPersons = new ArrayList<>();
 
     /**
-     * @param studentIndex of the student to be marked
+     * @param studentIndex indices of students to be marked
      * @param exerciseIndex exercise number to mark
      * @param status status to mark the exercise with
      */
-    public MarkExerciseCommand(Status status, Index studentIndex, Index exerciseIndex) {
-        requireAllNonNull(studentIndex, status, exerciseIndex);
+    public MarkExerciseCommand(MultiIndex studentIndex, Index exerciseIndex, Status status) {
+        super(studentIndex);
+        requireAllNonNull(studentIndex, exerciseIndex, status);
         this.studentIndex = studentIndex;
         this.exerciseIndex = exerciseIndex;
         this.status = status;
     }
-    public Index getExerciseIndex() {
-        return exerciseIndex;
-    }
 
-    public Index getStudentIndex() {
-        return studentIndex;
-    }
+    @Override
+    protected Person applyActionToPerson(Model model, Person personToEdit) throws CommandException {
+        ExerciseTracker updatedExerciseTracker = personToEdit.getExerciseTracker().copy();
+        try {
+            updatedExerciseTracker.markExercise(exerciseIndex, status);
+        } catch (IndexOutOfBoundsException e) {
+            throw new CommandException(String.format(MESSAGE_INDEX_OUT_OF_BOUNDS, HIGHEST_INDEX));
+        } catch (IllegalStateException e) {
+            alreadyMarkedPersons.add(personToEdit);
+            return null;
+        }
 
-    public Status getStatus() {
-        return status;
+        Person updatedPerson = new Person(
+                personToEdit.getStudentId(),
+                personToEdit.getName(),
+                personToEdit.getPhone(),
+                personToEdit.getEmail(),
+                personToEdit.getTags(),
+                personToEdit.getGithubUsername(),
+                updatedExerciseTracker,
+                personToEdit.getLabAttendanceList(),
+                personToEdit.getGradeMap()
+        );
+
+        model.setPerson(personToEdit, updatedPerson);
+        model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+        return updatedPerson;
     }
 
     @Override
-    public CommandResult execute(Model model) throws CommandException {
-        requireNonNull(model);
-        List<Person> lastShownList = model.getFilteredPersonList();
-        if (studentIndex.getZeroBased() >= lastShownList.size()) {
-            throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+    protected CommandResult buildResult(List<Person> updatedPersons) {
+        return new CommandResult(generateResponseMessage(alreadyMarkedPersons, updatedPersons));
+    }
+
+    private String generateResponseMessage(List<Person> alreadyMarkedPersons, List<Person> personsEdited) {
+        String editedNames = personsEdited.stream()
+                .map(person -> person.getName().fullName)
+                .collect(Collectors.joining(", "));
+
+        String alreadyMarkedMessage = compileAlreadyMarkedMessage(alreadyMarkedPersons);
+        StringBuilder message = new StringBuilder();
+
+        if (!alreadyMarkedMessage.isEmpty()) {
+            message.append(alreadyMarkedMessage).append("\n");
         }
 
-        Person student = lastShownList.get(studentIndex.getZeroBased());
-        assert student != null : "student should not be null";
-        model.saveAddressBook();
-
-        // Create a copy of the ExerciseTracker
-        ExerciseTracker updatedExerciseTracker = student.getExerciseTracker().copy();
-
-        try {
-            updatedExerciseTracker.markExercise(exerciseIndex, status); // Modify the copy
-        } catch (IndexOutOfBoundsException iob) {
-            throw new CommandException(
-                    String.format(MESSAGE_INDEX_OUT_OF_BOUNDS, HIGHEST_INDEX)
-            );
+        if (!personsEdited.isEmpty()) {
+            String successMessage = String.format(MESSAGE_MARK_EXERCISE_SUCCESS,
+                    exerciseIndex.getZeroBased(), status, editedNames);
+            message.append(successMessage);
         }
 
-        // Create a NEW Person with the updated ExerciseTracker
-        Person updatedStudent = new Person(
-                student.getStudentId(),
-                student.getName(),
-                student.getPhone(),
-                student.getEmail(),
-                student.getTags(),
-                student.getGithubUsername(),
-                updatedExerciseTracker, // Use the modified copy
-                student.getLabAttendanceList(),
-                student.getGradeMap()
-        );
+        return message.toString().trim();
+    }
 
-        model.setPerson(student, updatedStudent);
-        model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+    private String compileAlreadyMarkedMessage(List<Person> alreadyMarkedPersons) {
+        if (alreadyMarkedPersons.isEmpty()) {
+            return "";
+        }
 
-        return new CommandResult(String.format(MESSAGE_MARK_EXERCISE,
-                exerciseIndex.getZeroBased(),
-                status,
-                studentIndex.getOneBased(),
-                updatedStudent.getName()));
+        String names = alreadyMarkedPersons.stream()
+                .map(person -> person.getName().fullName)
+                .collect(Collectors.joining(", "));
+
+        return String.format(MESSAGE_FAILURE_ALREADY_MARKED,
+                exerciseIndex.getZeroBased(), status, names);
     }
 
     @Override
@@ -113,16 +130,13 @@ public class MarkExerciseCommand extends Command {
             return true;
         }
 
-        // instanceof handles nulls
         if (!(other instanceof MarkExerciseCommand)) {
             return false;
         }
 
-        MarkExerciseCommand e = (MarkExerciseCommand) other;
-        return studentIndex.equals(e.getStudentIndex())
-                && status.equals(e.getStatus())
-                && exerciseIndex.equals(e.getExerciseIndex());
+        MarkExerciseCommand otherCommand = (MarkExerciseCommand) other;
+        return studentIndex.equals(otherCommand.studentIndex)
+                && exerciseIndex.equals(otherCommand.exerciseIndex)
+                && status.equals(otherCommand.status);
     }
 }
-
-

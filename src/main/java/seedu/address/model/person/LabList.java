@@ -7,12 +7,13 @@ public class LabList implements LabAttendanceList {
     public static final int NUMBER_OF_LABS = 10;
     public static final String MESSAGE_CONSTRAINTS =
             "Lab attendance list should be in the format 'L1: Y/N ... L10: Y/N'";
+    private static int currentWeek = 0;
     private final LabAttendance[] labs;
 
     /**
      * Constructs a {@code LabList} with all labs initialized to not attended.
      */
-    public LabList(int currentWeek) {
+    public LabList() {
         this(createDefaultLabs(currentWeek));
     }
 
@@ -32,6 +33,14 @@ public class LabList implements LabAttendanceList {
             labAttendanceList[i] = new Lab(i + 1, currentWeek);
         }
         return labAttendanceList;
+    }
+
+    public static int getCurrentWeek() {
+        return currentWeek;
+    }
+
+    public static void setCurrentWeek(int week) {
+        currentWeek = week;
     }
 
     @Override
@@ -74,7 +83,7 @@ public class LabList implements LabAttendanceList {
      *
      * @return a new LabList with copied attendance records
      */
-    public LabList copy(int currentWeek) {
+    public LabList copy() {
         LabAttendance[] copiedLabs = new LabAttendance[NUMBER_OF_LABS];
         for (int i = 0; i < NUMBER_OF_LABS; i++) {
             Lab originalLab = (Lab) this.labs[i];

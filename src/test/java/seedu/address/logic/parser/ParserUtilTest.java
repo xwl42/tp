@@ -275,7 +275,7 @@ public class ParserUtilTest {
 
     @Test
     public void parseLabAttendanceList_valid_success() throws ParseException {
-        LabAttendanceList labAttendanceList = new LabList(1);
+        LabAttendanceList labAttendanceList = new LabList();
         labAttendanceList.markLabAsAttended(0);
         labAttendanceList.markLabAsAttended(6);
 

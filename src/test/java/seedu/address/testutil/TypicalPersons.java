@@ -31,7 +31,7 @@ public class TypicalPersons {
             .withPhone("94351253")
             .withTags("upcomingConsultation")
             .withGithubUsername("Alice")
-            .withLabAttendanceList(new LabList(0).toString())
+            .withLabAttendanceList(new LabList().toString())
             .withExerciseTracker(new ExerciseTracker().toString())
             .build();
 
@@ -40,7 +40,7 @@ public class TypicalPersons {
             .withEmail("johnd@example.com")
             .withPhone("98765432")
             .withGithubUsername("Benson")
-            .withLabAttendanceList(new LabList(0).toString())
+            .withLabAttendanceList(new LabList().toString())
             .withExerciseTracker(new ExerciseTracker().toString())
             .withTags("hadConsultation").build();
 
@@ -50,7 +50,7 @@ public class TypicalPersons {
             .withEmail("heinz@example.com")
 
             .withGithubUsername("Carl")
-            .withLabAttendanceList(new LabList(0).toString())
+            .withLabAttendanceList(new LabList().toString())
             .withExerciseTracker(new ExerciseTracker().toString())
             .build();
 
@@ -61,7 +61,7 @@ public class TypicalPersons {
 
             .withGithubUsername("Daniel")
             .withTags("upcomingConsultation")
-            .withLabAttendanceList(new LabList(0).toString())
+            .withLabAttendanceList(new LabList().toString())
             .withExerciseTracker(new ExerciseTracker().toString())
             .build();
 
@@ -71,7 +71,7 @@ public class TypicalPersons {
             .withEmail("werner@example.com")
 
             .withGithubUsername("Elle")
-            .withLabAttendanceList(new LabList(0).toString())
+            .withLabAttendanceList(new LabList().toString())
             .withExerciseTracker(new ExerciseTracker().toString())
             .build();
 
@@ -81,7 +81,7 @@ public class TypicalPersons {
             .withEmail("lydia@example.com")
 
             .withGithubUsername("Fiona")
-            .withLabAttendanceList(new LabList(0).toString())
+            .withLabAttendanceList(new LabList().toString())
             .withExerciseTracker(new ExerciseTracker().toString())
             .build();
 
@@ -91,7 +91,7 @@ public class TypicalPersons {
             .withEmail("anna@example.com")
 
             .withGithubUsername("George")
-            .withLabAttendanceList(new LabList(0).toString())
+            .withLabAttendanceList(new LabList().toString())
             .withExerciseTracker(new ExerciseTracker().toString())
             .build();
 
@@ -101,7 +101,7 @@ public class TypicalPersons {
             .withPhone("8482424")
             .withEmail("stefan@example.com")
             .withGithubUsername("Hoon")
-            .withLabAttendanceList(new LabList(0).toString())
+            .withLabAttendanceList(new LabList().toString())
             .withExerciseTracker(new ExerciseTracker().toString())
             .build();
 
@@ -110,7 +110,7 @@ public class TypicalPersons {
             .withPhone("8482131")
             .withEmail("hans@example.com")
             .withGithubUsername("Ida")
-            .withLabAttendanceList(new LabList(0).toString())
+            .withLabAttendanceList(new LabList().toString())
             .withExerciseTracker(new ExerciseTracker().toString())
             .build();
 
@@ -121,7 +121,7 @@ public class TypicalPersons {
             .withEmail(VALID_EMAIL_AMY)
             .withTags(VALID_TAG_FRIEND)
             .withGithubUsername(VALID_GITHUB_USERNAME_AMY)
-            .withLabAttendanceList(new LabList(0).toString())
+            .withLabAttendanceList(new LabList().toString())
             .withExerciseTracker(new ExerciseTracker().toString())
             .build();
 
@@ -131,7 +131,7 @@ public class TypicalPersons {
             .withEmail(VALID_EMAIL_BOB)
             .withTags(VALID_TAG_HUSBAND, VALID_TAG_FRIEND)
             .withGithubUsername(VALID_GITHUB_USERNAME_BOB)
-            .withLabAttendanceList(new LabList(0).toString())
+            .withLabAttendanceList(new LabList().toString())
             .withExerciseTracker(new ExerciseTracker().toString())
             .build();
 

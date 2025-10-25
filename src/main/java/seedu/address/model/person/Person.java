@@ -42,7 +42,7 @@ public class Person {
         this.tags.addAll(tags);
         this.exerciseTracker = new ExerciseTracker();
         this.githubUsername = githubUsername;
-        this.labAttendanceList = new LabList(currentWeek);
+        this.labAttendanceList = new LabList();
         this.gradeMap = new GradeMap();
     }
 

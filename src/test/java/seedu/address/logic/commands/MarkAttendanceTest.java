@@ -32,7 +32,7 @@ public class MarkAttendanceTest {
     @Test
     public void execute_markLab_success() {
         Person firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        LabAttendanceList labAttendanceList = new LabList(1);
+        LabAttendanceList labAttendanceList = new LabList();
         labAttendanceList.markLabAsAttended(0);
         Person editedPerson = new PersonBuilder(firstPerson)
                 .withLabAttendanceList(labAttendanceList.toString()).build();
@@ -66,7 +66,7 @@ public class MarkAttendanceTest {
     @Test
     public void execute_labAlreadyMarked_compilesMessageSuccessfully() throws CommandException {
         Person firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        LabAttendanceList labAttendanceList = new LabList(1);
+        LabAttendanceList labAttendanceList = new LabList();
         labAttendanceList.markLabAsAttended(0);
         Person editedPerson = new PersonBuilder(firstPerson)
                 .withLabAttendanceList(labAttendanceList.toString()).build();

@@ -29,7 +29,7 @@ public class PersonBuilder {
     public static final String DEFAULT_EMAIL = "amy@gmail.com";
     public static final String DEFAULT_ADDRESS = "123, Jurong West Ave 6, #08-111";
     public static final String DEFAULT_GITHUB_USERNAME = "TestUsername";
-    public static final String DEFAULT_LAB_ATTENDANCE_LIST = new LabList(1).toString();
+    public static final String DEFAULT_LAB_ATTENDANCE_LIST = new LabList().toString();
     public static final String DEFAULT_GRADEMAP = new GradeMap().toString();
 
 
@@ -54,7 +54,7 @@ public class PersonBuilder {
         tags = new HashSet<>();
         exerciseTracker = new ExerciseTracker();
         githubUsername = new GithubUsername(DEFAULT_GITHUB_USERNAME);
-        labAttendanceList = new LabList(1);
+        labAttendanceList = new LabList();
         gradeMap = new GradeMap();
     }
 

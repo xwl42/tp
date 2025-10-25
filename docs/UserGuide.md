@@ -42,11 +42,12 @@ How to use this guide:
     12. [Clearing all entries: `clear`](#clearing-all-entries-clear)
     13. [Undoing the last command: `undo`](#undoing-the-last-command-undo)
     14. [Blocking a timeslot: `block-timeslot`](#blocking-a-timeslot-block-timeslot)
-    15. [Retrieving merged timeslot ranges: `get-timeslots`](#retrieving-merged-timeslot-ranges-get-timeslots)
-    16. [Clearing all timeslots: `clear-timeslots`](#clearing-all-timeslots-clear-timeslots)
-    17. [Exiting the program: `exit`](#exiting-the-program-exit)
-    18. [Saving the data](#saving-the-data)
-    19. [Editing the data file](#editing-the-data-file)
+    15. [Unblocking a timeslot: `unblock-timeslot`](#unblocking-a-timeslot-unblock-timeslot)
+    16. [Retrieving merged timeslot ranges: `get-timeslots`](#retrieving-merged-timeslot-ranges-get-timeslots)
+    17. [Clearing all timeslots: `clear-timeslots`](#clearing-all-timeslots-clear-timeslots)
+    18. [Exiting the program: `exit`](#exiting-the-program-exit)
+    19. [Saving the data](#saving-the-data)
+    20. [Editing the data file](#editing-the-data-file)
 3. [FAQ](#faq)
 4. [Known issues](#known-issues)
 5. [Command summary](#command-summary)
@@ -116,7 +117,7 @@ How to use this guide:
 
 ## Features
 
-<box type="info">
+<box type="info" seamless>
 
 **Notes about the command format:**<br>
 
@@ -156,7 +157,7 @@ Adds a student to LambdaLab.
 
 Format: `add i/STUDENTID n/NAME p/PHONE e/EMAIL g/GITHUB_USERNAME [t/TAG]…​`
 
-<box type="tip">
+<box type="tip" seamless>
 
 **Tip:** A student can have zero or more tags.  
 A tag must be alphanumeric with no spaces or special characters.
@@ -167,7 +168,7 @@ Examples:
 * Optional fields included: `add i/A1234567X n/John Doe p/98765432 e/johnd@example.com g/JohnDoe t/modelStudent`
 * Fields in different order: `add g/JohnDoe i/A1234567X  p/98765432 t/modelStudent n/John Doe e/johnd@example.com`
 
-<box type="warning">
+<box type="warning" seamless>
 
 Duplicate Identifier (Student ID) will cause the below error:  
   `This student already exists in LambdaLab`
@@ -191,7 +192,7 @@ The index **must be a positive integer** 1, 2, 3, …​
 * You must provide at least 1 of the optional fields.
 * Existing values will be updated to the input values.
   
-<box type="warning">
+<box type="warning" seamless>
 
 **Caution:** 
 When editing tags, the existing tags of the student will be removed 
@@ -307,7 +308,7 @@ Format: `sort c/SORTCRITERION`
   * `lab` sorts students by their Lab Attendance Rate (Highest to lowest)
   * `ex` sorts students by their progress in their exercises (Highest to lowest)
 
-<box type="tip">
+<box type="tip" seamless>
 
 **Tip:** The criterion is case-insensitive!
 </box>
@@ -328,7 +329,7 @@ Examples:
 * `list` followed by `delete 2` deletes the 2nd student in the LambdaLab.
 * `find Betsy` followed by `delete 1` deletes the 1st student in the results of the `find` command.
 
-<box type="warning">
+<box type="warning" seamless>
 
 Missing fields or a non‑positive index will cause the following error:  
   `Invalid command format! 
@@ -343,7 +344,7 @@ Clears **all** entries from LambdaLab, leaving it completely empty.
 
 Format: `clear`
 
-<box type="warning">
+<box type="warning" seamless>
 
 **Caution:**
 This command will remove **all** entries from LambdaLab. If mistakenly performed, type `undo` **immediately**
@@ -360,14 +361,14 @@ Format: `undo`
 * Commands that do not modify data cannot be undone (e.g., `help`, `list`, `find`, `exit`).  
 * `undo` only reverses the very last data‑modifying command. If there is no command to undo, an error message will be displayed.
 
-<box type="warning">
+<box type="warning" seamless>
 
 **Caution:**
 This command only undoes the most recent data-modifying command. You cannot undo multiple data-modifying commands or skip 
 back to earlier changes. 
 </box>
 
-<box type="tip">
+<box type="tip" seamless>
 
 **Tip:** Use `undo` immediately after making a mistake to quickly restore your previous data state.
 </box>
@@ -395,6 +396,32 @@ Examples:
 * `block-timeslot ts/4 Oct 2025, 10:00 te/4 Oct 2025, 13:00`
 * `block-timeslot ts/4 Oct 2025 10:00 te/4 Oct 2025 13:00`
 
+### Unblocking a timeslot : `unblock-timeslot`
+
+Removes or trims stored timeslots that overlap the specified datetime range. The command will remove exact matches, trim edges, or split stored timeslots that contain the unblock range.
+
+Format: `unblock-timeslot ts/START_DATETIME te/END_DATETIME`
+
+* Accepted datetime formats:
+  * ISO_LOCAL_DATE_TIME: `2023-10-01T09:00:00`
+  * Human-friendly: `d MMM uuuu, HH:mm` (e.g. `4 Oct 2025, 10:00`) or `d MMM uuuu HH:mm` (e.g. `4 Oct 2025 10:00`)
+
+* If a stored timeslot exactly matches the unblock range, it is removed.
+* If the unblock range is strictly inside a stored timeslot, the stored timeslot is split into two (before and after the unblock range).
+* If the unblock range overlaps one end of a stored timeslot, the stored timeslot is trimmed accordingly.
+* If no stored timeslot overlaps the provided range, the command reports an error.
+
+Examples:
+* `unblock-timeslot ts/2025-10-04T10:00:00 te/2025-10-04T13:00:00`
+* `unblock-timeslot ts/4 Oct 2025, 11:00 te/4 Oct 2025, 12:00`
+* `unblock-timeslot ts/4 Oct 2025 12:00 te/4 Oct 2025 14:00`
+
+
+<box type="tip">
+
+**Tip:** Timeslot doesn't have to match added timeslot exactly. It can be any timeslot shown in `get-timeslots` as well
+</box>
+
 ### Retrieving merged timeslot ranges: `get-timeslots`
 
 Displays merged timeslot ranges derived from stored timeslots. Overlapping or adjacent timeslots are merged and presented as continuous ranges for easier viewing.
@@ -419,7 +446,7 @@ Removes all stored timeslots (does not affect student records).
 
 Format: `clear-timeslots`
 
-<box type="warning">
+<box type="warning" seamless>
 
 **Caution:**
 This will permanently remove all stored timeslots. There is no multi-step undo for timeslot clearing;
@@ -440,7 +467,7 @@ LambdaLab data are saved in the hard disk automatically after any command that c
 
 LambdaLab data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.
 
-<box type="warning">
+<box type="warning" seamless>
 
 **Caution:**
 If your changes to the data file makes its format invalid, LambdaLab will discard all data and start with an empty data file at the next run.  Hence, it is recommended to take a backup of the file before editing it.<br>
@@ -466,7 +493,7 @@ Furthermore, certain edits can cause the LambdaLab to behave in unexpected ways 
     - On your new computer, navigate to `[JAR file location]/data/`
     - Replace the empty `addressbook.json` file with your copied file
 4. Restart LambdaLab on your new computer to see all your student data
-<box type="tip">
+<box type="tip" seamless>
 **Tip:** You can also backup your data regularly by copying the `addressbook.json` file to a secure location (e.g., cloud storage, USB drive).
 </box>
 
@@ -530,6 +557,7 @@ Action     | Format, Examples
 **Undo** | `undo`
 **Grade**| `grade`
 **Block timeslot** | `block-timeslot ts/START_DATETIME te/END_DATETIME` <br> e.g. `block-timeslot ts/2025-10-04T10:00:00 te/2025-10-04T13:00:00`
+**Unblock timeslot** | `unblock-timeslot ts/START_DATETIME te/END_DATETIME` <br> e.g. `block-timeslot ts/2025-10-04T10:00:00 te/2025-10-04T13:00:00`
 **Get timeslots** | `get-timeslots` 
 **Clear timeslots** | `clear-timeslots` 
 **Exit**   | `exit`

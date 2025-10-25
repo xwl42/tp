@@ -26,6 +26,7 @@ import seedu.address.logic.commands.MarkAttendanceCommand;
 import seedu.address.logic.commands.MarkExerciseCommand;
 import seedu.address.logic.commands.SetWeekCommand;
 import seedu.address.logic.commands.SortCommand;
+import seedu.address.logic.commands.UnblockTimeslotCommand;
 import seedu.address.logic.commands.UndoCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 
@@ -107,6 +108,9 @@ public class AddressBookParser {
 
         case BlockTimeslotCommand.COMMAND_WORD:
             return new BlockTimeslotCommandParser().parse(arguments);
+
+        case UnblockTimeslotCommand.COMMAND_WORD:
+            return new UnblockTimeslotCommandParser().parse(arguments);
 
         case ClearTimeslotsCommand.COMMAND_WORD:
             return new ClearTimeslotsCommandParser().parse(arguments);

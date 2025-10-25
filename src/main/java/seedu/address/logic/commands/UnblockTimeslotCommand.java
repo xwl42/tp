@@ -59,7 +59,7 @@ public class UnblockTimeslotCommand extends Command {
         for (Timeslot s : overlapping) {
             // s = [s0, s1], u = [u0, u1]
             boolean coversStart = !timeslot.getStart().isAfter(s.getStart()); // u0 <= s0
-            boolean coversEnd = !timeslot.getEnd().isBefore(s.getEnd());     // u1 >= s1
+            boolean coversEnd = !timeslot.getEnd().isBefore(s.getEnd()); // u1 >= s1
 
             if (coversStart && coversEnd) {
                 // unblock range fully covers stored timeslot -> remove it

@@ -22,7 +22,7 @@ public class Lab implements LabAttendance {
         assert labNumber <= LabList.NUMBER_OF_LABS : "Lab number exceeded the maximum amount";
         this.labNumber = labNumber;
         this.isAttended = false;
-        this.isPastWeek = (labNumber + LAB_WEEK_DIFFERENCE <= currentWeek);
+        this.isPastWeek = (labNumber + LAB_WEEK_DIFFERENCE < currentWeek);
     }
 
     @Override

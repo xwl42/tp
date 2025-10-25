@@ -64,7 +64,8 @@ public class MarkAttendanceCommand extends MultiIndexCommand {
 
     @Override
     protected Person applyActionToPerson(Model model, Person personToEdit) throws CommandException {
-        LabAttendanceList labAttendanceList = ((LabList) personToEdit.getLabAttendanceList()).copy();
+        LabAttendanceList labAttendanceList = ((LabList) personToEdit.getLabAttendanceList())
+                .copy(model.getCurrentWeek().getWeekNumber());
 
         try {
             if (isAttended) {

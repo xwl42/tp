@@ -35,7 +35,7 @@ public class LabListTest {
     // Tests with Lab class, not the stub
     @Test
     public void constructorNoParam_default_success() {
-        LabList labAttendanceList = new LabList(1);
+        LabList labAttendanceList = new LabList(0);
         for (int i = 0; i < LabList.NUMBER_OF_LABS; i++) {
             assertFalse(labAttendanceList.getLabs()[i].isAttended());
         }
@@ -117,7 +117,7 @@ public class LabListTest {
 
     @Test
     public void copy_default_success() {
-        LabList labList = new LabList(1);
+        LabList labList = new LabList(0);
         LabList labListCopy = labList.copy(1);
         assertNotSame(labList, labListCopy);
         assertEquals(labList, labListCopy);
@@ -143,7 +143,7 @@ public class LabListTest {
 
     @Test
     public void isValidLabList_valid_true() {
-        LabList labList = new LabList(1);
+        LabList labList = new LabList(0);
         assertTrue(LabList.isValidLabList(labList.toString()));
 
         labList.markLabAsAttended(1);

@@ -1,6 +1,4 @@
 @startuml SaveActivityDiagram
-!include style.puml
-
 start
 :User executes command;
 
@@ -26,4 +24,4 @@ else ([command is read-only])
 endif
 
 stop
-@enduml
+@end

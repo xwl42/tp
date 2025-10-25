@@ -24,6 +24,7 @@ import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.ReadOnlyTimeslots;
 import seedu.address.model.ReadOnlyUserPrefs;
+import seedu.address.model.Week;
 import seedu.address.model.person.Person;
 import seedu.address.testutil.PersonBuilder;
 
@@ -161,6 +162,11 @@ public class AddCommandTest {
         }
 
         @Override
+        public void sortPersonList(Comparator<Person> comparator) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public void saveAddressBook() {
             throw new AssertionError("This method should not be called.");
         }
@@ -206,7 +212,12 @@ public class AddCommandTest {
         }
 
         @Override
-        public void sortPersonList(Comparator<Person> comparator) {
+        public void setCurrentWeek(Week currentWeek) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public Week getCurrentWeek() {
             throw new AssertionError("This method should not be called.");
         }
     }

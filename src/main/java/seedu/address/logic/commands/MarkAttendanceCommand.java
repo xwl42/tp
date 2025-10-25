@@ -1,6 +1,8 @@
 package seedu.address.logic.commands;
 
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_LAB_NUMBER;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_STATUS;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,8 +26,12 @@ public class MarkAttendanceCommand extends MultiIndexCommand {
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Marks the specific lab of the person(s) identified "
             + "by the index number(s) used in the last person listing.\n"
             + "Parameters: INDEX (must be a positive integer or range X:Y) "
-            + " l/LABNUMBER s/ATTENDANCESTATUS\n"
-            + "Example: " + COMMAND_WORD + " 1:5 l/1 s/y";
+            + PREFIX_LAB_NUMBER + "LABNUMBER "
+            + PREFIX_STATUS + "ATTENDANCESTATUS\n"
+            + "Example: " + COMMAND_WORD + " 1 "
+            + PREFIX_LAB_NUMBER + "1 " + PREFIX_STATUS + "y\n"
+            + "Example: " + COMMAND_WORD + " 1:5 "
+            + PREFIX_LAB_NUMBER + "1 " + PREFIX_STATUS + "y";
 
     public static final String MESSAGE_MARK_ATTENDANCE_SUCCESS =
             "Lab %1$d marked as attended for: %2$s";
@@ -57,7 +63,8 @@ public class MarkAttendanceCommand extends MultiIndexCommand {
 
     @Override
     protected Person applyActionToPerson(Model model, Person personToEdit) throws CommandException {
-        LabAttendanceList labAttendanceList = ((LabList) personToEdit.getLabAttendanceList()).copy();
+        LabAttendanceList labAttendanceList = ((LabList) personToEdit.getLabAttendanceList())
+                .copy();
 
         try {
             if (isAttended) {

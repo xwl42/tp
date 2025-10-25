@@ -25,8 +25,8 @@ public class Person {
     private final Set<Tag> tags = new HashSet<>();
     private final GithubUsername githubUsername;
     private final LabAttendanceList labAttendanceList;
-    private ExerciseTracker exerciseTracker;
-    private GradeMap gradeMap;
+    private final ExerciseTracker exerciseTracker;
+    private final GradeMap gradeMap;
 
     /**
      * Every field must be present and not null.

@@ -378,7 +378,7 @@
     -fx-background-color: #454545;  /* Black */
 }
 
-.exercise-overdue, .exam-fail {
+.lab-absent, .exercise-overdue, .exam-fail {
     -fx-text-fill: white;
     -fx-background-color: #e74c3c;  /* Black */
 }

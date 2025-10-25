@@ -14,4 +14,9 @@ public interface ReadOnlyAddressBook {
      */
     ObservableList<Person> getPersonList();
 
+    /**
+     * Returns the current week (immutable)
+     */
+    Week getCurrentWeek();
+
 }

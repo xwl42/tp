@@ -138,4 +138,14 @@ public interface Model {
      * Clears all timeslots.
      */
     void clearTimeslots();
+
+    /**
+     * Sets the current week number
+     */
+    void setCurrentWeek(Week currentWeek);
+
+    /**
+     * Gets the current week number
+     */
+    Week getCurrentWeek();
 }

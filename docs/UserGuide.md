@@ -216,6 +216,9 @@ Format: `set-week WEEKNUMBER`
 * Marks the overdue exercises as overdue if not complete (*to be implemented*)
 * `WEEKNUMBER` represents the NUS Semester week, and it **must be between 0 and 13 inclusive**
 
+Example:
+* `set-week 5` will set current week at 5. Labs 1 to 2 will be marked as absent (red) if they have not been attended. 
+
 ### Marking lab attendance: `marka`
 
 Marks the lab attendance of an existing student in LambdaLab.

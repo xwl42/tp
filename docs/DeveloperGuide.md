@@ -151,7 +151,7 @@ The `Storage` component,
 * provides concrete implementations like `JsonAddressBookStorage`, `JsonUserPrefsStorage`, and `JsonTimeslotsStorage` which read/write files on disk.
 
 The `StorageManager` class,
-* composes the individual storage providers (address book, prefs, timeslots) 
+* composes the individual storage providers (address book, prefs, timeslots)
 * exposes unified operations so `MainApp`, `Logic`, and other components access persistence through a single entry point
 
 The timeslots file location is configurable via `UserPrefs` and the application will create or populate the file with sample timeslots when none is present.
@@ -169,61 +169,61 @@ This section describes some noteworthy details on how certain features are imple
 
 #### Implementation
 
-The undo mechanism is facilitated by `ModelManager`. It stores a single previous state of the address book and 
-timeslots, stored internally as `previousAddressBookState` and `previousTimeslotsState`. Additionally, it implements 
+The undo mechanism is facilitated by `ModelManager`. It stores a single previous state of the address book and
+timeslots, stored internally as `previousAddressBookState` and `previousTimeslotsState`. Additionally, it implements
 the following operations:
 
 * `Model#saveAddressBook()` — Saves the current address book and timeslots state before modification.
 * `Model#undoAddressBook()` — Restores the previous address book and timeslots state.
 * `Model#canUndoAddressBook()` — Checks if there is a previous state available to undo to.
 
-These operations are exposed in the `Model` interface as `Model#saveAddressBook()`, `Model#undoAddressBook()` and 
+These operations are exposed in the `Model` interface as `Model#saveAddressBook()`, `Model#undoAddressBook()` and
 `Model#canUndoAddressBook()` respectively.
 
 Given below is an example usage scenario and how the undo mechanism behaves at each step.
 
-**Step 1.** The user launches the application for the first time. The `ModelManager` will be initialized with the 
-initial address book and timeslots state, with `previousAddressBookState` and `previousTimeslotsState` set to `null` 
+**Step 1.** The user launches the application for the first time. The `ModelManager` will be initialized with the
+initial address book and timeslots state, with `previousAddressBookState` and `previousTimeslotsState` set to `null`
 (no previous state to undo to).
 
 ![UndoState0](images/UndoState0.png)
 
-**Step 2.** The user executes `delete 5` command to delete the 5th person in the address book. The `delete` command 
-calls `Model#saveAddressBook()` before deleting, saving the current state. After the deletion, the current state is 
+**Step 2.** The user executes `delete 5` command to delete the 5th person in the address book. The `delete` command
+calls `Model#saveAddressBook()` before deleting, saving the current state. After the deletion, the current state is
 modified but the previous state preserves the state before deletion.
 
 ![UndoState1](images/UndoState1.png)
 
 <box type="info" seamless>
 
-**Note:** If a command fails its execution, it will not call `Model#saveAddressBook()`, so the previous state will 
+**Note:** If a command fails its execution, it will not call `Model#saveAddressBook()`, so the previous state will
 not be updated.
 
 </box>
 
-**Step 3.** The user executes `add n/John Doe …​` to add a new student. The `add` command also calls 
-`Model#saveAddressBook()` before adding, which **replaces** the previous state with the current state (ab1), 
+**Step 3.** The user executes `add n/John Doe …​` to add a new student. The `add` command also calls
+`Model#saveAddressBook()` before adding, which **replaces** the previous state with the current state (ab1),
 then adds the new student.
 
 ![UndoState2](images/UndoState2.png)
 
-**Step 4.** The user now decides that adding the student was a mistake, and decides to undo that action by 
-executing the `undo` command. The `undo` command will call `Model#undoAddressBook()`, which restores the address book 
+**Step 4.** The user now decides that adding the student was a mistake, and decides to undo that action by
+executing the `undo` command. The `undo` command will call `Model#undoAddressBook()`, which restores the address book
 to the previous state (ab1) and sets both `previousAddressBookState` and `previousTimeslotsState` to `null`.
 
 ![UndoState3](images/UndoState3.png)
 
 <box type="info" seamless>
 
-**Note:** If `previousAddressBookState` is `null`, then there is no previous state to restore. The `undo` command 
-uses `Model#canUndoAddressBook()` to check if this is the case. If so, it will return an error to the user rather than 
+**Note:** If `previousAddressBookState` is `null`, then there is no previous state to restore. The `undo` command
+uses `Model#canUndoAddressBook()` to check if this is the case. If so, it will return an error to the user rather than
 attempting to perform the undo.
 
 </box>
 
 <box type="warning" seamless>
 
-**Important:** This implementation only supports undoing **one command** at a time. After undoing once, you must 
+**Important:** This implementation only supports undoing **one command** at a time. After undoing once, you must
 execute another modifying command before you can undo again. There is no redo functionality.
 
 </box>
@@ -234,7 +234,7 @@ The following sequence diagram shows how an undo operation goes through the `Log
 
 <box type="info" seamless>
 
-**Note:** The lifeline for `UndoCommand` should end at the destroy marker (X) but due to a limitation of PlantUML, 
+**Note:** The lifeline for `UndoCommand` should end at the destroy marker (X) but due to a limitation of PlantUML,
 the lifeline reaches the end of diagram.
 
 </box>
@@ -243,12 +243,12 @@ Similarly, how an undo operation goes through the `Model` component is shown bel
 
 ![UndoSequenceDiagram-Model](images/UndoSequenceDiagram-Model.png)
 
-**Step 5.** The user then decides to execute the command `list`. Commands that do not modify the address book, 
+**Step 5.** The user then decides to execute the command `list`. Commands that do not modify the address book,
 such as `list`, `find`, or `get-timeslots`, will not call `Model#saveAddressBook()`. Thus, the previous state remains `null`.
 
 ![UndoState4](images/UndoState4.png)
 
-**Step 6.** The user executes `clear`, which calls `Model#saveAddressBook()` before clearing. The current state (ab1) 
+**Step 6.** The user executes `clear`, which calls `Model#saveAddressBook()` before clearing. The current state (ab1)
 is saved as the previous state, then all persons are deleted, creating a new current state.
 
 ![UndoState5](images/UndoState5.png)
@@ -313,24 +313,24 @@ The following commands do NOT support undo (read-only commands):
         * Harder to maintain and test.
         * Increased development time for new commands.
 
-**Rationale for Alternative 1:** For the scope of this project, a simple single-level undo is sufficient for most use 
-cases. Users typically need to undo only their most recent action, and the simplicity of implementation outweighs the 
-benefits of a full undo/redo stack. The minimal memory overhead and straightforward logic make this approach ideal for 
+**Rationale for Alternative 1:** For the scope of this project, a simple single-level undo is sufficient for most use
+cases. Users typically need to undo only their most recent action, and the simplicity of implementation outweighs the
+benefits of a full undo/redo stack. The minimal memory overhead and straightforward logic make this approach ideal for
 a student project with limited development time.
 
 #### Future enhancements
 
-* **Multiple undo levels:** Implement a full history stack (Alternative 2) to support undoing multiple commands in 
-sequence. This would involve storing a list of states and maintaining a current state pointer.
+* **Multiple undo levels:** Implement a full history stack (Alternative 2) to support undoing multiple commands in
+  sequence. This would involve storing a list of states and maintaining a current state pointer.
 
-* **Redo functionality:** Allow users to redo commands that were undone. This would require preserving the "future" 
-states after an undo operation until a new modifying command is executed.
+* **Redo functionality:** Allow users to redo commands that were undone. This would require preserving the "future"
+  states after an undo operation until a new modifying command is executed.
 
-* **Selective undo:** Allow undoing specific commands in history rather than just the most recent one. This would 
-require implementing Alternative 3 with command-specific undo logic.
+* **Selective undo:** Allow undoing specific commands in history rather than just the most recent one. This would
+  require implementing Alternative 3 with command-specific undo logic.
 
-* **Undo command confirmation:** For destructive commands like `clear`, prompt the user to confirm before executing, 
-reducing the need for undo in the first place.
+* **Undo command confirmation:** For destructive commands like `clear`, prompt the user to confirm before executing,
+  reducing the need for undo in the first place.
 
 
 ### \[Proposed\] Data archiving
@@ -365,7 +365,7 @@ _{Explain here how the data archiving feature will be implemented}_
 * prefer desktop apps for reliability during labs/consultations
 * can type fast and are comfortable with keyboard shortcuts (Vim)
 * prefer typing over mouse interactions
-* comfortable using CLI apps 
+* comfortable using CLI apps
 
 **Value proposition**: manage students, submissions, attendance, and resources faster and more efficiently than traditional spreadsheets or GUI-based systems
 
@@ -422,19 +422,19 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 1.  User receives notification that a student has submitted the exercise
 2.  User navigates to student's submission on GitHub via notification
 3.  User returns after grading student's submission on GitHub
-4.  User marks exercise as graded in LambdaLab 
+4.  User marks exercise as graded in LambdaLab
 5.  LambdaLab updates statistics
     Use case ends.
 
 **Extensions**
 
 * 1a. User doesn't want to grade student's exercise now
-  * 1a1. User dismisses the notification
-    Use case ends.
+    * 1a1. User dismisses the notification
+      Use case ends.
 * 1b. User accidentally dismisses notification
-  * 1b1. User goes to student's profile
-  * 1b2. User navigates to student's submission on GitHub via link in student's profile
-    Use case resumes at Step 3
+    * 1b1. User goes to student's profile
+    * 1b2. User navigates to student's submission on GitHub via link in student's profile
+      Use case resumes at Step 3
 
 
 **Use case: Mark student attendance**
@@ -450,16 +450,16 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **Extensions**
 
 * 1a. User provides an empty name or a name with invalid characters
-  * 1a1. LambdaLab displays error message: “Invalid name”
-  * 1a2. User re-enters a valid name
-    Use case resumes at Step 2
+    * 1a1. LambdaLab displays error message: “Invalid name”
+    * 1a2. User re-enters a valid name
+      Use case resumes at Step 2
 * 1b. User provides an invalid lab number (non-numeric, zero, negative, or out-of-range)
-  * 1b1. System displays error message: “Invalid lab number”
-  * 1b2. User re-enters a valid lab number
-    Use case resumes at Step 2
+    * 1b1. System displays error message: “Invalid lab number”
+    * 1b2. User re-enters a valid lab number
+      Use case resumes at Step 2
 * 3a. Attendance for the student in that lab number has already been marked
-  * 3a1. LambdaLab displays: “Attendance already marked for <studentName> in lab number <labNumber>”
-    Use case ends.
+    * 3a1. LambdaLab displays: “Attendance already marked for <studentName> in lab number <labNumber>”
+      Use case ends.
 
 
 **Use case: Schedule a consultation**
@@ -481,8 +481,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * 3a.
     * 3a1. User requests to reschedule or delete the consultation.
     * 3a2. System allows modification or cancellation.
-    Use case ends.
-  
+      Use case ends.
+
 *{More to be added}*
 
 ### Non-Functional Requirements
@@ -527,15 +527,15 @@ testers are expected to do more *exploratory* testing.
 
 1. Initial launch
 
-   1. Download the jar file and copy into an empty folder
+    1. Download the jar file and copy into an empty folder
 
-   1. Double-click the jar file Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
+    1. Double-click the jar file Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
 
 1. Saving window preferences
 
-   1. Resize the window to an optimum size. Move the window to a different location. Close the window.
+    1. Resize the window to an optimum size. Move the window to a different location. Close the window.
 
-   1. Re-launch the app by double-clicking the jar file.<br>
+    1. Re-launch the app by double-clicking the jar file.<br>
        Expected: The most recent window size and location is retained.
 
 1. _{ more test cases …​ }_
@@ -544,16 +544,16 @@ testers are expected to do more *exploratory* testing.
 
 1. Deleting a person while all persons are being shown
 
-   1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
+    1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
 
-   1. Test case: `delete 1`<br>
-      Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
+    1. Test case: `delete 1`<br>
+       Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
 
-   1. Test case: `delete 0`<br>
-      Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
+    1. Test case: `delete 0`<br>
+       Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
 
-   1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
-      Expected: Similar to previous.
+    1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
+       Expected: Similar to previous.
 
 1. _{ more test cases …​ }_
 
@@ -561,6 +561,6 @@ testers are expected to do more *exploratory* testing.
 
 1. Dealing with missing/corrupted data files
 
-   1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
+    1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
 
 1. _{ more test cases …​ }_

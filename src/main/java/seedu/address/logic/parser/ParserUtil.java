@@ -240,7 +240,7 @@ public class ParserUtil {
      *
      * @throws ParseException if the given {@code labAttendanceListString} is invalid.
      */
-    public static LabAttendanceList parseLabAttendanceList(String labAttendanceList, int currentWeek) throws ParseException {
+    public static LabAttendanceList parseLabAttendanceList(String labAttendanceList) throws ParseException {
         requireNonNull(labAttendanceList);
         String trimmed = labAttendanceList.trim();
         if (!LabList.isValidLabList(trimmed)) {
@@ -253,7 +253,7 @@ public class ParserUtil {
         for (int i = 0; i < labs.length; i++) {
             String status = parts[i * 2 + 1];
 
-            labs[i] = new Lab(i + 1, currentWeek);
+            labs[i] = new Lab(i + 1, LabList.getCurrentWeek());
             if (status.equals("Y")) {
                 labs[i].markAsAttended();
             }

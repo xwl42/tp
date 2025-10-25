@@ -126,7 +126,7 @@ public class PersonBuilder {
      */
     public PersonBuilder withLabAttendanceList(String labListString) {
         try {
-            labAttendanceList = ParserUtil.parseLabAttendanceList(labListString, 1);
+            labAttendanceList = ParserUtil.parseLabAttendanceList(labListString);
         } catch (ParseException e) {
             throw new IllegalArgumentException("Invalid Lab Attendance List format"); // For developers
         }

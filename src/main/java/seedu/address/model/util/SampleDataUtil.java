@@ -24,7 +24,6 @@ import seedu.address.model.timeslot.Timeslot;
  * Contains utility methods for populating {@code AddressBook} and {@code Timeslots} with sample data.
  */
 public class SampleDataUtil {
-    // Again, sample data current week is set to week 0
     public static Person[] getSamplePersons() {
         return new Person[] {
             new Person(new StudentId("A1231230B"), new Name("Alex Yeoh"), new Phone("87438807"),

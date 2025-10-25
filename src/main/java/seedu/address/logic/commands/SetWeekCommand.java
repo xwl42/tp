@@ -41,6 +41,8 @@ public class SetWeekCommand extends Command {
         model.setCurrentWeek(currentWeek);
         int currentWeekNumber = currentWeek.getWeekNumber();
 
+        LabList.setCurrentWeek(currentWeekNumber);
+
         List<Person> allPersons = model.getAddressBook().getPersonList();
         int updatedCount = 0;
 

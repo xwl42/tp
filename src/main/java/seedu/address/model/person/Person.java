@@ -33,7 +33,7 @@ public class Person {
      * Every field must be present and not null.
      */
     public Person(StudentId studentId, Name name, Phone phone, Email email,
-                  Set<Tag> tags, GithubUsername githubUsername, int currentWeek) {
+                  Set<Tag> tags, GithubUsername githubUsername) {
         requireAllNonNull(studentId, name, phone, email, tags, githubUsername);
         this.studentId = studentId;
         this.name = name;

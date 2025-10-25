@@ -52,9 +52,7 @@ public class AddCommandParser implements Parser<AddCommand> {
         GithubUsername githubUsername = ParserUtil.parseGithubUsername(argMultimap.getValue(PREFIX_GITHUB_USERNAME)
                                                                                     .get());
 
-        // The current week is set to 0 currently - I could not find a elegant solution to get currentWeek
-        // TODO: get correct curr week
-        Person person = new Person(studentId, name, phone, email, tagList, githubUsername, 0);
+        Person person = new Person(studentId, name, phone, email, tagList, githubUsername);
 
         return new AddCommand(person);
     }

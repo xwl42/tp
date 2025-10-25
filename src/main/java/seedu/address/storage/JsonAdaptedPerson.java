@@ -119,7 +119,7 @@ class JsonAdaptedPerson {
      *
      * @throws IllegalValueException if there were any data constraints violated in the adapted person.
      */
-    public Person toModelType(int currentWeek) throws IllegalValueException {
+    public Person toModelType() throws IllegalValueException {
         final List<Tag> personTags = new ArrayList<>();
         for (JsonAdaptedTag tag : tags) {
             personTags.add(tag.toModelType());
@@ -192,7 +192,7 @@ class JsonAdaptedPerson {
         if (!LabList.isValidLabList(labAttendanceList)) {
             throw new IllegalValueException(LabList.MESSAGE_CONSTRAINTS);
         }
-        final LabAttendanceList modelLabAttendanceList = ParserUtil.parseLabAttendanceList(labAttendanceList, currentWeek);
+        final LabAttendanceList modelLabAttendanceList = ParserUtil.parseLabAttendanceList(labAttendanceList);
         if (gradeMap == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT,
                     LabAttendanceList.class.getSimpleName()));

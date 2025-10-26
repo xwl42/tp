@@ -56,6 +56,24 @@ public class MarkExerciseCommand extends MultiIndexCommand {
         this.status = status;
     }
 
+    /**
+     * Executes the mark exercise command.
+     * Validates the exercise index before delegating to the parent class's execute method.
+     *
+     * @param model The model containing the person list and address book state.
+     * @return A CommandResult containing the outcome of the command execution.
+     * @throws CommandException If the exercise index is out of bounds or if the command fails during execution.
+     */
+    @Override
+    public CommandResult execute(Model model) throws CommandException {
+        // Validate exercise index BEFORE calling super.execute()
+        if (exerciseIndex.getZeroBased() < 0 || exerciseIndex.getZeroBased() >= NUMBER_OF_EXERCISES) {
+            throw new CommandException(String.format(MESSAGE_INDEX_OUT_OF_BOUNDS, HIGHEST_INDEX));
+        }
+
+        return super.execute(model);
+    }
+
     @Override
     protected Person applyActionToPerson(Model model, Person personToEdit) throws CommandException {
         ExerciseTracker updatedExerciseTracker = personToEdit.getExerciseTracker().copy();

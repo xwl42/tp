@@ -22,8 +22,7 @@ public class ExerciseTracker implements Comparable<ExerciseTracker> {
     public static final double WEIGHT_OVERDUE = -0.5;
     private static final Logger logger = LogsCenter.getLogger(MainApp.class);
     private static final String INDEX_OUT_OF_FOUNDS_FORMAT = "Index should be between 0 and %s";
-
-
+    private static int currentWeekNumber;
     private ArrayList<Exercise> exercises = new ArrayList<>();
 
     /**
@@ -31,7 +30,7 @@ public class ExerciseTracker implements Comparable<ExerciseTracker> {
      */
     public ExerciseTracker() {
         for (int i = 0; i < NUMBER_OF_EXERCISES; i++) {
-            exercises.add(new Exercise(i, false));
+            exercises.add(new Exercise(i, false, currentWeekNumber));
         }
         assert exercises.size() == NUMBER_OF_EXERCISES : "Exercise tracker must have exactly 10 exercises";
     }
@@ -46,11 +45,15 @@ public class ExerciseTracker implements Comparable<ExerciseTracker> {
         }
         this.exercises = new ArrayList<>();
         for (int i = 0; i < isDoneList.size(); i++) {
-            exercises.add(new Exercise(i, isDoneList.get(i)));
+            exercises.add(new Exercise(i, isDoneList.get(i), currentWeekNumber));
         }
         for (int i = isDoneList.size(); i < NUMBER_OF_EXERCISES; i++) {
-            exercises.add(new Exercise(i, false));
+            exercises.add(new Exercise(i, false, currentWeekNumber));
         }
+    }
+
+    public static void setCurrentWeek(int week) {
+        currentWeekNumber = week;
     }
 
     @Override

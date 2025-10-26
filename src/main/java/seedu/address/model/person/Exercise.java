@@ -7,23 +7,21 @@ import java.util.Objects;
  */
 public class Exercise {
     public static final int EXERCISE_WEEK_DIFFERENCE = 2;
-
     private boolean isDone;
     private final int exerciseNumber;
     private boolean isPastWeek;
-    private int currentWeek;
-
+    private final int currentWeek;
     /**
      * Creates an exercise object with the following parameters.
      * @param exerciseNumber the exercise number
      * @param isDone the completion status of the exercise
      */
-    public Exercise(int exerciseNumber, boolean isDone) {
+    public Exercise(int exerciseNumber, boolean isDone, int currentWeek) {
         assert exerciseNumber >= 0 : "Invalid exercise number";
         this.exerciseNumber = exerciseNumber;
         this.isDone = isDone;
-        this.currentWeek = 0;
-        this.isPastWeek = false; // will update when currentWeek is set
+        this.currentWeek = currentWeek;
+        this.isPastWeek = exerciseNumber < (currentWeek - EXERCISE_WEEK_DIFFERENCE);
     }
 
     @Override
@@ -44,11 +42,6 @@ public class Exercise {
 
     public boolean isDone() {
         return isDone;
-    }
-
-    public void setCurrentWeek(int week) {
-        this.currentWeek = week;
-        this.isPastWeek = (exerciseNumber + EXERCISE_WEEK_DIFFERENCE < currentWeek);
     }
 
     public Status getStatus() {

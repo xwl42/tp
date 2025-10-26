@@ -27,27 +27,27 @@ How to use this guide:
 ## Table of Contents
 
 1. [Quick start](#quick-start)
-2. [Features](#features)
-   (1) [Viewing help: `help`](#viewing-help-help)
-   (2) [Listing all students: `list`](#listing-all-students-list)
-   (3) [Adding a student: `add`](#adding-a-student-add)
-   (4) [Editing a student: `edit`](#editing-a-student-edit)
-   (5) [Marking lab attendance: `marka`](#marking-lab-attendance-marka)
-   (6) [Marking exercise status: `marke`](#marking-exercise-status-marke)
-   (7) [Setting current week: `set-week`](#setting-current-week-set-week)
-   (8) [Assigning assessment score: `grade`](#assigning-assessment-score-grade)
-   (9) [Locating students: `find`](#locating-students-by-name-find)
-   (10) [Sorting students: `sort`](#sorting-the-students-sort)
-   (11) [Deleting a student: `delete`](#deleting-a-student-delete)
-   (12) [Clearing all entries: `clear`](#clearing-all-entries-clear)
-   (13) [Undoing the last command: `undo`](#undoing-the-last-command-undo)
-   (14) [Blocking a timeslot: `block-timeslot`](#blocking-a-timeslot-block-timeslot)
-   (15) [Unblocking a timeslot: `unblock-timeslot`](#unblocking-a-timeslot-unblock-timeslot)
-   (16) [Retrieving merged timeslot ranges: `get-timeslots`](#retrieving-merged-timeslot-ranges-get-timeslots)
-   (17) [Clearing all timeslots: `clear-timeslots`](#clearing-all-timeslots-clear-timeslots)
-   (18) [Exiting the program: `exit`](#exiting-the-program-exit)
-   (19) [Saving the data](#saving-the-data)
-   (20) [Editing the data file](#editing-the-data-file)
+2. [Features](#features)<br>
+   (1) [Viewing help: `help`](#viewing-help-help)<br>
+   (2) [Listing all students: `list`](#listing-all-students-list)<br>
+   (3) [Adding a student: `add`](#adding-a-student-add)<br>
+   (4) [Editing a student: `edit`](#editing-a-student-edit)<br>
+   (5) [Marking lab attendance: `marka`](#marking-lab-attendance-marka)<br>
+   (6) [Marking exercise status: `marke`](#marking-exercise-status-marke)<br>
+   (7) [Setting current week: `set-week`](#setting-current-week-set-week)<br>
+   (8) [Assigning assessment score: `grade`](#assigning-assessment-score-grade)<br>
+   (9) [Locating students: `find`](#locating-students-by-name-find)<br>
+   (10) [Sorting students: `sort`](#sorting-the-students-sort)<br>
+   (11) [Deleting a student: `delete`](#deleting-a-student-delete)<br>
+   (12) [Clearing all entries: `clear`](#clearing-all-entries-clear)<br>
+   (13) [Undoing the last command: `undo`](#undoing-the-last-command-undo)<br>
+   (14) [Blocking a timeslot: `block-timeslot`](#blocking-a-timeslot-block-timeslot)<br>
+   (15) [Unblocking a timeslot: `unblock-timeslot`](#unblocking-a-timeslot-unblock-timeslot)<br>
+   (16) [Retrieving merged timeslot ranges: `get-timeslots`](#retrieving-merged-timeslot-ranges-get-timeslots)<br>
+   (17) [Clearing all timeslots: `clear-timeslots`](#clearing-all-timeslots-clear-timeslots)<br>
+   (18) [Exiting the program: `exit`](#exiting-the-program-exit)<br>
+   (19) [Saving the data](#saving-the-data)<br>
+   (20) [Editing the data file](#editing-the-data-file)<br>
 3. [FAQ](#faq)
 4. [Known issues](#known-issues)
 5. [Command summary](#command-summary)
@@ -177,7 +177,7 @@ Examples:
 
 <box type="warning">
 
-Duplicate Identifier (Student ID) will cause the below error:  
+Duplicate identifier (Student ID) will cause the below error:  
 `This student already exists in LambdaLab`
 </box>
 
@@ -198,9 +198,9 @@ Format: `edit INDEX [i/STUDENT ID] [n/NAME] [p/PHONE] [e/EMAIL] [g/GITHUB USERNA
 <box type="warning">
 
 **Caution:**
+
 When editing tags, the existing tags of the student will be removed
 i.e adding of tags is not cumulative.
-
 You can remove all the student’s tags by typing `t/` without
 specifying any tags after it.
 
@@ -310,10 +310,11 @@ Examples:
 * `find alice bob n/` - Returns students with `alice` or `bob` in their name only
 * `find alice bob A1231234B i/ n/` - Returns students with `alice`, `bob`, or `A1231234B` in their student ID or name
 
-<box type="tip" seamless>
+<box type="tip">
 Tip: Use multiple field prefixes to narrow your search to specific fields. For example, `find alice n/` searches for
 `alice` only in names, ignoring other fields.
 </box>
+
 
 <br><br>
 ### Sorting the students: `sort`

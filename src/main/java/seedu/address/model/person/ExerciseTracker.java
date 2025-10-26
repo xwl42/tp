@@ -30,7 +30,7 @@ public class ExerciseTracker implements Comparable<ExerciseTracker> {
      */
     public ExerciseTracker() {
         for (int i = 0; i < NUMBER_OF_EXERCISES; i++) {
-            exercises.add(new Exercise(i, NOT_DONE));
+            exercises.add(new Exercise(i, false));
         }
         assert exercises.size() == NUMBER_OF_EXERCISES : "Exercise tracker must have exactly 10 exercises";
     }
@@ -38,17 +38,17 @@ public class ExerciseTracker implements Comparable<ExerciseTracker> {
      * Initializes exercises using a list of statuses.
      * Each index corresponds to an exercise number.
      */
-    public ExerciseTracker(ArrayList<Status> statuses) {
-        assert statuses != null : "Statuses list must not be null";
-        if (statuses.size() > NUMBER_OF_EXERCISES) {
+    public ExerciseTracker(ArrayList<Boolean> isDoneList) {
+        assert isDoneList != null : "Statuses list must not be null";
+        if (isDoneList.size() > NUMBER_OF_EXERCISES) {
             throw new IllegalArgumentException("Too many statuses! Expected at most " + NUMBER_OF_EXERCISES);
         }
         this.exercises = new ArrayList<>();
-        for (int i = 0; i < statuses.size(); i++) {
-            exercises.add(new Exercise(i, statuses.get(i)));
+        for (int i = 0; i < isDoneList.size(); i++) {
+            exercises.add(new Exercise(i, isDoneList.get(i)));
         }
-        for (int i = statuses.size(); i < NUMBER_OF_EXERCISES; i++) {
-            exercises.add(new Exercise(i, NOT_DONE));
+        for (int i = isDoneList.size(); i < NUMBER_OF_EXERCISES; i++) {
+            exercises.add(new Exercise(i, false));
         }
     }
 
@@ -75,33 +75,27 @@ public class ExerciseTracker implements Comparable<ExerciseTracker> {
     public int hashCode() {
         return exercises.hashCode();
     }
-
-    public ArrayList<Status> getStatuses() {
+    public ArrayList<Boolean> getIsDoneList() {
         assert exercises != null && !exercises.isEmpty() : "Exercises must be initialized";
         return exercises.stream()
-                .map(Exercise::getStatus)
+                .map(Exercise::isDone)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
     /**
      * Marks the exercise at the given index with the status
      * @param index of the exercise
-     * @param status to mark the exercise with
+     * @param isDone to mark the exercise with
      */
-    public void markExercise(Index index, Status status) {
-        logger.info(String.format("Marking ex %d with %s", index.getOneBased(), status));
+    public void markExercise(Index index, boolean isDone) {
+        logger.info(String.format("Marking ex %d with %s", index.getOneBased(), isDone));
         if (index.getZeroBased() < 0 || index.getZeroBased() >= NUMBER_OF_EXERCISES) {
             throw new IndexOutOfBoundsException(
                     String.format(INDEX_OUT_OF_FOUNDS_FORMAT,
                             NUMBER_OF_EXERCISES - 1)
             );
         }
-        if (exercises.get(index.getZeroBased()).getStatus().equals(status)) {
-            throw new IllegalStateException(String.format("Ex %d already marked with %s",
-                    index.getZeroBased(),
-                    status));
-        }
-        exercises.get(index.getZeroBased()).markStatus(status);
+        exercises.get(index.getZeroBased()).markStatus(isDone);
     }
 
     /**
@@ -179,7 +173,7 @@ public class ExerciseTracker implements Comparable<ExerciseTracker> {
      * @return a new ExerciseTracker with copied data
      */
     public ExerciseTracker copy() {
-        ArrayList<Status> copiedStatuses = new ArrayList<>(this.getStatuses());
+        ArrayList<Boolean> copiedStatuses = new ArrayList<>(this.getIsDoneList());
         return new ExerciseTracker(copiedStatuses);
     }
 }

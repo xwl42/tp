@@ -14,7 +14,6 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.ExerciseTracker;
 import seedu.address.model.person.Person;
-import seedu.address.model.person.Status;
 
 /**
  * Marks a specific exercise as a given status for one or more students in the address book.
@@ -40,7 +39,7 @@ public class MarkExerciseCommand extends MultiIndexCommand {
 
     private final MultiIndex studentIndex;
     private final Index exerciseIndex;
-    private final Status status;
+    private final boolean isDone;
     private final List<Person> alreadyMarkedPersons = new ArrayList<>();
 
     /**
@@ -48,19 +47,19 @@ public class MarkExerciseCommand extends MultiIndexCommand {
      * @param exerciseIndex exercise number to mark
      * @param status status to mark the exercise with
      */
-    public MarkExerciseCommand(MultiIndex studentIndex, Index exerciseIndex, Status status) {
+    public MarkExerciseCommand(MultiIndex studentIndex, Index exerciseIndex, boolean status) {
         super(studentIndex);
         requireAllNonNull(studentIndex, exerciseIndex, status);
         this.studentIndex = studentIndex;
         this.exerciseIndex = exerciseIndex;
-        this.status = status;
+        this.isDone = status;
     }
 
     @Override
     protected Person applyActionToPerson(Model model, Person personToEdit) throws CommandException {
         ExerciseTracker updatedExerciseTracker = personToEdit.getExerciseTracker().copy();
         try {
-            updatedExerciseTracker.markExercise(exerciseIndex, status);
+            updatedExerciseTracker.markExercise(exerciseIndex, isDone);
         } catch (IndexOutOfBoundsException e) {
             throw new CommandException(String.format(MESSAGE_INDEX_OUT_OF_BOUNDS, HIGHEST_INDEX));
         } catch (IllegalStateException e) {
@@ -104,7 +103,7 @@ public class MarkExerciseCommand extends MultiIndexCommand {
 
         if (!personsEdited.isEmpty()) {
             String successMessage = String.format(MESSAGE_MARK_EXERCISE_SUCCESS,
-                    exerciseIndex.getZeroBased(), status, editedNames);
+                    exerciseIndex.getZeroBased(), isDone, editedNames);
             message.append(successMessage);
         }
 
@@ -121,7 +120,7 @@ public class MarkExerciseCommand extends MultiIndexCommand {
                 .collect(Collectors.joining(", "));
 
         return String.format(MESSAGE_FAILURE_ALREADY_MARKED,
-                exerciseIndex.getZeroBased(), status, names);
+                exerciseIndex.getZeroBased(), isDone, names);
     }
 
     @Override
@@ -137,6 +136,6 @@ public class MarkExerciseCommand extends MultiIndexCommand {
         MarkExerciseCommand otherCommand = (MarkExerciseCommand) other;
         return studentIndex.equals(otherCommand.studentIndex)
                 && exerciseIndex.equals(otherCommand.exerciseIndex)
-                && status.equals(otherCommand.status);
+                && isDone == otherCommand.isDone;
     }
 }

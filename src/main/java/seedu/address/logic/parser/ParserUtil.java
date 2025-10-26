@@ -277,7 +277,6 @@ public class ParserUtil {
         Status[] statuses = new Status[ExerciseTracker.NUMBER_OF_EXERCISES];
         String[] parts = trimmed.split("\\s+");
 
-        // Now we have 3 tokens per exercise: "ex", "0:", "N"
         for (int i = 0; i < ExerciseTracker.NUMBER_OF_EXERCISES; i++) {
             String statusString = parts[i * 3 + 2];
             statuses[i] = parseStatus(statusString);

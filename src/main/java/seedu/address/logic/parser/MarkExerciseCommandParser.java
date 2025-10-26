@@ -30,7 +30,7 @@ public class MarkExerciseCommandParser implements Parser<MarkExerciseCommand> {
                 ArgumentTokenizer.tokenize(args, PREFIX_EXERCISE_INDEX, PREFIX_STATUS);
         MultiIndex personIndex;
         Index exerciseIndex;
-        Status status;
+        boolean status;
         String statusString;
 
         // Parse the person index (from the command preamble)
@@ -49,7 +49,7 @@ public class MarkExerciseCommandParser implements Parser<MarkExerciseCommand> {
                     MarkExerciseCommand.MESSAGE_USAGE), ive);
         }
         try {
-            status = ParserUtil.parseStatus(statusString.trim().toUpperCase());
+            status = ParserUtil.parseLabStatus(statusString.trim().toUpperCase());
         } catch (IllegalArgumentException e) {
             throw new ParseException(INVALID_STATUS_FORMAT
                     + Arrays.toString(Status.values()));

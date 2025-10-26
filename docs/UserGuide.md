@@ -36,7 +36,7 @@ How to use this guide:
    (6) [Marking exercise status: `marke`](#marking-exercise-status-marke)
    (7) [Setting current week: `set-week`](#setting-current-week-set-week)
    (8) [Assigning assessment score: `grade`](#assigning-assessment-score-grade)
-   (9) [Locating students by name: `find`](#locating-students-by-name-find)
+   (9) [Locating students: `find`](#locating-students-by-name-find)
    (10) [Sorting students: `sort`](#sorting-the-students-sort)
    (11) [Deleting a student: `delete`](#deleting-a-student-delete)
    (12) [Clearing all entries: `clear`](#clearing-all-entries-clear)
@@ -285,23 +285,35 @@ Examples:
 * `grade 2 en/midterm sc/55` sets the **midterm** score of the **2nd student** in the list to **55**.
 
 <br><br>
-### Locating students by name: `find`
+### Locating students: find
+Finds students whose specified fields contain any of the given keywords.
+Format: `find KEYWORD [MORE_KEYWORDS]... [i/] [n/] [p/] [e/] [g/] [t/]`
 
-Finds students whose names contain any of the given keywords.
+| Field Prefixes | Search by       |
+|----------------|-----------------|
+| `i/`           | student ID      |
+| `n/`           | name            |
+| `p/`           | phone number    |
+| `e/`           | email           |
+| `g/`           | Github username |
+| `t/`           | tags            |
 
-Format: `find KEYWORD [MORE_KEYWORDS]`
-
-* The search is case-insensitive. e.g `hans` will match `Hans`
-* The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
-* Only the name is searched.
-* Only full words will be matched e.g. `Han` will not match `Hans`
-* Students matching at least one keyword will be returned (i.e. `OR` search).
-  e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
+* If you do not specify any field prefixes after the keywords, all fields are searched by default.
+* The search is case-insensitive. e.g., hans will match Hans
+* The order of keywords does not matter. e.g., `Hans Bo will` match `Bo Hans`
+* Only full words will be matched. e.g., `Han` will not match `Hans`
+* Students matching at least one keyword will be returned (i.e., OR search). e.g., `Hans Bo` will return `Hans Gruber` and `Bo Yang`
 
 Examples:
-* `find John` returns `john` and `John Doe`
-* `find alex david` returns `Alex Yeoh`, `David Li`<br>
-  ![result for 'find alex david'](images/findAlexDavidResult.png)
+* `find John` - Returns students with `john` or `John` in any field (name, student ID, email, etc.)
+* `find alex david` - Returns students with `alex` or `david` in any field
+* `find alice bob n/` - Returns students with `alice` or `bob` in their name only
+* `find alice bob A1231234B i/ n/` - Returns students with `alice`, `bob`, or `A1231234B` in their student ID or name
+
+<box type="tip" seamless>
+Tip: Use multiple field prefixes to narrow your search to specific fields. For example, `find alice n/` searches for
+`alice` only in names, ignoring other fields.
+</box>
 
 <br><br>
 ### Sorting the students: `sort`

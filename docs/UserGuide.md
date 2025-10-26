@@ -330,7 +330,8 @@ Format: `sort c/SORTCRITERION`
 
 <box type="tip">
 
-**Tip:** The criterion is case-insensitive!
+**Tip:** The criterion is case-insensitive. 
+Also note that `sort` cannot be undone through `undo`. However, you can always sort it base on another criterion again. 
 </box>
 
 Examples:
@@ -381,7 +382,7 @@ Reverses the most recent command that modified student data in LambdaLab.
 Format: `undo`
 
 * Only commands that change student data can be undone (e.g., `add`, `delete`, `edit`, `marka`, `marke`, `clear`, `set-week`, `block-timeslot`, etc.).
-* Commands that do not modify data cannot be undone (e.g., `help`, `list`, `find`, `get-timeslots`, `exit`, etc.).
+* Commands that do not modify data cannot be undone (e.g., `sort`, `help`, `list`, `find`, `get-timeslots`, `exit`, etc.).
 * `undo` only reverses the very last data‑modifying command. If there is no command to undo, an error message will be displayed.
 
 <box type="warning">

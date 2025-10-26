@@ -54,12 +54,17 @@ public class TimeslotsWindow {
     private static final double BODY_PADDING = 8; // must match VBox body padding used in renderWeek
     private static final double TOP_CONTAINER_SPACING = 24; // increased vertical gap between header and hours
 
+    // Keep a reference to the most-recently created Stage so callers (e.g. MainWindow) can hide it.
+    private static Stage currentStage = null;
+
     /**
      * Shows the merged timeslot ranges in a new window laid out as a timetable.
      * Each entry in {@code mergedRanges} should be a LocalDateTime[2] array: [start, end].
      */
     public static void showMerged(List<LocalDateTime[]> mergedRanges) {
         Stage stage = new Stage();
+        // remember the stage so clients can hide it
+        currentStage = stage;
         stage.setTitle("Consultation Schedule");
         stage.initModality(Modality.NONE);
 
@@ -128,6 +133,13 @@ public class TimeslotsWindow {
 
         stage.show();
 
+        // clear currentStage when user closes the window
+        stage.setOnHidden(evt -> {
+            if (currentStage == stage) {
+                currentStage = null;
+            }
+        });
+
         // Bind timelineWidth to scene width (minimum remains TIMELINE_WIDTH). Subtract left label area and padding.
         timelineWidth.bind(Bindings.createDoubleBinding(() -> Math.max(scene.getWidth() - 120, TIMELINE_WIDTH),
                 scene.widthProperty()));
@@ -138,6 +150,26 @@ public class TimeslotsWindow {
             sp.prefViewportWidthProperty().bind(scene.widthProperty().subtract(120));
             sp.prefViewportHeightProperty().bind(scene.heightProperty().subtract(140));
         }
+    }
+
+    /**
+     * Hides the currently shown Timeslots window if any.
+     */
+    public static void hide() {
+        if (currentStage != null) {
+            try {
+                currentStage.hide();
+            } finally {
+                currentStage = null;
+            }
+        }
+    }
+
+    /**
+     * Returns true if a Timeslots window is currently visible.
+     */
+    public static boolean isShowing() {
+        return currentStage != null && currentStage.isShowing();
     }
 
     // Renders the given week starting at weekStart (Monday) into root using provided topRow and hoursHeader nodes.

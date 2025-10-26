@@ -36,15 +36,18 @@ public abstract class MultiIndexCommand extends Command {
      */
     @Override
     public CommandResult execute(Model model) throws CommandException {
-        model.saveAddressBook();
         List<Person> lastShownList = model.getFilteredPersonList();
-        List<Person> updatedPersons = new ArrayList<>();
 
         for (Index index : multiIndex.toIndexList()) {
             if (index.getZeroBased() >= lastShownList.size()) {
                 throw new CommandException(MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
             }
+        }
 
+        model.saveAddressBook();
+
+        List<Person> updatedPersons = new ArrayList<>();
+        for (Index index : multiIndex.toIndexList()) {
             Person personToEdit = lastShownList.get(index.getZeroBased());
             Person editedPerson = applyActionToPerson(model, personToEdit);
 

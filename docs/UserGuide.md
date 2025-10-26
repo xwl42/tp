@@ -136,7 +136,7 @@ How to use this guide:
 
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 </box>
-
+<br><br>
 ### Viewing help: `help`
 
 Opens a Help window that provides a link to the User Guide.
@@ -148,7 +148,7 @@ Format: `help`
 ![help message](images/helpMessage2.png)
 
 
-
+<br><br>
 ### Adding a student: `add`
 
 Adds a student to LambdaLab.
@@ -171,12 +171,14 @@ Examples:
 Duplicate Identifier (Student ID) will cause the below error:  
   `This student already exists in LambdaLab`
 </box>
+<br><br>
 
 ### Listing all students : `list`
 
 Shows a list of all students and their information.
 
 Format: `list`
+<br><br>
 
 ### Editing a student : `edit`
 
@@ -204,6 +206,7 @@ specifying any tags after it.
 Examples:
 *  `edit 1 p/91234567 e/johndoe@example.com` Edits the phone number and email address of the 1st student to be `91234567` and `johndoe@example.com` respectively.
 *  `edit 2 n/Betsy Crower t/` Edits the name of the 2nd student to be `Betsy Crower` and clears all existing tags.
+<br><br>
 
 ### Marking lab attendance: `marka`
 

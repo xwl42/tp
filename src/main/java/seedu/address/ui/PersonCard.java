@@ -1,13 +1,19 @@
 package seedu.address.ui;
 
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
+import seedu.address.model.person.GradeMap;
+import seedu.address.model.person.Gradeable;
+import seedu.address.model.person.LabAttendance;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.Status;
 
 /**
  * An UI component that displays information of a {@code Person}.
@@ -41,13 +47,13 @@ public class PersonCard extends UiPart<Region> {
     @FXML
     private FlowPane tags;
     @FXML
-    private Label exerciseStatus;
+    private FlowPane exerciseStatus;
     @FXML
     private Label githubUsername;
     @FXML
-    private Label labAttendanceList;
+    private FlowPane labAttendance;
     @FXML
-    private Label gradeMap;
+    private FlowPane grades;
 
     /**
      * Creates a {@code PersonCode} with the given {@code Person} and index to display.
@@ -60,12 +66,50 @@ public class PersonCard extends UiPart<Region> {
         name.setText(person.getName().fullName);
         phone.setText(person.getPhone().value);
         email.setText(person.getEmail().value);
-        exerciseStatus.setText(person.getExerciseTracker().toString());
+        List<Status> exerciseStatuses = person.getExerciseTracker().getStatuses();
+        for (int i = 0; i < exerciseStatuses.size(); i++) {
+            Label exerciseLabel = new Label("EX" + i);
+            String statusClass = switch (exerciseStatuses.get(i)) {
+            case NOT_DONE -> "exercise-not-done";
+            case DONE -> "exercise-done";
+            case OVERDUE -> "exercise-overdue";
+            };
+            exerciseLabel.getStyleClass().addAll("status-label", statusClass);
+            exerciseStatus.getChildren().add(exerciseLabel);
+        }
+
         person.getTags().stream()
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
         githubUsername.setText(person.getGithubUsername().value);
-        labAttendanceList.setText(person.getLabAttendanceList().toString());
-        gradeMap.setText(person.getGradeMap().toString());
+        LabAttendance[] labs = person.getLabAttendanceList().getLabs();
+
+        for (LabAttendance lab : labs) {
+            Label labLabel = new Label("L" + lab.getLabNumber());
+            String statusClass = switch (lab.getStatus()) {
+            case "Y" -> "lab-attended";
+            case "A" -> "lab-absent";
+            default -> "lab-not-attended"; // "N"
+            };
+            labLabel.getStyleClass().addAll("status-label", statusClass);
+            labAttendance.getChildren().add(labLabel);
+        }
+
+        HashMap<String, Gradeable> gradeableMap = person.getGradeMap().getGradeableHashMap();
+        for (String examName : GradeMap.VALID_EXAM_NAMES) {
+            Gradeable exam = gradeableMap.get(examName);
+            Label gradeLabel = new Label(examName.toUpperCase());
+
+            double score = exam.getScore();
+            if (score == -1.0) {
+                gradeLabel.getStyleClass().addAll("status-label", "exam-not-graded");
+            } else if (score >= 50.0) {
+                gradeLabel.getStyleClass().addAll("status-label", "exam-pass");
+            } else {
+                gradeLabel.getStyleClass().addAll("status-label", "exam-fail");
+            }
+
+            grades.getChildren().add(gradeLabel);
+        }
     }
 }

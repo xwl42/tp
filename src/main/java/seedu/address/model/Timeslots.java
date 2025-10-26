@@ -7,7 +7,6 @@ import java.util.Objects;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.timeslot.Timeslot;
 
 /**
@@ -70,17 +69,15 @@ public class Timeslots implements ReadOnlyTimeslots {
         return times.contains(t);
     }
 
-    public void setTimeslot(Timeslot target, Timeslot editedTimeslot) {
-        requireNonNull(editedTimeslot);
-        int idx = times.indexOf(target);
-        if (idx == -1) {
-            throw new IllegalArgumentException("Target timeslot not found");
-        }
-        times.set(idx, editedTimeslot);
-    }
-
     public void removeTimeslot(Timeslot key) {
         times.remove(key);
+    }
+
+    /**
+     * Clears all timeslots in this collection while preserving the same ObservableList instance.
+     */
+    public void clear() {
+        times.clear();
     }
 
     //// util methods
@@ -92,9 +89,7 @@ public class Timeslots implements ReadOnlyTimeslots {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .add("times", times)
-                .toString();
+        return "Timeslots" + times.toString();
     }
 
     @Override

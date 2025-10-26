@@ -20,6 +20,7 @@ public class ExerciseTracker implements Comparable<ExerciseTracker> {
     public static final double WEIGHT_DONE = 1;
     public static final double WEIGHT_OVERDUE = -0.5;
     private static final Logger logger = LogsCenter.getLogger(MainApp.class);
+    private static final String INDEX_OUT_OF_FOUNDS_FORMAT = "Index should be between 0 and %s";
 
 
     private ArrayList<Exercise> exercises = new ArrayList<>();
@@ -39,8 +40,6 @@ public class ExerciseTracker implements Comparable<ExerciseTracker> {
      */
     public ExerciseTracker(ArrayList<Status> statuses) {
         assert statuses != null : "Statuses list must not be null";
-        assert statuses.size() <= NUMBER_OF_EXERCISES
-                : "Statuses list too long: " + statuses.size();
         if (statuses.size() > NUMBER_OF_EXERCISES) {
             throw new IllegalArgumentException("Too many statuses! Expected at most " + NUMBER_OF_EXERCISES);
         }
@@ -92,7 +91,15 @@ public class ExerciseTracker implements Comparable<ExerciseTracker> {
     public void markExercise(Index index, Status status) {
         logger.info(String.format("Marking ex %d with %s", index.getOneBased(), status));
         if (index.getZeroBased() < 0 || index.getZeroBased() >= NUMBER_OF_EXERCISES) {
-            throw new IndexOutOfBoundsException("Index should be between 0 and " + (NUMBER_OF_EXERCISES - 1));
+            throw new IndexOutOfBoundsException(
+                    String.format(INDEX_OUT_OF_FOUNDS_FORMAT,
+                            NUMBER_OF_EXERCISES - 1)
+            );
+        }
+        if (exercises.get(index.getZeroBased()).getStatus().equals(status)) {
+            throw new IllegalStateException(String.format("Ex %d already marked with %s",
+                    index.getZeroBased(),
+                    status));
         }
         exercises.get(index.getZeroBased()).markStatus(status);
     }

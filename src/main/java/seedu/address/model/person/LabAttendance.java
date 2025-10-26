@@ -11,10 +11,22 @@ public interface LabAttendance {
     public void markAsAttended();
 
     /**
+     * Marks this lab as not attended.
+     */
+    public void markAsAbsent();
+
+    /**
      * Returns whether this lab has been marked as attended.
      *
      * @return {@code true} if the lab has been marked as attended;
      *         {@code false} otherwise
      */
     public boolean isAttended();
+
+    public int getLabNumber();
+
+    /**
+     * @return the attendance status of the lab session
+     */
+    public String getStatus();
 }

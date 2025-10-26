@@ -32,20 +32,22 @@ How to use this guide:
     2. [Adding a student: `add`](#adding-a-student-add)
     3. [Listing all students: `list`](#listing-all-students-list)
     4. [Editing a student: `edit`](#editing-a-student-edit)
-    5. [Marking lab attendance: `marka`](#marking-lab-attendance-marka)
-    6. [Marking exercise status: `marke`](#marking-exercise-status-marke)
-    7. [Assigning assessment score: `grade`](#assigning-assessment-score-grade)
-    8. [Locating students by name: `find`](#locating-students-by-name-find)
-    9. [Sorting students: `sort`](#sorting-the-students-sort)
-    10. [Deleting a student: `delete`](#deleting-a-student-delete)
-    11. [Clearing all entries: `clear`](#clearing-all-entries-clear)
-    12. [Undoing the last command: `undo`](#undoing-the-last-command-undo)
-    13. [Blocking a timeslot: `block-timeslot`](#blocking-a-timeslot-block-timeslot)
-    14. [Retrieving merged timeslot ranges: `get-timeslots`](#retrieving-merged-timeslot-ranges-get-timeslots)
-    15. [Clearing all timeslots: `clear-timeslots`](#clearing-all-timeslots-clear-timeslots)
-    16. [Exiting the program: `exit`](#exiting-the-program-exit)
-    17. [Saving the data](#saving-the-data)
-    18. [Editing the data file](#editing-the-data-file)
+    5. [Setting current week: `set-week`](#setting-current-week-set-week)
+    6. [Marking lab attendance: `marka`](#marking-lab-attendance-marka)
+    7. [Marking exercise status: `marke`](#marking-exercise-status-marke)
+    8. [Assigning assessment score: `grade`](#assigning-assessment-score-grade)
+    9. [Locating students by name: `find`](#locating-students-by-name-find)
+    10. [Sorting students: `sort`](#sorting-the-students-sort)
+    11. [Deleting a student: `delete`](#deleting-a-student-delete)
+    12. [Clearing all entries: `clear`](#clearing-all-entries-clear)
+    13. [Undoing the last command: `undo`](#undoing-the-last-command-undo)
+    14. [Blocking a timeslot: `block-timeslot`](#blocking-a-timeslot-block-timeslot)
+    15. [Unblocking a timeslot: `unblock-timeslot`](#unblocking-a-timeslot-unblock-timeslot)
+    16. [Retrieving merged timeslot ranges: `get-timeslots`](#retrieving-merged-timeslot-ranges-get-timeslots)
+    17. [Clearing all timeslots: `clear-timeslots`](#clearing-all-timeslots-clear-timeslots)
+    18. [Exiting the program: `exit`](#exiting-the-program-exit)
+    19. [Saving the data](#saving-the-data)
+    20. [Editing the data file](#editing-the-data-file)
 3. [FAQ](#faq)
 4. [Known issues](#known-issues)
 5. [Command summary](#command-summary)
@@ -115,7 +117,7 @@ How to use this guide:
 
 ## Features
 
-<box type="info">
+<box type="info" seamless>
 
 **Notes about the command format:**<br>
 
@@ -155,7 +157,7 @@ Adds a student to LambdaLab.
 
 Format: `add i/STUDENTID n/NAME p/PHONE e/EMAIL g/GITHUB_USERNAME [t/TAG]…​`
 
-<box type="tip">
+<box type="tip" seamless>
 
 **Tip:** A student can have zero or more tags.  
 A tag must be alphanumeric with no spaces or special characters.
@@ -166,7 +168,7 @@ Examples:
 * Optional fields included: `add i/A1234567X n/John Doe p/98765432 e/johnd@example.com g/JohnDoe t/modelStudent`
 * Fields in different order: `add g/JohnDoe i/A1234567X  p/98765432 t/modelStudent n/John Doe e/johnd@example.com`
 
-<box type="warning">
+<box type="warning" seamless>
 
 Duplicate Identifier (Student ID) will cause the below error:  
   `This student already exists in LambdaLab`
@@ -192,7 +194,7 @@ The index **must be a positive integer** 1, 2, 3, …​
 * You must provide at least 1 of the optional fields.
 * Existing values will be updated to the input values.
   
-<box type="warning">
+<box type="warning" seamless>
 
 **Caution:** 
 When editing tags, the existing tags of the student will be removed 
@@ -208,18 +210,32 @@ Examples:
 *  `edit 2 n/Betsy Crower t/` Edits the name of the 2nd student to be `Betsy Crower` and clears all existing tags.
 <br><br>
 
+### Setting current week: 'set-week'
+
+Sets the current week of the semester to the specified week.
+
+Format: `set-week WEEKNUMBER`
+
+* Marks the lab attendance of past labs as absent if not attended
+* Marks the overdue exercises as overdue if not complete (*to be implemented*)
+* `WEEKNUMBER` represents the NUS Semester week, and it **must be between 0 and 13 inclusive**
+
+Examples:
+* `set-week 5` will set current week at 5. Labs 1 to 2 will be marked as absent (red) if they have not been attended. 
+
 ### Marking lab attendance: `marka`
 
 Marks the lab attendance of an existing student in LambdaLab.
 
-Format: `marka INDEX l/LABNUMBER`
+Format: `marka INDEX l/LABNUMBER s/ATTENDANCESTATUS`
 
 * Edits the student at the specified `INDEX`. The index refers to the index number shown in the displayed student list. The index **must be a positive integer** 1, 2, 3, …​
 * `LABNUMBER` represents the lab session to mark attendance for. It **must be between 1 and 10 (inclusive)**.
-* Attendance can only be **marked once per lab**.
+* `ATTENDANCESTATUS` represents the current status of the student's attendance. It **must be one of `y` or `n` (case-insensitive)**
 
 Examples:
-* `marka 2 l/7` marks Lab 7 of the second student as attended.
+* `marka 2 l/7 s/y` marks Lab 7 of the second student as attended.
+* `marka 2 l/7 s/n` marks Lab 7 of the second student as not attended.
 
 ### Marking exercise status: `marke`
 
@@ -295,7 +311,7 @@ Format: `sort c/SORTCRITERION`
   * `lab` sorts students by their Lab Attendance Rate (Highest to lowest)
   * `ex` sorts students by their progress in their exercises (Highest to lowest)
 
-<box type="tip">
+<box type="tip" seamless>
 
 **Tip:** The criterion is case-insensitive!
 </box>
@@ -316,7 +332,7 @@ Examples:
 * `list` followed by `delete 2` deletes the 2nd student in the LambdaLab.
 * `find Betsy` followed by `delete 1` deletes the 1st student in the results of the `find` command.
 
-<box type="warning">
+<box type="warning" seamless>
 
 Missing fields or a non‑positive index will cause the following error:  
   `Invalid command format! 
@@ -331,7 +347,7 @@ Clears **all** entries from LambdaLab, leaving it completely empty.
 
 Format: `clear`
 
-<box type="warning">
+<box type="warning" seamless>
 
 **Caution:**
 This command will remove **all** entries from LambdaLab. If mistakenly performed, type `undo` **immediately**
@@ -348,14 +364,14 @@ Format: `undo`
 * Commands that do not modify data cannot be undone (e.g., `help`, `list`, `find`, `exit`).  
 * `undo` only reverses the very last data‑modifying command. If there is no command to undo, an error message will be displayed.
 
-<box type="warning">
+<box type="warning" seamless>
 
 **Caution:**
 This command only undoes the most recent data-modifying command. You cannot undo multiple data-modifying commands or skip 
 back to earlier changes. 
 </box>
 
-<box type="tip">
+<box type="tip" seamless>
 
 **Tip:** Use `undo` immediately after making a mistake to quickly restore your previous data state.
 </box>
@@ -383,6 +399,32 @@ Examples:
 * `block-timeslot ts/4 Oct 2025, 10:00 te/4 Oct 2025, 13:00`
 * `block-timeslot ts/4 Oct 2025 10:00 te/4 Oct 2025 13:00`
 
+### Unblocking a timeslot : `unblock-timeslot`
+
+Removes or trims stored timeslots that overlap the specified datetime range. The command will remove exact matches, trim edges, or split stored timeslots that contain the unblock range.
+
+Format: `unblock-timeslot ts/START_DATETIME te/END_DATETIME`
+
+* Accepted datetime formats:
+  * ISO_LOCAL_DATE_TIME: `2023-10-01T09:00:00`
+  * Human-friendly: `d MMM uuuu, HH:mm` (e.g. `4 Oct 2025, 10:00`) or `d MMM uuuu HH:mm` (e.g. `4 Oct 2025 10:00`)
+
+* If a stored timeslot exactly matches the unblock range, it is removed.
+* If the unblock range is strictly inside a stored timeslot, the stored timeslot is split into two (before and after the unblock range).
+* If the unblock range overlaps one end of a stored timeslot, the stored timeslot is trimmed accordingly.
+* If no stored timeslot overlaps the provided range, the command reports an error.
+
+Examples:
+* `unblock-timeslot ts/2025-10-04T10:00:00 te/2025-10-04T13:00:00`
+* `unblock-timeslot ts/4 Oct 2025, 11:00 te/4 Oct 2025, 12:00`
+* `unblock-timeslot ts/4 Oct 2025 12:00 te/4 Oct 2025 14:00`
+
+
+<box type="tip">
+
+**Tip:** Timeslot doesn't have to match added timeslot exactly. It can be any timeslot shown in `get-timeslots` as well
+</box>
+
 ### Retrieving merged timeslot ranges: `get-timeslots`
 
 Displays merged timeslot ranges derived from stored timeslots. Overlapping or adjacent timeslots are merged and presented as continuous ranges for easier viewing.
@@ -407,7 +449,7 @@ Removes all stored timeslots (does not affect student records).
 
 Format: `clear-timeslots`
 
-<box type="warning">
+<box type="warning" seamless>
 
 **Caution:**
 This will permanently remove all stored timeslots. There is no multi-step undo for timeslot clearing;
@@ -428,7 +470,7 @@ LambdaLab data are saved in the hard disk automatically after any command that c
 
 LambdaLab data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.
 
-<box type="warning">
+<box type="warning" seamless>
 
 **Caution:**
 If your changes to the data file makes its format invalid, LambdaLab will discard all data and start with an empty data file at the next run.  Hence, it is recommended to take a backup of the file before editing it.<br>
@@ -454,7 +496,7 @@ Furthermore, certain edits can cause the LambdaLab to behave in unexpected ways 
     - On your new computer, navigate to `[JAR file location]/data/`
     - Replace the empty `addressbook.json` file with your copied file
 4. Restart LambdaLab on your new computer to see all your student data
-<box type="tip">
+<box type="tip" seamless>
 **Tip:** You can also backup your data regularly by copying the `addressbook.json` file to a secure location (e.g., cloud storage, USB drive).
 </box>
 
@@ -513,10 +555,12 @@ Action     | Format, Examples
 **Help**   | `help`
 **Mark Attendance** | `marka INDEX l/LABNUMBER` <br> e.g. `marka 2 l/7`
 **Mark Exercise** | `marke INDEX ei/EXERCISENUMBER s/STATUSLETTER` <br> e.g. `marke 2 ei/7 s/d`
+**Set Week** | `set-week WEEKNUMBER` <br> e.g. `set-week 5`
 **Sort**    | `sort`
 **Undo** | `undo`
 **Grade**| `grade`
 **Block timeslot** | `block-timeslot ts/START_DATETIME te/END_DATETIME` <br> e.g. `block-timeslot ts/2025-10-04T10:00:00 te/2025-10-04T13:00:00`
+**Unblock timeslot** | `unblock-timeslot ts/START_DATETIME te/END_DATETIME` <br> e.g. `block-timeslot ts/2025-10-04T10:00:00 te/2025-10-04T13:00:00`
 **Get timeslots** | `get-timeslots` 
 **Clear timeslots** | `clear-timeslots` 
 **Exit**   | `exit`

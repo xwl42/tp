@@ -15,6 +15,7 @@ import java.util.Set;
 
 import javafx.util.Pair;
 import seedu.address.commons.core.index.Index;
+import seedu.address.commons.core.index.MultiIndex;
 import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Email;
@@ -44,7 +45,36 @@ import seedu.address.model.tag.Tag;
 public class ParserUtil {
 
     public static final String MESSAGE_INVALID_INDEX = "Index is not a non-zero unsigned integer.";
+    /**
+     * @param input a string that is either in the "X:Y" or "X" form
+     * @return a MultiIndex instance
+     * @throws ParseException if the input is invalid
+     */
+    public static MultiIndex parseMultiIndex(String input) throws ParseException {
+        if (input.contains(":")) {
+            return parseRange(input);
+        } else {
+            return new MultiIndex(parseIndex(input));
+        }
+    }
+    /**
+     * Parses a range input like "2:5" into a MultiIndex.
+     * */
+    private static MultiIndex parseRange(String input) throws ParseException {
+        String[] parts = input.split(":");
+        if (parts.length != 2) {
+            throw new IllegalArgumentException("Invalid range format: " + input);
+        }
 
+        Index lower = ParserUtil.parseIndex(parts[0].trim());
+        Index upper = ParserUtil.parseIndex(parts[1].trim());
+
+        if (lower.getZeroBased() > upper.getZeroBased()) {
+            throw new IllegalArgumentException("Lower bound cannot be greater than upper bound: " + input);
+        }
+
+        return new MultiIndex(lower, upper);
+    }
     /**
      * Parses {@code oneBasedIndex} into an {@code Index} and returns it. Leading and trailing whitespaces will be
      * trimmed.
@@ -187,6 +217,24 @@ public class ParserUtil {
     }
 
     /**
+     * Parses a {@code String labStatus} into a boolean value.
+     *
+     * @param labStatus The status string to parse.
+     * @return true if the status is "y", false if the status is "n".
+     * @throws ParseException if the given {@code labStatus} is invalid.
+     */
+    public static boolean parseLabStatus(String labStatus) throws ParseException {
+        requireNonNull(labStatus);
+        String trimmed = labStatus.trim();
+        switch (trimmed.toLowerCase()) {
+        case "y": return true;
+        case "n": return false;
+        default:
+            throw new ParseException(Lab.MESSAGE_CONSTRAINTS);
+        }
+    }
+
+    /**
      * Parses a {@code String labAttendanceListString} into an {@code LabAttendanceList}.
      * Leading and trailing whitespaces will be trimmed.
      *
@@ -205,7 +253,7 @@ public class ParserUtil {
         for (int i = 0; i < labs.length; i++) {
             String status = parts[i * 2 + 1];
 
-            labs[i] = new Lab(i + 1);
+            labs[i] = new Lab(i + 1, LabList.getCurrentWeek());
             if (status.equals("Y")) {
                 labs[i].markAsAttended();
             }
@@ -255,7 +303,7 @@ public class ParserUtil {
             Examination exam = new Examination(name);
             if (!scoreStr.equalsIgnoreCase("NA")) {
                 try {
-                    exam.setScore(Double.parseDouble(scoreStr));
+                    exam.setPercentageScore(Double.parseDouble(scoreStr));
                 } catch (InvalidScoreException e) {
                     throw new ParseException(e.getMessage());
                 }

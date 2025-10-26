@@ -25,6 +25,7 @@ public class ModelManager implements Model {
     private final UserPrefs userPrefs;
     private final FilteredList<Person> filteredPersons;
     private ReadOnlyAddressBook previousAddressBookState;
+    private ReadOnlyTimeslots previousTimeslotsState;
 
     // Add timeslots managed by the model
     private Timeslots timeslots;
@@ -57,6 +58,7 @@ public class ModelManager implements Model {
         this.timeslots = new Timeslots(timeslots);
         filteredPersons = new FilteredList<>(this.addressBook.getPersonList());
         this.previousAddressBookState = null;
+        this.previousTimeslotsState = null;
     }
 
     public ModelManager() {
@@ -156,7 +158,7 @@ public class ModelManager implements Model {
         filteredPersons.setPredicate(predicate);
     }
 
-    //=========== Undo Command =============================================================
+    //=========== Undo Command =================================================================================
 
     /**
      * Saves the current address book state before making changes.
@@ -164,6 +166,7 @@ public class ModelManager implements Model {
     @Override
     public void saveAddressBook() {
         previousAddressBookState = new AddressBook(addressBook);
+        previousTimeslotsState = new Timeslots(timeslots);
     }
 
     /**
@@ -171,7 +174,7 @@ public class ModelManager implements Model {
      */
     @Override
     public boolean canUndoAddressBook() {
-        return previousAddressBookState != null;
+        return previousAddressBookState != null && previousTimeslotsState != null;
     }
 
     /**
@@ -184,7 +187,9 @@ public class ModelManager implements Model {
         }
 
         setAddressBook(previousAddressBookState);
-        previousAddressBookState = null; // Clear after undo
+        setTimeslots(previousTimeslotsState);
+        previousAddressBookState = null;
+        previousTimeslotsState = null;
     }
 
     /**
@@ -210,6 +215,17 @@ public class ModelManager implements Model {
     }
 
     /**
+     * Removes the given {@code Timeslot} from the model's timeslot collection.
+     *
+     * @param t the timeslot to remove (must not be null).
+     */
+    @Override
+    public void removeTimeslot(Timeslot t) {
+        requireNonNull(t);
+        this.timeslots.removeTimeslot(t);
+    }
+
+    /**
      * Returns true if the model already contains the given {@code Timeslot}.
      *
      * @param t timeslot to check presence for (must not be null).
@@ -225,10 +241,20 @@ public class ModelManager implements Model {
      */
     @Override
     public void clearTimeslots() {
-        // Replace with the appropriate Timeslots API if different in your codebase.
-        // If Timeslots has a clear() or resetData(...) method, call that instead.
         requireNonNull(this.timeslots);
-        this.timeslots = new Timeslots();
+        this.timeslots.clear();
+    }
+
+    //=========== CurrentWeek Accessors =============================================================
+
+    @Override
+    public void setCurrentWeek(Week currentWeek) {
+        addressBook.setCurrentWeek(currentWeek);
+    }
+
+    @Override
+    public Week getCurrentWeek() {
+        return addressBook.getCurrentWeek();
     }
 
     @Override

@@ -17,6 +17,7 @@ import seedu.address.model.person.UniquePersonList;
 public class AddressBook implements ReadOnlyAddressBook {
 
     private final UniquePersonList persons;
+    private Week currentWeek;
 
     /*
      * The 'unusual' code block below is a non-static initialization block, sometimes used to avoid duplication
@@ -27,6 +28,7 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     {
         persons = new UniquePersonList();
+        currentWeek = new Week(0); // Set default to week 0
     }
 
     public AddressBook() {}
@@ -56,6 +58,7 @@ public class AddressBook implements ReadOnlyAddressBook {
         requireNonNull(newData);
 
         setPersons(newData.getPersonList());
+        setCurrentWeek(newData.getCurrentWeek());
     }
 
     //// person-level operations
@@ -87,6 +90,7 @@ public class AddressBook implements ReadOnlyAddressBook {
         persons.setPerson(target, editedPerson);
     }
 
+
     /**
      * Removes {@code key} from this {@code AddressBook}.
      * {@code key} must exist in the address book.
@@ -103,12 +107,24 @@ public class AddressBook implements ReadOnlyAddressBook {
         persons.sort(comparator);
     }
 
+    //// week-level operations
+
+    public void setCurrentWeek(Week currentWeek) {
+        requireNonNull(currentWeek);
+        this.currentWeek = currentWeek;
+    }
+
+    public Week getCurrentWeek() {
+        return currentWeek;
+    }
+
     //// util methods
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
                 .add("persons", persons)
+                .add("currentWeek", currentWeek.getWeekNumber())
                 .toString();
     }
 
@@ -129,7 +145,8 @@ public class AddressBook implements ReadOnlyAddressBook {
         }
 
         AddressBook otherAddressBook = (AddressBook) other;
-        return persons.equals(otherAddressBook.persons);
+        return persons.equals(otherAddressBook.persons)
+                && currentWeek.equals(otherAddressBook.currentWeek);
     }
 
     @Override

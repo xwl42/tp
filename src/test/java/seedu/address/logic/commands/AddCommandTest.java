@@ -22,7 +22,9 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
+import seedu.address.model.ReadOnlyTimeslots;
 import seedu.address.model.ReadOnlyUserPrefs;
+import seedu.address.model.Week;
 import seedu.address.model.person.Person;
 import seedu.address.testutil.PersonBuilder;
 
@@ -180,7 +182,42 @@ public class AddCommandTest {
         }
 
         @Override
+        public ReadOnlyTimeslots getTimeslots() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void setTimeslots(seedu.address.model.ReadOnlyTimeslots newData) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public boolean hasTimeslot(seedu.address.model.timeslot.Timeslot timeslot) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void addTimeslot(seedu.address.model.timeslot.Timeslot timeslot) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void removeTimeslot(seedu.address.model.timeslot.Timeslot timeslot) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public void clearTimeslots() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void setCurrentWeek(Week currentWeek) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public Week getCurrentWeek() {
             throw new AssertionError("This method should not be called.");
         }
     }

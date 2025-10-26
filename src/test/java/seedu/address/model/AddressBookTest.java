@@ -84,7 +84,9 @@ public class AddressBookTest {
 
     @Test
     public void toStringMethod() {
-        String expected = AddressBook.class.getCanonicalName() + "{persons=" + addressBook.getPersonList() + "}";
+        String expected = AddressBook.class.getCanonicalName()
+                + "{persons=" + addressBook.getPersonList()
+                + ", currentWeek=" + addressBook.getCurrentWeek().getWeekNumber() + "}";
         assertEquals(expected, addressBook.toString());
     }
 
@@ -101,6 +103,11 @@ public class AddressBookTest {
         @Override
         public ObservableList<Person> getPersonList() {
             return persons;
+        }
+
+        @Override
+        public Week getCurrentWeek() {
+            throw new AssertionError("This method should not be called.");
         }
     }
 

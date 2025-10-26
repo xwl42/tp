@@ -7,6 +7,7 @@ import java.util.function.Predicate;
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.model.person.Person;
+import seedu.address.model.timeslot.Timeslot;
 
 /**
  * The API of the Model component.
@@ -107,8 +108,44 @@ public interface Model {
      */
     void sortPersonList(Comparator<Person> comparator);
 
+    // ===== Timeslots-related APIs =====
     /**
-     * Clears all timeslots stored in the model.
+     * Returns the timeslots as an unmodifiable view.
+     */
+    ReadOnlyTimeslots getTimeslots();
+
+    /**
+     * Replaces the current timeslots with {@code newData}.
+     */
+    void setTimeslots(ReadOnlyTimeslots newData);
+
+    /**
+     * Returns true if the model has the given timeslot.
+     */
+    boolean hasTimeslot(Timeslot timeslot);
+
+    /**
+     * Adds the given timeslot.
+     */
+    void addTimeslot(Timeslot timeslot);
+
+    /**
+     * Removes the given timeslot.
+     */
+    void removeTimeslot(Timeslot timeslot);
+
+    /**
+     * Clears all timeslots.
      */
     void clearTimeslots();
+
+    /**
+     * Sets the current week number
+     */
+    void setCurrentWeek(Week currentWeek);
+
+    /**
+     * Gets the current week number
+     */
+    Week getCurrentWeek();
 }

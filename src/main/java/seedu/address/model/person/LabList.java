@@ -7,13 +7,14 @@ public class LabList implements LabAttendanceList {
     public static final int NUMBER_OF_LABS = 10;
     public static final String MESSAGE_CONSTRAINTS =
             "Lab attendance list should be in the format 'L1: Y/N ... L10: Y/N'";
+    private static int currentWeek = 0;
     private final LabAttendance[] labs;
 
     /**
      * Constructs a {@code LabList} with all labs initialized to not attended.
      */
     public LabList() {
-        this(createDefaultLabs());
+        this(createDefaultLabs(currentWeek));
     }
 
     /**
@@ -26,20 +27,36 @@ public class LabList implements LabAttendanceList {
         this.labs = labs;
     }
 
-    private static LabAttendance[] createDefaultLabs() {
+    private static LabAttendance[] createDefaultLabs(int currentWeek) {
         LabAttendance[] labAttendanceList = new LabAttendance[NUMBER_OF_LABS];
         for (int i = 0; i < NUMBER_OF_LABS; i++) {
-            labAttendanceList[i] = new Lab(i + 1);
+            labAttendanceList[i] = new Lab(i + 1, currentWeek);
         }
         return labAttendanceList;
     }
 
+    public static int getCurrentWeek() {
+        return currentWeek;
+    }
+
+    public static void setCurrentWeek(int week) {
+        currentWeek = week;
+    }
+
     @Override
-    public void markLabAsAttended(int index) throws IndexOutOfBoundsException {
+    public void markLabAsAttended(int index) {
         if (index < 0 || index >= NUMBER_OF_LABS) {
             throw new IndexOutOfBoundsException("Index should be between 0 and " + (NUMBER_OF_LABS - 1));
         }
         labs[index].markAsAttended();
+    }
+
+    @Override
+    public void markLabAsAbsent(int index) {
+        if (index < 0 || index >= NUMBER_OF_LABS) {
+            throw new IndexOutOfBoundsException("Index should be between 0 and " + (NUMBER_OF_LABS - 1));
+        }
+        labs[index].markAsAbsent();
     }
 
     @Override
@@ -70,7 +87,7 @@ public class LabList implements LabAttendanceList {
         LabAttendance[] copiedLabs = new LabAttendance[NUMBER_OF_LABS];
         for (int i = 0; i < NUMBER_OF_LABS; i++) {
             Lab originalLab = (Lab) this.labs[i];
-            Lab newLab = new Lab(i + 1);
+            Lab newLab = new Lab(i + 1, currentWeek);
             if (originalLab.isAttended()) {
                 newLab.markAsAttended();
             }
@@ -112,7 +129,7 @@ public class LabList implements LabAttendanceList {
                 return false;
             }
 
-            if (!status.equals("Y") && !status.equals("N")) {
+            if (!status.equals("Y") && !status.equals("N") && !status.equals("A")) {
                 return false;
             }
         }

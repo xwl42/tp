@@ -24,7 +24,9 @@ import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.MarkAttendanceCommand;
 import seedu.address.logic.commands.MarkExerciseCommand;
+import seedu.address.logic.commands.SetWeekCommand;
 import seedu.address.logic.commands.SortCommand;
+import seedu.address.logic.commands.UnblockTimeslotCommand;
 import seedu.address.logic.commands.UndoCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 
@@ -101,18 +103,23 @@ public class AddressBookParser {
         case SortCommand.COMMAND_WORD:
             return new SortCommandParser().parse(arguments);
 
-
         case GetTimeslotCommand.COMMAND_WORD:
             return new GetTimeslotCommandParser().parse(arguments);
 
         case BlockTimeslotCommand.COMMAND_WORD:
             return new BlockTimeslotCommandParser().parse(arguments);
 
+        case UnblockTimeslotCommand.COMMAND_WORD:
+            return new UnblockTimeslotCommandParser().parse(arguments);
+
         case ClearTimeslotsCommand.COMMAND_WORD:
             return new ClearTimeslotsCommandParser().parse(arguments);
 
         case FilterCommand.COMMAND_WORD:
             return new FilterCommandParser().parse(arguments);
+
+        case SetWeekCommand.COMMAND_WORD:
+            return new SetWeekCommandParser().parse(arguments);
 
         default:
             logger.finer("This user input caused a ParseException: " + userInput);

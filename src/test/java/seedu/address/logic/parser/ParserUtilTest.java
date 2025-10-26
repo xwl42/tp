@@ -13,6 +13,8 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.address.commons.core.index.Index;
+import seedu.address.commons.core.index.MultiIndex;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.LabAttendanceList;
@@ -43,7 +45,31 @@ public class ParserUtilTest {
 
 
     private static final String WHITESPACE = " \t\r\n";
+    @Test
+    public void parseMultiIndex_validInputs_success() throws Exception {
+        // Single index
+        MultiIndex single = ParserUtil.parseMultiIndex("3");
+        assertEquals(new MultiIndex(Index.fromOneBased(3)), single);
 
+        // Range index
+        MultiIndex range = ParserUtil.parseMultiIndex("2:5");
+        assertEquals(new MultiIndex(Index.fromOneBased(2), Index.fromOneBased(5)), range);
+    }
+
+    @Test
+    public void parseMultiIndex_invalidInputs_throwsException() {
+        // Too many colons
+        assertThrows(IllegalArgumentException.class, () -> ParserUtil.parseMultiIndex("1:2:3"));
+
+        // Lower bound > upper bound
+        assertThrows(IllegalArgumentException.class, () -> ParserUtil.parseMultiIndex("5:2"));
+
+        // Non-numeric input
+        assertThrows(ParseException.class, () -> ParserUtil.parseMultiIndex("a:b"));
+
+        // Empty input
+        assertThrows(ParseException.class, () -> ParserUtil.parseMultiIndex(""));
+    }
     @Test
     public void parseIndex_invalidInput_throwsParseException() {
         assertThrows(ParseException.class, () -> ParserUtil.parseIndex("10 a"));

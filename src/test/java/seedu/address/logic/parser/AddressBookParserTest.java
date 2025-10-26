@@ -6,12 +6,14 @@ import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.Messages.MESSAGE_UNKNOWN_COMMAND;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_LAB_NUMBER;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SORT_CRITERION;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_STATUS;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_LAB;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.address.commons.core.index.MultiIndex;
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.DeleteCommand;
@@ -86,8 +88,8 @@ public class AddressBookParserTest {
     public void parseCommand_markAttendance() throws Exception {
         MarkAttendanceCommand command = (MarkAttendanceCommand) parser.parseCommand(
                 MarkAttendanceCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased() + " "
-                        + PREFIX_LAB_NUMBER + INDEX_FIRST_LAB.getOneBased());
-        assertEquals(new MarkAttendanceCommand(INDEX_FIRST_PERSON, INDEX_FIRST_LAB), command);
+                        + PREFIX_LAB_NUMBER + INDEX_FIRST_LAB.getOneBased() + " " + PREFIX_STATUS + "y");
+        assertEquals(new MarkAttendanceCommand(new MultiIndex(INDEX_FIRST_PERSON), INDEX_FIRST_LAB, true), command);
     }
 
     @Test

@@ -13,8 +13,23 @@ public class LabAttendanceStub implements LabAttendance {
     }
 
     @Override
+    public void markAsAbsent() {
+        isAttended = false;
+    }
+
+    @Override
     public boolean isAttended() {
         return isAttended;
+    }
+
+    @Override
+    public int getLabNumber() {
+        return 0;
+    }
+
+    @Override
+    public String getStatus() {
+        return this.toString();
     }
 
     @Override

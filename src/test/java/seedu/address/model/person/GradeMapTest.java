@@ -38,7 +38,7 @@ public class GradeMapTest {
     public void gradeExam_validExamName_setsScoreSuccessfully() throws InvalidExamNameException {
         gradeMap.gradeExam("midterm", 30.0);
         Gradeable exam = gradeMap.getGradeableHashMap().get("midterm");
-        assertEquals(30.0, exam.getScore());
+        assertEquals(30.0 / Examination.MAX_MIDTERM_SCORE * 100.0 , exam.getScore());
     }
 
     @Test

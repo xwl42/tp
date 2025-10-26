@@ -66,6 +66,7 @@ public class MainWindow extends UiPart<Stage> {
         setAccelerators();
 
         helpWindow = new HelpWindow();
+        // no instance needed — TimeslotsWindow exposes static show/hide helpers
     }
 
     public Stage getPrimaryStage() {
@@ -160,6 +161,8 @@ public class MainWindow extends UiPart<Stage> {
                 (int) primaryStage.getX(), (int) primaryStage.getY());
         logic.setGuiSettings(guiSettings);
         helpWindow.hide();
+        // close timeslots window if it is open
+        TimeslotsWindow.hide();
         primaryStage.hide();
     }
 

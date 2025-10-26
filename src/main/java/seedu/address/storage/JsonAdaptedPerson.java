@@ -23,7 +23,6 @@ import seedu.address.model.person.LabList;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
-import seedu.address.model.person.Status;
 import seedu.address.model.person.StudentId;
 import seedu.address.model.tag.Tag;
 
@@ -93,13 +92,13 @@ class JsonAdaptedPerson {
         email = source.getEmail().value;
         tags.addAll(source.getTags().stream()
                 .map(JsonAdaptedTag::new)
-                .collect(Collectors.toList()));
+                .toList());
         exerciseStatuses.addAll(source
                 .getExerciseTracker()
-                .getStatuses()
+                .getIsDoneList()
                 .stream()
-                .map(Object::toString)
-                .collect(Collectors.toList()));
+                .map(x -> x ? "y" : "n")
+                .toList());
         githubUsername = source.getGithubUsername().value;
         labAttendanceList = source.getLabAttendanceList().toString();
         gradeMap.putAll(
@@ -125,10 +124,10 @@ class JsonAdaptedPerson {
             personTags.add(tag.toModelType());
         }
 
-        final ArrayList<Status> exerciseStatusList = new ArrayList<>();
+        final ArrayList<Boolean> isDoneList = new ArrayList<>();
         for (String stat : exerciseStatuses) {
             if (!stat.isEmpty()) {
-                exerciseStatusList.add(ParserUtil.parseStatus(stat));
+                isDoneList.add(ParserUtil.parseStatus(stat));
             }
         }
         final GradeMap gradeMapModel = new GradeMap();
@@ -200,6 +199,6 @@ class JsonAdaptedPerson {
 
         return new Person(modelStudentId, modelName, modelPhone, modelEmail,
                 modelTags, modelGithubUsername,
-                new ExerciseTracker(exerciseStatusList), modelLabAttendanceList, gradeMapModel);
+                new ExerciseTracker(isDoneList), modelLabAttendanceList, gradeMapModel);
     }
 }

@@ -3,6 +3,7 @@ package seedu.address.model.person;
 import static seedu.address.model.person.Status.NOT_DONE;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -175,6 +176,10 @@ public class ExerciseTracker implements Comparable<ExerciseTracker> {
     public ExerciseTracker copy() {
         ArrayList<Boolean> copiedStatuses = new ArrayList<>(this.getIsDoneList());
         return new ExerciseTracker(copiedStatuses);
+    }
+
+    public List<Status> getStatuses() {
+        return exercises.stream().map(Exercise::getStatus).toList();
     }
 }
 

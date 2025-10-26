@@ -32,9 +32,9 @@ public class MarkExerciseCommandParserTest {
      */
     @Test
     public void parse_validArgs_returnsMarkExerciseCommand() throws Exception {
-        String input = "1 " + PREFIX_EXERCISE_INDEX + "0 " + PREFIX_STATUS + "D";
+        String input = "1 " + PREFIX_EXERCISE_INDEX + "0 " + PREFIX_STATUS + "y";
         MarkExerciseCommand expected = new MarkExerciseCommand(
-                new MultiIndex(Index.fromZeroBased(0)), Index.fromOneBased(1), Status.DONE);
+                new MultiIndex(Index.fromZeroBased(0)), Index.fromOneBased(1), true);
         MarkExerciseCommand result = parser.parse(input);
         assertEquals(expected, result);
     }
@@ -85,7 +85,7 @@ public class MarkExerciseCommandParserTest {
         String input = "1 " + PREFIX_EXERCISE_INDEX + "0 " + PREFIX_STATUS + "INVALIDSTATUS";
         ParseException e = assertThrows(ParseException.class, () -> parser.parse(input));
         assertEquals(
-                "Invalid status. Must be one of: " + Arrays.toString(Status.values()),
+                "Status must be y or n",
                 e.getMessage()
         );
     }

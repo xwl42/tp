@@ -49,7 +49,7 @@ public class MarkExerciseCommandParser implements Parser<MarkExerciseCommand> {
                     MarkExerciseCommand.MESSAGE_USAGE), ive);
         }
         try {
-            status = ParserUtil.parseLabStatus(statusString.trim().toUpperCase());
+            status = ParserUtil.parseStatus(statusString.trim().toUpperCase());
         } catch (IllegalArgumentException e) {
             throw new ParseException(INVALID_STATUS_FORMAT
                     + Arrays.toString(Status.values()));

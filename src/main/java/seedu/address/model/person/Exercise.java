@@ -19,7 +19,7 @@ public class Exercise {
      * @param isDone the completion status of the exercise
      */
     public Exercise(int exerciseNumber, boolean isDone) {
-        assert exerciseNumber > 0 : "Invalid exercise number";
+        assert exerciseNumber >= 0 : "Invalid exercise number";
         this.exerciseNumber = exerciseNumber;
         this.isDone = isDone;
         this.currentWeek = 0;
@@ -31,8 +31,15 @@ public class Exercise {
         return String.format("ex %d: %s", exerciseNumber, getStatus());
     }
 
-    public void markStatus(boolean isDone) {
-        this.isDone = isDone;
+    /**
+     * sets isDone to a given boolean value
+     * @param status to set isDone to
+     */
+    public void markStatus(boolean status) {
+        if (this.isDone == status) {
+            throw new IllegalStateException("Lab Attendance has already been marked as not attended");
+        }
+        this.isDone = status;
     }
 
     public boolean isDone() {

@@ -138,6 +138,7 @@ How to use this guide:
 
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 </box>
+
 <br><br>
 ### Viewing help: `help`
 
@@ -173,15 +174,15 @@ Examples:
 Duplicate Identifier (Student ID) will cause the below error:  
   `This student already exists in LambdaLab`
 </box>
-<br><br>
 
+<br><br>
 ### Listing all students : `list`
 
 Shows a list of all students and their information.
 
 Format: `list`
-<br><br>
 
+<br><br>
 ### Editing a student : `edit`
 
 Edits an existing student in LambdaLab.
@@ -208,8 +209,8 @@ specifying any tags after it.
 Examples:
 *  `edit 1 p/91234567 e/johndoe@example.com` Edits the phone number and email address of the 1st student to be `91234567` and `johndoe@example.com` respectively.
 *  `edit 2 n/Betsy Crower t/` Edits the name of the 2nd student to be `Betsy Crower` and clears all existing tags.
-<br><br>
 
+<br><br>
 ### Setting current week: 'set-week'
 
 Sets the current week of the semester to the specified week.
@@ -223,6 +224,7 @@ Format: `set-week WEEKNUMBER`
 Examples:
 * `set-week 5` will set current week at 5. Labs 1 to 2 will be marked as absent (red) if they have not been attended. 
 
+<br><br>
 ### Marking lab attendance: `marka`
 
 Marks the lab attendance of an existing student in LambdaLab.
@@ -237,6 +239,7 @@ Examples:
 * `marka 2 l/7 s/y` marks Lab 7 of the second student as attended.
 * `marka 2 l/7 s/n` marks Lab 7 of the second student as not attended.
 
+<br><br>
 ### Marking exercise status: `marke`
 
 Marks the exercise status of an existing student in LambdaLab.
@@ -257,6 +260,7 @@ Format: `marke INDEX ei/EXERCISENUMBER s/STATUSLETTER`
 Examples:
 * `marke 2 ei/7 s/d` marks exercise 7 of the 2nd student as done.
 
+<br><br>
 ### Assigning assessment score: `grade`
 
 Assigns the score for a specific assessment of an existing student in LambdaLab.
@@ -280,7 +284,7 @@ Supported Assessments:
 Examples:
 * `grade 2 en/midterm sc/55` sets the **midterm** score of the **2nd student** in the list to **55**.
 
-
+<br><br>
 ### Locating students by name: `find`
 
 Finds students whose names contain any of the given keywords.
@@ -299,6 +303,7 @@ Examples:
 * `find alex david` returns `Alex Yeoh`, `David Li`<br>
   ![result for 'find alex david'](images/findAlexDavidResult.png)
 
+<br><br>
 ### Sorting the students: `sort`
 
 Sorts the student by a specified criterion.
@@ -320,6 +325,7 @@ Examples:
 * `sort c/name` sorts the students by their name.
 * `sort c/lab` sorts the students by their lab attendance rate.
 
+<br><br>
 ### Deleting a student : `delete`
 
 Deletes the specified student from LambdaLab.
@@ -341,6 +347,7 @@ Missing fields or a non‑positive index will cause the following error:
     Example: delete 1`
 </box>
 
+<br><br>
 ### Clearing all entries : `clear`
 
 Clears **all** entries from LambdaLab, leaving it completely empty.
@@ -354,6 +361,7 @@ This command will remove **all** entries from LambdaLab. If mistakenly performed
 before using another data-modifying command.
 </box>
 
+<br><br>
 ### Undoing the last command: `undo`
 
 Reverses the most recent command that modified student data in LambdaLab.
@@ -384,6 +392,7 @@ Examples:
 * `delete 1` followed by `edit 1 n/Wrong Name` followed by 2 consecutive `undo`s only reverts the student's name 
 to its original value, but cannot restore the deleted student back to the list
 
+<br><br>
 ### Blocking a timeslot : `block-timeslot`
 
 Adds a timeslot to the application's timeslot store.
@@ -399,6 +408,7 @@ Examples:
 * `block-timeslot ts/4 Oct 2025, 10:00 te/4 Oct 2025, 13:00`
 * `block-timeslot ts/4 Oct 2025 10:00 te/4 Oct 2025 13:00`
 
+<br><br>
 ### Unblocking a timeslot : `unblock-timeslot`
 
 Removes or trims stored timeslots that overlap the specified datetime range. The command will remove exact matches, trim edges, or split stored timeslots that contain the unblock range.
@@ -425,6 +435,7 @@ Examples:
 **Tip:** Timeslot doesn't have to match added timeslot exactly. It can be any timeslot shown in `get-timeslots` as well
 </box>
 
+<br><br>
 ### Retrieving merged timeslot ranges: `get-timeslots`
 
 Displays merged timeslot ranges derived from stored timeslots. Overlapping or adjacent timeslots are merged and presented as continuous ranges for easier viewing.
@@ -443,6 +454,7 @@ Format: `get-timeslots`
   ![Timetable window](images/timetableWindow.png)
 
 
+<br><br>
 ### Clearing all timeslots : `clear-timeslots`
 
 Removes all stored timeslots (does not affect student records).
@@ -456,16 +468,19 @@ This will permanently remove all stored timeslots. There is no multi-step undo f
 use immediately after a mistaken action if your environment supports undo of other operations.
 </box>
 
+<br><br>
 ### Exiting the program : `exit`
 
 Exits the program.
 
 Format: `exit`
 
+<br><br>
 ### Saving the data
 
 LambdaLab data are saved in the hard disk automatically after any command that changes the data. There is no need to save manually.
 
+<br><br>
 ### Editing the data file
 
 LambdaLab data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.

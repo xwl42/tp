@@ -30,7 +30,7 @@ public class MarkExerciseCommandParser implements Parser<MarkExerciseCommand> {
                 ArgumentTokenizer.tokenize(args, PREFIX_EXERCISE_INDEX, PREFIX_STATUS);
         MultiIndex personIndex;
         Index exerciseIndex;
-        Status status;
+        boolean status;
         String statusString;
 
         // Parse the person index (from the command preamble)

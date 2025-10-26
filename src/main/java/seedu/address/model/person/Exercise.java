@@ -3,29 +3,57 @@ package seedu.address.model.person;
 import java.util.Objects;
 
 /**
- * Represents an exercise
+ * Represents an exercise.
  */
 public class Exercise {
-    private Status status;
-    private final int number;
+    public static final int EXERCISE_WEEK_DIFFERENCE = 2;
+    private boolean isDone;
+    private final int exerciseNumber;
+    private boolean isPastWeek;
+    private final int currentWeek;
     /**
-     * Creates an exercise object with the following parameters
-     * @param number is the exercise number
-     * @param status is the status of the exercise
+     * Creates an exercise object with the following parameters.
+     * @param exerciseNumber the exercise number
+     * @param isDone the completion status of the exercise
      */
-    public Exercise(int number, Status status) {
-        this.number = number;
-        this.status = status;
+    public Exercise(int exerciseNumber, boolean isDone, int currentWeek) {
+        assert exerciseNumber >= 0 : "Invalid exercise number";
+        this.exerciseNumber = exerciseNumber;
+        this.isDone = isDone;
+        this.currentWeek = currentWeek;
+        this.isPastWeek = exerciseNumber < (currentWeek - EXERCISE_WEEK_DIFFERENCE);
     }
 
     @Override
     public String toString() {
-        return String.format("ex %d: %s", number, status);
+        return String.format("ex %d: %s", exerciseNumber, getStatus());
     }
 
-    public void markStatus(Status status) {
-        this.status = status;
+    /**
+     * sets isDone to a given boolean value
+     * @param status to set isDone to
+     */
+    public void markStatus(boolean status) {
+        if (this.isDone == status) {
+            throw new IllegalStateException("Lab Attendance has already been marked as not attended");
+        }
+        this.isDone = status;
     }
+
+    public boolean isDone() {
+        return isDone;
+    }
+
+    public Status getStatus() {
+        if (isDone) {
+            return Status.DONE;
+        } else if (isPastWeek) {
+            return Status.OVERDUE;
+        } else {
+            return Status.NOT_DONE;
+        }
+    }
+
     @Override
     public boolean equals(Object other) {
         if (this == other) {
@@ -35,16 +63,11 @@ public class Exercise {
             return false;
         }
         Exercise otherExercise = (Exercise) other;
-        return number == otherExercise.number && status == otherExercise.status;
+        return exerciseNumber == otherExercise.exerciseNumber && isDone == otherExercise.isDone;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(number, status);
-    }
-
-
-    public Status getStatus() {
-        return status;
+        return Objects.hash(exerciseNumber, isDone);
     }
 }

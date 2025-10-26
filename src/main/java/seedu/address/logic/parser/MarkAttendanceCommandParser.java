@@ -35,7 +35,7 @@ public class MarkAttendanceCommandParser implements Parser<MarkAttendanceCommand
             multiIndex = ParserUtil.parseMultiIndex(argMultimap.getPreamble());
             labNumber = ParserUtil.parseIndex(argMultimap.getValue(PREFIX_LAB_NUMBER)
                     .orElseThrow(() -> new IllegalValueException("Missing lab number.")));
-            isAttended = ParserUtil.parseLabStatus(argMultimap.getValue(PREFIX_STATUS)
+            isAttended = ParserUtil.parseStatus(argMultimap.getValue(PREFIX_STATUS)
                     .orElseThrow(() -> new IllegalValueException("Missing status.")));
         } catch (IllegalValueException | IllegalArgumentException e) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,

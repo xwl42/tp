@@ -6,8 +6,6 @@ import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EXERCISE_INDEX;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_STATUS;
 
-import java.util.Arrays;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +13,6 @@ import seedu.address.commons.core.index.Index;
 import seedu.address.commons.core.index.MultiIndex;
 import seedu.address.logic.commands.MarkExerciseCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
-import seedu.address.model.person.Status;
 
 public class MarkExerciseCommandParserTest {
 
@@ -32,9 +29,9 @@ public class MarkExerciseCommandParserTest {
      */
     @Test
     public void parse_validArgs_returnsMarkExerciseCommand() throws Exception {
-        String input = "1 " + PREFIX_EXERCISE_INDEX + "0 " + PREFIX_STATUS + "D";
+        String input = "1 " + PREFIX_EXERCISE_INDEX + "0 " + PREFIX_STATUS + "y";
         MarkExerciseCommand expected = new MarkExerciseCommand(
-                new MultiIndex(Index.fromZeroBased(0)), Index.fromOneBased(1), Status.DONE);
+                new MultiIndex(Index.fromZeroBased(0)), Index.fromOneBased(1), true);
         MarkExerciseCommand result = parser.parse(input);
         assertEquals(expected, result);
     }
@@ -85,7 +82,7 @@ public class MarkExerciseCommandParserTest {
         String input = "1 " + PREFIX_EXERCISE_INDEX + "0 " + PREFIX_STATUS + "INVALIDSTATUS";
         ParseException e = assertThrows(ParseException.class, () -> parser.parse(input));
         assertEquals(
-                "Invalid status. Must be one of: " + Arrays.toString(Status.values()),
+                "Status must be y or n",
                 e.getMessage()
         );
     }

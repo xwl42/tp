@@ -14,7 +14,6 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.ExerciseTracker;
 import seedu.address.model.person.Person;
-import seedu.address.model.person.Status;
 
 /**
  * Marks a specific exercise as a given status for one or more students in the address book.
@@ -27,7 +26,7 @@ public class MarkExerciseCommand extends MultiIndexCommand {
             + "identified by their index numbers in the last person listing.\n"
             + "Parameters: INDEX (must be a positive integer or range X:Y) "
             + "ei/EXERCISEINDEX s/STATUS\n"
-            + "Example: " + COMMAND_WORD + " 1:3 ei/1 s/d";
+            + "Example: " + COMMAND_WORD + " 1:3 ei/1 s/y";
 
     public static final String MESSAGE_MARK_EXERCISE_SUCCESS =
             "Exercise %1$d marked as %2$s for: %3$s";
@@ -40,20 +39,22 @@ public class MarkExerciseCommand extends MultiIndexCommand {
 
     private final MultiIndex studentIndex;
     private final Index exerciseIndex;
-    private final Status status;
+    private final boolean isDone;
     private final List<Person> alreadyMarkedPersons = new ArrayList<>();
+    private String action;
 
     /**
      * @param studentIndex indices of students to be marked
      * @param exerciseIndex exercise number to mark
-     * @param status status to mark the exercise with
+     * @param isDone status to mark the exercise with
      */
-    public MarkExerciseCommand(MultiIndex studentIndex, Index exerciseIndex, Status status) {
+    public MarkExerciseCommand(MultiIndex studentIndex, Index exerciseIndex, boolean isDone) {
         super(studentIndex);
-        requireAllNonNull(studentIndex, exerciseIndex, status);
+        requireAllNonNull(studentIndex, exerciseIndex, isDone);
         this.studentIndex = studentIndex;
         this.exerciseIndex = exerciseIndex;
-        this.status = status;
+        this.isDone = isDone;
+        this.action = isDone ? "done" : "not done";
     }
 
     /**
@@ -78,7 +79,7 @@ public class MarkExerciseCommand extends MultiIndexCommand {
     protected Person applyActionToPerson(Model model, Person personToEdit) throws CommandException {
         ExerciseTracker updatedExerciseTracker = personToEdit.getExerciseTracker().copy();
         try {
-            updatedExerciseTracker.markExercise(exerciseIndex, status);
+            updatedExerciseTracker.markExercise(exerciseIndex, isDone);
         } catch (IndexOutOfBoundsException e) {
             throw new CommandException(String.format(MESSAGE_INDEX_OUT_OF_BOUNDS, HIGHEST_INDEX));
         } catch (IllegalStateException e) {
@@ -122,7 +123,7 @@ public class MarkExerciseCommand extends MultiIndexCommand {
 
         if (!personsEdited.isEmpty()) {
             String successMessage = String.format(MESSAGE_MARK_EXERCISE_SUCCESS,
-                    exerciseIndex.getZeroBased(), status, editedNames);
+                    exerciseIndex.getZeroBased(), action, editedNames);
             message.append(successMessage);
         }
 
@@ -139,7 +140,7 @@ public class MarkExerciseCommand extends MultiIndexCommand {
                 .collect(Collectors.joining(", "));
 
         return String.format(MESSAGE_FAILURE_ALREADY_MARKED,
-                exerciseIndex.getZeroBased(), status, names);
+                exerciseIndex.getZeroBased(), action, names);
     }
 
     @Override
@@ -155,6 +156,6 @@ public class MarkExerciseCommand extends MultiIndexCommand {
         MarkExerciseCommand otherCommand = (MarkExerciseCommand) other;
         return studentIndex.equals(otherCommand.studentIndex)
                 && exerciseIndex.equals(otherCommand.exerciseIndex)
-                && status.equals(otherCommand.status);
+                && isDone == otherCommand.isDone;
     }
 }

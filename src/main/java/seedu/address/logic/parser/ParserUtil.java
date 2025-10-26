@@ -4,7 +4,6 @@ import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_STATUS;
-import static seedu.address.logic.parser.MarkExerciseCommandParser.INVALID_STATUS_FORMAT;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,6 +44,8 @@ import seedu.address.model.tag.Tag;
 public class ParserUtil {
 
     public static final String MESSAGE_INVALID_INDEX = "Index is not a non-zero unsigned integer.";
+    private static final String MESSAGE_INVALID_STATUS = "Status must be y or n";
+
     /**
      * @param input a string that is either in the "X:Y" or "X" form
      * @return a MultiIndex instance
@@ -202,35 +203,20 @@ public class ParserUtil {
     }
 
     /**
-     * Converts first letter of status to status object
-     * @param code first letter of status
-     * @return status represented by code
-     */
-    public static Status parseStatus(String code) throws ParseException {
-        switch (code.toUpperCase()) {
-        case "D": return Status.DONE;
-        case "N": return Status.NOT_DONE;
-        case "O": return Status.OVERDUE;
-        default:
-            throw new ParseException(INVALID_STATUS_FORMAT + Arrays.toString(Status.values()));
-        }
-    }
-
-    /**
      * Parses a {@code String labStatus} into a boolean value.
      *
      * @param labStatus The status string to parse.
      * @return true if the status is "y", false if the status is "n".
      * @throws ParseException if the given {@code labStatus} is invalid.
      */
-    public static boolean parseLabStatus(String labStatus) throws ParseException {
+    public static boolean parseStatus(String labStatus) throws ParseException {
         requireNonNull(labStatus);
         String trimmed = labStatus.trim();
         switch (trimmed.toLowerCase()) {
         case "y": return true;
         case "n": return false;
         default:
-            throw new ParseException(Lab.MESSAGE_CONSTRAINTS);
+            throw new ParseException(MESSAGE_INVALID_STATUS);
         }
     }
 
@@ -274,10 +260,9 @@ public class ParserUtil {
             throw new ParseException(ExerciseTracker.MESSAGE_CONSTRAINTS);
         }
 
-        Status[] statuses = new Status[ExerciseTracker.NUMBER_OF_EXERCISES];
+        Boolean[] statuses = new Boolean[ExerciseTracker.NUMBER_OF_EXERCISES];
         String[] parts = trimmed.split("\\s+");
 
-        // Now we have 3 tokens per exercise: "ex", "0:", "N"
         for (int i = 0; i < ExerciseTracker.NUMBER_OF_EXERCISES; i++) {
             String statusString = parts[i * 3 + 2];
             statuses[i] = parseStatus(statusString);

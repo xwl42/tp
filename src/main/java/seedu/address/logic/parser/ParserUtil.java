@@ -46,6 +46,8 @@ public class ParserUtil {
     public static final String MESSAGE_INVALID_INDEX = "Index is not a non-zero unsigned integer.";
     private static final String MESSAGE_INVALID_STATUS = "Status must be y or n";
 
+
+
     /**
      * @param input a string that is either in the "X:Y" or "X" form
      * @return a MultiIndex instance
@@ -343,7 +345,7 @@ public class ParserUtil {
             throw new ParseException("Need exercise");
         }
         if (status.isEmpty()) {
-            throw new ParseException("Need status");
+            throw new ParseException("Exercise index must always be followed by exercise status");
         }
         String statusString = status.get().toUpperCase();
         switch (statusString) {
@@ -354,7 +356,7 @@ public class ParserUtil {
         case "O":
             return new Pair<>(exercise, Status.OVERDUE);
         default:
-            throw new ParseException("Need D N O");
+            throw new ParseException("Exercise status must be Y, N or O");
         }
     }
 
@@ -374,7 +376,7 @@ public class ParserUtil {
             throw new ParseException("Need lab number");
         }
         if (status.isEmpty()) {
-            throw new ParseException("Need status");
+            throw new ParseException("Lab index must always be followed by lab status");
         }
         String statusString = status.get().toUpperCase();
         switch (statusString) {
@@ -383,7 +385,7 @@ public class ParserUtil {
         case "N":
             return new Pair<>(labNumber, FALSE);
         default:
-            throw new ParseException("Need Y N");
+            throw new ParseException("Lab status must be Y, N or A");
         }
     }
 }

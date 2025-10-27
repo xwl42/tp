@@ -27,22 +27,35 @@ public class MarkAttendanceCommandParser implements Parser<MarkAttendanceCommand
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args,
                 PREFIX_LAB_NUMBER, PREFIX_STATUS);
 
-        //Parse exception directly goes to AddressBook Parser
+        // Parse exception directly goes to AddressBook Parser
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_LAB_NUMBER, PREFIX_STATUS);
+
+        // Check if required fields are present
+        if (argMultimap.getPreamble().isEmpty()
+                || argMultimap.getValue(PREFIX_LAB_NUMBER).isEmpty()
+                || argMultimap.getValue(PREFIX_STATUS).isEmpty()) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                    MarkAttendanceCommand.MESSAGE_USAGE));
+        }
 
         MultiIndex multiIndex;
         Index labNumber;
         boolean isAttended;
 
         try {
+            labNumber = ParserUtil.parseIndex(argMultimap.getValue(PREFIX_LAB_NUMBER).orElse(""));
+        } catch (ParseException e) {
+            throw new ParseException(MarkAttendanceCommand.MESSAGE_FAILURE_INVALID_LAB_INDEX);
+        }
+
+        // The ParseException from this would go to AddressBook Parser
+        isAttended = ParserUtil.parseStatus(argMultimap.getValue(PREFIX_STATUS).orElse(""));
+
+        // Parse multi-index (it will throw uncaught parse exception if index is wrong);
+        try {
             multiIndex = ParserUtil.parseMultiIndex(argMultimap.getPreamble());
-            labNumber = ParserUtil.parseIndex(argMultimap.getValue(PREFIX_LAB_NUMBER)
-                    .orElseThrow(() -> new IllegalValueException("Missing lab number.")));
-            isAttended = ParserUtil.parseStatus(argMultimap.getValue(PREFIX_STATUS)
-                    .orElseThrow(() -> new IllegalValueException("Missing status.")));
-        } catch (IllegalValueException | IllegalArgumentException e) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                    MarkAttendanceCommand.MESSAGE_USAGE), e);
+        } catch (IllegalArgumentException e) {
+            throw new ParseException(e.getMessage());
         }
 
         return new MarkAttendanceCommand(multiIndex, labNumber, isAttended);

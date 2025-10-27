@@ -41,6 +41,7 @@ public class JsonSerializableTimeslotsTest {
         JsonSerializableTimeslots json = new JsonSerializableTimeslots(list);
         Exception e = assertThrows(IllegalArgumentException.class, json::toModelType);
         // sanity-check message to ensure it's the expected overlap/duplicate reason
-        assertTrue(e.getMessage().toLowerCase().contains("overlap") || e.getMessage().toLowerCase().contains("duplicate"));
+        assertTrue(e.getMessage().toLowerCase().contains("overlap")
+                    || e.getMessage().toLowerCase().contains("duplicate"));
     }
 }

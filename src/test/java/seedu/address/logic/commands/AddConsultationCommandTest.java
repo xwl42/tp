@@ -61,7 +61,7 @@ public class AddConsultationCommandTest {
     }
 
     @Test
-    public void execute_sameIntervalDifferentStudent_throwsCommandException_duplicateTimeslot() {
+    public void execute_sameIntervalDifferentStudent_throwsCommandException() {
         // existing consultation 09:00-10:00 with Charlie
         LocalDateTime start = LocalDateTime.parse("2025-10-03T09:00:00", Timeslot.FORMATTER);
         LocalDateTime end = LocalDateTime.parse("2025-10-03T10:00:00", Timeslot.FORMATTER);

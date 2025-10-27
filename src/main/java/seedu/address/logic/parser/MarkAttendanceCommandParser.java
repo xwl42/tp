@@ -27,6 +27,9 @@ public class MarkAttendanceCommandParser implements Parser<MarkAttendanceCommand
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args,
                 PREFIX_LAB_NUMBER, PREFIX_STATUS);
 
+        //Parse exception directly goes to AddressBook Parser
+        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_LAB_NUMBER, PREFIX_STATUS);
+
         MultiIndex multiIndex;
         Index labNumber;
         boolean isAttended;

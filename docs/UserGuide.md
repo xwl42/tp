@@ -484,7 +484,8 @@ Examples:
 **Tip:** Timeslot doesn't have to match added timeslot exactly. It can be any timeslot shown in `get-timeslots` as well
 </box>
 
-<br><br>
+<br>
+
 ### Retrieving merged timeslot ranges: `get-timeslots`
 
 Displays merged timeslot ranges derived from stored timeslots. Overlapping or adjacent timeslots are merged and presented as continuous ranges for easier viewing.
@@ -503,7 +504,8 @@ Format: `get-timeslots`
   ![Timetable window](images/timetableWindow.png)
 
 
-<br><br>
+<br>
+
 ### Clearing all timeslots : `clear-timeslots`
 
 Removes all stored timeslots (does not affect student records).
@@ -517,19 +519,22 @@ This will permanently remove all stored timeslots. There is no multi-step undo f
 use immediately after a mistaken action if your environment supports undo of other operations.
 </box>
 
-<br><br>
+<br>
+
 ### Exiting the program : `exit`
 
 Exits the program.
 
 Format: `exit`
 
-<br><br>
+<br>
+
 ### Saving the data
 
 LambdaLab data are saved in the hard disk automatically after any command that changes the data. There is no need to save manually.
 
-<br><br>
+<br>
+
 ### Editing the data file
 
 LambdaLab data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.

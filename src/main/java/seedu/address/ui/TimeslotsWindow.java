@@ -8,8 +8,6 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.NumberBinding;

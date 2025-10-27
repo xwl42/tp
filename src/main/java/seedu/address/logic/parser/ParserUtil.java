@@ -16,6 +16,8 @@ import javafx.util.Pair;
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.core.index.MultiIndex;
 import seedu.address.commons.util.StringUtil;
+import seedu.address.logic.commands.FilterCommand;
+import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Examination;
@@ -45,6 +47,16 @@ public class ParserUtil {
 
     public static final String MESSAGE_INVALID_INDEX = "Index is not a non-zero unsigned integer.";
     private static final String MESSAGE_INVALID_STATUS = "Status must be y or n";
+    private static final String MESSAGE_INVALID_FILTER_EXERCISE_STATUS =
+            "Exercise status must be Y, N or O";
+    private static final String MESSAGE_INVALID_FILTER_LAB_STATUS =
+            "Lab status must be Y, N or A";
+    private static final String MESSAGE_MISSING_EXERCISE_STATUS =
+            "Exercise index must always be followed by exercise status";
+    private static final String MESSAGE_MISSING_LAB_STATUS =
+            "Lab index must always be followed by lab status";
+
+
 
     /**
      * @param input a string that is either in the "X:Y" or "X" form
@@ -340,10 +352,10 @@ public class ParserUtil {
         Optional<String> status = exerciseMultimap.getValue(PREFIX_STATUS);
         String exercise = exerciseMultimap.getPreamble();
         if (exercise.isEmpty()) {
-            throw new ParseException("Need exercise");
+            throw new ParseException(FilterCommand.MESSAGE_USAGE);
         }
         if (status.isEmpty()) {
-            throw new ParseException("Need status");
+            throw new ParseException(MESSAGE_MISSING_EXERCISE_STATUS);
         }
         String statusString = status.get().toUpperCase();
         switch (statusString) {
@@ -354,7 +366,7 @@ public class ParserUtil {
         case "O":
             return new Pair<>(exercise, Status.OVERDUE);
         default:
-            throw new ParseException("Need D N O");
+            throw new ParseException(MESSAGE_INVALID_FILTER_EXERCISE_STATUS);
         }
     }
 
@@ -371,10 +383,10 @@ public class ParserUtil {
         Optional<String> status = exerciseMultimap.getValue(PREFIX_STATUS);
         String labNumber = exerciseMultimap.getPreamble();
         if (labNumber.isEmpty()) {
-            throw new ParseException("Need lab number");
+            throw new ParseException(FindCommand.MESSAGE_USAGE);
         }
         if (status.isEmpty()) {
-            throw new ParseException("Need status");
+            throw new ParseException(MESSAGE_MISSING_LAB_STATUS);
         }
         String statusString = status.get().toUpperCase();
         switch (statusString) {
@@ -383,7 +395,7 @@ public class ParserUtil {
         case "N":
             return new Pair<>(labNumber, FALSE);
         default:
-            throw new ParseException("Need Y N");
+            throw new ParseException(MESSAGE_INVALID_FILTER_LAB_STATUS);
         }
     }
 }

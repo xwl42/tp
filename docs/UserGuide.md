@@ -301,7 +301,6 @@ Format: `find KEYWORD [MORE_KEYWORDS]... [i/] [n/] [p/] [e/] [g/] [t/]`
 * If you do not specify any field prefixes after the keywords, all fields are searched by default.
 * The search is case-insensitive. e.g., hans will match Hans
 * The order of keywords does not matter. e.g., `Hans Bo will` match `Bo Hans`
-* Only full words will be matched. e.g., `Han` will not match `Hans`
 * Students matching at least one keyword will be returned (i.e., OR search). e.g., `Hans Bo` will return `Hans Gruber` and `Bo Yang`
 
 Examples:
@@ -315,6 +314,42 @@ Tip: Use multiple field prefixes to narrow your search to specific fields. For e
 `alice` only in names, ignoring other fields.
 </box>
 
+<br><br>
+### Filtering students: `filter`
+
+Filters and shows only the students who satisfy the given lab attendance 
+and exercise completion statuses.
+
+Format: `filter [l/LABNUMBER s/ATTENDANCESTATUS] [ei/EXERCISEINDEX s/EXERCISESTATUS]`
+
+| Prefix           | Meaning                             | Accepted values                                                                              |
+|------------------|-------------------------------------|----------------------------------------------------------------------------------------------|
+| `l/`             | Lab number to check attendance for  | **1–10** (inclusive)                                                                         |
+| `ei/`            | Exercise number to check status for | **0–9** (inclusive)                                                                          |
+| `s/` after `l/`  | Attendance status for that lab      | `y` (attended), `n` (not attended yet), `a` (absent)(not implemented yet) — case-insensitive |
+| `s/` after `ei/` | Exercise status for that exercise   | `d` (done), `n` (not done), `o` (overdue) — case-insensitive                                 |
+
+
+* You **must** provide one `s/STATUS` immediately after each `l/LABNUMBER` or `ei/EXERCISEINDEX` you include.
+* If you use filter for both labs and exercises, they are combined with **AND**
+(a student must satisfy both conditions to be shown).
+* Status letters are case-insensitive (`Y`, `y`, `D`, `d`, etc.).
+
+Examples:
+* `filter l/7 s/y` — Shows students who attended Lab 7.
+* `filter l/3 s/n` — Shows students absent for Lab 3.
+* `filter ei/5 s/d` — Shows students who completed Exercise 5.
+* `filter ei/0 s/o` — Shows students with Exercise 0 overdue.
+* `filter l/2 s/y ei/4 s/d` — Shows students who attended Lab 2 and completed Exercise 4.
+
+
+<box type="tip">
+Use `list` to clear the filter and show everyone again.
+</box>
+
+
+
+Filters students by their lab attendance and exercise completions.
 
 <br><br>
 ### Sorting the students: `sort`
@@ -449,7 +484,8 @@ Examples:
 **Tip:** Timeslot doesn't have to match added timeslot exactly. It can be any timeslot shown in `get-timeslots` as well
 </box>
 
-<br><br>
+<br>
+
 ### Retrieving merged timeslot ranges: `get-timeslots`
 
 Displays merged timeslot ranges derived from stored timeslots. Overlapping or adjacent timeslots are merged and presented as continuous ranges for easier viewing.
@@ -468,7 +504,8 @@ Format: `get-timeslots`
   ![Timetable window](images/timetableWindow.png)
 
 
-<br><br>
+<br>
+
 ### Clearing all timeslots : `clear-timeslots`
 
 Removes all stored timeslots (does not affect student records).
@@ -482,19 +519,22 @@ This will permanently remove all stored timeslots. There is no multi-step undo f
 use immediately after a mistaken action if your environment supports undo of other operations.
 </box>
 
-<br><br>
+<br>
+
 ### Exiting the program : `exit`
 
 Exits the program.
 
 Format: `exit`
 
-<br><br>
+<br>
+
 ### Saving the data
 
 LambdaLab data are saved in the hard disk automatically after any command that changes the data. There is no need to save manually.
 
-<br><br>
+<br>
+
 ### Editing the data file
 
 LambdaLab data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.

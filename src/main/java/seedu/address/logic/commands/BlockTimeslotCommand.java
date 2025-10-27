@@ -56,7 +56,15 @@ public class BlockTimeslotCommand extends Command {
             throw new CommandException(MESSAGE_DUPLICATE_TIMESLOT);
         }
         model.saveAddressBook();
-        mm.addTimeslot(toAdd);
+        try {
+            mm.addTimeslot(toAdd);
+        } catch (IllegalArgumentException e) {
+            // Common reason: overlaps an existing timeslot. Map to user-friendly message.
+            String msg = e.getMessage() != null && e.getMessage().toLowerCase().contains("overlap")
+                    ? MESSAGE_DUPLICATE_TIMESLOT
+                    : MESSAGE_INVALID_TIMESLOT;
+            throw new CommandException(msg);
+        }
         return new CommandResult(String.format(MESSAGE_SUCCESS, toAdd));
     }
 

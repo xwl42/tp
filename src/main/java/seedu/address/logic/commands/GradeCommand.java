@@ -57,7 +57,13 @@ public class GradeCommand extends Command {
         List<Person> lastShownList = model.getFilteredPersonList();
 
         if (index.getZeroBased() >= lastShownList.size()) {
-            throw new CommandException(Messages.MESSAGE_INVALID_INDEX_FORMAT);
+            throw new CommandException(String.format(
+                    Messages.MESSAGE_INVALID_INDEX_FORMAT,
+                    index.getOneBased(),
+                    "student",
+                    1,
+                    lastShownList.size()
+            ));
         }
         Person personToGrade = lastShownList.get(index.getZeroBased());
 

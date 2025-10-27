@@ -41,8 +41,6 @@ public class MarkAttendanceCommand extends MultiIndexCommand {
             "Lab %1$d already marked as attended for %2$s";
     public static final String MESSAGE_FAILURE_ALREADY_NOT_ATTENDED =
             "Lab %1$d already marked as not attended for %2$s";
-    public static final String MESSAGE_FAILURE_INVALID_LAB_INDEX =
-            "The lab index provided is invalid";
 
     private final Index labNumber;
     private final boolean isAttended;
@@ -73,7 +71,9 @@ public class MarkAttendanceCommand extends MultiIndexCommand {
                 labAttendanceList.markLabAsAbsent(labNumber.getZeroBased());
             }
         } catch (IndexOutOfBoundsException e) {
-            throw new CommandException(MESSAGE_FAILURE_INVALID_LAB_INDEX);
+            throw new CommandException(
+                    e.getMessage()
+            );
         } catch (IllegalStateException e) {
             alreadyMarkedPersons.add(personToEdit);
             return null;

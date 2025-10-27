@@ -8,6 +8,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_STATUS;
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.core.index.MultiIndex;
 import seedu.address.commons.exceptions.IllegalValueException;
+import seedu.address.commons.exceptions.InvalidIndexException;
 import seedu.address.logic.commands.MarkAttendanceCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 
@@ -35,11 +36,17 @@ public class MarkAttendanceCommandParser implements Parser<MarkAttendanceCommand
             multiIndex = ParserUtil.parseMultiIndex(argMultimap.getPreamble());
             labNumber = ParserUtil.parseIndex(argMultimap.getValue(PREFIX_LAB_NUMBER)
                     .orElseThrow(() -> new IllegalValueException("Missing lab number.")));
-            isAttended = ParserUtil.parseStatus(argMultimap.getValue(PREFIX_STATUS)
-                    .orElseThrow(() -> new IllegalValueException("Missing status.")));
+        } catch (InvalidIndexException iie) {
+            throw new ParseException(iie.getMessage());
         } catch (IllegalValueException | IllegalArgumentException e) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                     MarkAttendanceCommand.MESSAGE_USAGE), e);
+        }
+        try {
+            isAttended = ParserUtil.parseStatus(argMultimap.getValue(PREFIX_STATUS)
+                    .orElseThrow(() -> new IllegalValueException("Missing status.")));
+        } catch (IllegalValueException e) {
+            throw new ParseException(e.getMessage());
         }
 
         return new MarkAttendanceCommand(multiIndex, labNumber, isAttended);

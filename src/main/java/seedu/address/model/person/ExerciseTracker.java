@@ -1,7 +1,4 @@
 package seedu.address.model.person;
-
-import static seedu.address.model.person.Status.NOT_DONE;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;

@@ -47,6 +47,8 @@ public class ParserUtil {
     public static final String MESSAGE_INVALID_INDEX = "Student index inputs must be a non-zero unsigned integers.";
     private static final String MESSAGE_INVALID_STATUS = "Status must be y or n.";
     private static final String MESSAGE_EMPTY_INPUT = "Input string is empty!";
+    private static final String MESSAGE_INVALID_MULTIINDEX_BOUNDS =
+            "%s is invalid! Lower bound cannot be greater than upper bound";
 
     /**
      * @param input a string that is either in the "X:Y" or "X" form
@@ -76,7 +78,7 @@ public class ParserUtil {
         Index upper = ParserUtil.parseIndex(parts[1].trim());
 
         if (lower.getZeroBased() > upper.getZeroBased()) {
-            throw new InvalidIndexException("Lower bound cannot be greater than upper bound: " + input);
+            throw new InvalidIndexException(String.format(MESSAGE_INVALID_MULTIINDEX_BOUNDS, input));
         }
 
         return new MultiIndex(lower, upper);

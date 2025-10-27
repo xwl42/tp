@@ -4,20 +4,17 @@ import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EXERCISE_INDEX;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_STATUS;
 
-import java.util.Arrays;
-
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.core.index.MultiIndex;
 import seedu.address.commons.exceptions.IllegalValueException;
+import seedu.address.commons.exceptions.InvalidIndexException;
 import seedu.address.logic.commands.MarkExerciseCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
-import seedu.address.model.person.Status;
 
 /**
  * Parser of the mark exercise command
  */
 public class MarkExerciseCommandParser implements Parser<MarkExerciseCommand> {
-    public static final String INVALID_STATUS_FORMAT = "Invalid status. Must be one of: ";
     private static final String EMPTY_PREFIX_FORMAT = "Prefix %s : has empty value!";
     /**
      * Parse the user input into a mark exercise command
@@ -32,8 +29,6 @@ public class MarkExerciseCommandParser implements Parser<MarkExerciseCommand> {
         Index exerciseIndex;
         boolean status;
         String statusString;
-
-        // Parse the person index (from the command preamble)
         try {
             personIndex = ParserUtil.parseMultiIndex(argMultimap.getPreamble());
             exerciseIndex = ParserUtil.parseZeroBasedIndex(
@@ -44,18 +39,13 @@ public class MarkExerciseCommandParser implements Parser<MarkExerciseCommand> {
             statusString = argMultimap.getValue(PREFIX_STATUS).orElseThrow(() -> new ParseException(
                     String.format(EMPTY_PREFIX_FORMAT, PREFIX_STATUS)
             ));
+        } catch (InvalidIndexException iie) {
+            throw new ParseException(iie.getMessage());
         } catch (IllegalValueException ive) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                     MarkExerciseCommand.MESSAGE_USAGE), ive);
         }
-        try {
-            status = ParserUtil.parseStatus(statusString.trim().toUpperCase());
-        } catch (IllegalArgumentException e) {
-            throw new ParseException(INVALID_STATUS_FORMAT
-                    + Arrays.toString(Status.values()));
-        }
-
-        // Return new command
+        status = ParserUtil.parseStatus(statusString.trim().toUpperCase());
         return new MarkExerciseCommand(personIndex, exerciseIndex, status);
     }
 }

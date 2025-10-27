@@ -1,6 +1,7 @@
 package seedu.address.ui;
 
 import java.time.DayOfWeek;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -377,9 +378,9 @@ public class TimeslotsWindow {
                 LocalDateTime renderEnd = end.isBefore(dayWindowEnd) ? end : dayWindowEnd;
 
                 if (renderStart.isBefore(renderEnd)) {
-                    double minutesFromStart = (renderStart.getHour() * 60 + renderStart.getMinute()) - START_HOUR * 60;
-                    double durationMinutes = (renderEnd.getHour() * 60 + renderEnd.getMinute())
-                            - (renderStart.getHour() * 60 + renderStart.getMinute());
+                    // Use Duration to compute minutes to correctly handle spans across midnight
+                    long minutesFromStart = Duration.between(dayWindowStart, renderStart).toMinutes();
+                    long durationMinutes = Duration.between(renderStart, renderEnd).toMinutes();
 
                     // Compute ratios relative to base timeline so they scale with timelineWidth
                     double xRatio = (minutesFromStart * PIXELS_PER_MINUTE) / TIMELINE_WIDTH;
@@ -479,9 +480,9 @@ public class TimeslotsWindow {
                 LocalDateTime renderEnd = end.isBefore(dayWindowEnd) ? end : dayWindowEnd;
 
                 if (renderStart.isBefore(renderEnd)) {
-                    double minutesFromStart = (renderStart.getHour() * 60 + renderStart.getMinute()) - START_HOUR * 60;
-                    double durationMinutes = (renderEnd.getHour() * 60 + renderEnd.getMinute())
-                            - (renderStart.getHour() * 60 + renderStart.getMinute());
+                    // Use Duration to compute minutes to correctly handle spans across midnight
+                    long minutesFromStart = Duration.between(dayWindowStart, renderStart).toMinutes();
+                    long durationMinutes = Duration.between(renderStart, renderEnd).toMinutes();
 
                     double xRatio = (minutesFromStart * PIXELS_PER_MINUTE) / TIMELINE_WIDTH;
                     double wRatio = (durationMinutes * PIXELS_PER_MINUTE) / TIMELINE_WIDTH;

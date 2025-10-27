@@ -20,7 +20,7 @@ public class BlockTimeslotCommand extends Command {
             + "Accepted datetime formats:\n"
             + " - ISO_LOCAL_DATE_TIME: 2023-10-01T09:00:00\n"
             + " - Human-friendly: 1 Jan 2025, 10:00\n"
-            + "Example: " + COMMAND_WORD + " ts/2023-10-01T09:00:00 te/2023-10-01T10:00:00";
+            + "Example: " + COMMAND_WORD + " ts/2025-10-01T09:00:00 te/2025-10-01T10:00:00";
 
     public static final String MESSAGE_SUCCESS = "Added: %1$s";
     public static final String MESSAGE_DUPLICATE_TIMESLOT = "This timeslot already exists.";

@@ -43,7 +43,7 @@ public class AddConsultationCommand extends Command {
         }
         ModelManager mm = (ModelManager) model;
 
-        // Custom duplicate checks: same interval + same student is considered duplicate consultation.
+        // Reject identical-interval duplicate consultation OR any overlapping timeslot.
         for (Timeslot existing : mm.getTimeslots().getTimeslotList()) {
             boolean sameInterval = existing.getStart().equals(toAdd.getStart())
                     && existing.getEnd().equals(toAdd.getEnd());
@@ -53,13 +53,17 @@ public class AddConsultationCommand extends Command {
                     if (toAdd.getStudentName().equals(c.getStudentName())) {
                         throw new CommandException(MESSAGE_DUPLICATE_CONSULTATION);
                     } else {
-                        // Another consultation exists at same time with different student -> consider timeslot collision
+                        // Another consultation exists at same time with different student -> collision
                         throw new CommandException(MESSAGE_DUPLICATE_TIMESLOT);
                     }
                 } else {
                     // Existing generic timeslot at same time -> cannot add consultation
                     throw new CommandException(MESSAGE_DUPLICATE_TIMESLOT);
                 }
+            }
+            // General overlap check: deny any partial/full overlap with existing timeslot
+            if (overlaps(existing, toAdd)) {
+                throw new CommandException(MESSAGE_DUPLICATE_TIMESLOT);
             }
         }
 
@@ -73,6 +77,13 @@ public class AddConsultationCommand extends Command {
                 toAdd.getEnd().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
 
         return new CommandResult(String.format(MESSAGE_SUCCESS, timeslotStr, toAdd.getStudentName()));
+    }
+
+    /**
+     * Two timeslots overlap if their intervals intersect (end > start and start < end).
+     */
+    private static boolean overlaps(Timeslot a, Timeslot b) {
+        return a.getEnd().isAfter(b.getStart()) && a.getStart().isBefore(b.getEnd());
     }
 
     @Override

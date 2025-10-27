@@ -52,10 +52,24 @@ public class Timeslots implements ReadOnlyTimeslots {
      * Adds a timeslot to this Timeslots collection.
      *
      * @param t timeslot to add; must not be null.
+     * @throws IllegalArgumentException if the new timeslot overlaps an existing one.
      */
     public void addTimeslot(Timeslot t) {
         requireNonNull(t);
+        // Prevent overlapping timeslots: new timeslot must not intersect any existing timeslot.
+        for (Timeslot existing : times) {
+            if (overlaps(existing, t)) {
+                throw new IllegalArgumentException("Timeslot overlaps existing timeslot: " + existing);
+            }
+        }
         times.add(t);
+    }
+
+    /**
+     * Two timeslots overlap if their intervals intersect (end > start and start < end).
+     */
+    private static boolean overlaps(Timeslot a, Timeslot b) {
+        return a.getEnd().isAfter(b.getStart()) && a.getStart().isBefore(b.getEnd());
     }
 
     /**

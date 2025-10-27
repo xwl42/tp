@@ -83,10 +83,10 @@ public class SampleDataUtil {
         Timeslots sample = new Timeslots();
         // Week: Monday 6 Oct 2025 -> Sunday 12 Oct 2025
 
-        // Monday: overlapping morning slots and an afternoon slot
+        // Monday: separate morning slots and an afternoon slot
         sample.addTimeslot(new Timeslot(LocalDateTime.of(2025, 10, 6, 9, 0),
                 LocalDateTime.of(2025, 10, 6, 10, 0)));
-        sample.addTimeslot(new Timeslot(LocalDateTime.of(2025, 10, 6, 9, 30),
+        sample.addTimeslot(new Timeslot(LocalDateTime.of(2025, 10, 6, 10, 30),
                 LocalDateTime.of(2025, 10, 6, 11, 0)));
         sample.addTimeslot(new Timeslot(LocalDateTime.of(2025, 10, 6, 14, 0),
                 LocalDateTime.of(2025, 10, 6, 15, 30)));

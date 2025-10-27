@@ -19,8 +19,9 @@ public class AddConsultationCommandParser implements Parser<AddConsultationComma
 
     @Override
     public AddConsultationCommand parse(String args) throws ParseException {
+        // include the name prefix so "n/..." is parsed separately (otherwise it becomes part of end datetime)
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args,
-                CliSyntax.PREFIX_TIMESLOT_START, CliSyntax.PREFIX_TIMESLOT_END);
+                CliSyntax.PREFIX_TIMESLOT_START, CliSyntax.PREFIX_TIMESLOT_END, CliSyntax.PREFIX_NAME);
 
         // disallow duplicated ts/ or te/ prefixes
         argMultimap.verifyNoDuplicatePrefixesFor(CliSyntax.PREFIX_TIMESLOT_START, CliSyntax.PREFIX_TIMESLOT_END);
@@ -31,8 +32,9 @@ public class AddConsultationCommandParser implements Parser<AddConsultationComma
             throw new ParseException(msg);
         }
 
-        String startStr = argMultimap.getValue(new Prefix("ts/")).orElse("");
-        String endStr = argMultimap.getValue(new Prefix("te/")).orElse("");
+        // use shared CliSyntax constants when reading values
+        String startStr = argMultimap.getValue(CliSyntax.PREFIX_TIMESLOT_START).orElse("");
+        String endStr = argMultimap.getValue(CliSyntax.PREFIX_TIMESLOT_END).orElse("");
         String studentName = argMultimap.getValue(CliSyntax.PREFIX_NAME).orElse("").trim();
 
         if (startStr.isEmpty() || endStr.isEmpty() || studentName.isEmpty()) {

@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -31,6 +32,8 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import seedu.address.model.timeslot.ConsultationTimeslot;
+import seedu.address.model.timeslot.Timeslot;
 
 /**
  * Timetable-style window to display merged timeslot ranges as horizontal blocks.
@@ -60,12 +63,85 @@ public class TimeslotsWindow {
     /**
      * Shows the merged timeslot ranges in a new window laid out as a timetable.
      * Each entry in {@code mergedRanges} should be a LocalDateTime[2] array: [start, end].
+     * Receives the concrete timeslot list so consultations (with student names) can be rendered specially.
      */
-    public static void showMerged(List<LocalDateTime[]> mergedRanges) {
+    public static void showMerged(List<LocalDateTime[]> mergedRanges, List<Timeslot> allTimeslots) {
+        // If a window already exists and is showing, update its contents and bring to front.
+        if (currentStage != null && currentStage.isShowing()) {
+            Scene scene = currentStage.getScene();
+            if (scene != null && scene.getRoot() instanceof BorderPane) {
+                BorderPane root = (BorderPane) scene.getRoot();
+
+                // Determine initial week start using earliest timeslot start if available,
+                // otherwise current week's Monday.
+                LocalDate[] weekStartRef = new LocalDate[1];
+                weekStartRef[0] = Optional.ofNullable(mergedRanges)
+                        .filter(l -> !l.isEmpty())
+                        .flatMap(l -> l.stream()
+                                .map(r -> r[0])
+                                .filter(Objects::nonNull)
+                                .map(LocalDateTime::toLocalDate)
+                                .min(LocalDate::compareTo)
+                        )
+                        .orElse(LocalDate.now())
+                        .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+
+                // top row: header + spacer + navigation buttons
+                Label header = new Label("Timetable");
+                header.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+                Button nextWeekBtn = new Button("Next Week");
+                Button prevWeekBtn = new Button("Previous Week");
+                HBox topRow = new HBox();
+                Region spacer = new Region();
+                HBox.setHgrow(spacer, Priority.ALWAYS);
+                topRow.setAlignment(Pos.CENTER_LEFT);
+                topRow.setSpacing(ROW_SPACING);
+                topRow.getChildren().addAll(header, spacer, prevWeekBtn, nextWeekBtn);
+
+                // timeline width property shared by all timeline panes so they resize together
+                DoubleProperty timelineWidth = new SimpleDoubleProperty(TIMELINE_WIDTH);
+                HBox hoursHeader = buildHoursHeader(timelineWidth);
+
+                // render initial week into existing root
+                renderWeek(root, weekStartRef[0], mergedRanges, allTimeslots, topRow, hoursHeader, timelineWidth);
+
+                // Rebind timelineWidth to the existing scene width so layout continues to scale
+                timelineWidth.bind(Bindings.createDoubleBinding(() -> Math.max(scene.getWidth() - 120, TIMELINE_WIDTH),
+                        scene.widthProperty()));
+
+                // Wire the navigation buttons to re-render the same root when week changes
+                nextWeekBtn.setOnAction(e -> {
+                    weekStartRef[0] = weekStartRef[0].plusWeeks(1);
+                    renderWeek(root, weekStartRef[0], mergedRanges, allTimeslots, topRow, hoursHeader, timelineWidth);
+                });
+                prevWeekBtn.setOnAction(e -> {
+                    weekStartRef[0] = weekStartRef[0].minusWeeks(1);
+                    renderWeek(root, weekStartRef[0], mergedRanges, allTimeslots, topRow, hoursHeader, timelineWidth);
+                });
+
+                // Ensure ScrollPane viewport stays bound to the scene size if present
+                if (root.getCenter() instanceof ScrollPane) {
+                    ScrollPane sp = (ScrollPane) root.getCenter();
+                    sp.prefViewportWidthProperty().bind(scene.widthProperty().subtract(120));
+                    sp.prefViewportHeightProperty().bind(scene.heightProperty().subtract(140));
+                }
+
+                currentStage.toFront();
+                return;
+            } else {
+                // Unexpected state: hide and fall through to create a fresh window.
+                try {
+                    currentStage.hide();
+                } finally {
+                    currentStage = null;
+                }
+            }
+        }
+
+        // No existing window => create a new one
         Stage stage = new Stage();
-        // remember the stage so clients can hide it
         currentStage = stage;
-        stage.setTitle("Consultation Schedule");
+        stage.setTitle("My Schedule");
         stage.initModality(Modality.NONE);
 
         BorderPane root = new BorderPane();
@@ -75,25 +151,26 @@ public class TimeslotsWindow {
         header.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
         BorderPane.setAlignment(header, Pos.CENTER);
 
-        // Navigation controls
         Button nextWeekBtn = new Button("Next Week");
         Button prevWeekBtn = new Button("Previous Week");
 
-        // Determine initial week start: use earliest timeslot start (its Monday) if available,
-        // otherwise fallback to current week's Monday.
-        LocalDate[] weekStartRef = new LocalDate[1];
-        weekStartRef[0] = Optional.ofNullable(mergedRanges)
-                .filter(l -> !l.isEmpty())
-                .flatMap(l -> l.stream()
-                        .map(r -> r[0]) // start LocalDateTime
-                        .filter(Objects::nonNull)
-                        .map(LocalDateTime::toLocalDate)
-                        .min(LocalDate::compareTo)
-                )
-                .orElse(LocalDate.now())
-                .with(DayOfWeek.MONDAY);
+        // Determine initial week start: prefer current week's Monday, but if the earliest timeslot
+        // starts before the current week, show that earlier week so the timeslot is visible.
+        LocalDate currentMonday = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        LocalDate earliestDate = null;
+        if (mergedRanges != null && !mergedRanges.isEmpty()) {
+            earliestDate = mergedRanges.stream()
+                    .map(r -> r[0])
+                    .filter(Objects::nonNull)
+                    .map(LocalDateTime::toLocalDate)
+                    .min(LocalDate::compareTo)
+                    .orElse(null);
+        }
+        final LocalDate[] weekStartRef = new LocalDate[1];
+        weekStartRef[0] = (earliestDate != null && earliestDate.isBefore(currentMonday))
+                ? earliestDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+                : currentMonday;
 
-        // top row: header + spacer + navigation buttons
         HBox topRow = new HBox();
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
@@ -101,39 +178,36 @@ public class TimeslotsWindow {
         topRow.setSpacing(ROW_SPACING);
         topRow.getChildren().addAll(header, spacer, prevWeekBtn, nextWeekBtn);
 
-        // timeline width property shared by all timeline panes so they resize together
         DoubleProperty timelineWidth = new SimpleDoubleProperty(TIMELINE_WIDTH);
-
-        // hours header (kept same as existing) - now takes timelineWidth
         HBox hoursHeader = buildHoursHeader(timelineWidth);
-        // no padding here — buildHoursHeader now inserts a left placeholder matching the day label column
-        // so ticks align exactly with the timelines.
 
         // render initial week
-        renderWeek(root, weekStartRef[0], mergedRanges, topRow, hoursHeader, timelineWidth);
+        renderWeek(root, weekStartRef[0], mergedRanges, allTimeslots, topRow, hoursHeader, timelineWidth);
 
-        // button actions: adjust weekStart and re-render
         nextWeekBtn.setOnAction(e -> {
-            weekStartRef[0] = weekStartRef[0].plusWeeks(1);
-            renderWeek(root, weekStartRef[0], mergedRanges, topRow, hoursHeader, timelineWidth);
+            if (weekStartRef[0] == null) {
+                weekStartRef[0] = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+            } else {
+                weekStartRef[0] = weekStartRef[0].plusWeeks(1);
+            }
+            renderWeek(root, weekStartRef[0], mergedRanges, allTimeslots, topRow, hoursHeader, timelineWidth);
         });
         prevWeekBtn.setOnAction(e -> {
-            weekStartRef[0] = weekStartRef[0].minusWeeks(1);
-            renderWeek(root, weekStartRef[0], mergedRanges, topRow, hoursHeader, timelineWidth);
+            if (weekStartRef[0] == null) {
+                weekStartRef[0] = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+            } else {
+                weekStartRef[0] = weekStartRef[0].minusWeeks(1);
+            }
+            renderWeek(root, weekStartRef[0], mergedRanges, allTimeslots, topRow, hoursHeader, timelineWidth);
         });
 
         Scene scene = new Scene(root);
         stage.setScene(scene);
-
-        // allow user to resize the window
         stage.setResizable(true);
-        // set sensible minimum size so layout remains usable
         stage.setMinWidth(600);
         stage.setMinHeight(400);
-
         stage.show();
 
-        // clear currentStage when user closes the window
         stage.setOnHidden(evt -> {
             if (currentStage == stage) {
                 currentStage = null;
@@ -141,10 +215,10 @@ public class TimeslotsWindow {
         });
 
         // Bind timelineWidth to scene width (minimum remains TIMELINE_WIDTH). Subtract left label area and padding.
-        timelineWidth.bind(Bindings.createDoubleBinding(() -> Math.max(scene.getWidth() - 120, TIMELINE_WIDTH),
-                scene.widthProperty()));
+        timelineWidth.bind(Bindings.createDoubleBinding(() ->
+            Math.max(scene.getWidth() - 120, TIMELINE_WIDTH),
+            scene.widthProperty()));
 
-        // After showing, bind the ScrollPane viewport to the scene size so it grows/shrinks with the window.
         if (root.getCenter() instanceof ScrollPane) {
             ScrollPane sp = (ScrollPane) root.getCenter();
             sp.prefViewportWidthProperty().bind(scene.widthProperty().subtract(120));
@@ -174,13 +248,17 @@ public class TimeslotsWindow {
 
     // Renders the given week starting at weekStart (Monday) into root using provided topRow and hoursHeader nodes.
     private static void renderWeek(BorderPane root, LocalDate weekStart, List<LocalDateTime[]> ranges,
-            HBox topRow, HBox hoursHeader, DoubleProperty timelineWidth) {
+            List<Timeslot> allTimeslots, HBox topRow, HBox hoursHeader, DoubleProperty timelineWidth) {
+        // Defensive fallback: if weekStart is null, use current week's Monday so UI always shows a valid week.
+        if (weekStart == null) {
+            weekStart = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        }
         // Body: one row per day with timeline pane for the week starting at weekStart
         VBox body = new VBox(6);
         body.setPadding(new Insets(8));
         for (int i = 0; i < 7; i++) { // 7 days in a week
             LocalDate date = weekStart.plusDays(i);
-            HBox row = buildDayRowForDate(date, ranges, timelineWidth);
+            HBox row = buildDayRowForDate(date, ranges, allTimeslots, timelineWidth);
             body.getChildren().add(row);
         }
 
@@ -243,9 +321,9 @@ public class TimeslotsWindow {
         return header;
     }
 
-    // New: buildDayRowForDate renders a row for a given LocalDate (shows label with date)
+    // buildDayRowForDate renders a row for a given LocalDate (shows label with date)
     private static HBox buildDayRowForDate(LocalDate date, List<LocalDateTime[]> ranges,
-            DoubleProperty timelineWidth) {
+            List<Timeslot> allTimeslots, DoubleProperty timelineWidth) {
         HBox row = new HBox();
         row.setSpacing(ROW_SPACING);
         row.setAlignment(Pos.CENTER_LEFT);
@@ -323,20 +401,151 @@ public class TimeslotsWindow {
                     block.setStroke(Color.web("#d0d7de"));
                     block.setStrokeWidth(1);
 
-                    String labelText = String.format("%s - %s",
+                    // Decide whether to hide the generic timeslot label.
+                    // We only hide the label if a consultation actually covers the label area at the start
+                    // of the timeslot block. This prevents hiding labels when a consultation overlaps later.
+                    final int labelSafeMinutes = 15;
+                    boolean hideGenericLabel = false;
+                    if (allTimeslots != null) {
+                        for (Timeslot t2 : allTimeslots) {
+                            if (!(t2 instanceof ConsultationTimeslot)) {
+                                continue;
+                            }
+                            LocalDateTime cStart = t2.getStart();
+                            LocalDateTime cEnd = t2.getEnd();
+                            if (cStart == null || cEnd == null) {
+                                continue;
+                            }
+                            // compute the portion of the consultation that falls on this date window
+                            LocalDateTime cRenderStart = cStart.isAfter(dayWindowStart) ? cStart : dayWindowStart;
+                            LocalDateTime cRenderEnd = cEnd.isBefore(dayWindowEnd) ? cEnd : dayWindowEnd;
+                            // if the consultation visible portion overlaps the timeslot at all
+                            if (cRenderStart.isBefore(renderEnd) && cRenderEnd.isAfter(renderStart)) {
+                                // hide the generic label only if the consultation covers the label area near the start
+                                if (cRenderStart.isBefore(renderStart.plusMinutes(labelSafeMinutes))
+                                        && cRenderEnd.isAfter(renderStart)) {
+                                    hideGenericLabel = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    // Only allow line breaks at the time separator " - " so we avoid character-level wrapping.
+                    // Show times as two lines with explicit S: (start) and E: (end) prefixes.
+                    String displayLabelText = String.format("S: %s\nE: %s",
                             renderStart.format(DateTimeFormatter.ofPattern("HH:mm")),
                             renderEnd.format(DateTimeFormatter.ofPattern("HH:mm")));
-                    Label bl = new Label(labelText);
+                    Label bl = new Label(displayLabelText);
+
                     bl.setStyle("-fx-text-fill: #1f2a2f; -fx-font-size: 11px;");
                     // bind label position to block.x + 6 so it follows scaling
                     bl.layoutXProperty().bind(xBind.add(6));
-                    bl.setLayoutY(12);
+                    bl.setLayoutY(8); // vertical placement
 
                     Tooltip tooltip = new Tooltip(start.format(FORMATTER) + "\n" + end.format(FORMATTER));
                     Tooltip.install(block, tooltip);
-                    Tooltip.install(bl, tooltip);
 
-                    timeline.getChildren().addAll(block, bl);
+                    // Add the block, and add the generic time label only if it's not obscured by a consultation
+                    // near the block start.
+                    if (!hideGenericLabel) {
+                        Tooltip.install(bl, tooltip);
+                        timeline.getChildren().addAll(block, bl);
+                    } else {
+                        timeline.getChildren().add(block);
+                    }
+                }
+            }
+        }
+
+        // Render consultations (distinct appearance + student name) from concrete timeslot list.
+        if (allTimeslots != null) {
+            for (Timeslot t : allTimeslots) {
+                if (!(t instanceof ConsultationTimeslot)) {
+                    continue;
+                }
+                ConsultationTimeslot ct = (ConsultationTimeslot) t;
+                LocalDateTime start = ct.getStart();
+                LocalDateTime end = ct.getEnd();
+                if (start == null || end == null) {
+                    continue;
+                }
+
+                // same intersection logic as above: check if this consultation overlaps the date and timeline window
+                LocalDateTime dayWindowStart = LocalDateTime.of(date, LocalTime.of(START_HOUR, 0));
+                LocalDateTime dayWindowEnd = LocalDateTime.of(date.plusDays(1), LocalTime.MIDNIGHT);
+
+                LocalDateTime renderStart = start.isAfter(dayWindowStart) ? start : dayWindowStart;
+                LocalDateTime renderEnd = end.isBefore(dayWindowEnd) ? end : dayWindowEnd;
+
+                if (renderStart.isBefore(renderEnd)) {
+                    double minutesFromStart = (renderStart.getHour() * 60 + renderStart.getMinute()) - START_HOUR * 60;
+                    double durationMinutes = (renderEnd.getHour() * 60 + renderEnd.getMinute())
+                            - (renderStart.getHour() * 60 + renderStart.getMinute());
+
+                    double xRatio = (minutesFromStart * PIXELS_PER_MINUTE) / TIMELINE_WIDTH;
+                    double wRatio = (durationMinutes * PIXELS_PER_MINUTE) / TIMELINE_WIDTH;
+
+                    NumberBinding xBind = timelineWidth.multiply(xRatio);
+                    NumberBinding wBind = timelineWidth.multiply(wRatio);
+
+                    // Render consultation as a simple red block; student name shown below the time label.
+                    Rectangle consultBlock = new Rectangle();
+                    consultBlock.xProperty().bind(xBind);
+                    consultBlock.yProperty().set(8); // same vertical placement as other blocks
+                    consultBlock.widthProperty().bind(wBind);
+                    consultBlock.setHeight(ROW_HEIGHT - 16);
+                    consultBlock.setArcWidth(8);
+                    consultBlock.setArcHeight(8);
+                    // Always red for consultations
+                    consultBlock.setFill(Color.web("#d96565ff"));
+                    consultBlock.setStroke(Color.web("#c94b4b"));
+                    consultBlock.setStrokeWidth(1);
+
+                    // Small icon to the left of the time label
+                    Label icon = new Label("\u2605"); // ★
+                    icon.setStyle("-fx-text-fill: #FFD23F; -fx-font-size: 14px; -fx-font-weight: bold;");
+                    // Place star a small distance from the block start; align vertically with the time label.
+                    icon.layoutXProperty().bind(xBind.add(6));
+                    icon.setLayoutY(10);
+
+                    // Time label
+                    String timeLblText = String.format("S: %s\nE: %s",
+                            renderStart.format(DateTimeFormatter.ofPattern("HH:mm")),
+                            renderEnd.format(DateTimeFormatter.ofPattern("HH:mm")));
+                    Label timeLbl = new Label(timeLblText);
+
+                    timeLbl.setStyle("-fx-text-fill: #000000ff; -fx-font-size: 11px;");
+                    timeLbl.layoutXProperty().bind(xBind.add(18)); // icon (8px) + small gap
+                    timeLbl.setLayoutY(8);
+
+                    // Student name label placed below the time label
+                    String studentText = ct.getStudentName();
+                    // allow student name to break at spaces if necessary
+                    Label studentLbl = new Label(studentText.contains(" ")
+                        ? studentText.replace(" ", "\n")
+                        : studentText);
+                    studentLbl.setStyle("-fx-text-fill: #000000ff; -fx-font-size: 11px;");
+                    studentLbl.layoutXProperty().bind(xBind.add(18));
+                    // Keep student label positioned directly below the time label even after the time label wraps.
+                    studentLbl.layoutYProperty().bind(timeLbl.layoutYProperty().add(timeLbl.heightProperty()).add(2));
+
+                    String consultTooltip = String.format("Consultation: %s -> %s%nStudent: %s",
+                            start.format(FORMATTER),
+                            end.format(FORMATTER),
+                            ct.getStudentName());
+                    Tooltip tooltip = new Tooltip(consultTooltip);
+                    Tooltip.install(consultBlock, tooltip);
+                    Tooltip.install(timeLbl, tooltip);
+                    Tooltip.install(studentLbl, tooltip);
+                    Tooltip.install(icon, tooltip);
+
+                    // Add consultation visuals: block, icon, then labels
+                    timeline.getChildren().addAll(consultBlock, icon, timeLbl, studentLbl);
+                    // Ensure labels and icon are rendered above the block.
+                    icon.toFront();
+                    timeLbl.toFront();
+                    studentLbl.toFront();
                 }
             }
         }
@@ -359,4 +568,6 @@ public class TimeslotsWindow {
         default -> Color.web("#cbd5df");
         };
     }
+
+
 }

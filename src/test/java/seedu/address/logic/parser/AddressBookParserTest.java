@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.index.MultiIndex;
 import seedu.address.logic.commands.AddCommand;
+import seedu.address.logic.commands.AddConsultationCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.EditCommand;
@@ -41,6 +42,13 @@ public class AddressBookParserTest {
         Person person = new PersonBuilder().build();
         AddCommand command = (AddCommand) parser.parseCommand(PersonUtil.getAddCommand(person));
         assertEquals(new AddCommand(person), command);
+    }
+
+    @Test
+    public void parseCommand_addConsultation() throws Exception {
+        // ensure add-consultation command is recognized by the parser
+        String input = "add-consultation ts/2025-10-04T10:00:00 te/2025-10-04T11:00:00 n/John";
+        assertTrue(parser.parseCommand(input) instanceof AddConsultationCommand);
     }
 
     @Test

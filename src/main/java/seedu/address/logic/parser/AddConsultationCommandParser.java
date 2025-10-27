@@ -19,11 +19,11 @@ public class AddConsultationCommandParser implements Parser<AddConsultationComma
 
     @Override
     public AddConsultationCommand parse(String args) throws ParseException {
-        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(
-                args,
-                new Prefix("ts/"),
-                new Prefix("te/"),
-                CliSyntax.PREFIX_NAME);
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args,
+                CliSyntax.PREFIX_TIMESLOT_START, CliSyntax.PREFIX_TIMESLOT_END);
+
+        // disallow duplicated ts/ or te/ prefixes
+        argMultimap.verifyNoDuplicatePrefixesFor(CliSyntax.PREFIX_TIMESLOT_START, CliSyntax.PREFIX_TIMESLOT_END);
 
         // no free-form preamble allowed
         if (!argMultimap.getPreamble().isEmpty()) {

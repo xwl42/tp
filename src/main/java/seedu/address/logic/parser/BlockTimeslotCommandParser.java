@@ -57,6 +57,9 @@ public class BlockTimeslotCommandParser implements Parser<BlockTimeslotCommand> 
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args,
                 CliSyntax.PREFIX_TIMESLOT_START, CliSyntax.PREFIX_TIMESLOT_END);
 
+        // disallow duplicated ts/ or te/ prefixes
+        argMultimap.verifyNoDuplicatePrefixesFor(CliSyntax.PREFIX_TIMESLOT_START, CliSyntax.PREFIX_TIMESLOT_END);
+
         String startStr = null;
         String endStr = null;
 

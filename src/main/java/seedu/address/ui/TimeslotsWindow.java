@@ -345,8 +345,11 @@ public class TimeslotsWindow {
                     block.setStroke(Color.web("#d0d7de"));
                     block.setStrokeWidth(1);
 
-                    // Determine if any consultation overlaps this rendered portion.
-                    boolean hasConsultationOverlap = false;
+                    // Decide whether to hide the generic timeslot label.
+                    // We only hide the label if a consultation actually covers the label area at the start
+                    // of the timeslot block. This prevents hiding labels when a consultation overlaps later.
+                    final int LABEL_SAFE_MINUTES = 15;
+                    boolean hideGenericLabel = false;
                     if (allTimeslots != null) {
                         for (Timeslot t2 : allTimeslots) {
                             if (!(t2 instanceof ConsultationTimeslot)) {
@@ -360,32 +363,39 @@ public class TimeslotsWindow {
                             // compute the portion of the consultation that falls on this date window
                             LocalDateTime cRenderStart = cStart.isAfter(dayWindowStart) ? cStart : dayWindowStart;
                             LocalDateTime cRenderEnd = cEnd.isBefore(dayWindowEnd) ? cEnd : dayWindowEnd;
-                            // if the consultation visible portion overlaps this merged-range visible portion
+                            // if the consultation visible portion overlaps the timeslot at all
                             if (cRenderStart.isBefore(renderEnd) && cRenderEnd.isAfter(renderStart)) {
-                                hasConsultationOverlap = true;
-                                break;
+                                // hide the generic label only if the consultation covers the label area near the start
+                                if (cRenderStart.isBefore(renderStart.plusMinutes(LABEL_SAFE_MINUTES))
+                                        && cRenderEnd.isAfter(renderStart)) {
+                                    hideGenericLabel = true;
+                                    break;
+                                }
                             }
                         }
                     }
 
-                    String labelText = String.format("%s - %s",
+                    // Only allow line breaks at the time separator " - " so we avoid character-level wrapping.
+                    // Show times as two lines with explicit S: (start) and E: (end) prefixes.
+                    String displayLabelText = String.format("S: %s\nE: %s",
                             renderStart.format(DateTimeFormatter.ofPattern("HH:mm")),
                             renderEnd.format(DateTimeFormatter.ofPattern("HH:mm")));
-                    Label bl = new Label(labelText);
+                    Label bl = new Label(displayLabelText);
+
                     bl.setStyle("-fx-text-fill: #1f2a2f; -fx-font-size: 11px;");
                     // bind label position to block.x + 6 so it follows scaling
                     bl.layoutXProperty().bind(xBind.add(6));
-                    bl.setLayoutY(12);
+                    bl.setLayoutY(8); // vertical placement
 
                     Tooltip tooltip = new Tooltip(start.format(FORMATTER) + "\n" + end.format(FORMATTER));
                     Tooltip.install(block, tooltip);
 
-                    // Only install tooltip and add the generic time label when there's no overlapping consultation.
-                    if (!hasConsultationOverlap) {
+                    // Add the block, and add the generic time label only if it's not obscured by a consultation
+                    // near the block start.
+                    if (!hideGenericLabel) {
                         Tooltip.install(bl, tooltip);
                         timeline.getChildren().addAll(block, bl);
                     } else {
-                        // add the block only (consultation will show its own labels)
                         timeline.getChildren().add(block);
                     }
                 }
@@ -444,18 +454,23 @@ public class TimeslotsWindow {
                     icon.setLayoutY(10);
 
                     // Time label
-                    Label timeLbl = new Label(String.format("%s - %s",
+                    String timeLblText = String.format("S: %s\nE: %s",
                             renderStart.format(DateTimeFormatter.ofPattern("HH:mm")),
-                            renderEnd.format(DateTimeFormatter.ofPattern("HH:mm"))));
+                            renderEnd.format(DateTimeFormatter.ofPattern("HH:mm")));
+                    Label timeLbl = new Label(timeLblText);
+
                     timeLbl.setStyle("-fx-text-fill: #000000ff; -fx-font-size: 11px;");
                     timeLbl.layoutXProperty().bind(xBind.add(18)); // icon (8px) + small gap
-                    timeLbl.setLayoutY(12);
+                    timeLbl.setLayoutY(8);
 
                     // Student name label placed below the time label
-                    Label studentLbl = new Label(ct.getStudentName());
+                    String studentText = ct.getStudentName();
+                    // allow student name to break at spaces if necessary but ensure it's positioned under the time label
+                    Label studentLbl = new Label(studentText.contains(" ") ? studentText.replace(" ", "\n") : studentText);
                     studentLbl.setStyle("-fx-text-fill: #000000ff; -fx-font-size: 11px;");
                     studentLbl.layoutXProperty().bind(xBind.add(18));
-                    studentLbl.setLayoutY(12 + 18); // placed below time label
+                    // Keep student label positioned directly below the time label even after the time label wraps.
+                    studentLbl.layoutYProperty().bind(timeLbl.layoutYProperty().add(timeLbl.heightProperty()).add(2));
 
                     Tooltip tooltip = new Tooltip(String.format("Consultation: %s -> %s\nStudent: %s",
                             start.format(FORMATTER), end.format(FORMATTER), ct.getStudentName()));

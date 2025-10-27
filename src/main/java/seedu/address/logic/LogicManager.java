@@ -3,6 +3,8 @@ package seedu.address.logic;
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Path;
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javafx.application.Platform;
@@ -18,6 +20,7 @@ import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.person.Person;
+import seedu.address.model.timeslot.Timeslot;
 import seedu.address.storage.Storage;
 import seedu.address.ui.TimeslotsWindow;
 
@@ -79,7 +82,13 @@ public class LogicManager implements Logic {
          */
         if (commandResult.getTimeslotRanges() != null && !commandResult.getTimeslotRanges().isEmpty()) {
             try {
-                Platform.runLater(() -> TimeslotsWindow.showMerged(commandResult.getTimeslotRanges()));
+                if (model instanceof ModelManager) {
+                    List<Timeslot> allTimeslots = ((ModelManager) model).getTimeslots().getTimeslotList();
+                    Platform.runLater(() -> TimeslotsWindow.showMerged(commandResult.getTimeslotRanges(), allTimeslots));
+                } else {
+                    Platform.runLater(() -> TimeslotsWindow.showMerged(commandResult.getTimeslotRanges(),
+                            Collections.emptyList()));
+                }
             } catch (IllegalStateException e) {
                 // JavaFX not initialized; ignore UI launch, command result still returned.
             }

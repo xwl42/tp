@@ -25,12 +25,15 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import seedu.address.model.timeslot.ConsultationTimeslot;
+import seedu.address.model.timeslot.Timeslot;
 
 /**
  * Timetable-style window to display merged timeslot ranges as horizontal blocks.
@@ -60,8 +63,9 @@ public class TimeslotsWindow {
     /**
      * Shows the merged timeslot ranges in a new window laid out as a timetable.
      * Each entry in {@code mergedRanges} should be a LocalDateTime[2] array: [start, end].
+     * Receives the concrete timeslot list so consultations (with student names) can be rendered specially.
      */
-    public static void showMerged(List<LocalDateTime[]> mergedRanges) {
+    public static void showMerged(List<LocalDateTime[]> mergedRanges, List<Timeslot> allTimeslots) {
         Stage stage = new Stage();
         // remember the stage so clients can hide it
         currentStage = stage;
@@ -110,16 +114,16 @@ public class TimeslotsWindow {
         // so ticks align exactly with the timelines.
 
         // render initial week
-        renderWeek(root, weekStartRef[0], mergedRanges, topRow, hoursHeader, timelineWidth);
+        renderWeek(root, weekStartRef[0], mergedRanges, allTimeslots, topRow, hoursHeader, timelineWidth);
 
         // button actions: adjust weekStart and re-render
         nextWeekBtn.setOnAction(e -> {
             weekStartRef[0] = weekStartRef[0].plusWeeks(1);
-            renderWeek(root, weekStartRef[0], mergedRanges, topRow, hoursHeader, timelineWidth);
+            renderWeek(root, weekStartRef[0], mergedRanges, allTimeslots, topRow, hoursHeader, timelineWidth);
         });
         prevWeekBtn.setOnAction(e -> {
             weekStartRef[0] = weekStartRef[0].minusWeeks(1);
-            renderWeek(root, weekStartRef[0], mergedRanges, topRow, hoursHeader, timelineWidth);
+            renderWeek(root, weekStartRef[0], mergedRanges, allTimeslots, topRow, hoursHeader, timelineWidth);
         });
 
         Scene scene = new Scene(root);
@@ -174,13 +178,13 @@ public class TimeslotsWindow {
 
     // Renders the given week starting at weekStart (Monday) into root using provided topRow and hoursHeader nodes.
     private static void renderWeek(BorderPane root, LocalDate weekStart, List<LocalDateTime[]> ranges,
-            HBox topRow, HBox hoursHeader, DoubleProperty timelineWidth) {
+            List<Timeslot> allTimeslots, HBox topRow, HBox hoursHeader, DoubleProperty timelineWidth) {
         // Body: one row per day with timeline pane for the week starting at weekStart
         VBox body = new VBox(6);
         body.setPadding(new Insets(8));
         for (int i = 0; i < 7; i++) { // 7 days in a week
             LocalDate date = weekStart.plusDays(i);
-            HBox row = buildDayRowForDate(date, ranges, timelineWidth);
+            HBox row = buildDayRowForDate(date, ranges, allTimeslots, timelineWidth);
             body.getChildren().add(row);
         }
 
@@ -245,7 +249,7 @@ public class TimeslotsWindow {
 
     // New: buildDayRowForDate renders a row for a given LocalDate (shows label with date)
     private static HBox buildDayRowForDate(LocalDate date, List<LocalDateTime[]> ranges,
-            DoubleProperty timelineWidth) {
+            List<Timeslot> allTimeslots, DoubleProperty timelineWidth) {
         HBox row = new HBox();
         row.setSpacing(ROW_SPACING);
         row.setAlignment(Pos.CENTER_LEFT);
@@ -340,6 +344,65 @@ public class TimeslotsWindow {
                 }
             }
         }
+
+        // Render consultations (distinct appearance + student name) from concrete timeslot list.
+        if (allTimeslots != null) {
+            for (Timeslot t : allTimeslots) {
+                if (!(t instanceof ConsultationTimeslot)) {
+                    continue;
+                }
+                ConsultationTimeslot ct = (ConsultationTimeslot) t;
+                LocalDateTime start = ct.getStart();
+                LocalDateTime end = ct.getEnd();
+                if (start == null || end == null) {
+                    continue;
+                }
+
+                // same intersection logic as above: check if this consultation overlaps the date and timeline window
+                LocalDateTime dayWindowStart = LocalDateTime.of(date, LocalTime.of(START_HOUR, 0));
+                LocalDateTime dayWindowEnd = LocalDateTime.of(date.plusDays(1), LocalTime.MIDNIGHT);
+
+                LocalDateTime renderStart = start.isAfter(dayWindowStart) ? start : dayWindowStart;
+                LocalDateTime renderEnd = end.isBefore(dayWindowEnd) ? end : dayWindowEnd;
+
+                if (renderStart.isBefore(renderEnd)) {
+                    double minutesFromStart = (renderStart.getHour() * 60 + renderStart.getMinute()) - START_HOUR * 60;
+                    double durationMinutes = (renderEnd.getHour() * 60 + renderEnd.getMinute())
+                            - (renderStart.getHour() * 60 + renderStart.getMinute());
+
+                    double xRatio = (minutesFromStart * PIXELS_PER_MINUTE) / TIMELINE_WIDTH;
+                    double wRatio = (durationMinutes * PIXELS_PER_MINUTE) / TIMELINE_WIDTH;
+
+                    NumberBinding xBind = timelineWidth.multiply(xRatio);
+                    NumberBinding wBind = timelineWidth.multiply(wRatio);
+
+                    // Render consultation as a single StackPane "pill" so the student name is centered.
+                    StackPane pillPane = new StackPane();
+                    pillPane.getStyleClass().add("consultation-pill");
+                    // inline style for now: distinct colour and rounded corners
+                    pillPane.setStyle("-fx-background-color: linear-gradient(#d96b90, #c1537a);"
+                            + "-fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: #9e3d6b; -fx-border-width: 0.8;");
+
+                    // position and sizing bindings
+                    pillPane.layoutXProperty().bind(xBind);
+                    pillPane.layoutYProperty().set(ROW_HEIGHT - 28); // near bottom of row
+                    pillPane.prefHeightProperty().set(20);
+                    // width: use computed width unless it's smaller than 80px => ensure minimum width 80
+                    pillPane.prefWidthProperty().bind(Bindings.when(wBind.lessThan(80)).then(80.0).otherwise(wBind));
+
+                    Label nameLabel = new Label(ct.getStudentName());
+                    nameLabel.setStyle("-fx-text-fill: white; -fx-font-size: 11px; -fx-font-weight: bold;");
+                    pillPane.getChildren().add(nameLabel); // centered by StackPane
+
+                    Tooltip tooltip = new Tooltip(String.format("Consultation: %s -> %s\nStudent: %s",
+                            start.format(FORMATTER), end.format(FORMATTER), ct.getStudentName()));
+                    Tooltip.install(pillPane, tooltip);
+
+                    // Ensure pill is on top by adding after other children
+                    timeline.getChildren().add(pillPane);
+                 }
+             }
+         }
 
         row.getChildren().addAll(dayLabel, timeline);
         return row;

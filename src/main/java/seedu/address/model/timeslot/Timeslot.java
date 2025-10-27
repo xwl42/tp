@@ -6,6 +6,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Represents a timeslot with a start and end time.
  * Immutable.
@@ -21,13 +24,21 @@ public class Timeslot {
     private final LocalDateTime start;
     private final LocalDateTime end;
 
+    // Optional student name; null for ordinary blocked timeslots, non-null for consultations.
+    @JsonProperty("studentName")
+    private final String studentName;
+
     /**
-     * Creates a Timeslot with the given start and end time.
+     * Jackson-friendly constructor that also accepts an optional studentName.
      *
      * @param start must not be null.
      * @param end must not be null and must be after the start time.
+     * @param studentName may be null (represents no associated student).
      */
-    public Timeslot(LocalDateTime start, LocalDateTime end) {
+    @JsonCreator
+    public Timeslot(@JsonProperty("start") LocalDateTime start,
+                    @JsonProperty("end") LocalDateTime end,
+                    @JsonProperty("studentName") String studentName) {
         requireNonNull(start);
         requireNonNull(end);
         if (end.isBefore(start) || end.equals(start)) {
@@ -35,6 +46,14 @@ public class Timeslot {
         }
         this.start = start;
         this.end = end;
+        this.studentName = studentName; // may be null
+    }
+
+    /**
+     * Creates a Timeslot with no associated student (studentName == null).
+     */
+    public Timeslot(LocalDateTime start, LocalDateTime end) {
+        this(start, end, null);
     }
 
     public LocalDateTime getStart() {
@@ -45,9 +64,22 @@ public class Timeslot {
         return end;
     }
 
+    /**
+     * Returns the associated student name, or {@code null} if none.
+     */
+    @JsonProperty("studentName")
+    public String getStudentName() {
+        return studentName;
+    }
+
     @Override
     public String toString() {
-        return String.format("Timeslot[Start: %s, End: %s]", start.format(FORMATTER), end.format(FORMATTER));
+        if (studentName == null) {
+            return String.format("Timeslot[Start: %s, End: %s]", start.format(FORMATTER), end.format(FORMATTER));
+        } else {
+            return String.format("Timeslot[Start: %s, End: %s, Student: %s]",
+                    start.format(FORMATTER), end.format(FORMATTER), studentName);
+        }
     }
 
     @Override
@@ -59,11 +91,12 @@ public class Timeslot {
             return false;
         }
         Timeslot otherTs = (Timeslot) other;
-        return start.equals(otherTs.start) && end.equals(otherTs.end);
+        return start.equals(otherTs.start) && end.equals(otherTs.end)
+                && Objects.equals(studentName, otherTs.studentName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(start, end);
+        return Objects.hash(start, end, studentName);
     }
 }

@@ -1,7 +1,5 @@
 package seedu.address.model.person;
 
-import static seedu.address.model.person.Status.NOT_DONE;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -18,8 +16,6 @@ public class ExerciseTracker implements Comparable<ExerciseTracker> {
 
     public static final String MESSAGE_CONSTRAINTS = "Exercise tracker takes in statuses";
     public static final int NUMBER_OF_EXERCISES = 10;
-    public static final double WEIGHT_DONE = 1;
-    public static final double WEIGHT_OVERDUE = -0.5;
     private static final Logger logger = LogsCenter.getLogger(MainApp.class);
     private static final String INDEX_OUT_OF_FOUNDS_FORMAT = "Index should be between 0 and %s";
     private static int currentWeekNumber;
@@ -103,25 +99,15 @@ public class ExerciseTracker implements Comparable<ExerciseTracker> {
     }
 
     /**
-     * Calculate a student's exercise progress as percentage
-     * @return the progress between -50.0 and 100.0.
+     * Calculates a student's exercise progress as percentage
+     * @return the progress between 0.0 and 100.0.
      */
     public double calculateProgress() {
         double count = 0;
         for (int i = 0; i < NUMBER_OF_EXERCISES; i++) {
             Status status = exercises.get(i).getStatus();
-            switch (status) {
-            case DONE:
-                count += WEIGHT_DONE;
-                break;
-            case OVERDUE:
-                count += WEIGHT_OVERDUE;
-                break;
-            case NOT_DONE:
-                break;
-
-            default:
-                throw new IllegalStateException("Unexpected status: " + status);
+            if (status == Status.DONE) {
+                count++;
             }
         }
         return count / NUMBER_OF_EXERCISES * 100.0;

@@ -44,7 +44,10 @@
       <FlowPane fx:id="labAttendance" alignment="CENTER_LEFT" />
       <FlowPane fx:id="grades" alignment="CENTER_LEFT" />
       <HBox.margin>
-         <Insets />
+         <Insets right="5.0" />
       </HBox.margin>
    </VBox>
+   <padding>
+      <Insets bottom="5.0" top="5.0" />
+   </padding>
 </HBox>

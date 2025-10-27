@@ -5,7 +5,9 @@ import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,13 +21,17 @@ import seedu.address.model.timeslot.Timeslot;
  */
 public class UnblockTimeslotCommandParser implements Parser<UnblockTimeslotCommand> {
 
-    // Alternate human-friendly formats:
+    // Alternate human-friendly formats (case-insensitive):
     // with comma: "1 Jan 2025, 10:00"
     private static final DateTimeFormatter ALTERNATE_WITH_COMMA =
-            DateTimeFormatter.ofPattern("d MMM uuuu, HH:mm");
+            new DateTimeFormatterBuilder().parseCaseInsensitive()
+                    .appendPattern("d MMM uuuu, HH:mm")
+                    .toFormatter(Locale.ENGLISH);
     // without comma: "1 Jan 2025 10:00"
     private static final DateTimeFormatter ALTERNATE_NO_COMMA =
-            DateTimeFormatter.ofPattern("d MMM uuuu HH:mm");
+            new DateTimeFormatterBuilder().parseCaseInsensitive()
+                    .appendPattern("d MMM uuuu HH:mm")
+                    .toFormatter(Locale.ENGLISH);
 
     private static LocalDateTime parseFlexibleDateTime(String input) throws DateTimeParseException {
         Objects.requireNonNull(input);

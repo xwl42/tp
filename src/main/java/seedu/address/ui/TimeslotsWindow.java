@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -82,10 +83,10 @@ public class TimeslotsWindow {
         Button nextWeekBtn = new Button("Next Week");
         Button prevWeekBtn = new Button("Previous Week");
 
-        // Determine initial week start: use earliest timeslot start (its Monday) if available,
-        // otherwise fallback to current week's Monday.
-        LocalDate[] weekStartRef = new LocalDate[1];
-        weekStartRef[0] = Optional.ofNullable(mergedRanges)
+        // Determine initial week start: prefer current week's Monday, but if the earliest timeslot
+        // starts before the current week, show that earlier week so the timeslot is visible.
+        LocalDate currentMonday = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        LocalDate earliestDate = Optional.ofNullable(mergedRanges)
                 .filter(l -> !l.isEmpty())
                 .flatMap(l -> l.stream()
                         .map(r -> r[0]) // start LocalDateTime
@@ -93,8 +94,12 @@ public class TimeslotsWindow {
                         .map(LocalDateTime::toLocalDate)
                         .min(LocalDate::compareTo)
                 )
-                .orElse(LocalDate.now())
-                .with(DayOfWeek.MONDAY);
+                .orElse(null);
+        final LocalDate[] weekStartRef = new LocalDate[] {
+                (earliestDate != null && earliestDate.isBefore(currentMonday))
+                        ? earliestDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+                        : currentMonday
+        };
 
         // top row: header + spacer + navigation buttons
         HBox topRow = new HBox();
@@ -117,11 +122,19 @@ public class TimeslotsWindow {
 
         // button actions: adjust weekStart and re-render
         nextWeekBtn.setOnAction(e -> {
-            weekStartRef[0] = weekStartRef[0].plusWeeks(1);
+            if (weekStartRef[0] == null) {
+                weekStartRef[0] = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+            } else {
+                weekStartRef[0] = weekStartRef[0].plusWeeks(1);
+            }
             renderWeek(root, weekStartRef[0], mergedRanges, allTimeslots, topRow, hoursHeader, timelineWidth);
         });
         prevWeekBtn.setOnAction(e -> {
-            weekStartRef[0] = weekStartRef[0].minusWeeks(1);
+            if (weekStartRef[0] == null) {
+                weekStartRef[0] = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+            } else {
+                weekStartRef[0] = weekStartRef[0].minusWeeks(1);
+            }
             renderWeek(root, weekStartRef[0], mergedRanges, allTimeslots, topRow, hoursHeader, timelineWidth);
         });
 
@@ -180,6 +193,10 @@ public class TimeslotsWindow {
     // Renders the given week starting at weekStart (Monday) into root using provided topRow and hoursHeader nodes.
     private static void renderWeek(BorderPane root, LocalDate weekStart, List<LocalDateTime[]> ranges,
             List<Timeslot> allTimeslots, HBox topRow, HBox hoursHeader, DoubleProperty timelineWidth) {
+        // Defensive fallback: if weekStart is null, use current week's Monday so UI always shows a valid week.
+        if (weekStart == null) {
+            weekStart = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        }
         // Body: one row per day with timeline pane for the week starting at weekStart
         VBox body = new VBox(6);
         body.setPadding(new Insets(8));

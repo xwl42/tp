@@ -1,6 +1,7 @@
 package seedu.address.model.util;
 
-import java.time.LocalDateTime;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -18,6 +19,7 @@ import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.StudentId;
 import seedu.address.model.tag.Tag;
+import seedu.address.model.timeslot.ConsultationTimeslot;
 import seedu.address.model.timeslot.Timeslot;
 
 /**
@@ -78,46 +80,51 @@ public class SampleDataUtil {
 
     /**
      * Returns a sample Timeslots populated with a few sample Timeslot entries.
+     * Uses the current week (Monday..Sunday) as the base so samples stay relevant.
      */
     public static Timeslots getSampleTimeslots() {
         Timeslots sample = new Timeslots();
-        // Week: Monday 6 Oct 2025 -> Sunday 12 Oct 2025
+
+        // Determine this week's Monday as the base date
+        LocalDate weekStart = LocalDate.now().with(DayOfWeek.MONDAY);
 
         // Monday: separate morning slots and an afternoon slot
-        sample.addTimeslot(new Timeslot(LocalDateTime.of(2025, 10, 6, 9, 0),
-                LocalDateTime.of(2025, 10, 6, 10, 0)));
-        sample.addTimeslot(new Timeslot(LocalDateTime.of(2025, 10, 6, 10, 30),
-                LocalDateTime.of(2025, 10, 6, 11, 0)));
-        sample.addTimeslot(new Timeslot(LocalDateTime.of(2025, 10, 6, 14, 0),
-                LocalDateTime.of(2025, 10, 6, 15, 30)));
+        LocalDate monday = weekStart;
+        sample.addTimeslot(new Timeslot(monday.atTime(9, 0), monday.atTime(10, 0)));
+        sample.addTimeslot(new Timeslot(monday.atTime(10, 30), monday.atTime(11, 0)));
+        sample.addTimeslot(new Timeslot(monday.atTime(14, 0), monday.atTime(15, 30)));
 
         // Tuesday: two separate slots
-        sample.addTimeslot(new Timeslot(LocalDateTime.of(2025, 10, 7, 9, 0),
-                LocalDateTime.of(2025, 10, 7, 10, 0)));
-        sample.addTimeslot(new Timeslot(LocalDateTime.of(2025, 10, 7, 13, 0),
-                LocalDateTime.of(2025, 10, 7, 14, 30)));
+        LocalDate tuesday = weekStart.plusDays(1);
+        sample.addTimeslot(new Timeslot(tuesday.atTime(9, 0), tuesday.atTime(10, 0)));
+        sample.addTimeslot(new Timeslot(tuesday.atTime(13, 0), tuesday.atTime(14, 30)));
 
         // Wednesday: single midday slot
-        sample.addTimeslot(new Timeslot(LocalDateTime.of(2025, 10, 8, 12, 0),
-                LocalDateTime.of(2025, 10, 8, 13, 0)));
+        LocalDate wednesday = weekStart.plusDays(2);
+        sample.addTimeslot(new Timeslot(wednesday.atTime(12, 0), wednesday.atTime(13, 0)));
 
         // Thursday: morning and evening slot
-        sample.addTimeslot(new Timeslot(LocalDateTime.of(2025, 10, 9, 8, 30),
-                LocalDateTime.of(2025, 10, 9, 10, 0)));
-        sample.addTimeslot(new Timeslot(LocalDateTime.of(2025, 10, 9, 18, 0),
-                LocalDateTime.of(2025, 10, 9, 19, 0)));
+        LocalDate thursday = weekStart.plusDays(3);
+        sample.addTimeslot(new Timeslot(thursday.atTime(8, 30), thursday.atTime(10, 0)));
+        sample.addTimeslot(new Timeslot(thursday.atTime(18, 0), thursday.atTime(19, 0)));
 
         // Friday: longer afternoon slot
-        sample.addTimeslot(new Timeslot(LocalDateTime.of(2025, 10, 10, 15, 0),
-                LocalDateTime.of(2025, 10, 10, 17, 0)));
+        LocalDate friday = weekStart.plusDays(4);
+        sample.addTimeslot(new Timeslot(friday.atTime(15, 0), friday.atTime(17, 0)));
 
         // Saturday: morning workshop slot
-        sample.addTimeslot(new Timeslot(LocalDateTime.of(2025, 10, 11, 10, 0),
-                LocalDateTime.of(2025, 10, 11, 12, 0)));
+        LocalDate saturday = weekStart.plusDays(5);
+        sample.addTimeslot(new Timeslot(saturday.atTime(10, 0), saturday.atTime(12, 0)));
 
         // Sunday: block spanning morning into early afternoon
-        sample.addTimeslot(new Timeslot(LocalDateTime.of(2025, 10, 12, 9, 0),
-                LocalDateTime.of(2025, 10, 12, 13, 0)));
+        LocalDate sunday = weekStart.plusDays(6);
+        sample.addTimeslot(new Timeslot(sunday.atTime(9, 0), sunday.atTime(13, 0)));
+
+        // Sample consultations (ConsultationTimeslot) placed in the same current week
+        // Tuesday 10:00-10:30 with Alice
+        sample.addTimeslot(new ConsultationTimeslot(tuesday.atTime(10, 0), tuesday.atTime(10, 30), "Alice"));
+        // Thursday 14:00-14:30 with Bob
+        sample.addTimeslot(new ConsultationTimeslot(thursday.atTime(14, 0), thursday.atTime(14, 30), "Bob"));
 
         return sample;
     }

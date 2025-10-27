@@ -99,7 +99,7 @@ public class ExerciseTracker implements Comparable<ExerciseTracker> {
     }
 
     /**
-     * Calculate a student's exercise progress as percentage
+     * Calculates a student's exercise progress as percentage
      * @return the progress between 0.0 and 100.0.
      */
     public double calculateProgress() {

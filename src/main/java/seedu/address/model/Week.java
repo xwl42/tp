@@ -20,7 +20,7 @@ public class Week {
      */
     public Week(int weekNumber) {
         if (weekNumber < 0 || weekNumber > MAX_WEEK) {
-            throw new IllegalStateException(MESSAGE_CONSTRAINTS);
+            throw new IllegalArgumentException(MESSAGE_CONSTRAINTS);
         }
         this.weekNumber = weekNumber;
     }

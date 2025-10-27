@@ -41,13 +41,16 @@ How to use this guide:
    (11) [Deleting a student: `delete`](#deleting-a-student-delete)<br>
    (12) [Clearing all entries: `clear`](#clearing-all-entries-clear)<br>
    (13) [Undoing the last command: `undo`](#undoing-the-last-command-undo)<br>
-   (14) [Blocking a timeslot: `block-timeslot`](#blocking-a-timeslot-block-timeslot)<br>
-   (15) [Unblocking a timeslot: `unblock-timeslot`](#unblocking-a-timeslot-unblock-timeslot)<br>
-   (16) [Retrieving merged timeslot ranges: `get-timeslots`](#retrieving-merged-timeslot-ranges-get-timeslots)<br>
-   (17) [Clearing all timeslots: `clear-timeslots`](#clearing-all-timeslots-clear-timeslots)<br>
-   (18) [Exiting the program: `exit`](#exiting-the-program-exit)<br>
-   (19) [Saving the data](#saving-the-data)<br>
-   (20) [Editing the data file](#editing-the-data-file)<br>
+   (14) [Timeslots & Consultations](#timeslots--consultations)<br>
+       &nbsp;&nbsp;&nbsp;(a) [Blocking a timeslot: `block-timeslot`](#blocking-a-timeslot-block-timeslot)<br>
+       &nbsp;&nbsp;&nbsp;(b) [Unblocking a timeslot: `unblock-timeslot`](#unblocking-a-timeslot-unblock-timeslot)<br>
+       &nbsp;&nbsp;&nbsp;(c) [Retrieving merged timeslot ranges: `get-timeslots`](#retrieving-merged-timeslot-ranges-get-timeslots)<br>
+       &nbsp;&nbsp;&nbsp;(d) [Retrieving consultations only: `get-consultations`](#retrieving-consultations-only-get-consultations)<br>
+       &nbsp;&nbsp;&nbsp;(e) [Clearing all timeslots: `clear-timeslots`](#clearing-all-timeslots-clear-timeslots)<br>
+       &nbsp;&nbsp;&nbsp;(f) [Adding a consultation: `add-consultation`](#adding-a-consultation-add-consultation)<br>
+   (15) [Exiting the program: `exit`](#exiting-the-program-exit)<br>
+   (16) [Saving the data](#saving-the-data)<br>
+   (17) [Editing the data file](#editing-the-data-file)<br>
 3. [FAQ](#faq)
 4. [Known issues](#known-issues)
 5. [Command summary](#command-summary)
@@ -442,7 +445,25 @@ Examples:
   to its original value, but cannot restore the deleted student back to the list
 
 <br><br>
-### Blocking a timeslot : `block-timeslot`
+## Timeslots & Consultations
+
+This section contains commands for managing unavailable times (blocked timeslots) and consultations. Timeslots can be used to mark regular events (e.g., classes), while consultation timeslots are specifically for CS2030S consultation sessions. These commands are designed to help users schedule and organize their consultation times more effectively.
+
+<box type="tip">
+
+**Tip:** Use `get-timeslots` to see your full schedule and `get-consultations` for an uncluttered view of your consultation schedule.
+
+</box>
+
+<box type="warning">
+Note on overlaps: LambdaLab prevents overlapping timeslots. If you try to add a timeslot that partially or fully overlaps an existing timeslot, the command will be rejected with an error ("A timeslot at the same time already exists."). This safeguard applies to both generic timeslots (block-timeslot) and consultations (add-consultation).
+</box>
+
+
+
+
+<br><br>
+### Blocking a timeslot: `block-timeslot`
 
 Adds a timeslot to the application's timeslot store.
 
@@ -456,11 +477,6 @@ Examples:
 * `block-timeslot ts/2025-10-04T10:00:00 te/2025-10-04T13:00:00`
 * `block-timeslot ts/4 Oct 2025, 10:00 te/4 Oct 2025, 13:00`
 * `block-timeslot ts/4 Oct 2025 10:00 te/4 Oct 2025 13:00`
-
-<box type="warning">
-Note on overlaps: LambdaLab prevents overlapping timeslots. If you try to add a timeslot that partially or fully overlaps an existing timeslot, the command will be rejected with an error ("A timeslot at the same time already exists."). This safeguard applies to both generic timeslots (block-timeslot) and consultations (add-consultation).
-</box>
-
 
 <br><br>
 ### Unblocking a timeslot : `unblock-timeslot`
@@ -486,7 +502,7 @@ Examples:
 
 <box type="tip">
 
-**Tip:** Timeslot doesn't have to match added timeslot exactly. It can be any timeslot shown in `get-timeslots` as well
+**Tip:** You can use `get-timeslots` to get the correctly formatted datetimes for the timeslot you want to unblock.
 </box>
 
 <br>

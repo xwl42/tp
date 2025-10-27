@@ -106,8 +106,7 @@ public class TimeslotsWindow {
                 renderWeek(root, weekStartRef[0], mergedRanges, allTimeslots, topRow, hoursHeader, timelineWidth);
 
                 // Rebind timelineWidth to the existing scene width so layout continues to scale
-                timelineWidth.bind(Bindings.createDoubleBinding(
-                        () -> Math.max(scene.getWidth() - 120, TIMELINE_WIDTH),
+                timelineWidth.bind(Bindings.createDoubleBinding(() -> Math.max(scene.getWidth() - 120, TIMELINE_WIDTH),
                         scene.widthProperty()));
 
                 // Wire the navigation buttons to re-render the same root when week changes

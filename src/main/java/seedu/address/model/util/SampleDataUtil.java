@@ -80,7 +80,7 @@ public class SampleDataUtil {
 
     /**
      * Returns a sample Timeslots populated with a few sample Timeslot entries.
-     * Uses the current week (Monday..Sunday) as the base so samples stay relevant.
+     * Generates 4 full weeks of sample data (current week + 3 subsequent weeks) with different slot patterns.
      */
     public static Timeslots getSampleTimeslots() {
         Timeslots sample = new Timeslots();
@@ -88,43 +88,126 @@ public class SampleDataUtil {
         // Determine this week's Monday as the base date
         LocalDate weekStart = LocalDate.now().with(DayOfWeek.MONDAY);
 
-        // Monday: separate morning slots and an afternoon slot
-        LocalDate monday = weekStart;
-        sample.addTimeslot(new Timeslot(monday.atTime(9, 0), monday.atTime(10, 0)));
-        sample.addTimeslot(new Timeslot(monday.atTime(10, 30), monday.atTime(11, 0)));
-        sample.addTimeslot(new Timeslot(monday.atTime(14, 0), monday.atTime(15, 30)));
+        // Names to rotate for consultations
+        String[] consultNames = new String[] {
+                "Alice", "Bob", "Charlie", "Daisy", "Eve", "Frank", "Grace", "Heidi"
+        };
+        int nameIndex = 0;
 
-        // Tuesday: two separate slots
-        LocalDate tuesday = weekStart.plusDays(1);
-        sample.addTimeslot(new Timeslot(tuesday.atTime(9, 0), tuesday.atTime(10, 0)));
-        sample.addTimeslot(new Timeslot(tuesday.atTime(13, 0), tuesday.atTime(14, 30)));
+        // Generate 4 consecutive weeks with varied patterns so they are not identical
+        for (int w = 0; w < 4; w++) {
+            LocalDate base = weekStart.plusWeeks(w);
 
-        // Wednesday: single midday slot
-        LocalDate wednesday = weekStart.plusDays(2);
-        sample.addTimeslot(new Timeslot(wednesday.atTime(12, 0), wednesday.atTime(13, 0)));
+            // Week-specific patterns
+            switch (w) {
+            case 0:
+                // Baseline week (similar to original)
+                sample.addTimeslot(new Timeslot(base.atTime(9, 0), base.atTime(10, 0)));
+                sample.addTimeslot(new Timeslot(base.atTime(10, 30), base.atTime(11, 0)));
+                sample.addTimeslot(new Timeslot(base.atTime(14, 0), base.atTime(15, 30)));
 
-        // Thursday: morning and evening slot
-        LocalDate thursday = weekStart.plusDays(3);
-        sample.addTimeslot(new Timeslot(thursday.atTime(8, 30), thursday.atTime(10, 0)));
-        sample.addTimeslot(new Timeslot(thursday.atTime(18, 0), thursday.atTime(19, 0)));
+                sample.addTimeslot(new Timeslot(base.plusDays(1).atTime(9, 0), base.plusDays(1).atTime(10, 0)));
+                sample.addTimeslot(new Timeslot(base.plusDays(1).atTime(13, 0), base.plusDays(1).atTime(14, 30)));
 
-        // Friday: longer afternoon slot
-        LocalDate friday = weekStart.plusDays(4);
-        sample.addTimeslot(new Timeslot(friday.atTime(15, 0), friday.atTime(17, 0)));
+                sample.addTimeslot(new Timeslot(base.plusDays(2).atTime(12, 0), base.plusDays(2).atTime(13, 0)));
 
-        // Saturday: morning workshop slot
-        LocalDate saturday = weekStart.plusDays(5);
-        sample.addTimeslot(new Timeslot(saturday.atTime(10, 0), saturday.atTime(12, 0)));
+                sample.addTimeslot(new Timeslot(base.plusDays(3).atTime(8, 30), base.plusDays(3).atTime(10, 0)));
+                sample.addTimeslot(new Timeslot(base.plusDays(3).atTime(18, 0), base.plusDays(3).atTime(19, 0)));
 
-        // Sunday: block spanning morning into early afternoon
-        LocalDate sunday = weekStart.plusDays(6);
-        sample.addTimeslot(new Timeslot(sunday.atTime(9, 0), sunday.atTime(13, 0)));
+                sample.addTimeslot(new Timeslot(base.plusDays(4).atTime(15, 0), base.plusDays(4).atTime(17, 0)));
 
-        // Sample consultations (ConsultationTimeslot) placed in the same current week
-        // Tuesday 10:00-10:30 with Alice
-        sample.addTimeslot(new ConsultationTimeslot(tuesday.atTime(10, 0), tuesday.atTime(10, 30), "Alice"));
-        // Thursday 14:00-14:30 with Bob
-        sample.addTimeslot(new ConsultationTimeslot(thursday.atTime(14, 0), thursday.atTime(14, 30), "Bob"));
+                sample.addTimeslot(new Timeslot(base.plusDays(5).atTime(10, 0), base.plusDays(5).atTime(12, 0)));
+
+                sample.addTimeslot(new Timeslot(base.plusDays(6).atTime(9, 0), base.plusDays(6).atTime(13, 0)));
+
+                // Consultations for week 0
+                sample.addTimeslot(new ConsultationTimeslot(base.plusDays(1).atTime(10, 0),
+                        base.plusDays(1).atTime(10, 30), consultNames[nameIndex++ % consultNames.length]));
+                sample.addTimeslot(new ConsultationTimeslot(base.plusDays(3).atTime(14, 0),
+                        base.plusDays(3).atTime(14, 30), consultNames[nameIndex++ % consultNames.length]));
+                break;
+
+            case 1:
+                // Week 1: morning slots shifted later, slightly different durations
+                sample.addTimeslot(new Timeslot(base.atTime(9, 30), base.atTime(10, 30)));
+                sample.addTimeslot(new Timeslot(base.atTime(11, 0), base.atTime(11, 30)));
+                sample.addTimeslot(new Timeslot(base.atTime(15, 0), base.atTime(16, 30)));
+
+                sample.addTimeslot(new Timeslot(base.plusDays(1).atTime(9, 30), base.plusDays(1).atTime(10, 30)));
+                sample.addTimeslot(new Timeslot(base.plusDays(1).atTime(13, 30), base.plusDays(1).atTime(15, 0)));
+
+                sample.addTimeslot(new Timeslot(base.plusDays(2).atTime(12, 30), base.plusDays(2).atTime(13, 30)));
+
+                sample.addTimeslot(new Timeslot(base.plusDays(3).atTime(9, 0), base.plusDays(3).atTime(10, 30)));
+                sample.addTimeslot(new Timeslot(base.plusDays(3).atTime(18, 30), base.plusDays(3).atTime(19, 30)));
+
+                sample.addTimeslot(new Timeslot(base.plusDays(4).atTime(14, 0), base.plusDays(4).atTime(16, 0)));
+
+                sample.addTimeslot(new Timeslot(base.plusDays(5).atTime(10, 30), base.plusDays(5).atTime(12, 30)));
+
+                sample.addTimeslot(new Timeslot(base.plusDays(6).atTime(8, 0), base.plusDays(6).atTime(11, 0)));
+
+                // Consultations for week 1 (different days/times)
+                sample.addTimeslot(new ConsultationTimeslot(base.plusDays(2).atTime(10, 0),
+                        base.plusDays(2).atTime(10, 30), consultNames[nameIndex++ % consultNames.length]));
+                sample.addTimeslot(new ConsultationTimeslot(base.plusDays(4).atTime(13, 0),
+                        base.plusDays(4).atTime(13, 30), consultNames[nameIndex++ % consultNames.length]));
+                break;
+
+            case 2:
+                // Week 2: earlier starts and longer morning blocks
+                sample.addTimeslot(new Timeslot(base.atTime(8, 0), base.atTime(9, 30)));
+                sample.addTimeslot(new Timeslot(base.atTime(11, 0), base.atTime(12, 0)));
+                sample.addTimeslot(new Timeslot(base.atTime(13, 30), base.atTime(15, 0)));
+
+                sample.addTimeslot(new Timeslot(base.plusDays(1).atTime(8, 30), base.plusDays(1).atTime(9, 30)));
+                sample.addTimeslot(new Timeslot(base.plusDays(1).atTime(12, 30), base.plusDays(1).atTime(14, 0)));
+
+                sample.addTimeslot(new Timeslot(base.plusDays(2).atTime(11, 30), base.plusDays(2).atTime(12, 30)));
+
+                sample.addTimeslot(new Timeslot(base.plusDays(3).atTime(7, 30), base.plusDays(3).atTime(9, 0)));
+                sample.addTimeslot(new Timeslot(base.plusDays(3).atTime(17, 30), base.plusDays(3).atTime(18, 30)));
+
+                sample.addTimeslot(new Timeslot(base.plusDays(4).atTime(14, 30), base.plusDays(4).atTime(16, 30)));
+
+                sample.addTimeslot(new Timeslot(base.plusDays(5).atTime(9, 0), base.plusDays(5).atTime(11, 0)));
+
+                sample.addTimeslot(new Timeslot(base.plusDays(6).atTime(10, 0), base.plusDays(6).atTime(12, 0)));
+
+                // Consultations for week 2
+                sample.addTimeslot(new ConsultationTimeslot(base.atTime(12, 0),
+                        base.atTime(12, 30), consultNames[nameIndex++ % consultNames.length]));
+                sample.addTimeslot(new ConsultationTimeslot(base.plusDays(5).atTime(14, 0),
+                        base.plusDays(5).atTime(14, 30), consultNames[nameIndex++ % consultNames.length]));
+                break;
+
+            default:
+                // Week 3: later-evening heavy week, different spread
+                sample.addTimeslot(new Timeslot(base.atTime(18, 0), base.atTime(20, 0)));
+                sample.addTimeslot(new Timeslot(base.atTime(10, 0), base.atTime(11, 0)));
+                sample.addTimeslot(new Timeslot(base.atTime(13, 0), base.atTime(14, 0)));
+
+                sample.addTimeslot(new Timeslot(base.plusDays(1).atTime(19, 0), base.plusDays(1).atTime(21, 0)));
+                sample.addTimeslot(new Timeslot(base.plusDays(1).atTime(9, 0), base.plusDays(1).atTime(10, 0)));
+
+                sample.addTimeslot(new Timeslot(base.plusDays(2).atTime(16, 0), base.plusDays(2).atTime(17, 30)));
+
+                sample.addTimeslot(new Timeslot(base.plusDays(3).atTime(18, 30), base.plusDays(3).atTime(19, 30)));
+
+                sample.addTimeslot(new Timeslot(base.plusDays(4).atTime(14, 0), base.plusDays(4).atTime(15, 30)));
+
+                sample.addTimeslot(new Timeslot(base.plusDays(5).atTime(11, 0), base.plusDays(5).atTime(12, 30)));
+
+                sample.addTimeslot(new Timeslot(base.plusDays(6).atTime(8, 30), base.plusDays(6).atTime(10, 30)));
+
+                // Consultations for week 3 (morning/evening)
+                sample.addTimeslot(new ConsultationTimeslot(base.plusDays(1).atTime(8, 0),
+                        base.plusDays(1).atTime(8, 30), consultNames[nameIndex++ % consultNames.length]));
+                sample.addTimeslot(new ConsultationTimeslot(base.plusDays(3).atTime(19, 30),
+                        base.plusDays(3).atTime(20, 0), consultNames[nameIndex++ % consultNames.length]));
+                break;
+            }
+        }
 
         return sample;
     }

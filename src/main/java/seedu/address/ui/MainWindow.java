@@ -191,12 +191,13 @@ public class MainWindow extends UiPart<Stage> {
 
             return commandResult;
         } catch (CommandException | ParseException e) {
+            String period;
             if (e instanceof CommandException) {
-                System.out.println("Command exception");
+                period = "executing";
             } else {
-                System.out.println("Parse exception");
+                period = "parsing";
             }
-            logger.info("An error occurred while executing command: " + commandText);
+            logger.info("An error occurred while " + period + " command :" + commandText);
             resultDisplay.setFeedbackToUser(e.getMessage());
             throw e;
         }

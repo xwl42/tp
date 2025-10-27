@@ -64,14 +64,14 @@ public class ParserUtil {
     private static MultiIndex parseRange(String input) throws ParseException {
         String[] parts = input.split(":");
         if (parts.length != 2) {
-            throw new IllegalArgumentException("Invalid range format: " + input);
+            throw new ParseException("Invalid range format: " + input);
         }
 
         Index lower = ParserUtil.parseIndex(parts[0].trim());
         Index upper = ParserUtil.parseIndex(parts[1].trim());
 
         if (lower.getZeroBased() > upper.getZeroBased()) {
-            throw new IllegalArgumentException("Lower bound cannot be greater than upper bound: " + input);
+            throw new ParseException("Lower bound cannot be greater than upper bound: " + input);
         }
 
         return new MultiIndex(lower, upper);

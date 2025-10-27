@@ -73,19 +73,9 @@ public class TimeslotsWindow {
             if (scene != null && scene.getRoot() instanceof BorderPane) {
                 BorderPane root = (BorderPane) scene.getRoot();
 
-                // Determine initial week start using earliest timeslot start if available,
-                // otherwise current week's Monday.
+                // Always start on the current week's Monday by default.
                 LocalDate[] weekStartRef = new LocalDate[1];
-                weekStartRef[0] = Optional.ofNullable(mergedRanges)
-                        .filter(l -> !l.isEmpty())
-                        .flatMap(l -> l.stream()
-                                .map(r -> r[0])
-                                .filter(Objects::nonNull)
-                                .map(LocalDateTime::toLocalDate)
-                                .min(LocalDate::compareTo)
-                        )
-                        .orElse(LocalDate.now())
-                        .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+                weekStartRef[0] = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
 
                 // top row: header + spacer + navigation buttons
                 Label header = new Label("Timetable");
@@ -155,22 +145,9 @@ public class TimeslotsWindow {
         Button nextWeekBtn = new Button("Next Week");
         Button prevWeekBtn = new Button("Previous Week");
 
-        // Determine initial week start: prefer current week's Monday, but if the earliest timeslot
-        // starts before the current week, show that earlier week so the timeslot is visible.
-        LocalDate currentMonday = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-        LocalDate earliestDate = null;
-        if (mergedRanges != null && !mergedRanges.isEmpty()) {
-            earliestDate = mergedRanges.stream()
-                    .map(r -> r[0])
-                    .filter(Objects::nonNull)
-                    .map(LocalDateTime::toLocalDate)
-                    .min(LocalDate::compareTo)
-                    .orElse(null);
-        }
+        // Always start on the current week's Monday by default.
         final LocalDate[] weekStartRef = new LocalDate[1];
-        weekStartRef[0] = (earliestDate != null && earliestDate.isBefore(currentMonday))
-                ? earliestDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
-                : currentMonday;
+        weekStartRef[0] = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
 
         HBox topRow = new HBox();
         Region spacer = new Region();

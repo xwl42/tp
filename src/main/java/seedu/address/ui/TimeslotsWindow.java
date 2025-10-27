@@ -8,7 +8,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.NumberBinding;
@@ -69,7 +68,7 @@ public class TimeslotsWindow {
         Stage stage = new Stage();
         // remember the stage so clients can hide it
         currentStage = stage;
-        stage.setTitle("Consultation Schedule");
+        stage.setTitle("My Schedule");
         stage.initModality(Modality.NONE);
 
         BorderPane root = new BorderPane();
@@ -86,20 +85,20 @@ public class TimeslotsWindow {
         // Determine initial week start: prefer current week's Monday, but if the earliest timeslot
         // starts before the current week, show that earlier week so the timeslot is visible.
         LocalDate currentMonday = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-        LocalDate earliestDate = Optional.ofNullable(mergedRanges)
-                .filter(l -> !l.isEmpty())
-                .flatMap(l -> l.stream()
-                        .map(r -> r[0]) // start LocalDateTime
-                        .filter(Objects::nonNull)
-                        .map(LocalDateTime::toLocalDate)
-                        .min(LocalDate::compareTo)
-                )
-                .orElse(null);
-        final LocalDate[] weekStartRef = new LocalDate[] {
-                (earliestDate != null && earliestDate.isBefore(currentMonday))
-                        ? earliestDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
-                        : currentMonday
-        };
+        // compute earliest date in mergedRanges (if provided) in a style that avoids complex chained calls
+        LocalDate earliestDate = null;
+        if (mergedRanges != null && !mergedRanges.isEmpty()) {
+            earliestDate = mergedRanges.stream()
+                    .map(r -> r[0]) // start LocalDateTime
+                    .filter(Objects::nonNull)
+                    .map(LocalDateTime::toLocalDate)
+                    .min(LocalDate::compareTo)
+                    .orElse(null);
+        }
+        final LocalDate[] weekStartRef = new LocalDate[1];
+        weekStartRef[0] = (earliestDate != null && earliestDate.isBefore(currentMonday))
+                ? earliestDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+                : currentMonday;
 
         // top row: header + spacer + navigation buttons
         HBox topRow = new HBox();
@@ -348,7 +347,7 @@ public class TimeslotsWindow {
                     // Decide whether to hide the generic timeslot label.
                     // We only hide the label if a consultation actually covers the label area at the start
                     // of the timeslot block. This prevents hiding labels when a consultation overlaps later.
-                    final int LABEL_SAFE_MINUTES = 15;
+                    final int labelSafeMinutes = 15;
                     boolean hideGenericLabel = false;
                     if (allTimeslots != null) {
                         for (Timeslot t2 : allTimeslots) {
@@ -366,7 +365,7 @@ public class TimeslotsWindow {
                             // if the consultation visible portion overlaps the timeslot at all
                             if (cRenderStart.isBefore(renderEnd) && cRenderEnd.isAfter(renderStart)) {
                                 // hide the generic label only if the consultation covers the label area near the start
-                                if (cRenderStart.isBefore(renderStart.plusMinutes(LABEL_SAFE_MINUTES))
+                                if (cRenderStart.isBefore(renderStart.plusMinutes(labelSafeMinutes))
                                         && cRenderEnd.isAfter(renderStart)) {
                                     hideGenericLabel = true;
                                     break;
@@ -465,15 +464,20 @@ public class TimeslotsWindow {
 
                     // Student name label placed below the time label
                     String studentText = ct.getStudentName();
-                    // allow student name to break at spaces if necessary but ensure it's positioned under the time label
-                    Label studentLbl = new Label(studentText.contains(" ") ? studentText.replace(" ", "\n") : studentText);
+                    // allow student name to break at spaces if necessary
+                    Label studentLbl = new Label(studentText.contains(" ")
+                        ? studentText.replace(" ", "\n")
+                        : studentText);
                     studentLbl.setStyle("-fx-text-fill: #000000ff; -fx-font-size: 11px;");
                     studentLbl.layoutXProperty().bind(xBind.add(18));
                     // Keep student label positioned directly below the time label even after the time label wraps.
                     studentLbl.layoutYProperty().bind(timeLbl.layoutYProperty().add(timeLbl.heightProperty()).add(2));
 
-                    Tooltip tooltip = new Tooltip(String.format("Consultation: %s -> %s\nStudent: %s",
-                            start.format(FORMATTER), end.format(FORMATTER), ct.getStudentName()));
+                    String consultTooltip = String.format("Consultation: %s -> %s%nStudent: %s",
+                            start.format(FORMATTER),
+                            end.format(FORMATTER),
+                            ct.getStudentName());
+                    Tooltip tooltip = new Tooltip(consultTooltip);
                     Tooltip.install(consultBlock, tooltip);
                     Tooltip.install(timeLbl, tooltip);
                     Tooltip.install(studentLbl, tooltip);
@@ -507,4 +511,6 @@ public class TimeslotsWindow {
         default -> Color.web("#cbd5df");
         };
     }
+
+
 }

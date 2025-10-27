@@ -58,10 +58,11 @@ public class LogicManager implements Logic {
         try {
             storage.saveAddressBook(model.getAddressBook());
         } catch (AccessDeniedException e) {
-
-            throw new CommandException(String.format(FILE_OPS_PERMISSION_ERROR_FORMAT, e.getMessage()), e);
+            String msg = String.format(FILE_OPS_PERMISSION_ERROR_FORMAT, e.getMessage());
+            throw new CommandException(msg, e);
         } catch (IOException ioe) {
-            throw new CommandException(String.format(FILE_OPS_ERROR_FORMAT, ioe.getMessage()), ioe);
+            String msg = String.format(FILE_OPS_ERROR_FORMAT, ioe.getMessage());
+            throw new CommandException(msg, ioe);
         }
 
         // Persist timeslots if model supports it
@@ -84,7 +85,8 @@ public class LogicManager implements Logic {
             try {
                 if (model instanceof ModelManager) {
                     List<Timeslot> allTimeslots = ((ModelManager) model).getTimeslots().getTimeslotList();
-                    Platform.runLater(() -> TimeslotsWindow.showMerged(commandResult.getTimeslotRanges(), allTimeslots));
+                    Platform.runLater(() -> TimeslotsWindow.showMerged(commandResult.getTimeslotRanges(),
+                                                                         allTimeslots));
                 } else {
                     Platform.runLater(() -> TimeslotsWindow.showMerged(commandResult.getTimeslotRanges(),
                             Collections.emptyList()));

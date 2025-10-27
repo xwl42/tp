@@ -19,12 +19,16 @@ public class AddConsultationCommandParser implements Parser<AddConsultationComma
 
     @Override
     public AddConsultationCommand parse(String args) throws ParseException {
-        ArgumentMultimap argMultimap =
-                ArgumentTokenizer.tokenize(args, new Prefix("ts/"), new Prefix("te/"), CliSyntax.PREFIX_NAME);
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(
+                args,
+                new Prefix("ts/"),
+                new Prefix("te/"),
+                CliSyntax.PREFIX_NAME);
 
         // no free-form preamble allowed
         if (!argMultimap.getPreamble().isEmpty()) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddConsultationCommand.MESSAGE_USAGE));
+            String msg = String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddConsultationCommand.MESSAGE_USAGE);
+            throw new ParseException(msg);
         }
 
         String startStr = argMultimap.getValue(new Prefix("ts/")).orElse("");
@@ -32,7 +36,8 @@ public class AddConsultationCommandParser implements Parser<AddConsultationComma
         String studentName = argMultimap.getValue(CliSyntax.PREFIX_NAME).orElse("").trim();
 
         if (startStr.isEmpty() || endStr.isEmpty() || studentName.isEmpty()) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddConsultationCommand.MESSAGE_USAGE));
+            String msg = String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddConsultationCommand.MESSAGE_USAGE);
+            throw new ParseException(msg);
         }
 
         LocalDateTime start = parseDateTime(startStr);
@@ -52,9 +57,9 @@ public class AddConsultationCommandParser implements Parser<AddConsultationComma
     private LocalDateTime parseDateTime(String input) throws ParseException {
         String trimmed = input.trim();
         DateTimeFormatter[] fmts = new DateTimeFormatter[] {
-                DateTimeFormatter.ISO_LOCAL_DATE_TIME,
-                DateTimeFormatter.ofPattern("d MMM uuuu, HH:mm"),
-                DateTimeFormatter.ofPattern("d MMM uuuu HH:mm")
+            DateTimeFormatter.ISO_LOCAL_DATE_TIME,
+            DateTimeFormatter.ofPattern("d MMM uuuu, HH:mm"),
+            DateTimeFormatter.ofPattern("d MMM uuuu HH:mm")
         };
         for (DateTimeFormatter fmt : fmts) {
             try {

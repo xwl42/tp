@@ -19,6 +19,11 @@ public class JsonSerializableTimeslots {
 
     private final List<JsonAdaptedTimeslot> times = new ArrayList<>();
 
+    /**
+     * Constructs a {@code JsonSerializableTimeslots} from a list of {@code JsonAdaptedTimeslot}.
+     *
+     * @param times the list of adapted timeslots read by Jackson (may be null).
+     */
     @JsonCreator
     public JsonSerializableTimeslots(@JsonProperty("timeslots") List<JsonAdaptedTimeslot> times) {
         if (times != null) {

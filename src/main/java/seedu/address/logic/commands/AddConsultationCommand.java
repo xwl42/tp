@@ -21,14 +21,21 @@ public class AddConsultationCommand extends Command {
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a consultation timeslot.\n"
             + "Parameters: ts/START_DATETIME te/END_DATETIME n/STUDENT_NAME\n"
             + "Accepted datetime formats: ISO_LOCAL_DATE_TIME or 'd MMM uuuu, HH:mm'\n"
-            + "Example: " + COMMAND_WORD + " ts/2025-10-04T10:00:00 te/2025-10-04T11:00:00 n/John Doe";
+            + "Example: " + COMMAND_WORD + " ts/2025-10-04T10:00:00\n"
+            + " te/2025-10-04T11:00:00 n/John Doe";
 
     public static final String MESSAGE_SUCCESS = "Added consultation: %1$s with %2$s";
-    public static final String MESSAGE_DUPLICATE_CONSULTATION = "A consultation with the same time and student already exists.";
+    public static final String MESSAGE_DUPLICATE_CONSULTATION =
+                                "A consultation with the same time and student already exists.";
     public static final String MESSAGE_DUPLICATE_TIMESLOT = "A timeslot at the same time already exists.";
 
     private final ConsultationTimeslot toAdd;
 
+    /**
+     * Creates an AddConsultationCommand to add the specified consultation timeslot.
+     *
+     * @param consultationTimeslot ConsultationTimeslot to add; must not be null.
+     */
     public AddConsultationCommand(ConsultationTimeslot consultationTimeslot) {
         requireNonNull(consultationTimeslot);
         this.toAdd = consultationTimeslot;

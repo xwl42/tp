@@ -144,8 +144,10 @@ public class TimeslotsWindow {
         });
 
         // Bind timelineWidth to scene width (minimum remains TIMELINE_WIDTH). Subtract left label area and padding.
-        timelineWidth.bind(Bindings.createDoubleBinding(() -> Math.max(scene.getWidth() - 120, TIMELINE_WIDTH),
-                scene.widthProperty()));
+        NumberBinding widthBinding = Bindings.createDoubleBinding(() ->
+            Math.max(scene.getWidth() - 120, TIMELINE_WIDTH),
+            scene.widthProperty());
+        timelineWidth.bind(widthBinding);
 
         // After showing, bind the ScrollPane viewport to the scene size so it grows/shrinks with the window.
         if (root.getCenter() instanceof ScrollPane) {
@@ -432,7 +434,7 @@ public class TimeslotsWindow {
                     timeLbl.layoutXProperty().bind(xBind.add(18)); // icon (8px) + small gap
                     timeLbl.setLayoutY(12);
 
-                    // Student name label placed below the time label 
+                    // Student name label placed below the time label
                     Label studentLbl = new Label(ct.getStudentName());
                     studentLbl.setStyle("-fx-text-fill: #000000ff; -fx-font-size: 11px;");
                     studentLbl.layoutXProperty().bind(xBind.add(18));
@@ -445,7 +447,7 @@ public class TimeslotsWindow {
                     Tooltip.install(studentLbl, tooltip);
                     Tooltip.install(icon, tooltip);
 
-                    // Add consultation visuals: block, icon, then labels so labels render on top and icon sits left of time.
+                    // Add consultation visuals: block, icon, then labels
                     timeline.getChildren().addAll(consultBlock, icon, timeLbl, studentLbl);
                     // Ensure labels and icon are rendered above the block.
                     icon.toFront();

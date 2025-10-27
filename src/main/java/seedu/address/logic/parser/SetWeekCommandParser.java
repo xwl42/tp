@@ -24,7 +24,7 @@ public class SetWeekCommandParser implements Parser<SetWeekCommand> {
         } catch (NumberFormatException nfe) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, SetWeekCommand.MESSAGE_USAGE), nfe);
         } catch (IllegalArgumentException e) {
-            throw new ParseException(e.getMessage());
+            throw new ParseException(e.getMessage(), e);
         }
 
         return new SetWeekCommand(currentWeek);

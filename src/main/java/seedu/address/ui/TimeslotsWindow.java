@@ -8,6 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.NumberBinding;
@@ -65,8 +66,81 @@ public class TimeslotsWindow {
      * Receives the concrete timeslot list so consultations (with student names) can be rendered specially.
      */
     public static void showMerged(List<LocalDateTime[]> mergedRanges, List<Timeslot> allTimeslots) {
+        // If a window already exists and is showing, update its contents and bring to front.
+        if (currentStage != null && currentStage.isShowing()) {
+            Scene scene = currentStage.getScene();
+            if (scene != null && scene.getRoot() instanceof BorderPane) {
+                BorderPane root = (BorderPane) scene.getRoot();
+
+                // Determine initial week start using earliest timeslot start if available,
+                // otherwise current week's Monday.
+                LocalDate[] weekStartRef = new LocalDate[1];
+                weekStartRef[0] = Optional.ofNullable(mergedRanges)
+                        .filter(l -> !l.isEmpty())
+                        .flatMap(l -> l.stream()
+                                .map(r -> r[0])
+                                .filter(Objects::nonNull)
+                                .map(LocalDateTime::toLocalDate)
+                                .min(LocalDate::compareTo)
+                        )
+                        .orElse(LocalDate.now())
+                        .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+
+                // top row: header + spacer + navigation buttons
+                Label header = new Label("Timetable");
+                header.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+                Button nextWeekBtn = new Button("Next Week");
+                Button prevWeekBtn = new Button("Previous Week");
+                HBox topRow = new HBox();
+                Region spacer = new Region();
+                HBox.setHgrow(spacer, Priority.ALWAYS);
+                topRow.setAlignment(Pos.CENTER_LEFT);
+                topRow.setSpacing(ROW_SPACING);
+                topRow.getChildren().addAll(header, spacer, prevWeekBtn, nextWeekBtn);
+
+                // timeline width property shared by all timeline panes so they resize together
+                DoubleProperty timelineWidth = new SimpleDoubleProperty(TIMELINE_WIDTH);
+                HBox hoursHeader = buildHoursHeader(timelineWidth);
+
+                // render initial week into existing root
+                renderWeek(root, weekStartRef[0], mergedRanges, allTimeslots, topRow, hoursHeader, timelineWidth);
+
+                // Rebind timelineWidth to the existing scene width so layout continues to scale
+                timelineWidth.bind(Bindings.createDoubleBinding(
+                        () -> Math.max(scene.getWidth() - 120, TIMELINE_WIDTH),
+                        scene.widthProperty()));
+
+                // Wire the navigation buttons to re-render the same root when week changes
+                nextWeekBtn.setOnAction(e -> {
+                    weekStartRef[0] = weekStartRef[0].plusWeeks(1);
+                    renderWeek(root, weekStartRef[0], mergedRanges, allTimeslots, topRow, hoursHeader, timelineWidth);
+                });
+                prevWeekBtn.setOnAction(e -> {
+                    weekStartRef[0] = weekStartRef[0].minusWeeks(1);
+                    renderWeek(root, weekStartRef[0], mergedRanges, allTimeslots, topRow, hoursHeader, timelineWidth);
+                });
+
+                // Ensure ScrollPane viewport stays bound to the scene size if present
+                if (root.getCenter() instanceof ScrollPane) {
+                    ScrollPane sp = (ScrollPane) root.getCenter();
+                    sp.prefViewportWidthProperty().bind(scene.widthProperty().subtract(120));
+                    sp.prefViewportHeightProperty().bind(scene.heightProperty().subtract(140));
+                }
+
+                currentStage.toFront();
+                return;
+            } else {
+                // Unexpected state: hide and fall through to create a fresh window.
+                try {
+                    currentStage.hide();
+                } finally {
+                    currentStage = null;
+                }
+            }
+        }
+
+        // No existing window => create a new one
         Stage stage = new Stage();
-        // remember the stage so clients can hide it
         currentStage = stage;
         stage.setTitle("My Schedule");
         stage.initModality(Modality.NONE);
@@ -78,18 +152,16 @@ public class TimeslotsWindow {
         header.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
         BorderPane.setAlignment(header, Pos.CENTER);
 
-        // Navigation controls
         Button nextWeekBtn = new Button("Next Week");
         Button prevWeekBtn = new Button("Previous Week");
 
         // Determine initial week start: prefer current week's Monday, but if the earliest timeslot
         // starts before the current week, show that earlier week so the timeslot is visible.
         LocalDate currentMonday = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-        // compute earliest date in mergedRanges (if provided) in a style that avoids complex chained calls
         LocalDate earliestDate = null;
         if (mergedRanges != null && !mergedRanges.isEmpty()) {
             earliestDate = mergedRanges.stream()
-                    .map(r -> r[0]) // start LocalDateTime
+                    .map(r -> r[0])
                     .filter(Objects::nonNull)
                     .map(LocalDateTime::toLocalDate)
                     .min(LocalDate::compareTo)
@@ -100,7 +172,6 @@ public class TimeslotsWindow {
                 ? earliestDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
                 : currentMonday;
 
-        // top row: header + spacer + navigation buttons
         HBox topRow = new HBox();
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
@@ -108,18 +179,12 @@ public class TimeslotsWindow {
         topRow.setSpacing(ROW_SPACING);
         topRow.getChildren().addAll(header, spacer, prevWeekBtn, nextWeekBtn);
 
-        // timeline width property shared by all timeline panes so they resize together
         DoubleProperty timelineWidth = new SimpleDoubleProperty(TIMELINE_WIDTH);
-
-        // hours header (kept same as existing) - now takes timelineWidth
         HBox hoursHeader = buildHoursHeader(timelineWidth);
-        // no padding here — buildHoursHeader now inserts a left placeholder matching the day label column
-        // so ticks align exactly with the timelines.
 
         // render initial week
         renderWeek(root, weekStartRef[0], mergedRanges, allTimeslots, topRow, hoursHeader, timelineWidth);
 
-        // button actions: adjust weekStart and re-render
         nextWeekBtn.setOnAction(e -> {
             if (weekStartRef[0] == null) {
                 weekStartRef[0] = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
@@ -139,16 +204,11 @@ public class TimeslotsWindow {
 
         Scene scene = new Scene(root);
         stage.setScene(scene);
-
-        // allow user to resize the window
         stage.setResizable(true);
-        // set sensible minimum size so layout remains usable
         stage.setMinWidth(600);
         stage.setMinHeight(400);
-
         stage.show();
 
-        // clear currentStage when user closes the window
         stage.setOnHidden(evt -> {
             if (currentStage == stage) {
                 currentStage = null;
@@ -156,12 +216,10 @@ public class TimeslotsWindow {
         });
 
         // Bind timelineWidth to scene width (minimum remains TIMELINE_WIDTH). Subtract left label area and padding.
-        NumberBinding widthBinding = Bindings.createDoubleBinding(() ->
+        timelineWidth.bind(Bindings.createDoubleBinding(() ->
             Math.max(scene.getWidth() - 120, TIMELINE_WIDTH),
-            scene.widthProperty());
-        timelineWidth.bind(widthBinding);
+            scene.widthProperty()));
 
-        // After showing, bind the ScrollPane viewport to the scene size so it grows/shrinks with the window.
         if (root.getCenter() instanceof ScrollPane) {
             ScrollPane sp = (ScrollPane) root.getCenter();
             sp.prefViewportWidthProperty().bind(scene.widthProperty().subtract(120));
@@ -264,7 +322,7 @@ public class TimeslotsWindow {
         return header;
     }
 
-    // New: buildDayRowForDate renders a row for a given LocalDate (shows label with date)
+    // buildDayRowForDate renders a row for a given LocalDate (shows label with date)
     private static HBox buildDayRowForDate(LocalDate date, List<LocalDateTime[]> ranges,
             List<Timeslot> allTimeslots, DoubleProperty timelineWidth) {
         HBox row = new HBox();

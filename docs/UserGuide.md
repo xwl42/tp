@@ -422,6 +422,11 @@ Examples:
 * `block-timeslot ts/4 Oct 2025, 10:00 te/4 Oct 2025, 13:00`
 * `block-timeslot ts/4 Oct 2025 10:00 te/4 Oct 2025 13:00`
 
+<box type="warning">
+Note on overlaps: the application prevents overlapping timeslots. If you try to add a timeslot that partially or fully overlaps an existing timeslot, the command will be rejected with an error ("A timeslot at the same time already exists."). This safeguard applies to both generic timeslots (block-timeslot) and consultations (add-consultation).
+</box>
+
+
 <br><br>
 ### Unblocking a timeslot : `unblock-timeslot`
 
@@ -450,9 +455,29 @@ Examples:
 </box>
 
 <br><br>
+### Adding a consultation: `add-consultation`
+
+Adds a consultation timeslot associated with a student's name. Consultation entries are shown specially (red background with student name label) in the Timetable view.
+
+Format: `add-consultation ts/START_DATETIME te/END_DATETIME n/STUDENT_NAME`
+
+* Accepted datetime formats are the same as for `block-timeslot` (ISO_LOCAL_DATE_TIME or human-friendly variants).
+* The student name is stored with the timeslot and will be visible in the UI and saved to the data file.
+* The Timetable window renders consultations with a distinct appearance (star icon and student name shown under the time label) for easier identification.
+
+Examples:
+* `add-consultation ts/2025-10-04T10:00:00 te/2025-10-04T11:00:00 n/John Doe`
+* `add-consultation ts/4 Oct 2025, 10:00 te/4 Oct 2025, 13:00`
+* `add-consultation ts/4 Oct 2025 10:00 te/4 Oct 2025 13:00`
+
+<box type="warning">
+Note on overlaps: the application prevents overlapping timeslots. If you try to add a timeslot that partially or fully overlaps an existing timeslot, the command will be rejected with an error ("A timeslot at the same time already exists."). This safeguard applies to both generic timeslots (block-timeslot) and consultations (add-consultation).
+</box>
+
+<br><br>
 ### Retrieving merged timeslot ranges: `get-timeslots`
 
-Displays merged timeslot ranges derived from stored timeslots. Overlapping or adjacent timeslots are merged and presented as continuous ranges for easier viewing.
+Displays all timeslot ranges derived from stored timeslots.
 
 Format: `get-timeslots`
 
@@ -467,6 +492,22 @@ Format: `get-timeslots`
 * The UI can also display these ranges in the Timetable window (when available). Note that the Timetable view only shows timeslots between 08:00 and 23:00.
   ![Timetable window](images/timetableWindow.png)
 
+
+<br><br>
+### Retrieving consultations only: `get-consultations`
+
+Displays all consultation timeslot ranges derived from stored consultation entries (ignores generic blocked timeslots).
+
+Format: `get-consultations`
+
+* Useful when you want a quick overview of scheduled consultations (student-facing times) without other blocked times.
+* Output is similar to `get-timeslots` but filtered to consultation entries only. The Timetable window can also display consultations specifically.
+
+Example output:
+```
+4 Oct 2025, 10:00 -> 4 Oct 2025, 11:00  (Student: John Doe)
+6 Oct 2025, 14:00 -> 6 Oct 2025, 14:30  (Student: Alice)
+```
 
 <br><br>
 ### Clearing all timeslots : `clear-timeslots`
@@ -572,6 +613,7 @@ lab sessions to maintain accurate records.
 Action     | Format, Examples
 -----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 **Add**    | `add i/STUDENTID n/NAME p/PHONE e/EMAIL g/GITHUB_USERNAME [t/TAG]…​` <br> e.g., `add i/A1234567X n/James Ho p/22224444 e/jamesho@example.com g/JamesHo t/friend`
+**Add consultation** | `add-consultation ts/START_DATETIME te/END_DATETIME n/STUDENT_NAME` <br> e.g., `add-consultation ts/2025-10-04T10:00:00 te/2025-10-04T11:00:00 n/John Doe`
 **Clear**  | `clear`
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
 **Edit**   | `edit INDEX [i/STUDENT ID] [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [g/GITHUB USERNAME] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
@@ -587,6 +629,7 @@ Action     | Format, Examples
 **Block timeslot** | `block-timeslot ts/START_DATETIME te/END_DATETIME` <br> e.g. `block-timeslot ts/2025-10-04T10:00:00 te/2025-10-04T13:00:00`
 **Unblock timeslot** | `unblock-timeslot ts/START_DATETIME te/END_DATETIME` <br> e.g. `block-timeslot ts/2025-10-04T10:00:00 te/2025-10-04T13:00:00`
 **Get timeslots** | `get-timeslots` 
+**Get consultations** | `get-consultations`
 **Clear timeslots** | `clear-timeslots` 
 **Exit**   | `exit`
 

@@ -25,7 +25,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -327,6 +326,29 @@ public class TimeslotsWindow {
                     block.setStroke(Color.web("#d0d7de"));
                     block.setStrokeWidth(1);
 
+                    // Determine if any consultation overlaps this rendered portion.
+                    boolean hasConsultationOverlap = false;
+                    if (allTimeslots != null) {
+                        for (Timeslot t2 : allTimeslots) {
+                            if (!(t2 instanceof ConsultationTimeslot)) {
+                                continue;
+                            }
+                            LocalDateTime cStart = t2.getStart();
+                            LocalDateTime cEnd = t2.getEnd();
+                            if (cStart == null || cEnd == null) {
+                                continue;
+                            }
+                            // compute the portion of the consultation that falls on this date window
+                            LocalDateTime cRenderStart = cStart.isAfter(dayWindowStart) ? cStart : dayWindowStart;
+                            LocalDateTime cRenderEnd = cEnd.isBefore(dayWindowEnd) ? cEnd : dayWindowEnd;
+                            // if the consultation visible portion overlaps this merged-range visible portion
+                            if (cRenderStart.isBefore(renderEnd) && cRenderEnd.isAfter(renderStart)) {
+                                hasConsultationOverlap = true;
+                                break;
+                            }
+                        }
+                    }
+
                     String labelText = String.format("%s - %s",
                             renderStart.format(DateTimeFormatter.ofPattern("HH:mm")),
                             renderEnd.format(DateTimeFormatter.ofPattern("HH:mm")));
@@ -338,9 +360,15 @@ public class TimeslotsWindow {
 
                     Tooltip tooltip = new Tooltip(start.format(FORMATTER) + "\n" + end.format(FORMATTER));
                     Tooltip.install(block, tooltip);
-                    Tooltip.install(bl, tooltip);
 
-                    timeline.getChildren().addAll(block, bl);
+                    // Only install tooltip and add the generic time label when there's no overlapping consultation.
+                    if (!hasConsultationOverlap) {
+                        Tooltip.install(bl, tooltip);
+                        timeline.getChildren().addAll(block, bl);
+                    } else {
+                        // add the block only (consultation will show its own labels)
+                        timeline.getChildren().add(block);
+                    }
                 }
             }
         }
@@ -376,33 +404,56 @@ public class TimeslotsWindow {
                     NumberBinding xBind = timelineWidth.multiply(xRatio);
                     NumberBinding wBind = timelineWidth.multiply(wRatio);
 
-                    // Render consultation as a single StackPane "pill" so the student name is centered.
-                    StackPane pillPane = new StackPane();
-                    pillPane.getStyleClass().add("consultation-pill");
-                    // inline style for now: distinct colour and rounded corners
-                    pillPane.setStyle("-fx-background-color: linear-gradient(#d96b90, #c1537a);"
-                            + "-fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: #9e3d6b; -fx-border-width: 0.8;");
+                    // Render consultation as a simple red block; student name shown below the time label.
+                    Rectangle consultBlock = new Rectangle();
+                    consultBlock.xProperty().bind(xBind);
+                    consultBlock.yProperty().set(8); // same vertical placement as other blocks
+                    consultBlock.widthProperty().bind(wBind);
+                    consultBlock.setHeight(ROW_HEIGHT - 16);
+                    consultBlock.setArcWidth(8);
+                    consultBlock.setArcHeight(8);
+                    // Always red for consultations
+                    consultBlock.setFill(Color.web("#d96565ff"));
+                    consultBlock.setStroke(Color.web("#c94b4b"));
+                    consultBlock.setStrokeWidth(1);
 
-                    // position and sizing bindings
-                    pillPane.layoutXProperty().bind(xBind);
-                    pillPane.layoutYProperty().set(ROW_HEIGHT - 28); // near bottom of row
-                    pillPane.prefHeightProperty().set(20);
-                    // width: use computed width unless it's smaller than 80px => ensure minimum width 80
-                    pillPane.prefWidthProperty().bind(Bindings.when(wBind.lessThan(80)).then(80.0).otherwise(wBind));
+                    // Small icon to the left of the time label
+                    Label icon = new Label("\u2605"); // ★
+                    icon.setStyle("-fx-text-fill: #FFD23F; -fx-font-size: 14px; -fx-font-weight: bold;");
+                    // Place star a small distance from the block start; align vertically with the time label.
+                    icon.layoutXProperty().bind(xBind.add(6));
+                    icon.setLayoutY(10);
 
-                    Label nameLabel = new Label(ct.getStudentName());
-                    nameLabel.setStyle("-fx-text-fill: white; -fx-font-size: 11px; -fx-font-weight: bold;");
-                    pillPane.getChildren().add(nameLabel); // centered by StackPane
+                    // Time label
+                    Label timeLbl = new Label(String.format("%s - %s",
+                            renderStart.format(DateTimeFormatter.ofPattern("HH:mm")),
+                            renderEnd.format(DateTimeFormatter.ofPattern("HH:mm"))));
+                    timeLbl.setStyle("-fx-text-fill: #000000ff; -fx-font-size: 11px;");
+                    timeLbl.layoutXProperty().bind(xBind.add(18)); // icon (8px) + small gap
+                    timeLbl.setLayoutY(12);
+
+                    // Student name label placed below the time label 
+                    Label studentLbl = new Label(ct.getStudentName());
+                    studentLbl.setStyle("-fx-text-fill: #000000ff; -fx-font-size: 11px;");
+                    studentLbl.layoutXProperty().bind(xBind.add(18));
+                    studentLbl.setLayoutY(12 + 18); // placed below time label
 
                     Tooltip tooltip = new Tooltip(String.format("Consultation: %s -> %s\nStudent: %s",
                             start.format(FORMATTER), end.format(FORMATTER), ct.getStudentName()));
-                    Tooltip.install(pillPane, tooltip);
+                    Tooltip.install(consultBlock, tooltip);
+                    Tooltip.install(timeLbl, tooltip);
+                    Tooltip.install(studentLbl, tooltip);
+                    Tooltip.install(icon, tooltip);
 
-                    // Ensure pill is on top by adding after other children
-                    timeline.getChildren().add(pillPane);
-                 }
-             }
-         }
+                    // Add consultation visuals: block, icon, then labels so labels render on top and icon sits left of time.
+                    timeline.getChildren().addAll(consultBlock, icon, timeLbl, studentLbl);
+                    // Ensure labels and icon are rendered above the block.
+                    icon.toFront();
+                    timeLbl.toFront();
+                    studentLbl.toFront();
+                }
+            }
+        }
 
         row.getChildren().addAll(dayLabel, timeline);
         return row;

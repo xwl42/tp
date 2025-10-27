@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.AddConsultationCommand;
+import seedu.address.logic.commands.GetConsultationsCommand;
 import seedu.address.logic.commands.BlockTimeslotCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.ClearTimeslotsCommand;
@@ -70,6 +71,9 @@ public class AddressBookParser {
 
         case AddConsultationCommand.COMMAND_WORD:
             return new AddConsultationCommandParser().parse(arguments);
+
+        case GetConsultationsCommand.COMMAND_WORD:
+            return new GetConsultationsCommand();
 
         case EditCommand.COMMAND_WORD:
             return new EditCommandParser().parse(arguments);

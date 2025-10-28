@@ -1,0 +1,41 @@
+@startuml
+!include style.puml
+skinparam arrowThickness 1.1
+skinparam arrowColor MODEL_COLOR
+skinparam classBackgroundColor MODEL_COLOR
+
+package Timeslots as TimeslotsPackage {
+
+package "Model (Timeslots Domain)" #F4F6F6 {
+  interface ReadOnlyTimeslots
+  Class Timeslots
+  Class Timeslot
+  Class ConsultationTimeslot
+}
+
+package "Persistence / Storage" #F4F6F6 {
+  interface TimeslotsStorage
+  Class JsonTimeslotsStorage
+  Class JsonSerializableTimeslots
+  Class JsonAdaptedTimeslot
+}
+
+package "Application" #F4F6F6 {
+  Class ModelManager
+  Class StorageManager
+}
+
+}
+
+' Relationship declarations (same arrow conventions as StorageClassDiagram)
+Timeslots .up.|> ReadOnlyTimeslots
+Timeslots *-- "0..*" Timeslot : contains
+ConsultationTimeslot -|> Timeslot
+JsonSerializableTimeslots ..> JsonAdaptedTimeslot
+JsonAdaptedTimeslot ..> Timeslot : converts to
+JsonTimeslotsStorage .up.|> TimeslotsStorage
+StorageManager -down-> JsonTimeslotsStorage : composes
+ModelManager --> Timeslots : manages
+ModelManager --> StorageManager : uses for persistence
+
+@enduml

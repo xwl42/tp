@@ -167,32 +167,41 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 This section describes some noteworthy details on how certain features are implemented.
 ## Timeslots features
 
-### Implementation
-The Timeslots feature is implemented as a set of commands that parse user input into command objects, interact with the Model to read or mutate the stored timeslots, and return a CommandResult.  The key behaviours
-are:
+### Implementation overview
+The Timeslots feature is implemented as a set of commands that parse user input into command objects, interact with the Model to read or mutate the stored timeslots, and return a CommandResult. Commands are implemented following the existing Command/Parser pattern used across the codebase (AddressBookParser -> XCommandParser -> XCommand). Some commands are read-only (e.g. get-timeslots) while others modify state (e.g. block-timeslot, unblock-timeslot, add-consultation, clear-timeslots).
 
-- Blocking (adding) a timeslot: parser constructs BlockTimeslotCommand which validates and then adds a Timeslot
-  to the model (persisting prior state for undo).
-- Adding a consultation: Similar to blocking a timeslots but it uses AddConsultationCommand and ConsultationTimeslot instead
+### Data model
+- Timeslot: stores start and end LocalDateTime; used for generic blocked timeslots.
+- ConsultationTimeslot: extends Timeslot and includes an associated student name; serialized to JSON with an explicit studentName field.
+- Timeslots are stored in a Timeslots collection inside ModelManager and are persisted by Storage (JsonTimeslotsStorage).
 
-Sequence Diagram for block timeslot command:
-<puml src="diagrams/BlockTimeslotSequenceDiagram.puml" width="574" />
+<puml src="diagrams/TimeslotsClassDiagram.puml" width="574" />
 
-- Unblocking (removing/trimming) a timeslot: parser constructs UnblockTimeslotCommand which computes overlapping
-  stored timeslots, then removes/trims/splits them as needed, persisting prior state.
+### Command flow
+Typical lifecycle for a timeslot command:
+1. User input → AddressBookParser creates the specific CommandParser.
+2. Parser validates prefixes/arguments and constructs a Command instance (e.g., BlockTimeslotCommand).
+3. LogicManager executes the Command (command.execute(model)).
+4. Command manipulates the Model (reads or mutates Timeslots) and returns a CommandResult.
+5. LogicManager persists changes (see Persistence & UI) and returns the CommandResult to the caller/UI.
 
-Sequence Diagram for unblock timeslot command:
-<puml src="diagrams/UnblockTimeslotSequenceDiagram.puml" width="574" />
+Sequence diagrams:
+- Block timeslot: <puml src="diagrams/BlockTimeslotSequenceDiagram.puml" width="574" />
+- Unblock timeslot: <puml src="diagrams/UnblockTimeslotSequenceDiagram.puml" width="574" />
+- Clear timeslots: <puml src="diagrams/ClearTimeslotsSequenceDiagram.puml" width="574" />
+- Get timeslots: <puml src="diagrams/GetTimeslotsSequenceDiagram.puml" width="574" />
 
-- Clearing all timeslots: ClearTimeslotsCommand clears the stored timeslots after persisting prior state.
-Sequence Diagram for clear timeslots command:
-<puml src="diagrams/ClearTimeslotSequenceDiagram.puml" width="574" />
+### Persistence & UI 
+- Persistence: LogicManager is responsible for writing persistent files. After a successful command execution, LogicManager saves the address book and, if available, timeslots via StorageManager.saveAddressBook(...) and StorageManager.saveTimeslots(...).
+- UI scheduling: Some commands (e.g., get-timeslots) produce a timeslot ranges payload inside CommandResult. When present, LogicManager schedules the UI update using Platform.runLater(() -> TimeslotsWindow.showTimetable(...)). This call:
+  - Is performed asynchronously on the JavaFX thread to avoid blocking command execution.
+  - Is guarded in LogicManager with a try/catch to ignore IllegalStateException in headless environments (unit tests).
+  - Is only invoked when CommandResult contains non-empty timeslot ranges.
 
-
-- Retrieving timeslots/consultations: read-only commands that fetch timeslots from the Model and format them for display; they do not modify state and therefore do not call save.
-Sequence Diagram for get timeslots command:
-<puml src="diagrams/GetTimeslotsSequenceDiagram.puml" width="574" />
-
+### Validation and error handling
+- Argument parsing: CommandParsers validate required prefixes (ts/ and te/) and perform flexible datetime parsing (ISO and human-friendly formats). Parsers throw ParseException with user-facing messages on invalid format.
+- Command execution: Commands validate business rules (e.g., no overlapping timeslots, consultations with duplicate student/time). On violation a CommandException is thrown with a clear message.
+- Persistence errors: LogicManager translates IO or permission errors (IOException, AccessDeniedException) from Storage into CommandException so callers can surface the error to users.
 
 ### Undo feature
 

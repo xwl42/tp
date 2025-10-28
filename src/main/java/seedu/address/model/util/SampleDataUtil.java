@@ -89,9 +89,9 @@ public class SampleDataUtil {
         LocalDate weekStart = LocalDate.now().with(DayOfWeek.MONDAY);
 
         // Names to rotate for consultations
-        String[] consultNames = new String[] {
-                "Alice", "Bob", "Charlie", "Daisy", "Eve", "Frank", "Grace", "Heidi"
-        };
+        String[] consultNames = new String[] { "Alice", "Bob", "Charlie", "Daisy",
+            "Eve", "Frank", "Grace", "Heidi" };
+
         int nameIndex = 0;
 
         // Generate 4 consecutive weeks with varied patterns so they are not identical

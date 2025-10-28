@@ -115,6 +115,9 @@ public class Person {
         return otherPerson != null
                 && otherPerson.getStudentId().equals(getStudentId());
     }
+    public String getNameAndID() {
+        return String.format("%s (%s) ", getName().toString(), getStudentId().toString());
+    }
 
     /**
      * Returns true if both persons have the same identity and data fields.

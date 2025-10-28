@@ -230,7 +230,7 @@ execute another modifying command before you can undo again. There is no redo fu
 
 The following sequence diagram shows how an undo operation goes through the `Logic` component:
 
-![UndoSequenceDiagram-Logic](images/UndoSequenceDiagram-Logic.png)
+![UndoSequenceDiagram-Logic](images/UndoSequenceDiagram_Logic.png)
 
 <box type="info" seamless>
 
@@ -241,7 +241,7 @@ the lifeline reaches the end of diagram.
 
 Similarly, how an undo operation goes through the `Model` component is shown below:
 
-![UndoSequenceDiagram-Model](images/UndoSequenceDiagram-Model.png)
+![UndoSequenceDiagram-Model](images/UndoSequenceDiagram_Model.png)
 
 **Step 5.** The user then decides to execute the command `list`. Commands that do not modify the address book,
 such as `list`, `find`, or `get-timeslots`, will not call `Model#saveAddressBook()`. Thus, the previous state remains `null`.

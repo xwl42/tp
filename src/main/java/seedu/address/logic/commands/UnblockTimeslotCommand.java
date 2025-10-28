@@ -94,7 +94,17 @@ public class UnblockTimeslotCommand extends Command {
 
         // apply removals and additions
         toRemove.forEach(model::removeTimeslot);
-        toAdd.forEach(model::addTimeslot);
+        for (Timeslot t : toAdd) {
+            try {
+                model.addTimeslot(t);
+            } catch (IllegalArgumentException e) {
+                // Convert runtime validation failure into CommandException with a helpful message.
+                String userMsg = e.getMessage() != null && e.getMessage().toLowerCase().contains("overlap")
+                        ? "Failed to apply unblock: resulting timeslot overlaps an existing timeslot."
+                        : "Failed to apply unblock: " + e.getMessage();
+                throw new CommandException(userMsg);
+            }
+        }
 
         return new CommandResult(String.format(MESSAGE_SUCCESS, toRemove.size(), toAdd.size()));
     }

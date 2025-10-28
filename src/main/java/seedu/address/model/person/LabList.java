@@ -7,6 +7,8 @@ public class LabList implements LabAttendanceList {
     public static final int NUMBER_OF_LABS = 10;
     public static final String MESSAGE_CONSTRAINTS =
             "Lab attendance list should be in the format 'L1: Y/N ... L10: Y/N'";
+    public static final String MESSAGE_INDEX_OUT_OF_BOUNDS =
+            "Lab index out of bounds! Lab index should be between 1 and %d";
     private static int currentWeek = 0;
     private final LabAttendance[] labs;
 
@@ -46,7 +48,7 @@ public class LabList implements LabAttendanceList {
     @Override
     public void markLabAsAttended(int index) {
         if (index < 0 || index >= NUMBER_OF_LABS) {
-            throw new IndexOutOfBoundsException("Index should be between 0 and " + (NUMBER_OF_LABS - 1));
+            throw new IndexOutOfBoundsException(String.format(MESSAGE_INDEX_OUT_OF_BOUNDS, NUMBER_OF_LABS));
         }
         labs[index].markAsAttended();
     }
@@ -54,7 +56,7 @@ public class LabList implements LabAttendanceList {
     @Override
     public void markLabAsAbsent(int index) {
         if (index < 0 || index >= NUMBER_OF_LABS) {
-            throw new IndexOutOfBoundsException("Index should be between 0 and " + (NUMBER_OF_LABS - 1));
+            throw new IndexOutOfBoundsException(String.format(MESSAGE_INDEX_OUT_OF_BOUNDS, NUMBER_OF_LABS));
         }
         labs[index].markAsAbsent();
     }

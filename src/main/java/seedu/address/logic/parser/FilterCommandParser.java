@@ -10,7 +10,9 @@ import java.util.function.Predicate;
 
 import javafx.util.Pair;
 import seedu.address.commons.core.index.Index;
+import seedu.address.commons.exceptions.InvalidIndexException;
 import seedu.address.logic.commands.FilterCommand;
+import seedu.address.logic.commands.MarkAttendanceCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Status;
@@ -60,7 +62,7 @@ public class FilterCommandParser implements Parser<FilterCommand> {
         Pair<String, Status> indexStatusPair = ParserUtil.parseExerciseIndexStatus(exerciseIndexStatus);
         Status exerciseStatus = indexStatusPair.getValue();
         String exerciseIndexString = indexStatusPair.getKey();
-        Index exerciseIndex = ParserUtil.parseZeroBasedIndex(exerciseIndexString);
+        Index exerciseIndex = ParserUtil.parseExerciseIndex(exerciseIndexString);
         return new ExerciseStatusMatchesPredicate(exerciseIndex, exerciseStatus);
     }
 
@@ -71,7 +73,12 @@ public class FilterCommandParser implements Parser<FilterCommand> {
         Pair<String, Boolean> labNumberStatusPair = ParserUtil.parseLabNumberStatus(labNumberStatus);
         Boolean labStatus = labNumberStatusPair.getValue();
         String labNumberString = labNumberStatusPair.getKey();
-        Index labNumber = ParserUtil.parseIndex(labNumberString);
+        Index labNumber;
+        try {
+            labNumber = ParserUtil.parseIndex(labNumberString);
+        } catch (InvalidIndexException iie) {
+            throw new ParseException(MarkAttendanceCommand.MESSAGE_FAILURE_INVALID_LAB_INDEX);
+        }
         return new LabStatusMatchesPredicate(labNumber, labStatus);
     }
 

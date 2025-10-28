@@ -7,6 +7,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_SCORE;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.exceptions.IllegalValueException;
+import seedu.address.commons.exceptions.InvalidIndexException;
 import seedu.address.logic.commands.GradeCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 /**
@@ -28,6 +29,13 @@ public class GradeCommandParser implements Parser<GradeCommand> {
         double score;
         try {
             studentIndex = ParserUtil.parseIndex(argumentMultimap.getPreamble());
+        } catch (InvalidIndexException iie) {
+            throw new ParseException("Student " + iie.getMessage());
+        } catch (ParseException pe) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                    GradeCommand.MESSAGE_USAGE), pe);
+        }
+        try {
             examName = argumentMultimap.getValue(PREFIX_EXAM_NAME).orElseThrow(()
                     -> new ParseException(
                             String.format(EMPTY_PREFIX_FORMAT, PREFIX_EXAM_NAME)
@@ -45,7 +53,7 @@ public class GradeCommandParser implements Parser<GradeCommand> {
                     GradeCommand.MESSAGE_USAGE), ive);
         } catch (NumberFormatException e) {
             throw new ParseException(
-                    String.format(INVALID_SCORE_INPUT_FORMAT, scoreString)
+                    String.format(INVALID_SCORE_INPUT_FORMAT, scoreString), e
             );
         }
         return new GradeCommand(studentIndex, examName, score);

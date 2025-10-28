@@ -1,14 +1,14 @@
 ---
   layout: default.md
-  title: "User Guide"
-  pageNav: 3
+    title: "User Guide"
+    pageNav: 3
 ---
 
 # LambdaLab User Guide
 
-LambdaLab is a desktop app for **CS2030S Teaching Assistants** to **manage student records**, optimised for use via a 
-Command Line Interface (CLI) while still having an intuitive Graphical User Interface (GUI). If you are a fast typer, 
-LambdaLab can help you track student information, lab attendance, and exercise submissions even faster than traditional 
+LambdaLab is a desktop app for **CS2030S Teaching Assistants** to **manage student records**, optimised for use via a
+Command Line Interface (CLI) while still having an intuitive Graphical User Interface (GUI). If you are a fast typer,
+LambdaLab can help you track student information, lab attendance, and exercise submissions even faster than traditional
 spreadsheets or GUI apps.
 
 ## About this guide
@@ -27,27 +27,27 @@ How to use this guide:
 ## Table of Contents
 
 1. [Quick start](#quick-start)
-2. [Features](#features)
-    1. [Viewing help: `help`](#viewing-help-help)
-    2. [Adding a student: `add`](#adding-a-student-add)
-    3. [Listing all students: `list`](#listing-all-students-list)
-    4. [Editing a student: `edit`](#editing-a-student-edit)
-    5. [Setting current week: `set-week`](#setting-current-week-set-week)
-    6. [Marking lab attendance: `marka`](#marking-lab-attendance-marka)
-    7. [Marking exercise status: `marke`](#marking-exercise-status-marke)
-    8. [Assigning assessment score: `grade`](#assigning-assessment-score-grade)
-    9. [Locating students by name: `find`](#locating-students-by-name-find)
-    10. [Sorting students: `sort`](#sorting-the-students-sort)
-    11. [Deleting a student: `delete`](#deleting-a-student-delete)
-    12. [Clearing all entries: `clear`](#clearing-all-entries-clear)
-    13. [Undoing the last command: `undo`](#undoing-the-last-command-undo)
-    14. [Blocking a timeslot: `block-timeslot`](#blocking-a-timeslot-block-timeslot)
-    15. [Unblocking a timeslot: `unblock-timeslot`](#unblocking-a-timeslot-unblock-timeslot)
-    16. [Retrieving merged timeslot ranges: `get-timeslots`](#retrieving-merged-timeslot-ranges-get-timeslots)
-    17. [Clearing all timeslots: `clear-timeslots`](#clearing-all-timeslots-clear-timeslots)
-    18. [Exiting the program: `exit`](#exiting-the-program-exit)
-    19. [Saving the data](#saving-the-data)
-    20. [Editing the data file](#editing-the-data-file)
+2. [Features](#features)<br>
+   (1) [Viewing help: `help`](#viewing-help-help)<br>
+   (2) [Listing all students: `list`](#listing-all-students-list)<br>
+   (3) [Adding a student: `add`](#adding-a-student-add)<br>
+   (4) [Editing a student: `edit`](#editing-a-student-edit)<br>
+   (5) [Marking lab attendance: `marka`](#marking-lab-attendance-marka)<br>
+   (6) [Marking exercise status: `marke`](#marking-exercise-status-marke)<br>
+   (7) [Setting current week: `set-week`](#setting-current-week-set-week)<br>
+   (8) [Assigning assessment score: `grade`](#assigning-assessment-score-grade)<br>
+   (9) [Locating students: `find`](#locating-students-by-name-find)<br>
+   (10) [Sorting students: `sort`](#sorting-the-students-sort)<br>
+   (11) [Deleting a student: `delete`](#deleting-a-student-delete)<br>
+   (12) [Clearing all entries: `clear`](#clearing-all-entries-clear)<br>
+   (13) [Undoing the last command: `undo`](#undoing-the-last-command-undo)<br>
+   (14) [Blocking a timeslot: `block-timeslot`](#blocking-a-timeslot-block-timeslot)<br>
+   (15) [Unblocking a timeslot: `unblock-timeslot`](#unblocking-a-timeslot-unblock-timeslot)<br>
+   (16) [Retrieving merged timeslot ranges: `get-timeslots`](#retrieving-merged-timeslot-ranges-get-timeslots)<br>
+   (17) [Clearing all timeslots: `clear-timeslots`](#clearing-all-timeslots-clear-timeslots)<br>
+   (18) [Exiting the program: `exit`](#exiting-the-program-exit)<br>
+   (19) [Saving the data](#saving-the-data)<br>
+   (20) [Editing the data file](#editing-the-data-file)<br>
 3. [FAQ](#faq)
 4. [Known issues](#known-issues)
 5. [Command summary](#command-summary)
@@ -78,38 +78,38 @@ How to use this guide:
 3. Copy the `.jar` file to the folder you want to use as the _home folder_ for your LambdaLab.
 
 4. Open a command terminal, `cd` into the folder you put the `.jar` file in, and use the `java -jar addressbook.jar` command to run the application.<br>
-   A GUI similar to the below should appear in a few seconds. Note that the app contains some sample data and the layout 
+   A GUI similar to the below should appear in a few seconds. Note that the app contains some sample data and the layout
    is explained in coloured boxes.<br>
    ![Ui](images/Ui.png)
 
 ### Quick CLI tutorial
 - Click the command input box (bottom of the UI), type a command exactly as shown (prefixes like `n/`, `i/`, `ts/` are required), then press Enter.
 - Typical response types:
-  - Success message with brief summary.
-  - List output (e.g., `list`, `find`) showing matching student entries.
-  - Error message starting with `Invalid command format!` or a validation message — read it carefully and retry.
+    - Success message with brief summary.
+    - List output (e.g., `list`, `find`) showing matching student entries.
+    - Error message starting with `Invalid command format!` or a validation message — read it carefully and retry.
 - Example sequence:
-  1. `add i/A1234567X n/John Doe p/98765432 e/john@example.com g/johndoe`
-     - Expected output: "New student added: John Doe"
-  2. `list`
-     - Expected output: numbered list including "John Doe".
-  3. `undo`
-     - Expected: restores previous state, shows "Undo successful" or a message indicating nothing to undo.
+    1. `add i/A1234567X n/John Doe p/98765432 e/john@example.com g/johndoe`
+        - Expected output: "New student added: John Doe"
+    2. `list`
+        - Expected output: numbered list including "John Doe".
+    3. `undo`
+        - Expected: restores previous state, shows "Undo successful" or a message indicating nothing to undo.
 
 5. Type your command in the command box and press Enter to execute it. <br>
    Some example commands you can try:
 
-   * `help` : Shows the help window that explains the command usage. 
+    * `help` : Shows the help window that explains the command usage.
 
-   * `list` : Lists all students' records.
+    * `list` : Lists all students' records.
 
-   * `add i/A1234567X n/John Doe p/98765432 e/johnd@example.com g/JohnDoe t/ModelStudent`: Adds a student named `John Doe` to the record.
+    * `add i/A1234567X n/John Doe p/98765432 e/johnd@example.com g/JohnDoe t/ModelStudent`: Adds a student named `John Doe` to the record.
 
-   * `delete 3` : Deletes the 3rd student's record shown in the current list.
+    * `delete 3` : Deletes the 3rd student's record shown in the current list.
 
-   * `clear` : Deletes all students' records.
+    * `clear` : Deletes all students' records.
 
-   * `exit` : Exits the app.
+    * `exit` : Exits the app.
 
 6. Refer to the [Features](#features) below for details of each command.
 
@@ -137,7 +137,7 @@ How to use this guide:
   e.g. if the command specifies `help 123`, it will be interpreted as `help`.
 
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
-</box>
+  </box>
 
 <br><br>
 ### Viewing help: `help`
@@ -150,6 +150,12 @@ Format: `help`
 
 ![help message](images/helpMessage2.png)
 
+<br><br>
+### Listing all students : `list`
+
+Shows a list of all students and their information.
+
+Format: `list`
 
 <br><br>
 ### Adding a student: `add`
@@ -171,16 +177,10 @@ Examples:
 
 <box type="warning">
 
-Duplicate Identifier (Student ID) will cause the below error:  
-  `This student already exists in LambdaLab`
+Duplicate identifier (Student ID) will cause the below error:  
+`This student already exists in LambdaLab`
 </box>
 
-<br><br>
-### Listing all students : `list`
-
-Shows a list of all students and their information.
-
-Format: `list`
 
 <br><br>
 ### Editing a student : `edit`
@@ -189,18 +189,18 @@ Edits an existing student in LambdaLab.
 
 Format: `edit INDEX [i/STUDENT ID] [n/NAME] [p/PHONE] [e/EMAIL] [g/GITHUB USERNAME] [t/TAG]…​`
 
-* Edits the student at the specified `INDEX`. 
-The index refers to the index number shown in the displayed student list. 
-The index **must be a positive integer** 1, 2, 3, …​
+* Edits the student at the specified `INDEX`.
+  The index refers to the index number shown in the displayed student list.
+  The index **must be a positive integer** 1, 2, 3, …​
 * You must provide at least 1 of the optional fields.
 * Existing values will be updated to the input values.
-  
+
 <box type="warning">
 
-**Caution:** 
-When editing tags, the existing tags of the student will be removed 
-i.e adding of tags is not cumulative.
+**Caution:**
 
+When editing tags, the existing tags of the student will be removed
+i.e adding of tags is not cumulative.
 You can remove all the student’s tags by typing `t/` without
 specifying any tags after it.
 
@@ -209,20 +209,6 @@ specifying any tags after it.
 Examples:
 *  `edit 1 p/91234567 e/johndoe@example.com` Edits the phone number and email address of the 1st student to be `91234567` and `johndoe@example.com` respectively.
 *  `edit 2 n/Betsy Crower t/` Edits the name of the 2nd student to be `Betsy Crower` and clears all existing tags.
-
-<br><br>
-### Setting current week: 'set-week'
-
-Sets the current week of the semester to the specified week.
-
-Format: `set-week WEEKNUMBER`
-
-* Marks the lab attendance of past labs as absent if not attended
-* Marks the overdue exercises as overdue if not complete (*to be implemented*)
-* `WEEKNUMBER` represents the NUS Semester week, and it **must be between 0 and 13 inclusive**
-
-Examples:
-* `set-week 5` will set current week at 5. Labs 1 to 2 will be marked as absent (red) if they have not been attended. 
 
 <br><br>
 ### Marking lab attendance: `marka`
@@ -261,6 +247,20 @@ Examples:
 * `marke 2 ei/7 s/d` marks exercise 7 of the 2nd student as done.
 
 <br><br>
+### Setting current week: `set-week`
+
+Sets the current week of the semester to the specified week.
+
+Format: `set-week WEEKNUMBER`
+
+* Marks the lab attendance of past labs as absent if not attended
+* Marks the overdue exercises as overdue if not complete (*to be implemented*)
+* `WEEKNUMBER` represents the NUS Semester week, and it **must be between 0 and 13 inclusive**
+
+Examples:
+* `set-week 5` will set current week at 5. Labs 1 to 2 will be marked as absent (red) if they have not been attended.
+
+<br><br>
 ### Assigning assessment score: `grade`
 
 Assigns the score for a specific assessment of an existing student in LambdaLab.
@@ -285,23 +285,71 @@ Examples:
 * `grade 2 en/midterm sc/55` sets the **midterm** score of the **2nd student** in the list to **55**.
 
 <br><br>
-### Locating students by name: `find`
+### Locating students: find
+Finds students whose specified fields contain any of the given keywords.
+Format: `find KEYWORD [MORE_KEYWORDS]... [i/] [n/] [p/] [e/] [g/] [t/]`
 
-Finds students whose names contain any of the given keywords.
+| Field Prefixes | Search by       |
+|----------------|-----------------|
+| `i/`           | student ID      |
+| `n/`           | name            |
+| `p/`           | phone number    |
+| `e/`           | email           |
+| `g/`           | Github username |
+| `t/`           | tags            |
 
-Format: `find KEYWORD [MORE_KEYWORDS]`
-
-* The search is case-insensitive. e.g `hans` will match `Hans`
-* The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
-* Only the name is searched.
-* Only full words will be matched e.g. `Han` will not match `Hans`
-* Students matching at least one keyword will be returned (i.e. `OR` search).
-  e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
+* If you do not specify any field prefixes after the keywords, all fields are searched by default.
+* The search is case-insensitive. e.g., hans will match Hans
+* The order of keywords does not matter. e.g., `Hans Bo will` match `Bo Hans`
+* Students matching at least one keyword will be returned (i.e., OR search). e.g., `Hans Bo` will return `Hans Gruber` and `Bo Yang`
 
 Examples:
-* `find John` returns `john` and `John Doe`
-* `find alex david` returns `Alex Yeoh`, `David Li`<br>
-  ![result for 'find alex david'](images/findAlexDavidResult.png)
+* `find John` - Returns students with `john` or `John` in any field (name, student ID, email, etc.)
+* `find alex david` - Returns students with `alex` or `david` in any field
+* `find alice bob n/` - Returns students with `alice` or `bob` in their name only
+* `find alice bob A1231234B i/ n/` - Returns students with `alice`, `bob`, or `A1231234B` in their student ID or name
+
+<box type="tip">
+Tip: Use multiple field prefixes to narrow your search to specific fields. For example, `find alice n/` searches for
+`alice` only in names, ignoring other fields.
+</box>
+
+<br><br>
+### Filtering students: `filter`
+
+Filters and shows only the students who satisfy the given lab attendance 
+and exercise completion statuses.
+
+Format: `filter [l/LABNUMBER s/ATTENDANCESTATUS] [ei/EXERCISEINDEX s/EXERCISESTATUS]`
+
+| Prefix           | Meaning                             | Accepted values                                                                              |
+|------------------|-------------------------------------|----------------------------------------------------------------------------------------------|
+| `l/`             | Lab number to check attendance for  | **1–10** (inclusive)                                                                         |
+| `ei/`            | Exercise number to check status for | **0–9** (inclusive)                                                                          |
+| `s/` after `l/`  | Attendance status for that lab      | `y` (attended), `n` (not attended yet), `a` (absent)(not implemented yet) — case-insensitive |
+| `s/` after `ei/` | Exercise status for that exercise   | `d` (done), `n` (not done), `o` (overdue) — case-insensitive                                 |
+
+
+* You **must** provide one `s/STATUS` immediately after each `l/LABNUMBER` or `ei/EXERCISEINDEX` you include.
+* If you use filter for both labs and exercises, they are combined with **AND**
+(a student must satisfy both conditions to be shown).
+* Status letters are case-insensitive (`Y`, `y`, `D`, `d`, etc.).
+
+Examples:
+* `filter l/7 s/y` — Shows students who attended Lab 7.
+* `filter l/3 s/n` — Shows students absent for Lab 3.
+* `filter ei/5 s/d` — Shows students who completed Exercise 5.
+* `filter ei/0 s/o` — Shows students with Exercise 0 overdue.
+* `filter l/2 s/y ei/4 s/d` — Shows students who attended Lab 2 and completed Exercise 4.
+
+
+<box type="tip">
+Use `list` to clear the filter and show everyone again.
+</box>
+
+
+
+Filters students by their lab attendance and exercise completions.
 
 <br><br>
 ### Sorting the students: `sort`
@@ -318,7 +366,8 @@ Format: `sort c/SORTCRITERION`
 
 <box type="tip">
 
-**Tip:** The criterion is case-insensitive!
+**Tip:** The criterion is case-insensitive. 
+Also note that `sort` cannot be undone through `undo`. However, you can always sort it base on another criterion again. 
 </box>
 
 Examples:
@@ -341,10 +390,10 @@ Examples:
 <box type="warning">
 
 Missing fields or a non‑positive index will cause the following error:  
-  `Invalid command format! 
-    delete: Deletes the student identified by the index number used in the displayed student list.
-    Parameters: INDEX (must be a positive integer)
-    Example: delete 1`
+`Invalid command format! 
+  delete: Deletes the student identified by the index number used in the displayed student list.
+  Parameters: INDEX (must be a positive integer)
+  Example: delete 1`
 </box>
 
 <br><br>
@@ -368,15 +417,15 @@ Reverses the most recent command that modified student data in LambdaLab.
 
 Format: `undo`
 
-* Only commands that change student data can be undone (e.g., `add`, `delete`, `edit`, `marka`, `marke`, `clear`).  
-* Commands that do not modify data cannot be undone (e.g., `help`, `list`, `find`, `exit`).  
+* Only commands that change student data can be undone (e.g., `add`, `delete`, `edit`, `marka`, `marke`, `clear`, `set-week`, `block-timeslot`, etc.).
+* Commands that do not modify data cannot be undone (e.g., `sort`, `help`, `list`, `find`, `get-timeslots`, `exit`, etc.).
 * `undo` only reverses the very last data‑modifying command. If there is no command to undo, an error message will be displayed.
 
 <box type="warning">
 
 **Caution:**
-This command only undoes the most recent data-modifying command. You cannot undo multiple data-modifying commands or skip 
-back to earlier changes. 
+This command only undoes the most recent data-modifying command. You cannot undo multiple data-modifying commands or skip
+back to earlier changes.
 </box>
 
 <box type="tip">
@@ -389,8 +438,8 @@ Examples:
 * `edit 1 n/Wrong Name` followed by `undo` reverts the student's name to its original value
 * `add n/John Doe p/12345678 e/john@u.nus.edu a/College Avenue` followed by `undo` removes the newly added student
 * `delete 2` followed by `list` followed by `undo` still restores the deleted student back to the list
-* `delete 1` followed by `edit 1 n/Wrong Name` followed by 2 consecutive `undo`s only reverts the student's name 
-to its original value, but cannot restore the deleted student back to the list
+* `delete 1` followed by `edit 1 n/Wrong Name` followed by 2 consecutive `undo`s only reverts the student's name
+  to its original value, but cannot restore the deleted student back to the list
 
 <br><br>
 ### Blocking a timeslot : `block-timeslot`
@@ -407,6 +456,11 @@ Examples:
 * `block-timeslot ts/2025-10-04T10:00:00 te/2025-10-04T13:00:00`
 * `block-timeslot ts/4 Oct 2025, 10:00 te/4 Oct 2025, 13:00`
 * `block-timeslot ts/4 Oct 2025 10:00 te/4 Oct 2025 13:00`
+
+<box type="warning">
+Note on overlaps: LambdaLab prevents overlapping timeslots. If you try to add a timeslot that partially or fully overlaps an existing timeslot, the command will be rejected with an error ("A timeslot at the same time already exists."). This safeguard applies to both generic timeslots (block-timeslot) and consultations (add-consultation).
+</box>
+
 
 <br><br>
 ### Unblocking a timeslot : `unblock-timeslot`
@@ -435,26 +489,65 @@ Examples:
 **Tip:** Timeslot doesn't have to match added timeslot exactly. It can be any timeslot shown in `get-timeslots` as well
 </box>
 
-<br><br>
+<br>
+
+### Adding a consultation: `add-consultation`
+
+Adds a consultation timeslot associated with a student's name. Consultation entries are shown specially (red background with student name label) in the Timetable view.
+
+Format: `add-consultation ts/START_DATETIME te/END_DATETIME n/STUDENT_NAME`
+
+* Accepted datetime formats are the same as for `block-timeslot` (ISO_LOCAL_DATE_TIME or human-friendly variants).
+* The student name is stored with the timeslot and will be visible in the UI and saved to the data file.
+* The Timetable window renders consultations with a distinct appearance (star icon and student name shown under the time label) for easier identification.
+
+Examples:
+* `add-consultation ts/2025-10-04T10:00:00 te/2025-10-04T11:00:00 n/John Doe`
+* `add-consultation ts/4 Oct 2025, 10:00 te/4 Oct 2025, 13:00`
+* `add-consultation ts/4 Oct 2025 10:00 te/4 Oct 2025 13:00`
+
+<box type="warning">
+Note on overlaps: the application prevents overlapping timeslots. If you try to add a timeslot that partially or fully overlaps an existing timeslot, the command will be rejected with an error ("A timeslot at the same time already exists."). This safeguard applies to both generic timeslots (block-timeslot) and consultations (add-consultation).
+</box>
+
+<br>
+
 ### Retrieving merged timeslot ranges: `get-timeslots`
 
-Displays merged timeslot ranges derived from stored timeslots. Overlapping or adjacent timeslots are merged and presented as continuous ranges for easier viewing.
+Displays all timeslot ranges derived from stored timeslots.
 
 Format: `get-timeslots`
 
 * Allows the user to keep track of unavailable times for easier scheduling of consultations with students.
 * The command shows merged ranges in a human-friendly date/time format.
-  * Example:
-    ```
-    4 Oct 2025, 10:00 -> 4 Oct 2025, 13:00
-    6 Oct 2025, 09:00 -> 6 Oct 2025, 11:30
-    ```
+    * Example:
+      ```
+      4 Oct 2025, 10:00 -> 4 Oct 2025, 13:00
+      6 Oct 2025, 09:00 -> 6 Oct 2025, 11:30
+      ```
 
 * The UI can also display these ranges in the Timetable window (when available). Note that the Timetable view only shows timeslots between 08:00 and 23:00.
   ![Timetable window](images/timetableWindow.png)
 
 
-<br><br>
+<br>
+
+### Retrieving consultations only: `get-consultations`
+
+Displays all consultation timeslot ranges derived from stored consultation entries (ignores generic blocked timeslots).
+
+Format: `get-consultations`
+
+* Useful when you want a quick overview of scheduled consultations (student-facing times) without other blocked times.
+* Output is similar to `get-timeslots` but filtered to consultation entries only. The Timetable window can also display consultations specifically.
+
+Example output:
+```
+4 Oct 2025, 10:00 -> 4 Oct 2025, 11:00  (Student: John Doe)
+6 Oct 2025, 14:00 -> 6 Oct 2025, 14:30  (Student: Alice)
+```
+
+<br>
 ### Clearing all timeslots : `clear-timeslots`
 
 Removes all stored timeslots (does not affect student records).
@@ -468,19 +561,22 @@ This will permanently remove all stored timeslots. There is no multi-step undo f
 use immediately after a mistaken action if your environment supports undo of other operations.
 </box>
 
-<br><br>
+<br>
+
 ### Exiting the program : `exit`
 
 Exits the program.
 
 Format: `exit`
 
-<br><br>
+<br>
+
 ### Saving the data
 
 LambdaLab data are saved in the hard disk automatically after any command that changes the data. There is no need to save manually.
 
-<br><br>
+<br>
+
 ### Editing the data file
 
 LambdaLab data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.
@@ -511,21 +607,17 @@ Furthermore, certain edits can cause the LambdaLab to behave in unexpected ways 
     - On your new computer, navigate to `[JAR file location]/data/`
     - Replace the empty `addressbook.json` file with your copied file
 4. Restart LambdaLab on your new computer to see all your student data
-<box type="tip">
-**Tip:** You can also backup your data regularly by copying the `addressbook.json` file to a secure location (e.g., cloud storage, USB drive).
-</box>
+   <box type="tip">
+   Tip: You can also backup your data regularly by copying the `addressbook.json` file to a secure location (e.g., cloud storage, USB drive).
+   </box>
 
 **Q**: Can I track multiple tutorial groups in LambdaLab?<br>
-**A**: Currently, LambdaLab is designed to manage one tutorial group per data file. If you teach multiple tutorial 
+**A**: Currently, LambdaLab is designed to manage one tutorial group per data file. If you teach multiple tutorial
 groups, you can maintain separate `.jar` files in different folders, each with its own data file.
 
-**Q**: What happens if I accidentally mark the wrong lab attendance or exercise status?<br>
-**A**: You can use the `undo` command immediately after the mistake to reverse it. Alternatively, use the `edit` 
-command or the respective `marka`/`marke` commands to update the information manually.
-
 **Q**: How do I keep track of which labs and exercises are current for CS2030S?<br>
-**A**: LambdaLab allows you to mark labs 1-10 and exercises 0-9. You'll need to refer to the CS2030S course schedule 
-to determine which labs and exercises are currently active. We recommend keeping a note of the current week's lab 
+**A**: LambdaLab allows you to mark labs 1-10 and exercises 0-9. You'll need to refer to the CS2030S course schedule
+to determine which labs and exercises are currently active. We recommend keeping a note of the current week's lab
 and exercise numbers.
 
 **Q**: Can I export my student data to a spreadsheet?<br>
@@ -537,15 +629,15 @@ this to a spreadsheet format using external tools, but direct export functionali
 `edit 1 g/newUserName e/newemail@u.nus.edu`
 
 **Q**: Why can't I undo the `list` or `find` command?<br>
-**A**: The `undo` command only works for commands that modify student data. Commands like `list`, `find`, and `help` 
+**A**: The `undo` command only works for commands that modify student data. Commands like `list`, `find`, and `help`
 only display information without changing any data, so there's nothing to undo.
 
 **Q**: How do I add GitHub usernames for students who don't have one yet?<br>
-**A**: All students must have a GitHub username when first added to LambdaLab. If a student doesn't have one yet, 
+**A**: All students must have a GitHub username when first added to LambdaLab. If a student doesn't have one yet,
 you can use a placeholder (e.g., "pending") and update it later using the `edit` command once they create their account.
 
 **Q**: Can I mark attendance for a lab session that hasn't happened yet?<br>
-**A**: Yes, LambdaLab allows you to mark any lab from 1-10. However, we recommend marking attendance only for completed 
+**A**: Yes, LambdaLab allows you to mark any lab from 1-10. However, we recommend marking attendance only for completed
 lab sessions to maintain accurate records.
 
 --------------------------------------------------------------------------------------------------------------------
@@ -562,6 +654,7 @@ lab sessions to maintain accurate records.
 Action     | Format, Examples
 -----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 **Add**    | `add i/STUDENTID n/NAME p/PHONE e/EMAIL g/GITHUB_USERNAME [t/TAG]…​` <br> e.g., `add i/A1234567X n/James Ho p/22224444 e/jamesho@example.com g/JamesHo t/friend`
+**Add consultation** | `add-consultation ts/START_DATETIME te/END_DATETIME n/STUDENT_NAME` <br> e.g., `add-consultation ts/2025-10-04T10:00:00 te/2025-10-04T11:00:00 n/John Doe`
 **Clear**  | `clear`
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
 **Edit**   | `edit INDEX [i/STUDENT ID] [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [g/GITHUB USERNAME] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
@@ -577,6 +670,7 @@ Action     | Format, Examples
 **Block timeslot** | `block-timeslot ts/START_DATETIME te/END_DATETIME` <br> e.g. `block-timeslot ts/2025-10-04T10:00:00 te/2025-10-04T13:00:00`
 **Unblock timeslot** | `unblock-timeslot ts/START_DATETIME te/END_DATETIME` <br> e.g. `block-timeslot ts/2025-10-04T10:00:00 te/2025-10-04T13:00:00`
 **Get timeslots** | `get-timeslots` 
+**Get consultations** | `get-consultations`
 **Clear timeslots** | `clear-timeslots` 
 **Exit**   | `exit`
 

@@ -39,6 +39,7 @@ public class GradeCommandParser implements Parser<GradeCommand> {
                     )
             );
             score = Double.parseDouble(scoreString);
+            score = Math.floor(score * 10) / 10.0; // Make it at most 1dp
         } catch (IllegalValueException ive) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                     GradeCommand.MESSAGE_USAGE), ive);

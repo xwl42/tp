@@ -165,6 +165,35 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 ## **Implementation**
 
 This section describes some noteworthy details on how certain features are implemented.
+## Timeslots features
+
+### Implementation
+The Timeslots feature is implemented as a set of commands that parse user input into command objects, interact with the Model to read or mutate the stored timeslots, and return a CommandResult.  The key behaviours
+are:
+
+- Blocking (adding) a timeslot: parser constructs BlockTimeslotCommand which validates and then adds a Timeslot
+  to the model (persisting prior state for undo).
+- Adding a consultation: Similar to blocking a timeslots but it uses AddConsultationCommand and ConsultationTimeslot instead
+
+Sequence Diagram for block timeslot command:
+<puml src="diagrams/BlockTimeslotSequenceDiagram.puml" width="574" />
+
+- Unblocking (removing/trimming) a timeslot: parser constructs UnblockTimeslotCommand which computes overlapping
+  stored timeslots, then removes/trims/splits them as needed, persisting prior state.
+
+Sequence Diagram for unblock timeslot command:
+<puml src="diagrams/UnblockTimeslotSequenceDiagram.puml" width="574" />
+
+- Clearing all timeslots: ClearTimeslotsCommand clears the stored timeslots after persisting prior state.
+Sequence Diagram for clear timeslots command:
+<puml src="diagrams/ClearTimeslotSequenceDiagram.puml" width="574" />
+
+
+- Retrieving timeslots/consultations: read-only commands that fetch timeslots from the Model and format them for display; they do not modify state and therefore do not call save.
+Sequence Diagram for get timeslots command:
+<puml src="diagrams/GetTimeslotsSequenceDiagram.puml" width="574" />
+
+
 ### Undo feature
 
 #### Implementation

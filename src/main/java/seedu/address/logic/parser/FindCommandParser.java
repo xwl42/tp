@@ -1,6 +1,5 @@
 package seedu.address.logic.parser;
 
-import static java.lang.Boolean.TRUE;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_GITHUB_USERNAME;
@@ -33,7 +32,7 @@ public class FindCommandParser implements Parser<FindCommand> {
 
     private static final String MESSAGE_FIELD_NOT_EMPTY = "Field selectors must be empty (e.g., 'n/' not 'n/alice').";
     private static final Prefix[] FIND_PREFIXES = { PREFIX_STUDENTID, PREFIX_NAME,
-            PREFIX_EMAIL, PREFIX_GITHUB_USERNAME, PREFIX_PHONE, PREFIX_TAG };
+        PREFIX_EMAIL, PREFIX_GITHUB_USERNAME, PREFIX_PHONE, PREFIX_TAG };
 
     /**
      * Parses the given {@code String} of arguments in the context of the FindCommand

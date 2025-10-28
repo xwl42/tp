@@ -115,10 +115,10 @@ public class ParserUtil {
 
     /**
      * Parses {@code oneBasedIndex} into an {@code Index} and returns it. Leading and trailing whitespaces will be
-     * trimmed.
-     * @throws ParseException if the specified index is invalid (not non-zero unsigned integer).
+     * trimmed. The index must be between 1 and the maximum number of labs (inclusive).
+     * @throws InvalidIndexException if the specified index is invalid (not a non-zero unsigned integer or exceeds the maximum lab number)
      */
-    public static Index parseLabIndex(String oneBasedIndex) throws ParseException {
+    public static Index parseLabIndex(String oneBasedIndex) throws InvalidIndexException {
         String trimmedIndex = oneBasedIndex.trim();
         if (!StringUtil.isNonZeroUnsignedInteger(trimmedIndex)) {
             throw new InvalidIndexException(MESSAGE_INVALID_LAB_INDEX);

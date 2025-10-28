@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.logic.commands.CommandTestUtil.showPersonAtIndex;
+import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.core.index.MultiIndex;
 import seedu.address.logic.Messages;
+import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
@@ -59,17 +61,19 @@ public class DeleteCommandTest {
     @Test
     public void execute_validIndexFilteredList_success() {
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
-
         Person personToDelete = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        DeleteCommand deleteCommand = new DeleteCommand(new MultiIndex(INDEX_FIRST_PERSON));
-
-        String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS,
+        DeleteCommand deleteCommand =
+                new DeleteCommand(new MultiIndex(INDEX_FIRST_PERSON));
+        String expectedMessage = String.format(
+                DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS,
                 personToDelete.getNameAndID());
-
-        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        Model expectedModel = new ModelManager(
+                new AddressBook(model.getAddressBook()),
+                new UserPrefs(model.getUserPrefs())
+        );
+        expectedModel.saveAddressBook();
         expectedModel.deletePerson(personToDelete);
-        showNoPerson(expectedModel);
-
+        expectedModel.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
         assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
     }
 

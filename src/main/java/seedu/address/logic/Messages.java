@@ -18,6 +18,9 @@ public class Messages {
     public static final String MESSAGE_PERSONS_LISTED_OVERVIEW = "%1$d persons listed!";
     public static final String MESSAGE_DUPLICATE_FIELDS =
                 "Multiple values specified for the following single-valued field(s): ";
+    public static final String MESSAGE_DUPLICATE_FIND_FIELDS =
+            "Field used more than once, each field is a flag and must be unique. Repeated: ";
+
 
     /**
      * Returns an error message indicating the duplicate prefixes.
@@ -29,6 +32,18 @@ public class Messages {
                 Stream.of(duplicatePrefixes).map(Prefix::toString).collect(Collectors.toSet());
 
         return MESSAGE_DUPLICATE_FIELDS + String.join(" ", duplicateFields);
+    }
+
+    /**
+     * Returns an error message indicating the duplicate selectors for find command
+     */
+    public static String getErrorMessageForDuplicateFindSelectors(Prefix... duplicatePrefixes) {
+        assert duplicatePrefixes.length > 0;
+
+        Set<String> duplicateFields =
+                Stream.of(duplicatePrefixes).map(Prefix::toString).collect(Collectors.toSet());
+
+        return MESSAGE_DUPLICATE_FIND_FIELDS + String.join(" ", duplicateFields);
     }
 
     /**

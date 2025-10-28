@@ -14,11 +14,14 @@ box Model MODEL_COLOR_T1
 participant "m:Model" as Model MODEL_COLOR
 end box
 
+box Storage STORAGE_COLOR_T1
+participant "storage:Storage" as Storage STORAGE_COLOR
+end box
+
 box UI UI_COLOR_T1
 participant "TimeslotsWindow" as TimeslotsWindow UI_COLOR
 end box
 
-participant "Storage" as Storage
 participant "Platform" as Platform
 
 [-> LogicManager : execute("get-timeslots")
@@ -66,13 +69,13 @@ deactivate GetTimeslotCommand
 ' --- Persist state (matches LogicManager implementation) ---
 LogicManager -> Storage : saveAddressBook(model.getAddressBook())
 activate Storage
-Storage --> LogicManager : ok / throws AccessDeniedException|IOException
+Storage --> LogicManager
 deactivate Storage
 
 alt model instanceof ModelManager
     LogicManager -> Storage : saveTimeslots(((ModelManager)model).getTimeslots())
     activate Storage
-    Storage --> LogicManager : ok / throws AccessDeniedException|IOException
+    Storage --> LogicManager
     deactivate Storage
 end
 

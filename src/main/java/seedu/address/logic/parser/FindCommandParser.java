@@ -114,8 +114,8 @@ public class FindCommandParser implements Parser<FindCommand> {
      * Binds a {@link Prefix} (e.g., {@code n/}, {@code e/}) to a predicate “builder” for a {@link Person}
      */
     public static class PrefixPredicateContainer {
-        private Prefix prefix;
-        private PredicateWrapper predicateWrapper;
+        private final Prefix prefix;
+        private final PredicateWrapper predicateWrapper;
 
         /**
          * Creates a {@code PrefixPredicate}.

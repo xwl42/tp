@@ -64,8 +64,15 @@ public class Messages {
                 .append(person.getGithubUsername())
                 .append("; Lab Attendance List: ")
                 .append(person.getLabAttendanceList())
-                .append("; Tags: ");
-        person.getTags().forEach(builder::append);
+                .append("; Tags:");
+        if (person.getTags().isEmpty()) {
+            builder.append(" ,");
+        } else {
+            builder.append(" ");
+            builder.append(person.getTags().stream()
+                    .map(Object::toString)
+                    .collect(Collectors.joining(", ")));
+        }
         return builder.toString();
     }
 

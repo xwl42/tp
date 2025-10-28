@@ -5,7 +5,7 @@ import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EXAM_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SCORE;
 
-import seedu.address.commons.core.index.Index;
+import seedu.address.commons.core.index.MultiIndex;
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.commons.exceptions.InvalidIndexException;
 import seedu.address.logic.commands.GradeCommand;
@@ -23,12 +23,12 @@ public class GradeCommandParser implements Parser<GradeCommand> {
         requireNonNull(userInput);
         ArgumentMultimap argumentMultimap =
                 ArgumentTokenizer.tokenize(userInput, PREFIX_EXAM_NAME, PREFIX_SCORE);
-        Index studentIndex;
+        MultiIndex studentIndex;
         String examName;
         String scoreString = "";
         double score;
         try {
-            studentIndex = ParserUtil.parseIndex(argumentMultimap.getPreamble());
+            studentIndex = ParserUtil.parseMultiIndex(argumentMultimap.getPreamble());
         } catch (InvalidIndexException iie) {
             throw new ParseException("Student " + iie.getMessage());
         } catch (ParseException pe) {

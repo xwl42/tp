@@ -1,14 +1,13 @@
 package seedu.address.ui;
 
 import java.time.DayOfWeek;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.NumberBinding;
@@ -72,19 +71,9 @@ public class TimeslotsWindow {
             if (scene != null && scene.getRoot() instanceof BorderPane) {
                 BorderPane root = (BorderPane) scene.getRoot();
 
-                // Determine initial week start using earliest timeslot start if available,
-                // otherwise current week's Monday.
+                // Always start on the current week's Monday by default.
                 LocalDate[] weekStartRef = new LocalDate[1];
-                weekStartRef[0] = Optional.ofNullable(mergedRanges)
-                        .filter(l -> !l.isEmpty())
-                        .flatMap(l -> l.stream()
-                                .map(r -> r[0])
-                                .filter(Objects::nonNull)
-                                .map(LocalDateTime::toLocalDate)
-                                .min(LocalDate::compareTo)
-                        )
-                        .orElse(LocalDate.now())
-                        .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+                weekStartRef[0] = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
 
                 // top row: header + spacer + navigation buttons
                 Label header = new Label("Timetable");
@@ -154,22 +143,9 @@ public class TimeslotsWindow {
         Button nextWeekBtn = new Button("Next Week");
         Button prevWeekBtn = new Button("Previous Week");
 
-        // Determine initial week start: prefer current week's Monday, but if the earliest timeslot
-        // starts before the current week, show that earlier week so the timeslot is visible.
-        LocalDate currentMonday = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-        LocalDate earliestDate = null;
-        if (mergedRanges != null && !mergedRanges.isEmpty()) {
-            earliestDate = mergedRanges.stream()
-                    .map(r -> r[0])
-                    .filter(Objects::nonNull)
-                    .map(LocalDateTime::toLocalDate)
-                    .min(LocalDate::compareTo)
-                    .orElse(null);
-        }
+        // Always start on the current week's Monday by default.
         final LocalDate[] weekStartRef = new LocalDate[1];
-        weekStartRef[0] = (earliestDate != null && earliestDate.isBefore(currentMonday))
-                ? earliestDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
-                : currentMonday;
+        weekStartRef[0] = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
 
         HBox topRow = new HBox();
         Region spacer = new Region();
@@ -377,9 +353,9 @@ public class TimeslotsWindow {
                 LocalDateTime renderEnd = end.isBefore(dayWindowEnd) ? end : dayWindowEnd;
 
                 if (renderStart.isBefore(renderEnd)) {
-                    double minutesFromStart = (renderStart.getHour() * 60 + renderStart.getMinute()) - START_HOUR * 60;
-                    double durationMinutes = (renderEnd.getHour() * 60 + renderEnd.getMinute())
-                            - (renderStart.getHour() * 60 + renderStart.getMinute());
+                    // Use Duration to compute minutes to correctly handle spans across midnight
+                    long minutesFromStart = Duration.between(dayWindowStart, renderStart).toMinutes();
+                    long durationMinutes = Duration.between(renderStart, renderEnd).toMinutes();
 
                     // Compute ratios relative to base timeline so they scale with timelineWidth
                     double xRatio = (minutesFromStart * PIXELS_PER_MINUTE) / TIMELINE_WIDTH;
@@ -479,9 +455,9 @@ public class TimeslotsWindow {
                 LocalDateTime renderEnd = end.isBefore(dayWindowEnd) ? end : dayWindowEnd;
 
                 if (renderStart.isBefore(renderEnd)) {
-                    double minutesFromStart = (renderStart.getHour() * 60 + renderStart.getMinute()) - START_HOUR * 60;
-                    double durationMinutes = (renderEnd.getHour() * 60 + renderEnd.getMinute())
-                            - (renderStart.getHour() * 60 + renderStart.getMinute());
+                    // Use Duration to compute minutes to correctly handle spans across midnight
+                    long minutesFromStart = Duration.between(dayWindowStart, renderStart).toMinutes();
+                    long durationMinutes = Duration.between(renderStart, renderEnd).toMinutes();
 
                     double xRatio = (minutesFromStart * PIXELS_PER_MINUTE) / TIMELINE_WIDTH;
                     double wRatio = (durationMinutes * PIXELS_PER_MINUTE) / TIMELINE_WIDTH;

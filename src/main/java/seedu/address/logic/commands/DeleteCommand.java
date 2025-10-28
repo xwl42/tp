@@ -1,12 +1,12 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 import seedu.address.commons.core.index.MultiIndex;
-import seedu.address.logic.Messages;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
 
@@ -22,7 +22,7 @@ public class DeleteCommand extends MultiIndexCommand {
             + "Parameters: INDEX... (must be positive integers)\n"
             + "Example: " + COMMAND_WORD + " 1:5";
 
-    public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Student(s):\n%1$s";
+    public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Student(s) : %1$s";
 
     /**
      * Constructs a {@code DeleteCommand} with multiple indices.
@@ -35,13 +35,14 @@ public class DeleteCommand extends MultiIndexCommand {
     protected Person applyActionToPerson(Model model, Person personToDelete) {
         requireNonNull(model);
         model.deletePerson(personToDelete);
+        model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
         return personToDelete;
     }
 
     @Override
     protected CommandResult buildResult(List<Person> deletedPersons) {
         String deletedList = deletedPersons.stream()
-                .map(Messages::format)
+                .map(Person::getNameAndID)
                 .collect(Collectors.joining(","));
         return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS, deletedList));
     }
@@ -55,6 +56,6 @@ public class DeleteCommand extends MultiIndexCommand {
 
     @Override
     public String toString() {
-        return "DeleteCommand{" + "multiIndex=" + multiIndex + "}";
+        return DeleteCommand.class.getCanonicalName() + "{multiIndex=" + multiIndex + "}";
     }
 }

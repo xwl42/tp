@@ -49,7 +49,7 @@ public class EditCommand extends MultiIndexCommand {
             + "[" + PREFIX_EMAIL + "EMAIL] "
             + "[" + PREFIX_GITHUB_USERNAME + "GITHUB_USERNAME] "
             + "[" + PREFIX_TAG + "TAG]...\n"
-            + "Example: " + COMMAND_WORD + " 1 2 "
+            + "Example: " + COMMAND_WORD + " 1:2 "
             + PREFIX_PHONE + "91234567 "
             + PREFIX_EMAIL + "johndoe@example.com";
 

@@ -29,7 +29,7 @@ public class GradeCommand extends MultiIndexCommand {
             + "Parameters: INDEX... (must be positive integers) "
             + PREFIX_EXAM_NAME + "EXAM_NAME "
             + PREFIX_SCORE + "SCORE\n"
-            + "Example: " + COMMAND_WORD + " 1 2 "
+            + "Example: " + COMMAND_WORD + " 1:2 "
             + PREFIX_EXAM_NAME + "midterm "
             + PREFIX_SCORE + "30.5";
 

@@ -79,8 +79,6 @@ public class MarkExerciseCommand extends MultiIndexCommand {
         ExerciseTracker updatedExerciseTracker = personToEdit.getExerciseTracker().copy();
         try {
             updatedExerciseTracker.markExercise(exerciseIndex, isDone);
-        } catch (IndexOutOfBoundsException e) {
-            throw new CommandException(String.format(MESSAGE_INDEX_OUT_OF_BOUNDS, HIGHEST_INDEX));
         } catch (IllegalStateException e) {
             alreadyMarkedPersons.add(personToEdit);
             return null;

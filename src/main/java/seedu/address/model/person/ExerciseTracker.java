@@ -17,7 +17,6 @@ public class ExerciseTracker implements Comparable<ExerciseTracker> {
     public static final String MESSAGE_CONSTRAINTS = "Exercise tracker takes in statuses";
     public static final int NUMBER_OF_EXERCISES = 10;
     private static final Logger logger = LogsCenter.getLogger(MainApp.class);
-    private static final String INDEX_OUT_OF_FOUNDS_FORMAT = "Index should be between 0 and %s";
     private static int currentWeekNumber;
     private ArrayList<Exercise> exercises = new ArrayList<>();
 
@@ -89,12 +88,8 @@ public class ExerciseTracker implements Comparable<ExerciseTracker> {
      */
     public void markExercise(Index index, boolean isDone) {
         logger.info(String.format("Marking ex %d with %s", index.getOneBased(), isDone));
-        if (index.getZeroBased() < 0 || index.getZeroBased() >= NUMBER_OF_EXERCISES) {
-            throw new IndexOutOfBoundsException(
-                    String.format(INDEX_OUT_OF_FOUNDS_FORMAT,
-                            NUMBER_OF_EXERCISES - 1)
-            );
-        }
+        assert index.getZeroBased() >= 0 : "Invalid Index";
+        assert index.getZeroBased() < NUMBER_OF_EXERCISES : "Invalid Index";
         exercises.get(index.getZeroBased()).markStatus(isDone);
     }
 

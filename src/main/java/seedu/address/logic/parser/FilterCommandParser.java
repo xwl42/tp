@@ -10,9 +10,7 @@ import java.util.function.Predicate;
 
 import javafx.util.Pair;
 import seedu.address.commons.core.index.Index;
-import seedu.address.commons.exceptions.InvalidIndexException;
 import seedu.address.logic.commands.FilterCommand;
-import seedu.address.logic.commands.MarkAttendanceCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Status;

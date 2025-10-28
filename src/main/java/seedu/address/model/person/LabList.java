@@ -47,9 +47,6 @@ public class LabList implements LabAttendanceList {
     public void markLabAsAttended(int index) {
         assert index >= 0 : "Index must be greater than zero (one based)";
         assert index < NUMBER_OF_LABS : "Index must be smaller than " + NUMBER_OF_LABS + " (one based)";
-        if (index < 0 || index >= NUMBER_OF_LABS) {
-
-        }
         labs[index].markAsAttended();
     }
 

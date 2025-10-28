@@ -1,9 +1,6 @@
 package seedu.address.logic.parser;
 
-import static java.lang.Boolean.FALSE;
-import static java.lang.Boolean.TRUE;
 import static java.util.Objects.requireNonNull;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_LAB_NUMBER;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_STATUS;
 
 import java.util.ArrayList;
@@ -18,8 +15,6 @@ import seedu.address.commons.core.index.Index;
 import seedu.address.commons.core.index.MultiIndex;
 import seedu.address.commons.exceptions.InvalidIndexException;
 import seedu.address.commons.util.StringUtil;
-import seedu.address.logic.commands.FilterCommand;
-import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Examination;
@@ -50,7 +45,8 @@ public class ParserUtil {
     public static final String MESSAGE_INVALID_INDEX = "index must be a number greater than 0";
     public static final String MESSAGE_INVALID_STATUS = "Status input must be Y or N";
     private static final String MESSAGE_INVALID_EXERCISE_INDEX =
-            "Exercise index is invalid! It must be between 0 and " + (ExerciseTracker.NUMBER_OF_EXERCISES - 1) + " (inclusive).";
+            "Exercise index is invalid! It must be between 0 and "
+                    + (ExerciseTracker.NUMBER_OF_EXERCISES - 1) + " (inclusive).";
     private static final String MESSAGE_INVALID_LAB_INDEX =
             "Lab index is invalid! It must be between 1 and " + LabList.NUMBER_OF_LABS + " (inclusive).";
     private static final String MESSAGE_INVALID_FILTER_EXERCISE_STATUS =
@@ -117,7 +113,7 @@ public class ParserUtil {
     /**
      * Parses {@code oneBasedIndex} into an {@code Index} and returns it. Leading and trailing whitespaces will be
      * trimmed. The index must be between 1 and the maximum number of labs (inclusive).
-     * @throws InvalidIndexException if the specified index is invalid (not a non-zero unsigned integer or exceeds the maximum lab number)
+     * @throws InvalidIndexException if the specified index is invalid
      */
     public static Index parseLabIndex(String oneBasedIndex) throws InvalidIndexException {
         String trimmedIndex = oneBasedIndex.trim();
@@ -135,7 +131,7 @@ public class ParserUtil {
     /**
      * Parses {@code zeroBasedIndex} into an {@code Index} and returns it. Leading and trailing whitespaces will be
      * trimmed. The index must be between 1 and the maximum number of labs - 1 (inclusive).
-     * @throws InvalidIndexException if the specified index is invalid (negative number or exceeds the maximum exercise number)
+     * @throws InvalidIndexException if the specified index is invalid
      */
     public static Index parseExerciseIndex(String zeroBasedIndex) throws InvalidIndexException {
         String trimmedIndex = zeroBasedIndex.trim();

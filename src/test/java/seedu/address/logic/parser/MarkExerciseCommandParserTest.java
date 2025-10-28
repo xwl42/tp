@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EXERCISE_INDEX;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_STATUS;
+import static seedu.address.logic.parser.ParserUtil.MESSAGE_INVALID_STATUS;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -82,7 +83,7 @@ public class MarkExerciseCommandParserTest {
         String input = "1 " + PREFIX_EXERCISE_INDEX + "0 " + PREFIX_STATUS + "INVALIDSTATUS";
         ParseException e = assertThrows(ParseException.class, () -> parser.parse(input));
         assertEquals(
-                "Status must be y or n",
+                MESSAGE_INVALID_STATUS,
                 e.getMessage()
         );
     }

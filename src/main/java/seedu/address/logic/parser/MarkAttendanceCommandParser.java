@@ -7,6 +7,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_STATUS;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.core.index.MultiIndex;
+import seedu.address.commons.exceptions.InvalidIndexException;
 import seedu.address.logic.commands.MarkAttendanceCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 
@@ -44,7 +45,9 @@ public class MarkAttendanceCommandParser implements Parser<MarkAttendanceCommand
         try {
             labNumber = ParserUtil.parseIndex(argMultimap.getValue(PREFIX_LAB_NUMBER).orElse(""));
         } catch (ParseException e) {
-            throw new ParseException(MarkAttendanceCommand.MESSAGE_FAILURE_INVALID_LAB_INDEX);
+            throw new ParseException(
+                    MarkAttendanceCommand.MESSAGE_FAILURE_INVALID_LAB_INDEX
+            );
         }
 
         // The ParseException from this would go to AddressBook Parser
@@ -53,8 +56,8 @@ public class MarkAttendanceCommandParser implements Parser<MarkAttendanceCommand
         // Parse multi-index (it will throw uncaught parse exception if index is wrong);
         try {
             multiIndex = ParserUtil.parseMultiIndex(argMultimap.getPreamble());
-        } catch (IllegalArgumentException e) {
-            throw new ParseException(e.getMessage());
+        } catch (InvalidIndexException iie) {
+            throw new ParseException("Student " + iie.getMessage());
         }
 
         return new MarkAttendanceCommand(multiIndex, labNumber, isAttended);

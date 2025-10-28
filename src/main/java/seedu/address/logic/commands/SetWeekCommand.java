@@ -56,7 +56,6 @@ public class SetWeekCommand extends Command {
             LabList updatedLabList = oldLabList.copy();
             ExerciseTracker exerciseTracker = person.getExerciseTracker();
             ExerciseTracker updatedExerciseTracker = exerciseTracker.copy();
-            System.out.println(updatedExerciseTracker.toString());
             Person updatedPerson = new Person(
                     person.getStudentId(),
                     person.getName(),

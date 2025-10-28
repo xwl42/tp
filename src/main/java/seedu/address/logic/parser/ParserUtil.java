@@ -15,6 +15,7 @@ import java.util.Set;
 import javafx.util.Pair;
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.core.index.MultiIndex;
+import seedu.address.commons.exceptions.InvalidIndexException;
 import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.commands.FilterCommand;
 import seedu.address.logic.commands.FindCommand;
@@ -45,8 +46,10 @@ import seedu.address.model.tag.Tag;
  */
 public class ParserUtil {
 
-    public static final String MESSAGE_INVALID_INDEX = "Index is not a non-zero unsigned integer.";
-    private static final String MESSAGE_INVALID_STATUS = "Status must be y or n";
+    public static final String MESSAGE_INVALID_INDEX = "index must be a number greater than 0";
+    public static final String MESSAGE_INVALID_STATUS = "Status input must be Y or N";
+    private static final String MESSAGE_INVALID_EXERCISE_INDEX =
+            "Exercise index must be a number greater than or equal to 0";
     private static final String MESSAGE_INVALID_FILTER_EXERCISE_STATUS =
             "Exercise status must be Y, N or O";
     private static final String MESSAGE_INVALID_FILTER_LAB_STATUS =
@@ -55,8 +58,9 @@ public class ParserUtil {
             "Exercise index must always be followed by exercise status";
     private static final String MESSAGE_MISSING_LAB_STATUS =
             "Lab index must always be followed by lab status";
-
-
+    private static final String MESSAGE_EMPTY_INPUT = "Input string is empty!";
+    private static final String MESSAGE_INVALID_MULTIINDEX_BOUNDS =
+            "%s is invalid! Lower bound cannot be greater than upper bound";
 
     /**
      * @param input a string that is either in the "X:Y" or "X" form
@@ -64,6 +68,9 @@ public class ParserUtil {
      * @throws ParseException if the input is invalid
      */
     public static MultiIndex parseMultiIndex(String input) throws ParseException {
+        if (input.isEmpty()) {
+            throw new ParseException(MESSAGE_EMPTY_INPUT);
+        }
         if (input.contains(":")) {
             return parseRange(input);
         } else {
@@ -76,14 +83,14 @@ public class ParserUtil {
     private static MultiIndex parseRange(String input) throws ParseException {
         String[] parts = input.split(":");
         if (parts.length != 2) {
-            throw new IllegalArgumentException("Invalid range format: " + input);
+            throw new InvalidIndexException("Invalid range format: " + input);
         }
 
         Index lower = ParserUtil.parseIndex(parts[0].trim());
         Index upper = ParserUtil.parseIndex(parts[1].trim());
 
         if (lower.getZeroBased() > upper.getZeroBased()) {
-            throw new IllegalArgumentException("Lower bound cannot be greater than upper bound: " + input);
+            throw new InvalidIndexException(String.format(MESSAGE_INVALID_MULTIINDEX_BOUNDS, input));
         }
 
         return new MultiIndex(lower, upper);
@@ -95,20 +102,23 @@ public class ParserUtil {
      */
     public static Index parseIndex(String oneBasedIndex) throws ParseException {
         String trimmedIndex = oneBasedIndex.trim();
+        if (trimmedIndex.isEmpty()) {
+            throw new ParseException(MESSAGE_EMPTY_INPUT);
+        }
         if (!StringUtil.isNonZeroUnsignedInteger(trimmedIndex)) {
-            throw new ParseException(MESSAGE_INVALID_INDEX);
+            throw new InvalidIndexException(MESSAGE_INVALID_INDEX);
         }
         return Index.fromOneBased(Integer.parseInt(trimmedIndex));
     }
     /**
      * Parses {@code zeroBasedIndex} into an {@code Index} and returns it. Leading and trailing whitespaces will be
      * trimmed.
-     * @throws ParseException if the specified index is invalid (not non-zero unsigned integer).
+     * @throws InvalidIndexException if the specified index is invalid (not non-zero unsigned integer).
      */
-    public static Index parseZeroBasedIndex(String zeroBasedIndex) throws ParseException {
+    public static Index parseExerciseIndex(String zeroBasedIndex) throws InvalidIndexException {
         String trimmedIndex = zeroBasedIndex.trim();
         if (!StringUtil.isNonNegativeUnsignedInteger(trimmedIndex)) {
-            throw new ParseException(MESSAGE_INVALID_INDEX);
+            throw new InvalidIndexException(MESSAGE_INVALID_EXERCISE_INDEX);
         }
         return Index.fromZeroBased(Integer.parseInt(trimmedIndex));
     }
@@ -116,7 +126,7 @@ public class ParserUtil {
      * Parses a {@code String studentId} into a {@code StudentId}.
      * Leading and trailing whitespaces will be trimmed.
      *
-     * @throws ParseException if the given {@code studentId} is invalid.
+     * @throws InvalidIndexException if the given {@code studentId} is invalid.
      */
     public static StudentId parseStudentId(String studentId) throws ParseException {
         requireNonNull(studentId);

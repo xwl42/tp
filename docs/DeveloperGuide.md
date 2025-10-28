@@ -192,7 +192,7 @@ initial address book and timeslots state, with `previousAddressBookState` and `p
 calls `Model#saveAddressBook()` before deleting, saving the current state. After the deletion, the current state is
 modified but the previous state preserves the state before deletion.
 
-<puml src="diagrams/UndoCommand/UndoState1.puml" with="574">
+<puml src="diagrams/UndoCommand/UndoState1.puml" with="574" />
 
 <box type="info" seamless>
 
@@ -205,13 +205,13 @@ not be updated.
 `Model#saveAddressBook()` before adding, which **replaces** the previous state with the current state (ab1),
 then adds the new student.
 
-<puml src="diagrams/UndoCommand/UndoState2.puml" with="574">
+<puml src="diagrams/UndoCommand/UndoState2.puml" with="574" />
 
 **Step 4.** The user now decides that adding the student was a mistake, and decides to undo that action by
 executing the `undo` command. The `undo` command will call `Model#undoAddressBook()`, which restores the address book
 to the previous state (ab1) and sets both `previousAddressBookState` and `previousTimeslotsState` to `null`.
 
-<puml src="diagrams/UndoCommand/UndoState3.puml" with="574">
+<puml src="diagrams/UndoCommand/UndoState3.puml" with="574" />
 
 <box type="info" seamless>
 
@@ -230,7 +230,7 @@ execute another modifying command before you can undo again. There is no redo fu
 
 The following sequence diagram shows how an undo operation goes through the `Logic` component:
 
-<puml src="diagrams/UndoCommand/UndoSequenceDiagram-Logic" with="574">
+<puml src="diagrams/UndoCommand/UndoSequenceDiagram-Logic" with="574" />
 
 <box type="info" seamless>
 
@@ -241,7 +241,7 @@ the lifeline reaches the end of diagram.
 
 Similarly, how an undo operation goes through the `Model` component is shown below:
 
-<puml src="diagrams/UndoCommand/UndoSequenceDiagram-Model" with="574">
+<puml src="diagrams/UndoCommand/UndoSequenceDiagram-Model" with="574" />
 
 **Step 5.** The user then decides to execute the command `list`. Commands that do not modify the address book,
 such as `list`, `find`, or `get-timeslots`, will not call `Model#saveAddressBook()`. Thus, the previous state remains `null`.
@@ -251,11 +251,11 @@ such as `list`, `find`, or `get-timeslots`, will not call `Model#saveAddressBook
 **Step 6.** The user executes `clear`, which calls `Model#saveAddressBook()` before clearing. The current state (ab1)
 is saved as the previous state, then all persons are deleted, creating a new current state.
 
-<puml src="diagrams/UndoCommand/UndoState5.puml" with="574">
+<puml src="diagrams/UndoCommand/UndoState5.puml" with="574" />
 
 The following activity diagram summarises what happens when a user executes a new command:
 
-<puml src="diagrams/UndoCommand/SaveActivityDiagram.puml" with="574">
+<puml src="diagrams/UndoCommand/SaveActivityDiagram.puml" with="574" />
 
 #### Commands that support undo
 
@@ -268,7 +268,10 @@ The following commands call `Model#saveAddressBook()` and thus support undo:
 - `marka` - Marks attendance
 - `grade` - Marks grade of an assessment
 - `block-timeslot` - Adds a timeslot
+- `unblock-timeslot` - Unblock a timeslot
 - `clear-timeslots` - Clears all timeslots
+- `add-consultation` - Adds a consultation
+- `set-week` - Sets current week
 
 The following commands do NOT support undo (read-only commands):
 - `list` - Lists all students
@@ -276,6 +279,7 @@ The following commands do NOT support undo (read-only commands):
 - `filter` - Filters students
 - `sort` - Sorts students base on some criteria
 - `get-timeslots` - Displays timeslots
+- `get-consultations` - Gets consultation schedule
 - `help` - Shows help
 - `exit` - Exits the application
 

@@ -56,7 +56,8 @@ public class FindCommandParser implements Parser<FindCommand> {
         return new FindCommand(new PersonContainsKeywordsPredicate(predicates));
     }
 
-    private List<Predicate<Person>> selectPredicates(ArgumentMultimap argMultimap, List<String> keywords) throws ParseException {
+    private List<Predicate<Person>> selectPredicates(ArgumentMultimap argMultimap, List<String> keywords)
+            throws ParseException {
 
         List<PrefixPredicateContainer> prefixPredicateContainers = PrefixPredicateContainer.getAllPrefixPredicate();
         boolean isAnySelected = false;
@@ -88,8 +89,8 @@ public class FindCommandParser implements Parser<FindCommand> {
 
     private static void checkSelectorEmpty(ArgumentMultimap argMultimap, Prefix... prefixes) throws ParseException {
         for (Prefix p : prefixes) {
-            if (argMultimap.getValue(p).isPresent() &&
-                    argMultimap.getValue(p).get().isBlank()) {
+            if (argMultimap.getValue(p).isPresent()
+                    && argMultimap.getValue(p).get().isBlank()) {
                 throw new ParseException(MESSAGE_FIELD_NOT_EMPTY);
             }
 

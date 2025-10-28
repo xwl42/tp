@@ -59,10 +59,9 @@ public class FilterCommandParser implements Parser<FilterCommand> {
             throws ParseException {
         assert(exerciseIndexOptional.isPresent());
         String exerciseIndexStatus = exerciseIndexOptional.get();
-        Pair<String, Status> indexStatusPair = ParserUtil.parseExerciseIndexStatus(exerciseIndexStatus);
+        Pair<Index, Status> indexStatusPair = ParserUtil.parseExerciseIndexStatus(exerciseIndexStatus);
         Status exerciseStatus = indexStatusPair.getValue();
-        String exerciseIndexString = indexStatusPair.getKey();
-        Index exerciseIndex = ParserUtil.parseExerciseIndex(exerciseIndexString);
+        Index exerciseIndex = indexStatusPair.getKey();
         return new ExerciseStatusMatchesPredicate(exerciseIndex, exerciseStatus);
     }
 

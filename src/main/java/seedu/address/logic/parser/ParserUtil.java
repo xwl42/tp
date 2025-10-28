@@ -382,28 +382,17 @@ public class ParserUtil {
      * @param exerciseIndexString a string containing both the index and status as a combined string
      * @throws ParseException if the given {@code String} does not include a status.
      */
-    public static Pair<String, Status> parseExerciseIndexStatus(String exerciseIndexString) throws ParseException {
+    public static Pair<Index, Status> parseExerciseIndexStatus(String exerciseIndexString) throws ParseException {
         ArgumentMultimap exerciseMultimap =
                 ArgumentTokenizer.tokenize(exerciseIndexString, PREFIX_STATUS);
-        Optional<String> status = exerciseMultimap.getValue(PREFIX_STATUS);
-        String exercise = exerciseMultimap.getPreamble();
-        if (exercise.isEmpty()) {
-            throw new ParseException(FilterCommand.MESSAGE_USAGE);
-        }
-        if (status.isEmpty()) {
+        String exerciseNumberStr = exerciseMultimap.getPreamble();
+        Optional<String> statusString = exerciseMultimap.getValue(PREFIX_STATUS);
+        if (statusString.isEmpty()) {
             throw new ParseException(MESSAGE_MISSING_EXERCISE_STATUS);
         }
-        String statusString = status.get().toUpperCase();
-        switch (statusString) {
-        case "D":
-            return new Pair<>(exercise, Status.DONE);
-        case "N":
-            return new Pair<>(exercise, Status.NOT_DONE);
-        case "O":
-            return new Pair<>(exercise, Status.OVERDUE);
-        default:
-            throw new ParseException(MESSAGE_INVALID_FILTER_EXERCISE_STATUS);
-        }
+        Index exerciseNumber = parseLabIndex(exerciseNumberStr);
+        Status status = parseExerciseStatusForFilter(exerciseMultimap.getValue(PREFIX_STATUS).orElse(""));
+        return new Pair<>(exerciseNumber, status);
     }
 
     /**
@@ -417,9 +406,13 @@ public class ParserUtil {
         ArgumentMultimap exerciseMultimap =
                 ArgumentTokenizer.tokenize(labNumberString, PREFIX_STATUS);
         String labNumberStr = exerciseMultimap.getPreamble();
+        Optional<String> statusString = exerciseMultimap.getValue(PREFIX_STATUS);
+        if (statusString.isEmpty()) {
+            throw new ParseException(MESSAGE_MISSING_LAB_STATUS);
+        }
         Index labNumber = parseLabIndex(labNumberStr);
-        String statusString = parseLabStatusForFilter(exerciseMultimap.getValue(PREFIX_STATUS).orElse(""));
-        return new Pair<>(labNumber, statusString);
+        String statusStr = parseLabStatusForFilter(exerciseMultimap.getValue(PREFIX_STATUS).orElse(""));
+        return new Pair<>(labNumber, statusStr);
     }
 
     private static String parseLabStatusForFilter(String labStatus) throws ParseException {
@@ -431,6 +424,18 @@ public class ParserUtil {
         case "A": return "A";
         default:
             throw new ParseException(MESSAGE_INVALID_FILTER_LAB_STATUS);
+        }
+    }
+
+    private static Status parseExerciseStatusForFilter(String exerciseStatus) throws ParseException {
+        requireNonNull(exerciseStatus);
+        String trimmed = exerciseStatus.trim();
+        switch (trimmed.toUpperCase()) {
+        case "Y": return Status.DONE;
+        case "N": return Status.NOT_DONE;
+        case "O": return Status.OVERDUE;
+        default:
+            throw new ParseException(MESSAGE_INVALID_FILTER_EXERCISE_STATUS);
         }
     }
 }

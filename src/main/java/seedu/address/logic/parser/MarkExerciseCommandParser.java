@@ -8,7 +8,6 @@ import seedu.address.commons.core.index.Index;
 import seedu.address.commons.core.index.MultiIndex;
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.commons.exceptions.InvalidIndexException;
-import seedu.address.logic.commands.MarkAttendanceCommand;
 import seedu.address.logic.commands.MarkExerciseCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 

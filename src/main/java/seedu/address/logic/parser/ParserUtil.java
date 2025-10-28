@@ -46,9 +46,10 @@ import seedu.address.model.tag.Tag;
  */
 public class ParserUtil {
 
-    public static final String MESSAGE_INVALID_INDEX = "index must be greater than 0";
-    private static final String MESSAGE_INVALID_EXERCISE_INDEX = "Exercise index must be greater than or equal to 0";
-    private static final String MESSAGE_INVALID_STATUS = "Status must be Y or N";
+    public static final String MESSAGE_INVALID_INDEX = "index must be a number greater than 0";
+    public static final String MESSAGE_INVALID_STATUS = "Status input must be Y or N";
+    private static final String MESSAGE_INVALID_EXERCISE_INDEX =
+            "Exercise index must be a number greater than or equal to 0";
     private static final String MESSAGE_INVALID_FILTER_EXERCISE_STATUS =
             "Exercise status must be Y, N or O";
     private static final String MESSAGE_INVALID_FILTER_LAB_STATUS =

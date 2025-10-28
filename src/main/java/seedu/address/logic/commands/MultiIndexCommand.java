@@ -41,9 +41,13 @@ public abstract class MultiIndexCommand extends Command {
         model.saveAddressBook();
 
         List<Person> updatedPersons = new ArrayList<>();
-        for (Index index : multiIndex.toIndexList()) {
-            Person personToEdit = lastShownList.get(index.getZeroBased());
-            Person editedPerson = applyActionToPerson(model, personToEdit);
+        List<Person> personsToUpdate = multiIndex
+                .toIndexList()
+                .stream()
+                .map(index -> lastShownList.get(index.getZeroBased()))
+                .toList();
+        for (Person person : personsToUpdate) {
+            Person editedPerson = applyActionToPerson(model, person);
 
             if (editedPerson != null) {
                 updatedPersons.add(editedPerson);

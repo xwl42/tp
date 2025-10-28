@@ -72,10 +72,6 @@ public class MarkAttendanceCommand extends MultiIndexCommand {
             } else {
                 labAttendanceList.markLabAsAbsent(labNumber.getZeroBased());
             }
-        } catch (IndexOutOfBoundsException e) {
-            throw new CommandException(
-                    MESSAGE_FAILURE_INVALID_LAB_INDEX
-            );
         } catch (IllegalStateException e) {
             alreadyMarkedPersons.add(personToEdit);
             return null;

@@ -75,9 +75,9 @@ public class FilterCommandParser implements Parser<FilterCommand> {
         String labNumberString = labNumberStatusPair.getKey();
         Index labNumber;
         try {
-            labNumber = ParserUtil.parseIndex(labNumberString);
-        } catch (InvalidIndexException iie) {
-            throw new ParseException(MarkAttendanceCommand.MESSAGE_FAILURE_INVALID_LAB_INDEX);
+            labNumber = ParserUtil.parseLabIndex(labNumberString);
+        } catch (InvalidIndexException e) {
+            throw new ParseException(e.getMessage());
         }
         return new LabStatusMatchesPredicate(labNumber, labStatus);
     }

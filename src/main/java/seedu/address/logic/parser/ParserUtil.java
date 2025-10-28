@@ -50,6 +50,8 @@ public class ParserUtil {
     public static final String MESSAGE_INVALID_STATUS = "Status input must be Y or N";
     private static final String MESSAGE_INVALID_EXERCISE_INDEX =
             "Exercise index must be a number greater than or equal to 0";
+    private static final String MESSAGE_INVALID_LAB_INDEX =
+            "Lab index is invalid! It must be between 0 and " + LabList.NUMBER_OF_LABS + " (inclusive).";
     private static final String MESSAGE_INVALID_FILTER_EXERCISE_STATUS =
             "Exercise status must be Y, N or O";
     private static final String MESSAGE_INVALID_FILTER_LAB_STATUS =
@@ -110,6 +112,25 @@ public class ParserUtil {
         }
         return Index.fromOneBased(Integer.parseInt(trimmedIndex));
     }
+
+    /**
+     * Parses {@code oneBasedIndex} into an {@code Index} and returns it. Leading and trailing whitespaces will be
+     * trimmed.
+     * @throws ParseException if the specified index is invalid (not non-zero unsigned integer).
+     */
+    public static Index parseLabIndex(String oneBasedIndex) throws ParseException {
+        String trimmedIndex = oneBasedIndex.trim();
+        if (!StringUtil.isNonZeroUnsignedInteger(trimmedIndex)) {
+            throw new InvalidIndexException(MESSAGE_INVALID_LAB_INDEX);
+        }
+
+        int oneBased = Integer.parseInt(trimmedIndex);
+        if (oneBased >= LabList.NUMBER_OF_LABS) {
+            throw new InvalidIndexException(MESSAGE_INVALID_LAB_INDEX);
+        }
+        return Index.fromOneBased(oneBased);
+    }
+
     /**
      * Parses {@code zeroBasedIndex} into an {@code Index} and returns it. Leading and trailing whitespaces will be
      * trimmed.

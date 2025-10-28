@@ -381,12 +381,11 @@ public class ParserUtil {
     public static Pair<Index, Status> parseExerciseIndexStatus(String exerciseIndexString) throws ParseException {
         ArgumentMultimap exerciseMultimap =
                 ArgumentTokenizer.tokenize(exerciseIndexString, PREFIX_STATUS);
-        String exerciseNumberStr = exerciseMultimap.getPreamble();
         Optional<String> statusString = exerciseMultimap.getValue(PREFIX_STATUS);
         if (statusString.isEmpty()) {
             throw new ParseException(MESSAGE_MISSING_EXERCISE_STATUS);
         }
-        Index exerciseNumber = parseLabIndex(exerciseNumberStr);
+        Index exerciseNumber = parseLabIndex(exerciseMultimap.getPreamble());
         Status status = parseExerciseStatusForFilter(exerciseMultimap.getValue(PREFIX_STATUS).orElse(""));
         return new Pair<>(exerciseNumber, status);
     }
@@ -401,12 +400,12 @@ public class ParserUtil {
     public static Pair<Index, String> parseLabNumberStatus(String labNumberString) throws ParseException {
         ArgumentMultimap exerciseMultimap =
                 ArgumentTokenizer.tokenize(labNumberString, PREFIX_STATUS);
-        String labNumberStr = exerciseMultimap.getPreamble();
         Optional<String> statusString = exerciseMultimap.getValue(PREFIX_STATUS);
         if (statusString.isEmpty()) {
             throw new ParseException(MESSAGE_MISSING_LAB_STATUS);
         }
-        Index labNumber = parseLabIndex(labNumberStr);
+        Index labNumber = parseLabIndex(exerciseMultimap.getPreamble());
+        // If needed, can replace OrElse with just get
         String statusStr = parseLabStatusForFilter(exerciseMultimap.getValue(PREFIX_STATUS).orElse(""));
         return new Pair<>(labNumber, statusStr);
     }

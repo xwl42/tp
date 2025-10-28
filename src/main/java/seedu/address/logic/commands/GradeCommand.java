@@ -34,7 +34,7 @@ public class GradeCommand extends Command {
             + PREFIX_SCORE + "30.5";
     public static final String MESSAGE_GRADE_SUCCESS = "%s of %s graded with score %.1f";
     private static final String MESSAGE_FAILURE_INVALID_SCORE =
-            "%.1f is invalid! Grade the exam with a number in between 0 and %.1f (inclusive)";
+            "%.1f is invalid! Grade %s with a number in between 0 and %.1f (inclusive)";
     private static final String MESSAGE_FAILURE_INVALID_NAME =
             "%s is invalid! Here are the valid exam names %s";
     private final Index index;
@@ -67,12 +67,12 @@ public class GradeCommand extends Command {
         }
         Person personToGrade = lastShownList.get(index.getZeroBased());
 
-        model.saveAddressBook(); // Save before modification
+        model.saveAddressBook();
 
-        GradeMap updatedGradeMap = personToGrade.getGradeMap().copy(); // Create copy
+        GradeMap updatedGradeMap = personToGrade.getGradeMap().copy();
 
         try {
-            updatedGradeMap.gradeExam(examName, score); // Modify the copy
+            updatedGradeMap.gradeExam(examName, score);
             assert updatedGradeMap.getGradeableHashMap().get(examName) != null
                     : "Updated GradeMap should contain the graded exam";
         } catch (InvalidExamNameException iene) {
@@ -87,6 +87,7 @@ public class GradeCommand extends Command {
             throw new CommandException(
                     String.format(MESSAGE_FAILURE_INVALID_SCORE,
                             score,
+                            examName,
                             ise.getMaxScore()
                     )
             );

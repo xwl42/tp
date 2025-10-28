@@ -27,7 +27,7 @@ public class FilterCommand extends Command {
             + "Exercise index and lab index must always be followed by status.\n"
             + "You can use both filters together.\n"
             + "Parameters: [ei/EXERCISE INDEX] [s/exercise status] [l/LAB INDEX] [s/lab status]\n"
-            + "Example: " + COMMAND_WORD + " ei/1 s/D \n";
+            + "Example: " + COMMAND_WORD + " ei/1 s/Y \n";
 
     private final Predicate<Person> predicate;
 

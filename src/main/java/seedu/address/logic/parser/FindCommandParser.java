@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 
+import seedu.address.logic.Messages;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Person;
@@ -29,6 +30,8 @@ import seedu.address.model.person.predicates.TagContainsKeywordsPredicate;
  * Parses input arguments and creates a new FindCommand object
  */
 public class FindCommandParser implements Parser<FindCommand> {
+
+    private static final String MESSAGE_FIELD_NOT_EMPTY = "Field selectors must be empty (e.g., 'n/' not 'n/alice').";
 
     /**
      * Parses the given {@code String} of arguments in the context of the FindCommand
@@ -53,7 +56,7 @@ public class FindCommandParser implements Parser<FindCommand> {
         return new FindCommand(new PersonContainsKeywordsPredicate(predicates));
     }
 
-    private List<Predicate<Person>> selectPredicates(ArgumentMultimap argMultimap, List<String> keywords) {
+    private List<Predicate<Person>> selectPredicates(ArgumentMultimap argMultimap, List<String> keywords) throws ParseException {
 
         List<PrefixPredicateContainer> prefixPredicateContainers = PrefixPredicateContainer.getAllPrefixPredicate();
         boolean isAnySelected = false;
@@ -77,7 +80,35 @@ public class FindCommandParser implements Parser<FindCommand> {
             }
         }
 
+        checkNoDuplicatePrefix(argMultimap, PREFIX_STUDENTID, PREFIX_NAME,
+                PREFIX_EMAIL, PREFIX_GITHUB_USERNAME, PREFIX_PHONE, PREFIX_TAG);
+
         return predicates;
+    }
+
+    private static void checkSelectorEmpty(ArgumentMultimap argMultimap, Prefix... prefixes) throws ParseException {
+        for (Prefix p : prefixes) {
+            if (argMultimap.getValue(p).isPresent() &&
+                    argMultimap.getValue(p).get().isBlank()) {
+                throw new ParseException(MESSAGE_FIELD_NOT_EMPTY);
+            }
+
+        }
+    }
+
+    private static void checkNoDuplicatePrefix(ArgumentMultimap argMultimap, Prefix... prefixes) throws ParseException {
+        List<Prefix> duplicates = new ArrayList<>();
+        for (Prefix p : prefixes) {
+            if (argMultimap.getAllValues(p).size() > 1) {
+                duplicates.add(p);
+            }
+        }
+
+        if (!duplicates.isEmpty()) {
+            throw new ParseException(Messages.getErrorMessageForDuplicateFindSelectors(
+                    duplicates.toArray(new Prefix[0])
+            ));
+        }
     }
 
     /**

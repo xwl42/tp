@@ -53,8 +53,8 @@ public class FilterCommandParser implements Parser<FilterCommand> {
         return new FilterCommand(new FilterCombinedPredicate(predicates));
     }
 
-    private ExerciseStatusMatchesPredicate createExerciseFilter(Optional<String> exerciseIndexOptional)
-            throws ParseException {
+    private ExerciseStatusMatchesPredicate createExerciseFilter(
+            Optional<String> exerciseIndexOptional) throws ParseException {
         assert(exerciseIndexOptional.isPresent());
         String exerciseIndexStatus = exerciseIndexOptional.get();
         Pair<String, Status> indexStatusPair = ParserUtil.parseExerciseIndexStatus(exerciseIndexStatus);
@@ -64,8 +64,8 @@ public class FilterCommandParser implements Parser<FilterCommand> {
         return new ExerciseStatusMatchesPredicate(exerciseIndex, exerciseStatus);
     }
 
-    private LabStatusMatchesPredicate createLabFilter(Optional<String> labNumberOptional)
-            throws ParseException {
+    private LabStatusMatchesPredicate createLabFilter(
+            Optional<String> labNumberOptional) throws ParseException {
         assert(labNumberOptional.isPresent());
         String labNumberStatus = labNumberOptional.get();
         Pair<String, Boolean> labNumberStatusPair = ParserUtil.parseLabNumberStatus(labNumberStatus);

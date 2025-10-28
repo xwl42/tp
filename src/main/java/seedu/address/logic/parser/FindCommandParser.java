@@ -68,6 +68,11 @@ public class FindCommandParser implements Parser<FindCommand> {
 
     private static void checkSelectorEmpty(ArgumentMultimap argMultimap) throws ParseException {
         for (Prefix p : FIND_PREFIXES) {
+
+            //Already checked by checkNoDuplicatePrefix
+            assert argMultimap.getAllValues(p).size() <= 1
+                    : "Parser precondition violated: repeated selector " + p;
+
             if (argMultimap.getValue(p).isPresent()
                     && !argMultimap.getValue(p).get().isEmpty()) {
                 throw new ParseException(MESSAGE_FIELD_NOT_EMPTY);

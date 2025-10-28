@@ -3,6 +3,7 @@ package seedu.address.logic.parser;
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_LAB_NUMBER;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_STATUS;
 
 import java.util.ArrayList;
@@ -408,23 +409,22 @@ public class ParserUtil {
      * @param labNumberString a string containing both the index and status as a combined string
      * @throws ParseException if the given {@code String} does not include a status.
      */
-    public static Pair<String, Boolean> parseLabNumberStatus(String labNumberString) throws ParseException {
+    public static Pair<Index, String> parseLabNumberStatus(String labNumberString) throws ParseException {
         ArgumentMultimap exerciseMultimap =
                 ArgumentTokenizer.tokenize(labNumberString, PREFIX_STATUS);
-        Optional<String> status = exerciseMultimap.getValue(PREFIX_STATUS);
-        String labNumber = exerciseMultimap.getPreamble();
-        if (labNumber.isEmpty()) {
-            throw new ParseException(FindCommand.MESSAGE_USAGE);
-        }
-        if (status.isEmpty()) {
-            throw new ParseException(MESSAGE_MISSING_LAB_STATUS);
-        }
-        String statusString = status.get().toUpperCase();
-        switch (statusString) {
-        case "Y":
-            return new Pair<>(labNumber, TRUE);
-        case "N":
-            return new Pair<>(labNumber, FALSE);
+        String labNumberStr = exerciseMultimap.getPreamble();
+        Index labNumber = parseLabIndex(labNumberStr);
+        String statusString = parseLabStatusForFilter(exerciseMultimap.getValue(PREFIX_STATUS).orElse(""));
+        return new Pair<>(labNumber, statusString);
+    }
+
+    private static String parseLabStatusForFilter(String labStatus) throws ParseException {
+        requireNonNull(labStatus);
+        String trimmed = labStatus.trim();
+        switch (trimmed.toUpperCase()) {
+        case "Y": return "Y";
+        case "N": return "N";
+        case "A": return "A";
         default:
             throw new ParseException(MESSAGE_INVALID_FILTER_LAB_STATUS);
         }

@@ -70,15 +70,9 @@ public class FilterCommandParser implements Parser<FilterCommand> {
             throws ParseException {
         assert(labNumberOptional.isPresent());
         String labNumberStatus = labNumberOptional.get();
-        Pair<String, Boolean> labNumberStatusPair = ParserUtil.parseLabNumberStatus(labNumberStatus);
-        Boolean labStatus = labNumberStatusPair.getValue();
-        String labNumberString = labNumberStatusPair.getKey();
-        Index labNumber;
-        try {
-            labNumber = ParserUtil.parseLabIndex(labNumberString);
-        } catch (InvalidIndexException e) {
-            throw new ParseException(e.getMessage());
-        }
+        Pair<Index, String> labNumberStatusPair = ParserUtil.parseLabNumberStatus(labNumberStatus);
+        String labStatus = labNumberStatusPair.getValue();
+        Index labNumber = labNumberStatusPair.getKey();
         return new LabStatusMatchesPredicate(labNumber, labStatus);
     }
 

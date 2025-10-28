@@ -186,7 +186,7 @@ Given below is an example usage scenario and how the undo mechanism behaves at e
 initial address book and timeslots state, with `previousAddressBookState` and `previousTimeslotsState` set to `null`
 (no previous state to undo to).
 
-<puml src="diagrams/UndoCommand/UndoState0.puml" with="574">
+<puml src="diagrams/UndoCommand/UndoState0.puml" with="574" />
 
 **Step 2.** The user executes `delete 5` command to delete the 5th person in the address book. The `delete` command
 calls `Model#saveAddressBook()` before deleting, saving the current state. After the deletion, the current state is
@@ -246,7 +246,7 @@ Similarly, how an undo operation goes through the `Model` component is shown bel
 **Step 5.** The user then decides to execute the command `list`. Commands that do not modify the address book,
 such as `list`, `find`, or `get-timeslots`, will not call `Model#saveAddressBook()`. Thus, the previous state remains `null`.
 
-<puml src="diagrams/UndoCommand/UndoState4.puml" with="574">
+<puml src="diagrams/UndoCommand/UndoState4.puml" with="574" />
 
 **Step 6.** The user executes `clear`, which calls `Model#saveAddressBook()` before clearing. The current state (ab1)
 is saved as the previous state, then all persons are deleted, creating a new current state.

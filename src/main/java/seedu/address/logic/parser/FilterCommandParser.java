@@ -60,7 +60,7 @@ public class FilterCommandParser implements Parser<FilterCommand> {
         Pair<String, Status> indexStatusPair = ParserUtil.parseExerciseIndexStatus(exerciseIndexStatus);
         Status exerciseStatus = indexStatusPair.getValue();
         String exerciseIndexString = indexStatusPair.getKey();
-        Index exerciseIndex = ParserUtil.parseZeroBasedIndex(exerciseIndexString);
+        Index exerciseIndex = ParserUtil.parseExerciseIndex(exerciseIndexString);
         return new ExerciseStatusMatchesPredicate(exerciseIndex, exerciseStatus);
     }
 

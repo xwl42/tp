@@ -74,7 +74,7 @@ public class MarkAttendanceCommand extends MultiIndexCommand {
             }
         } catch (IndexOutOfBoundsException e) {
             throw new CommandException(
-                    e.getMessage()
+                    MESSAGE_FAILURE_INVALID_LAB_INDEX
             );
         } catch (IllegalStateException e) {
             alreadyMarkedPersons.add(personToEdit);

@@ -33,7 +33,7 @@ public class MarkExerciseCommand extends MultiIndexCommand {
     public static final String MESSAGE_FAILURE_ALREADY_MARKED =
             "Exercise %1$d already marked as %2$s for %3$s";
     public static final String MESSAGE_INDEX_OUT_OF_BOUNDS =
-            "Exercise index out of bounds! Index should be between 0 and %d.";
+            "The exercise index provided is invalid, index must be between 0 to 9 (inclusive)";
 
     private static final int HIGHEST_INDEX = NUMBER_OF_EXERCISES - 1;
 

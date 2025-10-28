@@ -46,8 +46,9 @@ import seedu.address.model.tag.Tag;
  */
 public class ParserUtil {
 
-    public static final String MESSAGE_INVALID_INDEX = "Index is not a non-zero unsigned integer.";
-    private static final String MESSAGE_INVALID_STATUS = "Status must be y or n";
+    public static final String MESSAGE_INVALID_INDEX = "index must be greater than 0";
+    private static final String MESSAGE_INVALID_EXERCISE_INDEX = "Exercise index must be greater than or equal to 0";
+    private static final String MESSAGE_INVALID_STATUS = "Status must be Y or N";
     private static final String MESSAGE_INVALID_FILTER_EXERCISE_STATUS =
             "Exercise status must be Y, N or O";
     private static final String MESSAGE_INVALID_FILTER_LAB_STATUS =
@@ -113,10 +114,10 @@ public class ParserUtil {
      * trimmed.
      * @throws InvalidIndexException if the specified index is invalid (not non-zero unsigned integer).
      */
-    public static Index parseZeroBasedIndex(String zeroBasedIndex) throws InvalidIndexException {
+    public static Index parseExerciseIndex(String zeroBasedIndex) throws InvalidIndexException {
         String trimmedIndex = zeroBasedIndex.trim();
         if (!StringUtil.isNonNegativeUnsignedInteger(trimmedIndex)) {
-            throw new InvalidIndexException(MESSAGE_INVALID_INDEX);
+            throw new InvalidIndexException(MESSAGE_INVALID_EXERCISE_INDEX);
         }
         return Index.fromZeroBased(Integer.parseInt(trimmedIndex));
     }

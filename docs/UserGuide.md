@@ -38,9 +38,8 @@
 - Clear
 - Undo
 
-#### **Part 2: Tracking milestones like labs, exercises and exams**
-
 ---
+#### **Part 2: Tracking milestones like labs, exercises and exams**
 
 ## Mark a student's lab attendance: `marka`
 
@@ -58,7 +57,7 @@ marka INDEX l/LAB_NUMBER s/STATUS
 > [!WARNING]
 > Attempting to re-mark a lab with the same status will trigger a message indicating it was already marked.
 
----
+<br>
 
 ## Mark a student's exercise for completion: `marke`
 
@@ -66,7 +65,7 @@ Use this command to record or update whether selected students have completed a 
 
 **Format:**
 ```
-marke INDEX... ei/EXERCISE_INDEX s/STATUS
+marke INDEX ei/EXERCISE_INDEX s/STATUS
 ```
 
 **Examples:**
@@ -76,7 +75,7 @@ marke INDEX... ei/EXERCISE_INDEX s/STATUS
 > [!WARNING]
 > If an exercise is already marked with the same status, the command will show a message indicating it was already marked.
 
----
+<br>
 
 ## Record a student's score for an exam: `grade`
 
@@ -96,7 +95,15 @@ grade INDEX... en/EXAM_NAME s/SCORE
 
 > [!WARNING]
 > The exam name must be one of the valid exams defined in the system.  
-> The score must be a valid number (e.g., `85`, `92.5`). Non-numeric inputs will result in an error.
+> The score must be a valid number (e.g., `85`, `92.5`) 
+> that is no greater than the maximum score of the exam you intend to mark.
+
+| **Valid Exam Name** | **Maximum score** |
+|----------------------|-------------------|
+| `pe1`               | 40                |
+| `midterm`           | 60                |
+| `pe2`               | 40                |
+| `final`             | 100               |
 
 ---
 

@@ -48,7 +48,7 @@ public class LabStatusMatchesPredicate implements Predicate<Person> {
         }
 
         LabStatusMatchesPredicate otherPredicate = (LabStatusMatchesPredicate) other;
-        return status == (otherPredicate.status)
+        return status.equals(otherPredicate.status)
                 && index.equals(otherPredicate.index);
     }
 

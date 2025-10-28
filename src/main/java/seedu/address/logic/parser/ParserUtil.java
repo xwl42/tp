@@ -50,9 +50,9 @@ public class ParserUtil {
     public static final String MESSAGE_INVALID_INDEX = "index must be a number greater than 0";
     public static final String MESSAGE_INVALID_STATUS = "Status input must be Y or N";
     private static final String MESSAGE_INVALID_EXERCISE_INDEX =
-            "Exercise index must be a number greater than or equal to 0";
+            "Exercise index is invalid! It must be between 0 and " + (ExerciseTracker.NUMBER_OF_EXERCISES - 1) + " (inclusive).";
     private static final String MESSAGE_INVALID_LAB_INDEX =
-            "Lab index is invalid! It must be between 0 and " + LabList.NUMBER_OF_LABS + " (inclusive).";
+            "Lab index is invalid! It must be between 1 and " + LabList.NUMBER_OF_LABS + " (inclusive).";
     private static final String MESSAGE_INVALID_FILTER_EXERCISE_STATUS =
             "Exercise status must be Y, N or O";
     private static final String MESSAGE_INVALID_FILTER_LAB_STATUS =
@@ -126,7 +126,7 @@ public class ParserUtil {
         }
 
         int oneBased = Integer.parseInt(trimmedIndex);
-        if (oneBased >= LabList.NUMBER_OF_LABS) {
+        if (oneBased > LabList.NUMBER_OF_LABS) {
             throw new InvalidIndexException(MESSAGE_INVALID_LAB_INDEX);
         }
         return Index.fromOneBased(oneBased);
@@ -134,15 +134,19 @@ public class ParserUtil {
 
     /**
      * Parses {@code zeroBasedIndex} into an {@code Index} and returns it. Leading and trailing whitespaces will be
-     * trimmed.
-     * @throws InvalidIndexException if the specified index is invalid (not non-zero unsigned integer).
+     * trimmed. The index must be between 1 and the maximum number of labs - 1 (inclusive).
+     * @throws InvalidIndexException if the specified index is invalid (negative number or exceeds the maximum exercise number)
      */
     public static Index parseExerciseIndex(String zeroBasedIndex) throws InvalidIndexException {
         String trimmedIndex = zeroBasedIndex.trim();
         if (!StringUtil.isNonNegativeUnsignedInteger(trimmedIndex)) {
             throw new InvalidIndexException(MESSAGE_INVALID_EXERCISE_INDEX);
         }
-        return Index.fromZeroBased(Integer.parseInt(trimmedIndex));
+        int zeroBased = Integer.parseInt(trimmedIndex);
+        if (zeroBased >= ExerciseTracker.NUMBER_OF_EXERCISES) {
+            throw new InvalidIndexException(MESSAGE_INVALID_EXERCISE_INDEX);
+        }
+        return Index.fromZeroBased(zeroBased);
     }
     /**
      * Parses a {@code String studentId} into a {@code StudentId}.

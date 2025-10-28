@@ -54,8 +54,8 @@ public class MarkAttendanceCommandParser implements Parser<MarkAttendanceCommand
         // Parse multi-index (it will throw uncaught parse exception if index is wrong);
         try {
             multiIndex = ParserUtil.parseMultiIndex(argMultimap.getPreamble());
-        } catch (InvalidIndexException iie) {
-            throw new ParseException("Student " + iie.getMessage());
+        } catch (InvalidIndexException e) {
+            throw new ParseException("Student " + e.getMessage());
         }
 
         return new MarkAttendanceCommand(multiIndex, labNumber, isAttended);

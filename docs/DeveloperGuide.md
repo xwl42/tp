@@ -191,7 +191,7 @@ Sequence diagrams:
 - Clear timeslots: <puml src="diagrams/ClearTimeslotsSequenceDiagram.puml" width="574" />
 - Get timeslots: <puml src="diagrams/GetTimeslotsSequenceDiagram.puml" width="574" />
 
-### Persistence & UI 
+### Persistence & UI
 - Persistence: LogicManager is responsible for writing persistent files. After a successful command execution, LogicManager saves the address book and, if available, timeslots via StorageManager.saveAddressBook(...) and StorageManager.saveTimeslots(...).
 - UI scheduling: Some commands (e.g., get-timeslots) produce a timeslot ranges payload inside CommandResult. When present, LogicManager schedules the UI update using Platform.runLater(() -> TimeslotsWindow.showTimetable(...)). This call:
   - Is performed asynchronously on the JavaFX thread to avoid blocking command execution.

@@ -80,7 +80,8 @@ How to use this guide:
 
 3. Copy the `.jar` file to the folder you want to use as the _home folder_ for your LambdaLab.
 
-4. Open a command terminal, `cd` into the folder you put the `.jar` file in, and use the `java -jar addressbook.jar` command to run the application.<br>
+4. Open a command terminal, `cd` into the folder you put the `.jar` file in, and use the `java -jar addressbook.jar` command to run the application.
+
    A GUI similar to the below should appear in a few seconds. Note that the app contains some sample data and the layout
    is explained in coloured boxes.<br>
    ![Ui](images/Ui.png)
@@ -272,7 +273,7 @@ Format: `grade INDEX en/EXAMNAME sc/SCORE`
 
 * Edits the student at the specified `INDEX`. The index refers to the index number shown in the displayed student list. The index **must be a positive integer** 1, 2, 3, …​
 * `EXAMNAME` specifies the name of the assessment.
-* `SCORE` specifies the score to assign for that assessment.  
+* `SCORE` specifies the score to assign for that assessment.
   It **must be between 0 and the assessment’s maximum achievable score (inclusive)**.
 
 Supported Assessments:
@@ -320,7 +321,7 @@ Tip: Use multiple field prefixes to narrow your search to specific fields. For e
 <br><br>
 ### Filtering students: `filter`
 
-Filters and shows only the students who satisfy the given lab attendance 
+Filters and shows only the students who satisfy the given lab attendance
 and exercise completion statuses.
 
 Format: `filter [l/LABNUMBER s/ATTENDANCESTATUS] [ei/EXERCISEINDEX s/EXERCISESTATUS]`
@@ -369,8 +370,8 @@ Format: `sort c/SORTCRITERION`
 
 <box type="tip">
 
-**Tip:** The criterion is case-insensitive. 
-Also note that `sort` cannot be undone through `undo`. However, you can always sort it base on another criterion again. 
+**Tip:** The criterion is case-insensitive.
+Also note that `sort` cannot be undone through `undo`. However, you can always sort it base on another criterion again.
 </box>
 
 Examples:
@@ -685,9 +686,9 @@ Action     | Format, Examples
 **Grade**| `grade`
 **Block timeslot** | `block-timeslot ts/START_DATETIME te/END_DATETIME` <br> e.g. `block-timeslot ts/2025-10-04T10:00:00 te/2025-10-04T13:00:00`
 **Unblock timeslot** | `unblock-timeslot ts/START_DATETIME te/END_DATETIME` <br> e.g. `block-timeslot ts/2025-10-04T10:00:00 te/2025-10-04T13:00:00`
-**Get timeslots** | `get-timeslots` 
+**Get timeslots** | `get-timeslots`
 **Get consultations** | `get-consultations`
-**Clear timeslots** | `clear-timeslots` 
+**Clear timeslots** | `clear-timeslots`
 **Exit**   | `exit`
 
 

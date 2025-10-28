@@ -32,6 +32,8 @@ import seedu.address.model.person.predicates.TagContainsKeywordsPredicate;
 public class FindCommandParser implements Parser<FindCommand> {
 
     private static final String MESSAGE_FIELD_NOT_EMPTY = "Field selectors must be empty (e.g., 'n/' not 'n/alice').";
+    private static final Prefix[] FIND_PREFIXES = { PREFIX_STUDENTID, PREFIX_NAME,
+            PREFIX_EMAIL, PREFIX_GITHUB_USERNAME, PREFIX_PHONE, PREFIX_TAG };
 
     /**
      * Parses the given {@code String} of arguments in the context of the FindCommand
@@ -41,8 +43,8 @@ public class FindCommandParser implements Parser<FindCommand> {
     public FindCommand parse(String args) throws ParseException {
 
         ArgumentMultimap argMultimap =
-                ArgumentTokenizer.tokenize(args, PREFIX_STUDENTID, PREFIX_NAME,
-                        PREFIX_EMAIL, PREFIX_GITHUB_USERNAME, PREFIX_PHONE, PREFIX_TAG);
+                ArgumentTokenizer.tokenize(args, FIND_PREFIXES);
+
         String[] preamble = argMultimap.getPreamble().trim().split("\\s+");
         List<String> keywords = Arrays.asList(preamble);
 
@@ -51,55 +53,34 @@ public class FindCommandParser implements Parser<FindCommand> {
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
 
-        List<Predicate<Person>> predicates = selectPredicates(argMultimap, keywords);
+        List<Predicate<Person>> predicates = getSelectedPredicates(argMultimap, keywords);
 
         return new FindCommand(new PersonContainsKeywordsPredicate(predicates));
     }
 
-    private List<Predicate<Person>> selectPredicates(ArgumentMultimap argMultimap, List<String> keywords)
+    private List<Predicate<Person>> getSelectedPredicates(ArgumentMultimap argMultimap, List<String> keywords)
             throws ParseException {
 
-        List<PrefixPredicateContainer> prefixPredicateContainers = PrefixPredicateContainer.getAllPrefixPredicate();
-        boolean isAnySelected = false;
-        List<Predicate<Person>> predicates = new ArrayList<>();
+        checkNoDuplicatePrefix(argMultimap);
+        checkSelectorEmpty(argMultimap);
 
-        for (int i = 0; i < prefixPredicateContainers.size(); i++) {
-            PrefixPredicateContainer prefixPredicateContainer = prefixPredicateContainers.get(i);
-            if (argMultimap.getValue(
-                    prefixPredicateContainer.getPrefix()).isPresent()) {
-                prefixPredicateContainer.setIsSelected(TRUE);
-                isAnySelected = true;
-            }
-        }
-
-        for (int i = 0; i < prefixPredicateContainers.size(); i++) {
-            PrefixPredicateContainer prefixPredicateContainer = prefixPredicateContainers.get(i);
-            if (!isAnySelected || prefixPredicateContainer.getIsSelected()) {
-                predicates.add(prefixPredicateContainer
-                        .getPredicateWrapper()
-                        .buildPredicate(keywords));
-            }
-        }
-
-        checkNoDuplicatePrefix(argMultimap, PREFIX_STUDENTID, PREFIX_NAME,
-                PREFIX_EMAIL, PREFIX_GITHUB_USERNAME, PREFIX_PHONE, PREFIX_TAG);
-
-        return predicates;
+        return selectPredicates(argMultimap, keywords);
     }
 
-    private static void checkSelectorEmpty(ArgumentMultimap argMultimap, Prefix... prefixes) throws ParseException {
-        for (Prefix p : prefixes) {
+    private static void checkSelectorEmpty(ArgumentMultimap argMultimap) throws ParseException {
+        for (Prefix p : FIND_PREFIXES) {
             if (argMultimap.getValue(p).isPresent()
-                    && argMultimap.getValue(p).get().isBlank()) {
+                    && !argMultimap.getValue(p).get().isEmpty()) {
                 throw new ParseException(MESSAGE_FIELD_NOT_EMPTY);
             }
 
         }
     }
 
-    private static void checkNoDuplicatePrefix(ArgumentMultimap argMultimap, Prefix... prefixes) throws ParseException {
+    private static void checkNoDuplicatePrefix(ArgumentMultimap argMultimap)
+            throws ParseException {
         List<Prefix> duplicates = new ArrayList<>();
-        for (Prefix p : prefixes) {
+        for (Prefix p : FIND_PREFIXES) {
             if (argMultimap.getAllValues(p).size() > 1) {
                 duplicates.add(p);
             }
@@ -112,59 +93,67 @@ public class FindCommandParser implements Parser<FindCommand> {
         }
     }
 
+    private static List<Predicate<Person>> selectPredicates(ArgumentMultimap argMultimap, List<String> keywords) {
+        List<PrefixPredicateContainer> prefixPredicateContainers = PrefixPredicateContainer.getAllPrefixPredicate();
+
+        List<Predicate<Person>> predicates = new ArrayList<>();
+
+        boolean isAnySelected = Arrays.stream(FIND_PREFIXES).anyMatch(p -> argMultimap.getValue(p).isPresent());
+
+        for (PrefixPredicateContainer prefixPredicateContainer : prefixPredicateContainers) {
+            boolean isSelected = argMultimap.getValue(prefixPredicateContainer.getPrefix()).isPresent();
+            if (!isAnySelected || isSelected) {
+                predicates.add(prefixPredicateContainer
+                        .getPredicateWrapper()
+                        .buildPredicate(keywords));
+            }
+        }
+        return predicates;
+    }
+
     /**
      * Binds a {@link Prefix} (e.g., {@code n/}, {@code e/}) to a predicate “builder” for a {@link Person}
-     * and tracks whether that field has been selected as a search target.
      */
     public static class PrefixPredicateContainer {
         private Prefix prefix;
         private PredicateWrapper predicateWrapper;
-        private boolean isSelected;
 
         /**
          * Creates a {@code PrefixPredicate}.
          *
          * @param prefix the CLI prefix that identifies the target field.
          * @param predicateWrapper a factory that, given keywords, builds a field-level predicate.
-         * @param isSelected initial selection state, usually false
          */
-        public PrefixPredicateContainer(Prefix prefix, PredicateWrapper predicateWrapper, boolean isSelected) {
+        public PrefixPredicateContainer(Prefix prefix, PredicateWrapper predicateWrapper) {
             this.prefix = prefix;
             this.predicateWrapper = predicateWrapper;
-            this.isSelected = isSelected;
         }
 
         public static List<PrefixPredicateContainer> getAllPrefixPredicate() {
             return Arrays.asList(
                     new PrefixPredicateContainer(
                             PREFIX_STUDENTID,
-                            keywords -> new StudentIdContainsKeywordsPredicate(keywords),
-                            false
+                            keywords -> new StudentIdContainsKeywordsPredicate(keywords)
                     ),
                     new PrefixPredicateContainer(
                             PREFIX_NAME,
-                            keywords -> new NameContainsKeywordsPredicate(keywords),
-                            false
+                            keywords -> new NameContainsKeywordsPredicate(keywords)
                     ),
                     new PrefixPredicateContainer(
                             PREFIX_EMAIL,
-                            keywords -> new EmailContainsKeywordsPredicate(keywords),
-                            false
+                            keywords -> new EmailContainsKeywordsPredicate(keywords)
                     ),
                     new PrefixPredicateContainer(
                             PREFIX_GITHUB_USERNAME,
-                            keywords -> new GithubContainsKeywordsPredicate(keywords),
-                            false
+                            keywords -> new GithubContainsKeywordsPredicate(keywords)
                     ),
                     new PrefixPredicateContainer(
                             PREFIX_PHONE,
-                            keywords -> new PhoneContainsKeywordsPredicate(keywords),
-                    false
+                            keywords -> new PhoneContainsKeywordsPredicate(keywords)
                     ),
                     new PrefixPredicateContainer(
                             PREFIX_TAG,
-                            keywords -> new TagContainsKeywordsPredicate(keywords),
-                            false
+                            keywords -> new TagContainsKeywordsPredicate(keywords)
                     )
             );
         }
@@ -177,18 +166,12 @@ public class FindCommandParser implements Parser<FindCommand> {
             return predicateWrapper;
         }
 
-        public boolean getIsSelected() {
-            return isSelected;
-        }
-
-        public void setIsSelected(boolean set) {
-            isSelected = set;
-        }
 
         /**
          * Functional interface for building field-level predicates from a list of keywords.
          * Enables lazy building of only predicates that are selected.
          */
+        @FunctionalInterface
         public interface PredicateWrapper {
 
             public Predicate<Person> buildPredicate(List<String> keywords);

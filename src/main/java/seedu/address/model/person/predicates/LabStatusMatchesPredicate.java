@@ -43,7 +43,7 @@ public class LabStatusMatchesPredicate implements Predicate<Person> {
         }
 
         // instanceof handles nulls
-        if (!(other instanceof ExerciseStatusMatchesPredicate)) {
+        if (!(other instanceof LabStatusMatchesPredicate)) {
             return false;
         }
 

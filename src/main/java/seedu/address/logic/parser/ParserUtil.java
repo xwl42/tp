@@ -9,11 +9,14 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.core.index.MultiIndex;
 import seedu.address.commons.exceptions.InvalidIndexException;
 import seedu.address.commons.util.StringUtil;
+import seedu.address.logic.commands.FilterCommand;
 import seedu.address.logic.helpers.Comparison;
 import seedu.address.logic.helpers.ExerciseIndexStatus;
 import seedu.address.logic.helpers.LabAttendanceComparison;
@@ -62,6 +65,10 @@ public class ParserUtil {
     private static final String MESSAGE_EMPTY_INPUT = "Input string is empty!";
     private static final String MESSAGE_INVALID_MULTIINDEX_BOUNDS =
             "%s is invalid! Lower bound cannot be greater than upper bound";
+    private static final String MESSAGE_MISSING_OPERATOR =
+            "Missing appropriate operator for comparison, one of ==, >=, <=, >, < should follow la/";
+    private static final String MESSAGE_INVALID_PERCENTAGE =
+            "Attendance percentage must be an integer between 0 and 100.";
 
     /**
      * @param input a string that is either in the "X:Y" or "X" form
@@ -398,10 +405,11 @@ public class ParserUtil {
         ArgumentMultimap exerciseMultimap =
                 ArgumentTokenizer.tokenize(exerciseIndexString, PREFIX_STATUS);
         Optional<String> statusString = exerciseMultimap.getValue(PREFIX_STATUS);
+
+        Index exerciseNumber = parseLabIndex(exerciseMultimap.getPreamble());
         if (statusString.isEmpty()) {
             throw new ParseException(MESSAGE_MISSING_EXERCISE_STATUS);
         }
-        Index exerciseNumber = parseLabIndex(exerciseMultimap.getPreamble());
         Status status = parseExerciseStatusForFilter(exerciseMultimap.getValue(PREFIX_STATUS).orElse(""));
         return new ExerciseIndexStatus(exerciseNumber, status);
     }
@@ -417,10 +425,11 @@ public class ParserUtil {
         ArgumentMultimap exerciseMultimap =
                 ArgumentTokenizer.tokenize(labNumberString, PREFIX_STATUS);
         Optional<String> statusString = exerciseMultimap.getValue(PREFIX_STATUS);
+
+        Index labNumber = parseLabIndex(exerciseMultimap.getPreamble());
         if (statusString.isEmpty()) {
             throw new ParseException(MESSAGE_MISSING_LAB_STATUS);
         }
-        Index labNumber = parseLabIndex(exerciseMultimap.getPreamble());
         // If needed, can replace OrElse with just get
         String statusStr = parseLabStatusForFilter(exerciseMultimap.getValue(PREFIX_STATUS).orElse(""));
         return new LabIndexStatus(labNumber, statusStr);
@@ -466,27 +475,25 @@ public class ParserUtil {
      *                        or the value is outside 0–100
      */
     public static LabAttendanceComparison parseAttendanceComparison(String attendanceComparison) throws ParseException {
-        if (attendanceComparison == null) {
-            throw new ParseException("Missing comparison condition.");
-        }
+        assert(attendanceComparison != null);
         String s = attendanceComparison.trim().replaceAll("\\s+", "");
 
         // Accept: ==70, >=60, <=85, >40, <25, 75, and any of those with a trailing %
-        java.util.regex.Matcher m = java.util.regex.Pattern
-                .compile("^(?:([<>]=?|==?|))?(\\d{1,3})(?:%)?$")
+        Matcher m = Pattern
+                .compile("^(?:([<>]=?|==?|))?(-?\\d{1,3})(?:%)?$")
                 .matcher(s);
         if (!m.matches()) {
-            throw new ParseException("Invalid attendance condition. Try la/>=60 or la/75%.");
+            throw new ParseException(FilterCommand.ATTENDED_PERCENTAGE_USAGE);
         }
 
-        String opStr = m.group(1);
-        int v = Integer.parseInt(m.group(2));
-        if (v < 0 || v > 100) {
-            throw new ParseException("Attendance percentage must be between 0 and 100.");
+        String operator = m.group(1);
+        int value = Integer.parseInt(m.group(2));
+        if (value < 0 || value > 100) {
+            throw new ParseException(MESSAGE_INVALID_PERCENTAGE);
         }
 
         Comparison comparison;
-        switch (opStr) {
+        switch (operator) {
         case "==":
             comparison = Comparison.EQ;
             break;
@@ -503,10 +510,10 @@ public class ParserUtil {
             comparison = Comparison.LT;
             break;
         default:
-            throw new ParseException("Unsupported operator for attendance.");
+            throw new ParseException(MESSAGE_MISSING_OPERATOR);
         };
 
-        return new LabAttendanceComparison(v, comparison);
+        return new LabAttendanceComparison(value, comparison);
     }
 
 }

@@ -28,6 +28,8 @@ import seedu.address.model.person.predicates.LabStatusMatchesPredicate;
 public class FilterCommandParser implements Parser<FilterCommand> {
 
     private static final Prefix[] FILTER_PREFIXES = { PREFIX_EXERCISE_INDEX, PREFIX_LAB_NUMBER, PREFIX_LAB_ATTENDANCE };
+    private static final String MESSAGE_MISSING_ATTENDANCE_COMPARISON = "Missing attendance comparison.\n";
+
 
     /**
      * Parses the given {@code String} of arguments in the context of the FilterCommand
@@ -53,26 +55,17 @@ public class FilterCommandParser implements Parser<FilterCommand> {
         List<Predicate<Person>> predicates = new ArrayList<>();
 
         for (String exerciseIndexStatus : exerciseIndexes) {
-            if (exerciseIndexStatus.isBlank()) {
-                throw new ParseException("Exercise value missing");
-            }
             predicates.add(getExercisePredicate(exerciseIndexStatus));
         }
 
         for (String labNumberStatus : labNumbers) {
-            if (labNumberStatus.isBlank()) {
-                throw new ParseException("Lab value missing");
-            }
             predicates.add(getLabPredicate(labNumberStatus));
         }
 
-        if (!labAttendances.isEmpty()) {
-            if (labAttendances.size() != 1) {
-                throw new ParseException("Only 1 la/ allowed");
-            }
-            String labAttendance = labAttendances.get(0);
+        for (String labAttendance : labAttendances) {
             if (labAttendance.isBlank()) {
-                throw new ParseException("Lab attendance value missing");
+                throw new ParseException(MESSAGE_MISSING_ATTENDANCE_COMPARISON
+                        + FilterCommand.ATTENDED_PERCENTAGE_USAGE);
             }
             predicates.add(getLabAttendancePredicate(labAttendance));
         }

@@ -19,15 +19,21 @@ public class FilterCommand extends Command {
 
     public static final String COMMAND_WORD = "filter";
 
+    public static final String ATTENDED_PERCENTAGE_USAGE = "Lab attended comparison must contain an operator ==, >=,"
+            + " <=, >, < and an integer to compare with from 0-100 in percents.\n"
+            + "The % symbol after the value is optional.\n";
+
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Filters all persons whose exercise or lab attendance match the "
             + "specified statuses (case-insensitive) and displays them as a list with index numbers.\n"
             + "Exercise completed status Y - yes, N - not yet, O - overdue.\n"
             + "Lab attended status Y - yes, N - not yet, A - absent.\n"
             + "Exercise index and lab index must always be followed by status.\n"
-            + "You can use both filters together.\n"
-            + "Parameters: [ei/EXERCISE INDEX s/exercise status]... [l/LAB INDEX s/lab status]...\n"
+            + ATTENDED_PERCENTAGE_USAGE
+            + "Parameters: [ei/EXERCISE INDEX s/exercise status]... [l/LAB INDEX s/lab status]... "
+            + "[la/LAB ATTENDED PERCENTAGE]...\n"
             + "Example: " + COMMAND_WORD + " ei/1 s/Y \n";
+
 
     private final Predicate<Person> predicate;
 

@@ -116,7 +116,7 @@ public class Person {
                 && otherPerson.getStudentId().equals(getStudentId());
     }
     public String getNameAndID() {
-        return String.format("%s (%s) ", getName().toString(), getStudentId().toString());
+        return String.format("%s (%s)", getName().toString(), getStudentId().toString());
     }
 
     /**

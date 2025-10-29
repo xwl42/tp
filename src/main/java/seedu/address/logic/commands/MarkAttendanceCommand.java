@@ -94,7 +94,7 @@ public class MarkAttendanceCommand extends MultiIndexCommand {
 
     private String generateResponseMessage(List<Person> alreadyMarkedPersons, List<Person> personsEdited) {
         String studentNamesEdited = personsEdited.stream()
-                .map(person -> person.getName().fullName)
+                .map(Person::getNameAndID)
                 .collect(Collectors.joining(", "));
 
         String exceptionMessage = compileExceptionMessage(alreadyMarkedPersons);
@@ -122,7 +122,7 @@ public class MarkAttendanceCommand extends MultiIndexCommand {
         }
 
         String names = alreadyMarkedPersons.stream()
-                .map(person -> person.getName().fullName)
+                .map(Person::getNameAndID)
                 .collect(Collectors.joining(", "));
 
         return isAttended

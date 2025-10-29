@@ -1,25 +1,27 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EXERCISE_INDEX;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_LAB_ATTENDANCE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_LAB_NUMBER;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Predicate;
 
-import javafx.util.Pair;
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.exceptions.InvalidIndexException;
 import seedu.address.logic.commands.FilterCommand;
 import seedu.address.logic.commands.MarkAttendanceCommand;
+import seedu.address.logic.helpers.Comparison;
 import seedu.address.logic.helpers.ExerciseIndexStatus;
+import seedu.address.logic.helpers.LabAttendanceComparison;
 import seedu.address.logic.helpers.LabIndexStatus;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Status;
 import seedu.address.model.person.predicates.ExerciseStatusMatchesPredicate;
 import seedu.address.model.person.predicates.FilterCombinedPredicate;
+import seedu.address.model.person.predicates.LabAttendanceMatchesPredicate;
 import seedu.address.model.person.predicates.LabStatusMatchesPredicate;
 
 /**
@@ -27,7 +29,7 @@ import seedu.address.model.person.predicates.LabStatusMatchesPredicate;
  */
 public class FilterCommandParser implements Parser<FilterCommand> {
 
-    private static final Prefix[] FILTER_PREFIXES = { PREFIX_EXERCISE_INDEX, PREFIX_LAB_NUMBER };
+    private static final Prefix[] FILTER_PREFIXES = { PREFIX_EXERCISE_INDEX, PREFIX_LAB_NUMBER, PREFIX_LAB_ATTENDANCE };
 
     /**
      * Parses the given {@code String} of arguments in the context of the FilterCommand
@@ -45,12 +47,12 @@ public class FilterCommandParser implements Parser<FilterCommand> {
         return new FilterCommand(new FilterCombinedPredicate(predicates));
     }
 
-    private List<Predicate<Person>> getSelectedPredicates(ArgumentMultimap argMultimap) throws ParseException{
+    private List<Predicate<Person>> getSelectedPredicates(ArgumentMultimap argMultimap) throws ParseException {
         List<String> exerciseIndexes = argMultimap.getAllValues(PREFIX_EXERCISE_INDEX);
         List<String> labNumbers = argMultimap.getAllValues(PREFIX_LAB_NUMBER);
+        List<String> labAttendances = argMultimap.getAllValues(PREFIX_LAB_ATTENDANCE);
 
         List<Predicate<Person>> predicates = new ArrayList<>();
-
 
         for (String exerciseIndexStatus : exerciseIndexes) {
             if (exerciseIndexStatus.isBlank()) {
@@ -64,6 +66,17 @@ public class FilterCommandParser implements Parser<FilterCommand> {
                 throw new ParseException("Lab value missing");
             }
             predicates.add(getLabPredicate(labNumberStatus));
+        }
+
+        if (!labAttendances.isEmpty()) {
+            if (labAttendances.size() != 1) {
+                throw new ParseException("Only 1 la/ allowed");
+            }
+            String labAttendance = labAttendances.get(0);
+            if (labAttendance.isBlank()) {
+                throw new ParseException("Lab attendance value missing");
+            }
+            predicates.add(getLabAttendancePredicate(labAttendance));
         }
 
         if (predicates.isEmpty()) {
@@ -98,6 +111,16 @@ public class FilterCommandParser implements Parser<FilterCommand> {
         }
 
         return new LabStatusMatchesPredicate(labIndex, labStatus);
+    }
+
+    private LabAttendanceMatchesPredicate getLabAttendancePredicate(
+            String labAttendenceStatus) throws ParseException {
+        LabAttendanceComparison labAttendanceComparison = ParserUtil
+                .parseAttendanceComparison(labAttendenceStatus);
+
+        double value = labAttendanceComparison.getAttendance();
+        Comparison comparison = labAttendanceComparison.getComparison();
+        return new LabAttendanceMatchesPredicate(value, comparison);
     }
 
     private void checkNoKeywords(ArgumentMultimap argMultimap) throws ParseException {

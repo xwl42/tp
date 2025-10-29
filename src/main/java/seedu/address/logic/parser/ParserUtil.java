@@ -1,7 +1,5 @@
 package seedu.address.logic.parser;
 
-import static java.lang.Boolean.FALSE;
-import static java.lang.Boolean.TRUE;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_STATUS;
 
@@ -12,14 +10,15 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-import javafx.util.Pair;
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.core.index.MultiIndex;
 import seedu.address.commons.exceptions.InvalidIndexException;
 import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.commands.FilterCommand;
 import seedu.address.logic.commands.FindCommand;
+import seedu.address.logic.helpers.Comparison;
 import seedu.address.logic.helpers.ExerciseIndexStatus;
+import seedu.address.logic.helpers.LabAttendanceComparison;
 import seedu.address.logic.helpers.LabIndexStatus;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Email;
@@ -412,4 +411,64 @@ public class ParserUtil {
             throw new ParseException(MESSAGE_INVALID_FILTER_LAB_STATUS);
         }
     }
+
+    /**
+     * Parses an attendance comparison like ">=60", "75%", "<=85".
+     *
+     * Accepted forms (spaces optional; '%' optional):
+     * - ==70, >=60, <=85, >40, <25
+     * - 75 or 75%
+     *
+     * Value must be an integer from 0 to 100.
+     * Operator must be one of: ==, >=, <=, >, <.
+     *
+     * @param attendanceComparison raw input string
+     * @return a LabAttendanceComparison with the parsed value and operator
+     * @throws ParseException if input is null, malformed, has an unsupported operator,
+     *                        or the value is outside 0–100
+     */
+    public static LabAttendanceComparison parseAttendanceComparison(String attendanceComparison) throws ParseException {
+        if (attendanceComparison == null) {
+            throw new ParseException("Missing comparison condition.");
+        }
+        String s = attendanceComparison.trim().replaceAll("\\s+", "");
+
+        // Accept: ==70, >=60, <=85, >40, <25, 75, and any of those with a trailing %
+        java.util.regex.Matcher m = java.util.regex.Pattern
+                .compile("^(?:([<>]=?|==?|))?(\\d{1,3})(?:%)?$")
+                .matcher(s);
+        if (!m.matches()) {
+            throw new ParseException("Invalid attendance condition. Try la/>=60 or la/75%.");
+        }
+
+        String opStr = m.group(1);
+        int v = Integer.parseInt(m.group(2));
+        if (v < 0 || v > 100) {
+            throw new ParseException("Attendance percentage must be between 0 and 100.");
+        }
+
+        Comparison comparison;
+        switch (opStr) {
+        case "==":
+            comparison = Comparison.EQ;
+            break;
+        case ">=":
+            comparison = Comparison.GE;
+            break;
+        case "<=":
+            comparison = Comparison.LE;
+            break;
+        case ">":
+            comparison = Comparison.GT;
+            break;
+        case "<":
+            comparison = Comparison.LT;
+            break;
+        default:
+            throw new ParseException("Unsupported operator for attendance.");
+        };
+
+        return new LabAttendanceComparison(v, comparison);
+    }
+
 }

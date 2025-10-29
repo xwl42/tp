@@ -31,7 +31,7 @@ public class FilterCommand extends Command {
             + "Exercise index and lab index must always be followed by status.\n"
             + ATTENDED_PERCENTAGE_USAGE
             + "Parameters: [ei/EXERCISE INDEX s/exercise status]... [l/LAB INDEX s/lab status]... "
-            + "[la/LAB ATTENDED PERCENTAGE]...\n"
+            + "[la/COMPARISON]...\n"
             + "Example: " + COMMAND_WORD + " ei/1 s/Y \n";
 
 

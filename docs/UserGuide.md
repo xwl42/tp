@@ -280,7 +280,7 @@ number of labs. Multiple conditions can be filtered at once
 - shows students who completed Exercise 5: `filter ei/5 s/y`
 - shows students who attended Lab 2 **and** completed Exercise 4: `filter l/2 s/y ei/4 s/y`
 - shows students absent for Lab 3 **and** Lab 4: `filter l/3 s/n l/4 s/n`
-- shows students who attended more than 50% of labs: `filter la/>=50%`
+- shows students who attended more than 50% of labs but less than 70% of labs: `filter la/>50% la/<70%`
 
 <box type="tip">
 
@@ -389,14 +389,16 @@ Tip: You can also press `F1` or use the app’s Help menu to open the Help windo
 
 # Parameters
 
-| **Parameter**      | **Description**                                        | **Prefix**                                      | **Constraint**                                                               |
-|--------------------|--------------------------------------------------------|-------------------------------------------------|------------------------------------------------------------------------------|
-| **STUDENT_INDEX**  | Index or range of student(s) in the displayed list.    | *(no prefix — written before other parameters)* | Must be a whole number greater than 0, or a range in the format `X:Y`.       |
-| **EXERCISE_INDEX** | Specific exercise number to mark.                      | `ei/`                                           | Must be between 0–9 (inclusive).                                             |
-| **STATUS**         | Completion or attendance status (`y` = yes, `n` = no). | `s/`                                            | Must be either `y` or `n`.                                                   |
-| **LAB_NUMBER**     | Specific lab session to mark attendance for.           | `l/`                                            | Must be between 1–10 (inclusive).                                            |
-| **EXAM_NAME**      | Name of the exam to record or update a grade for.      | `en/`                                           | Must be one of: `pe1`, `midterm`, `pe2`, or `final`.                         |
-| **SCORE**          | Numeric grade assigned for the exam.                   | `sc/`                                           | Must be a number; up to one decimal place.                                   |
-| **START_DATETIME** | Starting datetime of the timeslot                      | `ts/`                                           | Must be in ISO_LOCAL_DATE_TIME or human-friendly format (specified in notes) |
-| **END_DATETIME**   | Ending datetime of the timeslot                        | `ts/`                                           | Must be in ISO_LOCAL_DATE_TIME or human-friendly format (specified in notes) |
-| **STUDENT_NAME**   | Name of student in consultation                        | `n/`                                            |                                                                              |
+| **Parameter**      | **Description**                                        | **Prefix**                                      | **Constraint**                                                                                  |
+|--------------------|--------------------------------------------------------|-------------------------------------------------|-------------------------------------------------------------------------------------------------|
+| **STUDENT_INDEX**  | Index or range of student(s) in the displayed list.    | *(no prefix — written before other parameters)* | Must be a whole number greater than 0, or a range in the format `X:Y`.                          |
+| **EXERCISE_INDEX** | Specific exercise number to mark.                      | `ei/`                                           | Must be between 0–9 (inclusive).                                                                |
+| **STATUS**         | Completion or attendance status (`y` = yes, `n` = no). | `s/`                                            | Must be either `y` or `n`.                                                                      |
+| **LAB_NUMBER**     | Specific lab session to mark attendance for.           | `l/`                                            | Must be between 1–10 (inclusive).                                                               |
+| **EXAM_NAME**      | Name of the exam to record or update a grade for.      | `en/`                                           | Must be one of: `pe1`, `midterm`, `pe2`, or `final`.                                            |
+| **SCORE**          | Numeric grade assigned for the exam.                   | `sc/`                                           | Must be a number; up to one decimal place.                                                      |
+| **START_DATETIME** | Starting datetime of the timeslot                      | `ts/`                                           | Must be in ISO_LOCAL_DATE_TIME or human-friendly format (specified in notes)                    |
+| **END_DATETIME**   | Ending datetime of the timeslot                        | `ts/`                                           | Must be in ISO_LOCAL_DATE_TIME or human-friendly format (specified in notes)                    |
+| **STUDENT_NAME**   | Name of student in consultation                        | `n/`                                            |                                                                                                 |
+| **CRITERION**      | Criterion to sort by                                   | `c/`                                            | Must be `name`, `id`, `lab`, `ex`                                                               |
+| **COMPARISON**     | Percentage of labs attended to filter by               | `la/`                                           | Must contain one of the following operators, ==, >=, <=, >, < followed by an integer from 0-100 |

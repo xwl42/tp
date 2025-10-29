@@ -243,16 +243,141 @@ use immediately after a mistaken action if your environment supports undo of oth
 ---
 
 ## **Visualisation**
-- Find
-- Filter
-- Sort
-- List
+### Finding students: `find`
+You can use this command to search for students by keywords and optionally
+restrict which fields are searched.
+
+**Format:** `find KEYWORD [MORE_KEYWORDS]... [i/] [n/] [p/] [e/] [g/] [t/]`
+
+**Examples:**
+- searches **all fields** for “alex” or “david”: `find alex david`
+- searches **names only** for “alice”: `find alice n/`
+- searches **Student ID** or **Name** for “A123” or “john”: `find A123 john i/ n/`
+- searches **tags only** for “lab1”: `find lab1 t/`
+
+<box type="tip">
+
+Tip: If you do not include parameters, all fields are searched. Matching is case-insensitive and 
+if any of the keywords match, the student will be shown.
+</box>
+
+<box type="warning">
+
+Caution: Selectors must be empty. You should use `find alice n/` instead of `find n/alice`.
+</box>
+
+<br>
+
+### Filtering students: `filter`
+You can use this command to show the students who attended a certain lab or did a certain
+assigment. You can also filter by students who attended more than a certain
+number of labs. Multiple conditions can be filtered at once
+
+**Format:** `filter [l/LAB_NUMBER s/ATTENDANCE_STATUS]... [ei/EXERCISE_INDEX s/EXERCISE_STATUS]... [la/COMPARISON]`
+
+**Examples:**
+- shows students who attended Lab 7: `filter l/7 s/y`
+- shows students who completed Exercise 5: `filter ei/5 s/y`
+- shows students who attended Lab 2 **and** completed Exercise 4: `filter l/2 s/y ei/4 s/y`
+- shows students absent for Lab 3 **and** Lab 4: `filter l/3 s/n l/4 s/n`
+- shows students who attended more than 50% of labs: `filter la/>=50%`
+
+<box type="tip">
+
+Tip: Run `list` to clear filters and show everyone again.
+</box>
+
+<box type="warning">
+
+Caution: Each `l/` must be followed by its own `s/`, and each `ei/` must be followed by its own `s/`.
+Missing or misplaced `s/` parts will be rejected.
+</box>
+
+<br>
+
+
+
+### Sorting students: `sort`
+
+You can use this command to reorder the current list of students
+by the criterion you choose.
+
+**Format:** `sort c/CRITERION`
+
+**Examples:**
+- sort by name (A to Z): `sort c/name`
+- sort by Student ID: `sort c/id`
+- sort by lab attendance (high to low): `sort c/lab`
+- sort by exercise progress (high to low): `sort c/ex`
+
+<box type="tip">
+
+Tip: Valid options are `name`, `id`, `lab`, `ex`.
+Capital letters do not matter (e.g., `c/Name` works).
+</box>
+
+<box type="warning">
+
+Caution: Sorting does not change any data and cannot be undone with `undo`. 
+To change the order again, run `sort` with a different option.
+</box>
+
+<br>
+
+### Listing students: `list`
+You can use this command to show all students in the current list and clear any search or filter views.
+
+**Format:** `list`
+
+**Examples:**
+- show all students: `list`
+- return to the full list after a search or filter: `list`
+
+<box type="tip">
+
+Tip: Use `list` after `find` or `filter` to show everyone again.
+</box>
+
+<box type="warning">
+
+Caution: Any extra text after `list` is ignored and does not change what is shown.
+</box>
+
+<br>
+
 
 ---
 
 ## **Miscellaneous**
-- Exit
-- Help
+### Exiting the application: `exit`
+You can use this command to close LambdaLab.
+
+**Format:** `exit`
+
+**Examples:**
+- close the application: `exit`
+
+
+<br>
+
+### Opening the help window: `help`
+You can use this command to open the Help window,
+which links to the User Guide and also provides brief explanations
+of each command.
+
+**Format:** `help`
+
+**Examples:**
+- open the help window: `help`
+
+<box type="tip">
+
+Tip: You can also press `F1` or use the app’s Help menu to open the Help window.
+</box>
+
+
+<br>
+
 
 ---
 
@@ -264,14 +389,14 @@ use immediately after a mistaken action if your environment supports undo of oth
 
 # Parameters
 
-| **Parameter**      | **Description** | **Prefix** | **Constraint** |
-|---------------------|------------------|-------------|----------------|
-| **STUDENT_INDEX**   | Index or range of student(s) in the displayed list. | *(no prefix — written before other parameters)* | Must be a whole number greater than 0, or a range in the format `X:Y`. |
-| **EXERCISE_INDEX**  | Specific exercise number to mark. | `ei/` | Must be between 0–9 (inclusive). |
-| **STATUS**          | Completion or attendance status (`y` = yes, `n` = no). | `s/` | Must be either `y` or `n`. |
-| **LAB_NUMBER**      | Specific lab session to mark attendance for. | `l/` | Must be between 1–10 (inclusive). |
-| **EXAM_NAME**       | Name of the exam to record or update a grade for. | `en/` | Must be one of: `pe1`, `midterm`, `pe2`, or `final`. |
-| **SCORE**           | Numeric grade assigned for the exam. | `sc/` | Must be a number; up to one decimal place. |
-| **START_DATETIME**   | Starting datetime of the timeslot | `ts/` | Must be in ISO_LOCAL_DATE_TIME or human-friendly format (specified in notes) |
-| **END_DATETIME**   | Ending datetime of the timeslot | `ts/` | Must be in ISO_LOCAL_DATE_TIME or human-friendly format (specified in notes) |
-| **STUDENT_NAME**          | Name of student in consultation | `n/` |  |
+| **Parameter**      | **Description**                                        | **Prefix**                                      | **Constraint**                                                               |
+|--------------------|--------------------------------------------------------|-------------------------------------------------|------------------------------------------------------------------------------|
+| **STUDENT_INDEX**  | Index or range of student(s) in the displayed list.    | *(no prefix — written before other parameters)* | Must be a whole number greater than 0, or a range in the format `X:Y`.       |
+| **EXERCISE_INDEX** | Specific exercise number to mark.                      | `ei/`                                           | Must be between 0–9 (inclusive).                                             |
+| **STATUS**         | Completion or attendance status (`y` = yes, `n` = no). | `s/`                                            | Must be either `y` or `n`.                                                   |
+| **LAB_NUMBER**     | Specific lab session to mark attendance for.           | `l/`                                            | Must be between 1–10 (inclusive).                                            |
+| **EXAM_NAME**      | Name of the exam to record or update a grade for.      | `en/`                                           | Must be one of: `pe1`, `midterm`, `pe2`, or `final`.                         |
+| **SCORE**          | Numeric grade assigned for the exam.                   | `sc/`                                           | Must be a number; up to one decimal place.                                   |
+| **START_DATETIME** | Starting datetime of the timeslot                      | `ts/`                                           | Must be in ISO_LOCAL_DATE_TIME or human-friendly format (specified in notes) |
+| **END_DATETIME**   | Ending datetime of the timeslot                        | `ts/`                                           | Must be in ISO_LOCAL_DATE_TIME or human-friendly format (specified in notes) |
+| **STUDENT_NAME**   | Name of student in consultation                        | `n/`                                            |                                                                              |

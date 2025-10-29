@@ -13,6 +13,8 @@ import seedu.address.commons.core.index.Index;
 import seedu.address.commons.exceptions.InvalidIndexException;
 import seedu.address.logic.commands.FilterCommand;
 import seedu.address.logic.commands.MarkAttendanceCommand;
+import seedu.address.logic.helpers.ExerciseIndexStatus;
+import seedu.address.logic.helpers.LabIndexStatus;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Status;
@@ -25,6 +27,8 @@ import seedu.address.model.person.predicates.LabStatusMatchesPredicate;
  */
 public class FilterCommandParser implements Parser<FilterCommand> {
 
+    private static final Prefix[] FILTER_PREFIXES = { PREFIX_EXERCISE_INDEX, PREFIX_LAB_NUMBER };
+
     /**
      * Parses the given {@code String} of arguments in the context of the FilterCommand
      * and returns a FilterCommand object for execution.
@@ -33,53 +37,73 @@ public class FilterCommandParser implements Parser<FilterCommand> {
     public FilterCommand parse(String args) throws ParseException {
 
         ArgumentMultimap argMultimap =
-                ArgumentTokenizer.tokenize(args, PREFIX_EXERCISE_INDEX, PREFIX_LAB_NUMBER);
+                ArgumentTokenizer.tokenize(args, FILTER_PREFIXES);
 
-        Optional<String> exerciseIndexOptional = argMultimap.getValue(PREFIX_EXERCISE_INDEX);
-        Optional<String> labNumberOptional = argMultimap.getValue(PREFIX_LAB_NUMBER);
+        checkNoKeywords(argMultimap);
+        List<Predicate<Person>> predicates = getSelectedPredicates(argMultimap);
+
+        return new FilterCommand(new FilterCombinedPredicate(predicates));
+    }
+
+    private List<Predicate<Person>> getSelectedPredicates(ArgumentMultimap argMultimap) throws ParseException{
+        List<String> exerciseIndexes = argMultimap.getAllValues(PREFIX_EXERCISE_INDEX);
+        List<String> labNumbers = argMultimap.getAllValues(PREFIX_LAB_NUMBER);
 
         List<Predicate<Person>> predicates = new ArrayList<>();
 
-        if (exerciseIndexOptional.isPresent()) {
-            predicates.add(createExerciseFilter(exerciseIndexOptional));
+
+        for (String exerciseIndexStatus : exerciseIndexes) {
+            if (exerciseIndexStatus.isBlank()) {
+                throw new ParseException("Exercise value missing");
+            }
+            predicates.add(getExercisePredicate(exerciseIndexStatus));
         }
 
-        if (labNumberOptional.isPresent()) {
-            predicates.add(createLabFilter(labNumberOptional));
+        for (String labNumberStatus : labNumbers) {
+            if (labNumberStatus.isBlank()) {
+                throw new ParseException("Lab value missing");
+            }
+            predicates.add(getLabPredicate(labNumberStatus));
         }
 
         if (predicates.isEmpty()) {
             throw new ParseException(FilterCommand.MESSAGE_USAGE);
         }
-
-        return new FilterCommand(new FilterCombinedPredicate(predicates));
+        return predicates;
     }
 
-    private ExerciseStatusMatchesPredicate createExerciseFilter(
-            Optional<String> exerciseIndexOptional) throws ParseException {
-        assert(exerciseIndexOptional.isPresent());
-        String exerciseIndexStatus = exerciseIndexOptional.get();
-        Pair<String, Status> indexStatusPair = ParserUtil.parseExerciseIndexStatus(exerciseIndexStatus);
-        Status exerciseStatus = indexStatusPair.getValue();
-        String exerciseIndexString = indexStatusPair.getKey();
+    private ExerciseStatusMatchesPredicate getExercisePredicate(
+            String exerciseIndexStatus) throws ParseException {
+        ExerciseIndexStatus indexStatusPair = ParserUtil.parseExerciseIndexStatus(exerciseIndexStatus);
+
+        Status exerciseStatus = indexStatusPair.getStatus();
+        String exerciseIndexString = indexStatusPair.getExerciseIndex();
         Index exerciseIndex = ParserUtil.parseExerciseIndex(exerciseIndexString);
+
         return new ExerciseStatusMatchesPredicate(exerciseIndex, exerciseStatus);
     }
 
-    private LabStatusMatchesPredicate createLabFilter(
-            Optional<String> labNumberOptional) throws ParseException {
-        assert(labNumberOptional.isPresent());
-        String labNumberStatus = labNumberOptional.get();
-        Pair<String, Boolean> labNumberStatusPair = ParserUtil.parseLabNumberStatus(labNumberStatus);
-        Boolean labStatus = labNumberStatusPair.getValue();
-        String labNumberString = labNumberStatusPair.getKey();
-        Index labNumber;
+    private LabStatusMatchesPredicate getLabPredicate(
+            String labNumberStatus) throws ParseException {
+        LabIndexStatus labNumberStatusPair = ParserUtil.parseLabNumberStatus(labNumberStatus);
+
+        String labStatus = labNumberStatusPair.getStatus();
+        String labIndexString = labNumberStatusPair.getLabIndex();
+        Index labIndex;
+
         try {
-            labNumber = ParserUtil.parseIndex(labNumberString);
+            labIndex = ParserUtil.parseIndex(labIndexString);
         } catch (InvalidIndexException iie) {
             throw new ParseException(MarkAttendanceCommand.MESSAGE_FAILURE_INVALID_LAB_INDEX);
         }
-        return new LabStatusMatchesPredicate(labNumber, labStatus);
+
+        return new LabStatusMatchesPredicate(labIndex, labStatus);
+    }
+
+    private void checkNoKeywords(ArgumentMultimap argMultimap) throws ParseException {
+        if (!argMultimap.getPreamble().isBlank()) {
+            throw new ParseException(FilterCommand.MESSAGE_USAGE);
+        }
     }
 
 }

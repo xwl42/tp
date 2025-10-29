@@ -19,6 +19,8 @@ import seedu.address.commons.exceptions.InvalidIndexException;
 import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.commands.FilterCommand;
 import seedu.address.logic.commands.FindCommand;
+import seedu.address.logic.helpers.ExerciseIndexStatus;
+import seedu.address.logic.helpers.LabIndexStatus;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Examination;
@@ -356,7 +358,7 @@ public class ParserUtil {
      * @param exerciseIndexString a string containing both the index and status as a combined string
      * @throws ParseException if the given {@code String} does not include a status.
      */
-    public static Pair<String, Status> parseExerciseIndexStatus(String exerciseIndexString) throws ParseException {
+    public static ExerciseIndexStatus parseExerciseIndexStatus(String exerciseIndexString) throws ParseException {
         ArgumentMultimap exerciseMultimap =
                 ArgumentTokenizer.tokenize(exerciseIndexString, PREFIX_STATUS);
         Optional<String> status = exerciseMultimap.getValue(PREFIX_STATUS);
@@ -369,12 +371,12 @@ public class ParserUtil {
         }
         String statusString = status.get().toUpperCase();
         switch (statusString) {
-        case "D":
-            return new Pair<>(exercise, Status.DONE);
+        case "Y":
+            return new ExerciseIndexStatus(exercise, Status.DONE);
         case "N":
-            return new Pair<>(exercise, Status.NOT_DONE);
+            return new ExerciseIndexStatus(exercise, Status.NOT_DONE);
         case "O":
-            return new Pair<>(exercise, Status.OVERDUE);
+            return new ExerciseIndexStatus(exercise, Status.OVERDUE);
         default:
             throw new ParseException(MESSAGE_INVALID_FILTER_EXERCISE_STATUS);
         }
@@ -387,7 +389,7 @@ public class ParserUtil {
      * @param labNumberString a string containing both the index and status as a combined string
      * @throws ParseException if the given {@code String} does not include a status.
      */
-    public static Pair<String, Boolean> parseLabNumberStatus(String labNumberString) throws ParseException {
+    public static LabIndexStatus parseLabNumberStatus(String labNumberString) throws ParseException {
         ArgumentMultimap exerciseMultimap =
                 ArgumentTokenizer.tokenize(labNumberString, PREFIX_STATUS);
         Optional<String> status = exerciseMultimap.getValue(PREFIX_STATUS);
@@ -401,9 +403,11 @@ public class ParserUtil {
         String statusString = status.get().toUpperCase();
         switch (statusString) {
         case "Y":
-            return new Pair<>(labNumber, TRUE);
+            return new LabIndexStatus(labNumber, "Y");
         case "N":
-            return new Pair<>(labNumber, FALSE);
+            return new LabIndexStatus(labNumber, "N");
+        case "A":
+            return new LabIndexStatus(labNumber, "A");
         default:
             throw new ParseException(MESSAGE_INVALID_FILTER_LAB_STATUS);
         }

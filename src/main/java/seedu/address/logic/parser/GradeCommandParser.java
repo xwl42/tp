@@ -3,7 +3,7 @@ package seedu.address.logic.parser;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EXAM_NAME;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_SCORE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_STATUS;
 
 import seedu.address.commons.core.index.MultiIndex;
 import seedu.address.commons.exceptions.IllegalValueException;
@@ -21,16 +21,18 @@ public class GradeCommandParser implements Parser<GradeCommand> {
     public static final String MESSAGE_INVALID_EXAM_NAME_FORMAT =
             "%s is an invalid exam name. Exam name must be one of %s";
     private static final String EMPTY_PREFIX_FORMAT = "Prefix %s : has empty value!";
+    private static final String MESSAGE_INVALID_STATUS = "Invalid status! Use 'y' for passed or 'n' for failed.";
 
     @Override
     public GradeCommand parse(String userInput) throws ParseException {
         requireNonNull(userInput);
         ArgumentMultimap argumentMultimap =
-                ArgumentTokenizer.tokenize(userInput, PREFIX_EXAM_NAME, PREFIX_SCORE);
+                ArgumentTokenizer.tokenize(userInput, PREFIX_EXAM_NAME, PREFIX_STATUS);
 
         MultiIndex studentIndex;
         String examName;
-        String result;
+        String status;
+        boolean isPassed;
 
         try {
             studentIndex = ParserUtil.parseMultiIndex(argumentMultimap.getPreamble());
@@ -42,11 +44,11 @@ public class GradeCommandParser implements Parser<GradeCommand> {
                     pe
             );
         }
+        isPassed = ParserUtil.parseStatus(argumentMultimap.getValue(PREFIX_STATUS).orElse(""));
 
         try {
-            examName = argumentMultimap.getValue(PREFIX_EXAM_NAME).orElseThrow(() -> new ParseException(String.format(EMPTY_PREFIX_FORMAT, PREFIX_EXAM_NAME)));
-
-            result = argumentMultimap.getValue(PREFIX_SCORE).orElseThrow(() -> new ParseException(String.format(EMPTY_PREFIX_FORMAT, PREFIX_SCORE)));
+            examName = argumentMultimap.getValue(PREFIX_EXAM_NAME).orElseThrow(()
+                    -> new ParseException(String.format(EMPTY_PREFIX_FORMAT, PREFIX_EXAM_NAME)));
 
         } catch (IllegalValueException ive) {
             throw new ParseException(
@@ -55,6 +57,6 @@ public class GradeCommandParser implements Parser<GradeCommand> {
             );
         }
 
-        return new GradeCommand(studentIndex, examName, result);
+        return new GradeCommand(studentIndex, examName, isPassed);
     }
 }

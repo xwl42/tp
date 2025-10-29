@@ -2,7 +2,7 @@ package seedu.address.logic.commands;
 
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EXAM_NAME;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_SCORE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_STATUS;
 import static seedu.address.model.person.GradeMap.VALID_EXAM_NAMES;
 
 import java.util.Arrays;
@@ -17,7 +17,7 @@ import seedu.address.model.person.Person;
 import seedu.address.model.person.exceptions.InvalidExamNameException;
 
 /**
- * Marks the specified exam as passed ("y") or failed ("n")
+ * Marks the specified exam as passed or failed
  * for one or more students in the address book.
  */
 public class GradeCommand extends MultiIndexCommand {
@@ -26,41 +26,31 @@ public class GradeCommand extends MultiIndexCommand {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Marks the specified exam as passed or failed "
             + "for one or more students identified by their index numbers in the displayed student list.\n"
-            + "Parameters: INDEX... (must be positive integers) "
+            + "Parameters: INDEX (must be a positive integer or range X:Y) "
             + PREFIX_EXAM_NAME + "EXAM_NAME "
-            + PREFIX_SCORE + "RESULT (y/n)\n"
-            + "Example: " + COMMAND_WORD + " 1:3 " + PREFIX_EXAM_NAME + "midterm " + PREFIX_SCORE + "y\n"
-            + "Example: " + COMMAND_WORD + " 2 " + PREFIX_EXAM_NAME + "pe1 " + PREFIX_SCORE + "n\n";
+            + PREFIX_STATUS + "STATUS (y/n)\n"
+            + "Example: " + COMMAND_WORD + " 1:3 " + PREFIX_EXAM_NAME + "midterm " + PREFIX_STATUS + "y\n"
+            + "Example: " + COMMAND_WORD + " 2 " + PREFIX_EXAM_NAME + "pe1 " + PREFIX_STATUS + "n\n";
 
     public static final String MESSAGE_GRADE_SUCCESS = "%s marked as %s for: %s";
     public static final String MESSAGE_FAILURE_INVALID_NAME =
             "%s is invalid! Here are the valid exam names: %s";
-    public static final String MESSAGE_FAILURE_INVALID_RESULT =
-            "Invalid result! Use 'y' for passed or 'n' for failed.";
 
     private final String examName;
     private final boolean isPassed;
 
     /**
-     * @param multiIndex list of students to update
-     * @param examName name of exam
-     * @param result result character ("y" or "n")
+     * Constructs a GradeCommand.
+     *
+     * @param multiIndex List of students to update.
+     * @param examName   Name of the exam to mark.
+     * @param isPassed   True if passed, false if failed.
      */
-    public GradeCommand(MultiIndex multiIndex, String examName, String result) {
+    public GradeCommand(MultiIndex multiIndex, String examName, boolean isPassed) {
         super(multiIndex);
-        requireAllNonNull(multiIndex, examName, result);
-
+        requireAllNonNull(multiIndex, examName);
         this.examName = examName.toLowerCase();
-
-        String trimmed = result.trim().toLowerCase();
-
-        if (trimmed.equals("y")) {
-            this.isPassed = true;
-        } else if (trimmed.equals("n")) {
-            this.isPassed = false;
-        } else {
-            throw new IllegalArgumentException(MESSAGE_FAILURE_INVALID_RESULT);
-        }
+        this.isPassed = isPassed;
     }
 
     @Override
@@ -107,7 +97,13 @@ public class GradeCommand extends MultiIndexCommand {
                 .map(Person::getNameAndID)
                 .collect(Collectors.joining(", "));
 
-        String resultString = isPassed ? "Passed" : "Failed";
+        String resultString;
+
+        if (isPassed) {
+            resultString = "passed";
+        } else {
+            resultString = "failed";
+        }
 
         return new CommandResult(String.format(
                 MESSAGE_GRADE_SUCCESS,

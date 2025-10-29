@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EXAM_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_STATUS;
+import static seedu.address.logic.parser.ParserUtil.validateFields;
 
 import seedu.address.commons.core.index.MultiIndex;
 import seedu.address.commons.exceptions.IllegalValueException;
@@ -19,7 +20,7 @@ import seedu.address.logic.parser.exceptions.ParseException;
 public class GradeCommandParser implements Parser<GradeCommand> {
 
     public static final String MESSAGE_INVALID_EXAM_NAME_FORMAT =
-            "%s is an invalid exam name. Exam name must be one of %s";
+            "Exam name is invalid! Exam name must be one of %s";
     private static final String EMPTY_PREFIX_FORMAT = "Prefix %s : has empty value!";
 
     @Override
@@ -27,12 +28,23 @@ public class GradeCommandParser implements Parser<GradeCommand> {
         requireNonNull(userInput);
         ArgumentMultimap argumentMultimap =
                 ArgumentTokenizer.tokenize(userInput, PREFIX_EXAM_NAME, PREFIX_STATUS);
-
         MultiIndex studentIndex;
         String examName;
-        String status;
         boolean isPassed;
-
+        validateFields(argumentMultimap, GradeCommand.MESSAGE_USAGE, PREFIX_EXAM_NAME, PREFIX_STATUS);
+        isPassed = ParserUtil.parseStatus(argumentMultimap.getValue(PREFIX_STATUS).orElseThrow(()
+                -> new ParseException(
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, GradeCommand.MESSAGE_USAGE)
+        )));
+        try {
+            examName = argumentMultimap.getValue(PREFIX_EXAM_NAME).orElseThrow(()
+                    -> new ParseException(String.format(EMPTY_PREFIX_FORMAT, PREFIX_EXAM_NAME)));
+        } catch (IllegalValueException ive) {
+            throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, GradeCommand.MESSAGE_USAGE),
+                    ive
+            );
+        }
         try {
             studentIndex = ParserUtil.parseMultiIndex(argumentMultimap.getPreamble());
         } catch (InvalidIndexException iie) {
@@ -43,19 +55,6 @@ public class GradeCommandParser implements Parser<GradeCommand> {
                     pe
             );
         }
-        isPassed = ParserUtil.parseStatus(argumentMultimap.getValue(PREFIX_STATUS).orElse(""));
-
-        try {
-            examName = argumentMultimap.getValue(PREFIX_EXAM_NAME).orElseThrow(()
-                    -> new ParseException(String.format(EMPTY_PREFIX_FORMAT, PREFIX_EXAM_NAME)));
-
-        } catch (IllegalValueException ive) {
-            throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, GradeCommand.MESSAGE_USAGE),
-                    ive
-            );
-        }
-
         return new GradeCommand(studentIndex, examName, isPassed);
     }
 }

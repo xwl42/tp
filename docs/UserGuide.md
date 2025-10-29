@@ -328,9 +328,7 @@ If you regrade an exam, the previous pass/fail status will be **overwritten**.
 <box type="warning">
 
 **Caution:**
-- The exam name must match one of the valid exams listed below.
-- Only valid exam names will be accepted — entering an invalid one will cause an error.
-- This command modifies students’ grade records directly, so ensure the correct exam and indices are specified.
+- The exam name must match one of the valid exams listed below — entering an invalid one will cause an error.
   </box>
 
 | **Valid Exam Name** | **Description** |
@@ -648,7 +646,38 @@ commands or skip back to earlier changes.
 
 ### Set-week
 
-*Content to be added*
+The `set-week` command allows you to update the **current teaching week** in LambdaLab.  
+This helps the system automatically manage time-sensitive features such as **exercise due dates** and **lab attendances**.
+
+**Format:**
+set-week WEEK_NUMBER
+
+**Examples:**
+- `set-week 5` — Sets the current teaching week to Week 5.
+- `set-week 1` — Resets the current week to Week 1 at the start of a new semester.
+
+<box type="tip">
+
+**Tip:**  
+The current week determines the following:
+1. If an exercise that is not done is displayed as overdue in the lab attendance tracker.
+2. If a lab that is not attended is displayed as absent in the lab attendance tracker.
+</box>
+
+3. For example:
+Let's say **Exercise 0** is due on **Week 2** and it is not done. 
+![not-done-exercise.png](images/not-done-exercise.png)
+Now, if you set the current week to **Week 3**, **Exercise 0** will automatically be marked as **overdue**
+![overdue-exercise.png](images/overdue-exercise.png)
+
+Similarly, lab attendance is tracked relative to the current week, allowing TAs to manage which students have missed sessions.
+
+<box type="warning">
+
+**Caution:**
+- The week number must be within the valid semester range (e.g., 1–13).
+- Setting the wrong week may cause inconsistencies in exercise deadlines and attendance tracking.
+  </box>
 
 <br>
 

@@ -155,7 +155,7 @@ spreadsheets or GUI apps.
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines 
 as space characters surrounding line-breaks may be omitted when copied over to the application.
 
-* For any command using the `INDEX` parameter, you can mark multiple students at once using a range `X:Y` (inclusive) (e.g., `1:5`).
+* For any command using the `INDEX` parameter, you can mark multiple students at once using a range `X:Y` (inclusive, X <= Y) (e.g., `1:5`).
   Note that this only works for selecting multiple students (`INDEX`), not for multiple exercises (`EXERCISE_INDEX`) or labs (`LAB_INDEX`).
 </box>
 

@@ -29,7 +29,7 @@ activate Model
 Model --> MultiIndexCommand : list of persons [1,2,3]
 deactivate Model
 
-loop while the
+loop For each person in the filtered person list
     MultiIndexCommand -> GradeCommand : applyActionToPerson(model, p)
     activate GradeCommand
 

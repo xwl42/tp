@@ -6,23 +6,11 @@
 
 # LambdaLab User Guide
 
-LambdaLab is a desktop app for **CS2030S Teaching Assistants** to **manage student records**, optimised for use via a
+LambdaLab is a desktop app for **CS2030S Teaching Assistants** to to maintain student records, mark lab attendance and exercises,
+and manage consultation timeslots. It is optimised for use via a
 Command Line Interface (CLI) while still having an intuitive Graphical User Interface (GUI). If you are a fast typer,
 LambdaLab can help you track student information, lab attendance, and exercise submissions even faster than traditional
 spreadsheets or GUI apps.
-
-## About this guide
-
-This guide is written for CS2030S teaching assistants who need to maintain student records, mark lab attendance and exercises,
-and manage consultation timeslots. Assumed prior knowledge:
-- Comfortable using a command terminal on Windows / macOS / Linux.
-- Basic familiarity with editing plain text (copy/paste commands).
-- Understands core CS2030S concepts (labs, exercises, student identifiers).
-
-How to use this guide:
-- Quick start: run the application and try a few example commands.
-- Features: detailed command syntax, examples, and expected output.
-- Troubleshooting: common errors and remedies are highlighted near each command.
 
 ## Table of Contents
 
@@ -595,7 +583,8 @@ LambdaLab data are saved in the hard disk automatically after any command that c
 
 ### Editing the data file
 
-LambdaLab data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.
+LambdaLab data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are 
+welcome to update data directly by editing that data file.
 
 <box type="warning">
 
@@ -660,8 +649,15 @@ lab sessions to maintain accurate records.
 
 ## Known issues
 
-1. **When using multiple screens**, if you move the application to a secondary screen, and later switch to using only the primary screen, the GUI will open off-screen. The remedy is to delete the `preferences.json` file created by the application before running the application again.
-2. **If you minimize the Help Window** and then run the `help` command (or use the `Help` menu, or the keyboard shortcut `F1`) again, the original Help Window will remain minimized, and no new Help Window will appear. The remedy is to manually restore the minimized Help Window.
+1. **When using multiple screens**, if you move the application to a secondary screen, and later switch to using only the 
+primary screen, the GUI will open off-screen. The remedy is to delete the `preferences.json` file created by the application 
+before running the application again.
+2. **If you minimize the Help Window** and then run the `help` command (or use the `Help` menu, or the keyboard shortcut 
+`F1`) again, the original Help Window will remain minimized, and no new Help Window will appear. The remedy is to manually 
+restore the minimized Help Window.
+3. **When copying commands from PDF**, space characters surrounding line-breaks may be omitted, causing command format 
+errors. The remedy is to manually check and add spaces between parameters when pasting commands.
+4. 
 
 --------------------------------------------------------------------------------------------------------------------
 

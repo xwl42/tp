@@ -261,9 +261,26 @@ clear
 
 ---
 
-### On the labs, exercises and examinations
-Before learning about the commands let's familiarise ourselves with the **Trackers**
+### On Labs, Exercises, and Examinations
+
+Before learning about the specific commands, let’s first familiarise ourselves with the **Trackers** feature.  
+These trackers provide a visual overview of each student’s progress in terms of **lab attendance**,
+**exercise completion**, and **examination performance (on a pass/fail basis)**.
+
 ![Trackers.png](images/Trackers.png)
+
+Each tracker uses colour indicators to represent a student’s current status in a clear and intuitive way:
+
+| **Category** | **Green** | **Grey** | **Red** |
+|:--------------|:-----------|:-----------|:-----------|
+| **Lab** | Attended | Not conducted yet | Absent |
+| **Exercise** | Completed | Not conducted | Overdue |
+| **Exam** | Passed | Not graded | Failed |
+
+This system allows Teaching Assistants to quickly assess how students are performing at a glance.  
+For example, a green tracker indicates satisfactory progress, while a red one highlights areas needing attention — such as missed labs, overdue exercises, or failed exams.
+
+Now let's get started with the commands!
 
 #### Mark a student's lab attendance: `marka`
 

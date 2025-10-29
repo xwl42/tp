@@ -385,6 +385,8 @@ Each subclass:
 grade 1 en/midterm s/y
 Marks the *Midterm* exam as *passed* for student 1.
 
+<puml src="diagrams/GradeSequenceDiagram.puml" width="550" />
+
 **Example 2: Range of Indices**
 marka 1:5 l/3 s/n
 Marks Lab 3 as *absent* for students 1 through 5.

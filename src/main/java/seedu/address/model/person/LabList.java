@@ -170,5 +170,12 @@ public class LabList implements LabAttendanceList {
         }
         return colours;
     }
-
+    @Override
+    public List<String> getLabels() {
+        List<String> labels = new ArrayList<>();
+        for (int i = 0; i < NUMBER_OF_LABS; i++) {
+            labels.add("L" + (i + 1));
+        }
+        return labels;
+    }
 }

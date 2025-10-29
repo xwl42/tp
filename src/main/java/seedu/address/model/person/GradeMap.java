@@ -140,5 +140,10 @@ public class GradeMap implements Trackable{
                 })
                 .collect(Collectors.toList());
     }
-
+    @Override
+    public List<String> getLabels() {
+        return Arrays.stream(VALID_EXAM_NAMES)
+                .map(String::toUpperCase)
+                .toList();
+    }
 }

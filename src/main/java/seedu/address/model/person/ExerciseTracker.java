@@ -179,5 +179,13 @@ public class ExerciseTracker implements Comparable<ExerciseTracker>, Trackable {
                 })
                 .collect(Collectors.toList());
     }
+    @Override
+    public List<String> getLabels() {
+        List<String> labels = new ArrayList<>();
+        for (int i = 0; i < NUMBER_OF_EXERCISES; i++) {
+            labels.add("EX" + (i));
+        }
+        return labels;
+    }
 }
 

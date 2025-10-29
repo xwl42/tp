@@ -51,7 +51,21 @@
         "storage-component": "Storage component",
         "common-classes": "Common classes",
         "implementation": "Implementation",
-        "undo-feature": "Undo feature"
+        "undo-feature": "Undo feature",
+        "feature-multi-index-inputs": "Feature: Multi-Index Inputs",
+        "proposed-data-archiving": "[Proposed] Data archiving",
+        "find-feature": "Find Feature:",
+        "documentation-logging-testing-configuration-dev-ops": "Documentation, logging, testing, configuration, dev-ops",
+        "appendix-requirements": "Appendix: Requirements",
+        "product-scope": "Product scope",
+        "user-stories": "User stories",
+        "use-cases": "Use cases",
+        "non-functional-requirements": "Non-Functional Requirements",
+        "glossary": "Glossary",
+        "appendix-instructions-for-manual-testing": "Appendix: Instructions for manual testing",
+        "launch-and-shutdown": "Launch and shutdown",
+        "deleting-a-person": "Deleting a person",
+        "saving-data": "Saving data"
       },
       "headingKeywords": {}
     },
@@ -72,27 +86,7 @@
       "headingKeywords": {}
     },
     {
-      "src": "SettingUp.md",
-      "title": "Setting up and getting started",
-      "headings": {
-        "setting-up-and-getting-started": "Setting up and getting started",
-        "setting-up-the-project-in-your-computer": "Setting up the project in your computer",
-        "before-writing-code": "Before writing code"
-      },
-      "headingKeywords": {}
-    },
-    {
-      "src": "Testing.md",
-      "title": "Testing guide",
-      "headings": {
-        "testing-guide": "Testing guide",
-        "running-tests": "Running tests",
-        "types-of-tests": "Types of tests"
-      },
-      "headingKeywords": {}
-    },
-    {
-      "src": "UserGuide.md",
+      "src": "OLD_UserGuide.md",
       "title": "User Guide",
       "headings": {
         "lambdalab-user-guide": "LambdaLab User Guide",
@@ -127,6 +121,45 @@
         "faq": "FAQ",
         "known-issues": "Known issues",
         "command-summary": "Command summary"
+      },
+      "headingKeywords": {}
+    },
+    {
+      "src": "SettingUp.md",
+      "title": "Setting up and getting started",
+      "headings": {
+        "setting-up-and-getting-started": "Setting up and getting started",
+        "setting-up-the-project-in-your-computer": "Setting up the project in your computer",
+        "before-writing-code": "Before writing code"
+      },
+      "headingKeywords": {}
+    },
+    {
+      "src": "Testing.md",
+      "title": "Testing guide",
+      "headings": {
+        "testing-guide": "Testing guide",
+        "running-tests": "Running tests",
+        "types-of-tests": "Types of tests"
+      },
+      "headingKeywords": {}
+    },
+    {
+      "src": "UserGuide.md",
+      "headings": {
+        "command-features": "Command Features",
+        "data-modifying": "Data – Modifying",
+        "part-1-person-data": "Part 1: Person Data",
+        "part-2-tracking-milestones-like-labs-exercises-and-exams": "Part 2: Tracking milestones like labs, exercises and exams",
+        "blocking-a-timeslot-block-timeslot": "Blocking a timeslot: block-timeslot",
+        "unblocking-a-timeslot-unblock-timeslot": "Unblocking a timeslot : unblock-timeslot",
+        "adding-a-consultation-add-consultation": "Adding a consultation: add-consultation",
+        "retrieving-merged-timeslot-ranges-get-timeslots": "Retrieving merged timeslot ranges: get-timeslots",
+        "retrieving-consultations-only-get-consultations": "Retrieving consultations only: get-consultations",
+        "visualisation": "Visualisation",
+        "miscellaneous": "Miscellaneous",
+        "non-command-features": "Non-Command Features",
+        "parameters": "Parameters"
       },
       "headingKeywords": {}
     },

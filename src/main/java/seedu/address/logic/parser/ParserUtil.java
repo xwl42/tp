@@ -29,7 +29,6 @@ import seedu.address.model.person.Name;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.Status;
 import seedu.address.model.person.StudentId;
-import seedu.address.model.person.exceptions.InvalidScoreException;
 import seedu.address.model.person.sortcriterion.ExerciseSortCriterion;
 import seedu.address.model.person.sortcriterion.LabSortCriterion;
 import seedu.address.model.person.sortcriterion.NameSortCriterion;

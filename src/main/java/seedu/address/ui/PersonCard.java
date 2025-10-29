@@ -11,7 +11,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import seedu.address.model.person.Examination;
 import seedu.address.model.person.GradeMap;
-import seedu.address.model.person.Gradeable;
 import seedu.address.model.person.LabAttendance;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Status;

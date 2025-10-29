@@ -44,17 +44,22 @@ public class FindCommandParser implements Parser<FindCommand> {
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, FIND_PREFIXES);
 
-        String[] preamble = argMultimap.getPreamble().trim().split("\\s+");
-        List<String> keywords = Arrays.asList(preamble);
 
-        if (keywords.isEmpty() || keywords.get(0).isEmpty()) {
-            throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
-        }
-
+        List<String> keywords = getKeywords(argMultimap);
         List<Predicate<Person>> predicates = getSelectedPredicates(argMultimap, keywords);
 
         return new FindCommand(new PersonContainsKeywordsPredicate(predicates));
+    }
+
+    private List<String> getKeywords(ArgumentMultimap argMultimap) throws ParseException {
+        String[] preamble = argMultimap.getPreamble().trim().split("\\s+");
+        List<String> keywords = Arrays.asList(preamble);
+
+        if (keywords.isEmpty() || keywords.get(0).isBlank()) {
+            throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+        }
+        return keywords;
     }
 
     private List<Predicate<Person>> getSelectedPredicates(ArgumentMultimap argMultimap, List<String> keywords)
@@ -68,8 +73,13 @@ public class FindCommandParser implements Parser<FindCommand> {
 
     private static void checkSelectorEmpty(ArgumentMultimap argMultimap) throws ParseException {
         for (Prefix p : FIND_PREFIXES) {
+
+            //Already checked by checkNoDuplicatePrefix
+            assert argMultimap.getAllValues(p).size() <= 1
+                    : "Parser precondition violated: repeated selector " + p;
+
             if (argMultimap.getValue(p).isPresent()
-                    && !argMultimap.getValue(p).get().isEmpty()) {
+                    && !argMultimap.getValue(p).get().isBlank()) {
                 throw new ParseException(MESSAGE_FIELD_NOT_EMPTY);
             }
 
@@ -109,6 +119,7 @@ public class FindCommandParser implements Parser<FindCommand> {
         }
         return predicates;
     }
+
 
     /**
      * Binds a {@link Prefix} (e.g., {@code n/}, {@code e/}) to a predicate “builder” for a {@link Person}

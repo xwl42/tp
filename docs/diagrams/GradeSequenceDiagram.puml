@@ -51,7 +51,7 @@ MultiIndexCommand -> GradeCommand : buildResult(updatedPersons)
 activate GradeCommand
 
 create CommandResult
-GradeCommand -> CommandResult : new CommandResult("midterm marked as passed for: Alice (A1231231B), Bob (A1231232B), Charlie(A1231233B)")
+GradeCommand -> CommandResult : new CommandResult("midterm marked as passed for: Alex Yeoh (A1231230B), Bernice Yu (A1231231B), Charlotte Oliveiro (A1231232B)")
 activate CommandResult
 
 CommandResult --> GradeCommand

@@ -18,10 +18,10 @@ end box
 [-> LogicManager : execute("grade 1:3 en/midterm s/y")
 activate LogicManager
 
-LogicManager -> GradeCommand : execute(model)
+LogicManager -> GradeCommand : execute(m)
 activate GradeCommand
 
-GradeCommand -> MultiIndexCommand : execute(model)
+GradeCommand -> MultiIndexCommand : execute(m)
 activate MultiIndexCommand
 
 MultiIndexCommand -> Model : getFilteredPersonList()
@@ -51,7 +51,7 @@ MultiIndexCommand -> GradeCommand : buildResult(updatedPersons)
 activate GradeCommand
 
 create CommandResult
-GradeCommand -> CommandResult : new CommandResult("midterm marked as passed for: Alice, Bob, Charlie")
+GradeCommand -> CommandResult : new CommandResult("midterm marked as passed for: Alice (A1231231B), Bob (A1231232B), Charlie(A1231233B)")
 activate CommandResult
 
 CommandResult --> GradeCommand

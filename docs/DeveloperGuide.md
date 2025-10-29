@@ -399,7 +399,7 @@ marka 5 l/3 s/n - Marks Lab 3 as *absent* for the student at the (one-based) ind
 grade 1:3 en/midterm s/y  - Marks the *Midterm* exam as *passed* for student 1.
 A sequence diagram for the execution of this command is shown over here:
 
-<puml src="diagrams/GradeSequenceDiagram.puml" width="800" />
+<puml src="diagrams/GradeCommand/GradeSequenceDiagram.puml" width="800" />
 
 ---
 
@@ -451,17 +451,29 @@ This allows Teaching Assistants to instantly gauge student performance and ident
 
 #### Implementation
 
-Each component that represents progress (such as exercises, labs, or grades) implements a common `Trackable` interface.  
-This abstraction ensures that any new progress type can be integrated into the display system without modifying existing UI logic.
+#### Implementation
 
-In the UI, each `PersonCard` automatically renders these trackable elements into coloured labels.  
-Each label displays the corresponding item name and is assigned a colour class — green, grey, or red — based on the item’s status.  
-These styles are defined in the CSS file, ensuring visual consistency and easy customization.
+The **Trackable Display** feature enables LambdaLab to visually represent a student’s **exercises**, **lab attendance**, and **exam results** in a consistent and colour-coded format.
 
-The rendering process is generic, meaning new trackable data types can be displayed without altering the user interface logic.  
-The same mechanism applies to lab attendance, exercises, and exam grades.
+This is achieved through the `Trackable` interface, which standardizes how trackable data is exposed to the UI.  
+Each of the following classes implements `Trackable`:
+- `ExerciseTracker` – tracks completion status of exercises.
+- `LabList` – tracks attendance for lab sessions.
+- `GradeMap` – tracks examination results.
 
----
+When a `PersonCard` is created, it directly retrieves these three trackers from the `Person` object:
+1. `person.getExerciseTracker()`
+2. `person.getLabAttendanceList()`
+3. `person.getGradeMap()`
+
+For each tracker, the `PersonCard`:
+- Calls `getLabels()` to obtain display names (e.g., **EX1**, **L3**, **MIDTERM**).
+- Calls `getTrackerColours()` to obtain their corresponding colour codes (`GREEN`, `GREY`, or `RED`).
+- Dynamically generates a label for each item and applies the appropriate CSS class based on its colour.
+
+This design cleanly separates **model data** from **UI rendering**, ensuring that any future updates to how data is displayed require no changes to the model logic.
+
+<puml src="diagrams/Trackable/TrackableClassDiagram.puml" width="800" />
 
 #### Design Considerations
 

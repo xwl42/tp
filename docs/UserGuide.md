@@ -1,4 +1,4 @@
-## **Features**
+# **Command Features**
 
 <box type="info">
 
@@ -29,9 +29,9 @@
 > you can mark multiple students at once using a range (e.g. `1:5`).
 > note: This does not apply to the EXERCISE_INDEX or LAB_INDEX parameters
  
-### **Data – Modifying**
+## **Data – Modifying**
 
-#### **Part 1: Person Data**
+### **Part 1: Person Data**
 - Add
 - Edit
 - Delete
@@ -39,9 +39,9 @@
 - Undo
 
 ---
-#### **Part 2: Tracking milestones like labs, exercises and exams**
+### **Part 2: Tracking milestones like labs, exercises and exams**
 
-## Mark a student's lab attendance: `marka`
+#### Mark a student's lab attendance: `marka`
 
 You can use this command to record whether selected students attended or were absent for a particular lab.  
 
@@ -59,7 +59,7 @@ marka INDEX l/LAB_NUMBER s/STATUS
 
 <br>
 
-## Mark a student's exercise for completion: `marke`
+##### Mark a student's exercise for completion: `marke`
 
 Use this command to record or update whether selected students have completed a particular exercise.  
 
@@ -77,7 +77,7 @@ marke INDEX ei/EXERCISE_INDEX s/STATUS
 
 <br>
 
-## Record a student's score for an exam: `grade`
+##### Record a student's score for an exam: `grade`
 
 This command allows you to assign or edit exam grades for selected students.  
 
@@ -135,13 +135,13 @@ grade INDEX... en/EXAM_NAME s/SCORE
 
 ---
 
-## **Non-command Feature**
+# **Non-Command Features**
 - Save
 - Edit data file
 
 ---
 
-#### Parameters
+# Parameters
 
 | **Parameter**      | **Description** | **Prefix** | **Constraint** |
 |---------------------|------------------|-------------|----------------|

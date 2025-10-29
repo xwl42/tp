@@ -21,7 +21,6 @@ public class GradeCommandParser implements Parser<GradeCommand> {
     public static final String MESSAGE_INVALID_EXAM_NAME_FORMAT =
             "%s is an invalid exam name. Exam name must be one of %s";
     private static final String EMPTY_PREFIX_FORMAT = "Prefix %s : has empty value!";
-    private static final String MESSAGE_INVALID_STATUS = "Invalid status! Use 'y' for passed or 'n' for failed.";
 
     @Override
     public GradeCommand parse(String userInput) throws ParseException {

@@ -19,8 +19,9 @@ public class DeleteCommand extends MultiIndexCommand {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Deletes one or more students identified by their index numbers in the displayed student list.\n"
-            + "Parameters: INDEX... (must be positive integers)\n"
-            + "Example: " + COMMAND_WORD + " 1:5";
+            + "Parameters: INDEX (must be a positive integer or range X:Y)\n"
+            + "Example: " + COMMAND_WORD + " 1:5 \n"
+            + "Example: " + COMMAND_WORD + " 1 \n";
 
     public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Student(s) : %1$s";
 

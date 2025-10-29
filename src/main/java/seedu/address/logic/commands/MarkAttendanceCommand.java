@@ -72,10 +72,6 @@ public class MarkAttendanceCommand extends MultiIndexCommand {
             } else {
                 labAttendanceList.markLabAsAbsent(labNumber.getZeroBased());
             }
-        } catch (IndexOutOfBoundsException e) {
-            throw new CommandException(
-                    MESSAGE_FAILURE_INVALID_LAB_INDEX
-            );
         } catch (IllegalStateException e) {
             alreadyMarkedPersons.add(personToEdit);
             return null;
@@ -98,7 +94,7 @@ public class MarkAttendanceCommand extends MultiIndexCommand {
 
     private String generateResponseMessage(List<Person> alreadyMarkedPersons, List<Person> personsEdited) {
         String studentNamesEdited = personsEdited.stream()
-                .map(person -> person.getName().fullName)
+                .map(Person::getNameAndID)
                 .collect(Collectors.joining(", "));
 
         String exceptionMessage = compileExceptionMessage(alreadyMarkedPersons);
@@ -126,7 +122,7 @@ public class MarkAttendanceCommand extends MultiIndexCommand {
         }
 
         String names = alreadyMarkedPersons.stream()
-                .map(person -> person.getName().fullName)
+                .map(Person::getNameAndID)
                 .collect(Collectors.joining(", "));
 
         return isAttended

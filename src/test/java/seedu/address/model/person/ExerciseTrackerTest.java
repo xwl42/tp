@@ -3,7 +3,6 @@ package seedu.address.model.person;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_LAB;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_LAB;
 
@@ -65,13 +64,6 @@ public class ExerciseTrackerTest {
     // -------------------------------------------------------------------------
     // markExercise Tests
     // -------------------------------------------------------------------------
-
-    @Test
-    public void markExercise_invalidIndex_throwsIndexOutOfBounds() {
-        Index index1 = Index.fromZeroBased(100);
-        assertThrows(IndexOutOfBoundsException.class, ()
-                -> tracker.markExercise(index1, true));
-    }
 
     @Test
     public void markExercise_validIndex_updatesStatus() {

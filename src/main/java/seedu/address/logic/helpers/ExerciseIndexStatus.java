@@ -1,5 +1,6 @@
 package seedu.address.logic.helpers;
 
+import seedu.address.commons.core.index.Index;
 import seedu.address.model.person.Status;
 
 /**
@@ -7,7 +8,7 @@ import seedu.address.model.person.Status;
  * Immutable after construction.
  */
 public class ExerciseIndexStatus {
-    private final String exerciseIndex;
+    private final Index exerciseIndex;
     private final Status status;
 
     /**
@@ -16,7 +17,7 @@ public class ExerciseIndexStatus {
      * @param exerciseIndex the exercise index
      * @param status the status to associate with the exercise
      */
-    public ExerciseIndexStatus(String exerciseIndex, Status status) {
+    public ExerciseIndexStatus(Index exerciseIndex, Status status) {
         this.exerciseIndex = exerciseIndex;
         this.status = status;
     }
@@ -25,7 +26,7 @@ public class ExerciseIndexStatus {
         return status;
     }
 
-    public String getExerciseIndex() {
+    public Index getExerciseIndex() {
         return exerciseIndex;
     }
 }

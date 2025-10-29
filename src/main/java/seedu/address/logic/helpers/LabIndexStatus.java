@@ -1,11 +1,13 @@
 package seedu.address.logic.helpers;
 
+import seedu.address.commons.core.index.Index;
+
 /**
  * Simple data transfer object pairing a lab index with its status.
  * Immutable after construction.
  */
 public class LabIndexStatus {
-    private final String labIndex;
+    private final Index labIndex;
     private final String status;
 
     /**
@@ -14,7 +16,7 @@ public class LabIndexStatus {
      * @param labIndex the lab index
      * @param status the status to associate with the lab
      */
-    public LabIndexStatus(String labIndex, String status) {
+    public LabIndexStatus(Index labIndex, String status) {
         this.labIndex = labIndex;
         this.status = status;
     }
@@ -23,7 +25,7 @@ public class LabIndexStatus {
         return status;
     }
 
-    public String getLabIndex() {
+    public Index getLabIndex() {
         return labIndex;
     }
 }

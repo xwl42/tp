@@ -9,9 +9,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import seedu.address.commons.core.index.Index;
-import seedu.address.commons.exceptions.InvalidIndexException;
 import seedu.address.logic.commands.FilterCommand;
-import seedu.address.logic.commands.MarkAttendanceCommand;
 import seedu.address.logic.helpers.Comparison;
 import seedu.address.logic.helpers.ExerciseIndexStatus;
 import seedu.address.logic.helpers.LabAttendanceComparison;
@@ -90,8 +88,7 @@ public class FilterCommandParser implements Parser<FilterCommand> {
         ExerciseIndexStatus indexStatusPair = ParserUtil.parseExerciseIndexStatus(exerciseIndexStatus);
 
         Status exerciseStatus = indexStatusPair.getStatus();
-        String exerciseIndexString = indexStatusPair.getExerciseIndex();
-        Index exerciseIndex = ParserUtil.parseExerciseIndex(exerciseIndexString);
+        Index exerciseIndex = indexStatusPair.getExerciseIndex();
 
         return new ExerciseStatusMatchesPredicate(exerciseIndex, exerciseStatus);
     }
@@ -101,14 +98,7 @@ public class FilterCommandParser implements Parser<FilterCommand> {
         LabIndexStatus labNumberStatusPair = ParserUtil.parseLabNumberStatus(labNumberStatus);
 
         String labStatus = labNumberStatusPair.getStatus();
-        String labIndexString = labNumberStatusPair.getLabIndex();
-        Index labIndex;
-
-        try {
-            labIndex = ParserUtil.parseIndex(labIndexString);
-        } catch (InvalidIndexException iie) {
-            throw new ParseException(MarkAttendanceCommand.MESSAGE_FAILURE_INVALID_LAB_INDEX);
-        }
+        Index labIndex = labNumberStatusPair.getLabIndex();
 
         return new LabStatusMatchesPredicate(labIndex, labStatus);
     }

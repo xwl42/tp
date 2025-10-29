@@ -10,12 +10,18 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import javafx.util.Pair;
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.core.index.MultiIndex;
 import seedu.address.commons.exceptions.InvalidIndexException;
 import seedu.address.commons.util.StringUtil;
+import seedu.address.logic.commands.FilterCommand;
+import seedu.address.logic.helpers.Comparison;
+import seedu.address.logic.helpers.ExerciseIndexStatus;
+import seedu.address.logic.helpers.LabAttendanceComparison;
+import seedu.address.logic.helpers.LabIndexStatus;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Examination;
@@ -60,6 +66,10 @@ public class ParserUtil {
     private static final String MESSAGE_EMPTY_INPUT = "Input string is empty!";
     private static final String MESSAGE_INVALID_MULTIINDEX_BOUNDS =
             "%s is invalid! Lower bound cannot be greater than upper bound";
+    private static final String MESSAGE_MISSING_OPERATOR =
+            "Missing appropriate operator for comparison, one of ==, >=, <=, >, < should follow la/";
+    private static final String MESSAGE_INVALID_PERCENTAGE =
+            "Attendance percentage must be an integer between 0 and 100.";
 
     /**
      * @param input a string that is either in the "X:Y" or "X" form
@@ -314,6 +324,7 @@ public class ParserUtil {
 
         return new ExerciseTracker(new ArrayList<>(Arrays.asList(statuses)));
     }
+
     /**
      * Parses a {@code gradeMapString} into a {@code GradeMap}.
      * Expected format: "pe1: Passed, midterm: Failed, pe2: NA"
@@ -391,16 +402,17 @@ public class ParserUtil {
      * @param exerciseIndexString a string containing both the index and status as a combined string
      * @throws ParseException if the given {@code String} does not include a status.
      */
-    public static Pair<Index, Status> parseExerciseIndexStatus(String exerciseIndexString) throws ParseException {
+    public static ExerciseIndexStatus parseExerciseIndexStatus(String exerciseIndexString) throws ParseException {
         ArgumentMultimap exerciseMultimap =
                 ArgumentTokenizer.tokenize(exerciseIndexString, PREFIX_STATUS);
         Optional<String> statusString = exerciseMultimap.getValue(PREFIX_STATUS);
+
+        Index exerciseNumber = parseLabIndex(exerciseMultimap.getPreamble());
         if (statusString.isEmpty()) {
             throw new ParseException(MESSAGE_MISSING_EXERCISE_STATUS);
         }
-        Index exerciseNumber = parseLabIndex(exerciseMultimap.getPreamble());
         Status status = parseExerciseStatusForFilter(exerciseMultimap.getValue(PREFIX_STATUS).orElse(""));
-        return new Pair<>(exerciseNumber, status);
+        return new ExerciseIndexStatus(exerciseNumber, status);
     }
 
     /**
@@ -410,17 +422,18 @@ public class ParserUtil {
      * @param labNumberString a string containing both the index and status as a combined string
      * @throws ParseException if the given {@code String} does not include a status.
      */
-    public static Pair<Index, String> parseLabNumberStatus(String labNumberString) throws ParseException {
+    public static LabIndexStatus parseLabNumberStatus(String labNumberString) throws ParseException {
         ArgumentMultimap exerciseMultimap =
                 ArgumentTokenizer.tokenize(labNumberString, PREFIX_STATUS);
         Optional<String> statusString = exerciseMultimap.getValue(PREFIX_STATUS);
+
+        Index labNumber = parseLabIndex(exerciseMultimap.getPreamble());
         if (statusString.isEmpty()) {
             throw new ParseException(MESSAGE_MISSING_LAB_STATUS);
         }
-        Index labNumber = parseLabIndex(exerciseMultimap.getPreamble());
         // If needed, can replace OrElse with just get
         String statusStr = parseLabStatusForFilter(exerciseMultimap.getValue(PREFIX_STATUS).orElse(""));
-        return new Pair<>(labNumber, statusStr);
+        return new LabIndexStatus(labNumber, statusStr);
     }
 
     private static String parseLabStatusForFilter(String labStatus) throws ParseException {
@@ -446,6 +459,64 @@ public class ParserUtil {
             throw new ParseException(MESSAGE_INVALID_FILTER_EXERCISE_STATUS);
         }
     }
+
+    /**
+     * Parses an attendance comparison like ">=60", "75%", "<=85".
+     *
+     * Accepted forms (spaces optional; '%' optional):
+     * - ==70, >=60, <=85, >40, <25
+     * - 75 or 75%
+     *
+     * Value must be an integer from 0 to 100.
+     * Operator must be one of: ==, >=, <=, >, <.
+     *
+     * @param attendanceComparison raw input string
+     * @return a LabAttendanceComparison with the parsed value and operator
+     * @throws ParseException if input is null, malformed, has an unsupported operator,
+     *                        or the value is outside 0–100
+     */
+    public static LabAttendanceComparison parseAttendanceComparison(String attendanceComparison) throws ParseException {
+        assert(attendanceComparison != null);
+        String s = attendanceComparison.trim().replaceAll("\\s+", "");
+
+        // Accept: ==70, >=60, <=85, >40, <25, 75, and any of those with a trailing %
+        Matcher m = Pattern
+                .compile("^(?:([<>]=?|==?|))?(-?\\d{1,3})(?:%)?$")
+                .matcher(s);
+        if (!m.matches()) {
+            throw new ParseException(FilterCommand.ATTENDED_PERCENTAGE_USAGE);
+        }
+
+        String operator = m.group(1);
+        int value = Integer.parseInt(m.group(2));
+        if (value < 0 || value > 100) {
+            throw new ParseException(MESSAGE_INVALID_PERCENTAGE);
+        }
+
+        Comparison comparison;
+        switch (operator) {
+        case "==":
+            comparison = Comparison.EQ;
+            break;
+        case ">=":
+            comparison = Comparison.GE;
+            break;
+        case "<=":
+            comparison = Comparison.LE;
+            break;
+        case ">":
+            comparison = Comparison.GT;
+            break;
+        case "<":
+            comparison = Comparison.LT;
+            break;
+        default:
+            throw new ParseException(MESSAGE_MISSING_OPERATOR);
+        };
+
+        return new LabAttendanceComparison(value, comparison);
+    }
+
 
     /**
      * @param argumentMultimap of the command parser

@@ -1,7 +1,5 @@
 package seedu.address.logic.parser;
 
-import static java.lang.Boolean.FALSE;
-import static java.lang.Boolean.TRUE;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_STATUS;
 
@@ -16,8 +14,6 @@ import seedu.address.commons.core.index.Index;
 import seedu.address.commons.core.index.MultiIndex;
 import seedu.address.commons.exceptions.InvalidIndexException;
 import seedu.address.commons.util.StringUtil;
-import seedu.address.logic.commands.FilterCommand;
-import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.helpers.Comparison;
 import seedu.address.logic.helpers.ExerciseIndexStatus;
 import seedu.address.logic.helpers.LabAttendanceComparison;

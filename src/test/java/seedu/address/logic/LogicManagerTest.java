@@ -67,7 +67,7 @@ public class LogicManagerTest {
         String deleteCommand = "delete 9";
         assertCommandException(deleteCommand,
                 String.format(MESSAGE_INVALID_INDEX_FORMAT,
-                        8,
+                        9,
                         "student",
                         1,
                         0));

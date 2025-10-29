@@ -4,11 +4,14 @@ import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
+import java.util.Locale;
 
 import seedu.address.logic.commands.AddConsultationCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.timeslot.ConsultationTimeslot;
+import seedu.address.model.timeslot.Timeslot;
 
 /**
  * Parses input arguments and creates a new AddConsultationCommand object.
@@ -60,9 +63,16 @@ public class AddConsultationCommandParser implements Parser<AddConsultationComma
         String trimmed = input.trim();
         DateTimeFormatter[] fmts = new DateTimeFormatter[] {
             DateTimeFormatter.ISO_LOCAL_DATE_TIME,
-            DateTimeFormatter.ofPattern("d MMM uuuu, HH:mm"),
-            DateTimeFormatter.ofPattern("d MMM uuuu HH:mm")
+            // accept Timeslot's configured formatter as used elsewhere
+            Timeslot.FORMATTER,
+            new DateTimeFormatterBuilder().parseCaseInsensitive()
+                    .appendPattern("d MMM uuuu, HH:mm")
+                    .toFormatter(Locale.ENGLISH),
+            new DateTimeFormatterBuilder().parseCaseInsensitive()
+                    .appendPattern("d MMM uuuu HH:mm")
+                    .toFormatter(Locale.ENGLISH)
         };
+
         for (DateTimeFormatter fmt : fmts) {
             try {
                 return LocalDateTime.parse(trimmed, fmt);

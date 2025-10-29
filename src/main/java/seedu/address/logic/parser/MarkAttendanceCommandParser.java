@@ -43,11 +43,9 @@ public class MarkAttendanceCommandParser implements Parser<MarkAttendanceCommand
         boolean isAttended;
 
         try {
-            labNumber = ParserUtil.parseIndex(argMultimap.getValue(PREFIX_LAB_NUMBER).orElse(""));
-        } catch (ParseException e) {
-            throw new ParseException(
-                    MarkAttendanceCommand.MESSAGE_FAILURE_INVALID_LAB_INDEX
-            );
+            labNumber = ParserUtil.parseLabIndex(argMultimap.getValue(PREFIX_LAB_NUMBER).orElse(""));
+        } catch (InvalidIndexException e) {
+            throw new ParseException(e.getMessage());
         }
 
         // The ParseException from this would go to AddressBook Parser
@@ -56,8 +54,8 @@ public class MarkAttendanceCommandParser implements Parser<MarkAttendanceCommand
         // Parse multi-index (it will throw uncaught parse exception if index is wrong);
         try {
             multiIndex = ParserUtil.parseMultiIndex(argMultimap.getPreamble());
-        } catch (InvalidIndexException iie) {
-            throw new ParseException("Student " + iie.getMessage());
+        } catch (InvalidIndexException e) {
+            throw new ParseException("Student " + e.getMessage());
         }
 
         return new MarkAttendanceCommand(multiIndex, labNumber, isAttended);

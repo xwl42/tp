@@ -1,7 +1,6 @@
 package seedu.address.logic.commands;
 
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
-import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 import static seedu.address.model.person.ExerciseTracker.NUMBER_OF_EXERCISES;
 
 import java.util.ArrayList;
@@ -79,8 +78,6 @@ public class MarkExerciseCommand extends MultiIndexCommand {
         ExerciseTracker updatedExerciseTracker = personToEdit.getExerciseTracker().copy();
         try {
             updatedExerciseTracker.markExercise(exerciseIndex, isDone);
-        } catch (IndexOutOfBoundsException e) {
-            throw new CommandException(String.format(MESSAGE_INDEX_OUT_OF_BOUNDS, HIGHEST_INDEX));
         } catch (IllegalStateException e) {
             alreadyMarkedPersons.add(personToEdit);
             return null;
@@ -99,7 +96,6 @@ public class MarkExerciseCommand extends MultiIndexCommand {
         );
 
         model.setPerson(personToEdit, updatedPerson);
-        model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
         return updatedPerson;
     }
 

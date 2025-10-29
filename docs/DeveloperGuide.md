@@ -426,6 +426,81 @@ Future commands that require multi-student operations (e.g., adding group tags o
 * **Parallel Execution:**  
   For large datasets, multi-index operations could be processed concurrently for improved performance.
 
+### **Feature: Displaying Trackable Data**
+
+#### Overview
+
+LambdaLab displays each student’s academic progress using **trackable components**, which visually represent data such as **exercise completion**, **lab attendance**, and **exam performance**.  
+This feature leverages the `Trackable` interface and its implementing classes to unify how progress information is retrieved and displayed within the UI.
+
+Each trackable component defines both:
+- The **status colours** (e.g., green, red, grey) that indicate the current state.
+- The **labels** (e.g., EX1, L5, MIDTERM) used to identify individual tracked items.
+
+---
+
+#### Motivation
+
+Previously, progress indicators for labs, exercises, and exams existed only as stored data, without any visual representation on the student card.  
+Teaching Assistants had to rely on manual inspection or individual commands to check each student’s record, which was slow and error-prone.
+
+The **Display Trackable** feature introduces a clear and intuitive visualization of progress through coloured labels.  
+This allows Teaching Assistants to instantly gauge student performance and identify those who are struggling — directly from the main student list.
+
+---
+
+#### Implementation
+
+Each component that represents progress (such as exercises, labs, or grades) implements a common `Trackable` interface.  
+This abstraction ensures that any new progress type can be integrated into the display system without modifying existing UI logic.
+
+In the UI, each `PersonCard` automatically renders these trackable elements into coloured labels.  
+Each label displays the corresponding item name and is assigned a colour class — green, grey, or red — based on the item’s status.  
+These styles are defined in the CSS file, ensuring visual consistency and easy customization.
+
+The rendering process is generic, meaning new trackable data types can be displayed without altering the user interface logic.  
+The same mechanism applies to lab attendance, exercises, and exam grades.
+
+---
+
+#### Design Considerations
+
+**Aspect: Reusability**  
+The abstraction of the `Trackable` interface allows all progress-tracking components to share the same rendering logic, reducing code duplication and simplifying maintenance.
+
+**Aspect: Extensibility**  
+Future features such as project submissions or participation tracking can easily be integrated by implementing the same interface.
+
+**Aspect: Visual Consistency**  
+Colours and font styles are centrally managed through CSS, ensuring that every type of status indicator follows the same visual pattern.
+
+---
+
+#### Example
+
+Each student card displays their current progress in three areas:
+
+| Category | Green Meaning | Grey Meaning | Red Meaning |
+|:----------|:---------------|:--------------|:-------------|
+| **Lab** | Attended | Not conducted yet | Absent |
+| **Exercise** | Completed | Not conducted | Overdue |
+| **Exam** | Passed | Not graded | Failed |
+
+This provides a concise and visual summary of each student’s standing in the course.
+
+---
+
+#### Future Enhancements
+
+* **Dynamic Updates:**  
+  Allow trackable status colours to update in real time when a record changes, without requiring a full refresh.
+
+* **Tooltips:**  
+  Provide contextual information (e.g., submission dates or marks) when hovering over each label.
+
+* **Custom Colour Themes:**  
+  Allow instructors to customize the colour scheme for accessibility or course preferences.
+
 ### \[Proposed\] Data archiving
 
 _{Explain here how the data archiving feature will be implemented}_

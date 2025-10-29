@@ -795,3 +795,4 @@ Action     | Format, Examples
 | **END_DATETIME**     | Ending datetime of the timeslot                           | `te/`                                           | Must be in ISO_LOCAL_DATE_TIME (`2023-10-01T09:00:00`) or human-friendly format (`4 Oct 2025, 10:00`, `4 Oct 2025 10:00`) | `block-timeslot`, `unblock-timeslot`, `add-consultation` |
 | **STUDENT_NAME**     | Name of student for consultation                          | `n/`                                            | Student's name to be associated with the consultation timeslot                                                            | `add-consultation`                                       |
 
+

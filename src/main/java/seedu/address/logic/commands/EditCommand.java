@@ -52,7 +52,8 @@ public class EditCommand extends MultiIndexCommand {
             + "[" + PREFIX_TAG + "TAG]...\n"
             + "Example: " + COMMAND_WORD + " 1:2 "
             + PREFIX_PHONE + "91234567 "
-            + PREFIX_EMAIL + "johndoe@example.com";
+            + PREFIX_EMAIL + "johndoe@example.com \n"
+            + "Example: " + COMMAND_WORD + " 5 " + PREFIX_TAG + "struggling";
 
     public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Student(s):\n%1$s";
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";

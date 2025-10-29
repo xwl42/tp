@@ -6,23 +6,11 @@
 
 # LambdaLab User Guide
 
-LambdaLab is a desktop app for **CS2030S Teaching Assistants** to **manage student records**, optimised for use via a
+LambdaLab is a desktop app for **CS2030S Teaching Assistants** to to maintain student records, mark lab attendance and exercises,
+and manage consultation timeslots. It is optimised for use via a
 Command Line Interface (CLI) while still having an intuitive Graphical User Interface (GUI). If you are a fast typer,
 LambdaLab can help you track student information, lab attendance, and exercise submissions even faster than traditional
 spreadsheets or GUI apps.
-
-## About this guide
-
-This guide is written for CS2030S teaching assistants who need to maintain student records, mark lab attendance and exercises,
-and manage consultation timeslots. Assumed prior knowledge:
-- Comfortable using a command terminal on Windows / macOS / Linux.
-- Basic familiarity with editing plain text (copy/paste commands).
-- Understands core CS2030S concepts (labs, exercises, student identifiers).
-
-How to use this guide:
-- Quick start: run the application and try a few example commands.
-- Features: detailed command syntax, examples, and expected output.
-- Troubleshooting: common errors and remedies are highlighted near each command.
 
 ## Table of Contents
 

@@ -40,7 +40,7 @@ public class MarkAttendanceTest {
                 new MultiIndex(INDEX_FIRST_PERSON), INDEX_FIRST_LAB, true);
 
         String expectedMessage = String.format(MarkAttendanceCommand.MESSAGE_MARK_ATTENDANCE_SUCCESS,
-                INDEX_FIRST_LAB.getOneBased(), firstPerson.getName());
+                INDEX_FIRST_LAB.getOneBased(), firstPerson.getNameAndID());
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(firstPerson, editedPerson);
@@ -71,7 +71,7 @@ public class MarkAttendanceTest {
         String expectedMessage = String.format(
                 MarkAttendanceCommand.MESSAGE_FAILURE_ALREADY_ATTENDED,
                 INDEX_FIRST_LAB.getOneBased(),
-                firstPerson.getName());
+                firstPerson.getNameAndID());
         assertEquals(expectedMessage.trim(), result.getFeedbackToUser().trim());
     }
 

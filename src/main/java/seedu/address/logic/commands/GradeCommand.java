@@ -29,9 +29,8 @@ public class GradeCommand extends MultiIndexCommand {
             + "Parameters: INDEX... (must be positive integers) "
             + PREFIX_EXAM_NAME + "EXAM_NAME "
             + PREFIX_SCORE + "SCORE\n"
-            + "Example: " + COMMAND_WORD + " 1:2 "
-            + PREFIX_EXAM_NAME + "midterm "
-            + PREFIX_SCORE + "30.5";
+            + "Example:" + COMMAND_WORD + " 1:2 " + PREFIX_EXAM_NAME + "midterm " + PREFIX_SCORE + "30.5 \n"
+            + "Example:" + COMMAND_WORD + " 1 " + PREFIX_EXAM_NAME + "pe1 " + PREFIX_SCORE + "30.5 \n";
 
     public static final String MESSAGE_GRADE_SUCCESS = "%s graded with score %.1f for: %s";
     private static final String MESSAGE_FAILURE_INVALID_SCORE =
@@ -97,7 +96,7 @@ public class GradeCommand extends MultiIndexCommand {
     @Override
     protected CommandResult buildResult(List<Person> updatedPersons) {
         String result = updatedPersons.stream()
-                .map(p -> p.getName().toString())
+                .map(Person::getNameAndID)
                 .collect(Collectors.joining(", "));
         return new CommandResult(String.format(
                 MESSAGE_GRADE_SUCCESS,

@@ -25,7 +25,8 @@ public class MarkExerciseCommand extends MultiIndexCommand {
             + "identified by their index numbers in the last person listing.\n"
             + "Parameters: INDEX (must be a positive integer or range X:Y) "
             + "ei/EXERCISEINDEX s/STATUS\n"
-            + "Example: " + COMMAND_WORD + " 1:3 ei/1 s/y";
+            + "Example: " + COMMAND_WORD + " 1:3 ei/1 s/y \n"
+            + "Example: " + COMMAND_WORD + " 2 ei/3 s/y";
 
     public static final String MESSAGE_MARK_EXERCISE_SUCCESS =
             "Exercise %1$d marked as %2$s for: %3$s";
@@ -106,7 +107,7 @@ public class MarkExerciseCommand extends MultiIndexCommand {
 
     private String generateResponseMessage(List<Person> alreadyMarkedPersons, List<Person> personsEdited) {
         String editedNames = personsEdited.stream()
-                .map(person -> person.getName().fullName)
+                .map(Person::getNameAndID)
                 .collect(Collectors.joining(", "));
 
         String alreadyMarkedMessage = compileAlreadyMarkedMessage(alreadyMarkedPersons);
@@ -131,7 +132,7 @@ public class MarkExerciseCommand extends MultiIndexCommand {
         }
 
         String names = alreadyMarkedPersons.stream()
-                .map(person -> person.getName().fullName)
+                .map(Person::getNameAndID)
                 .collect(Collectors.joining(", "));
 
         return String.format(MESSAGE_FAILURE_ALREADY_MARKED,

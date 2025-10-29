@@ -75,14 +75,14 @@ public class PersonCard extends UiPart<Region> {
     private void renderTrackable(FlowPane pane, Trackable trackable, String baseClass) {
         List<TrackerColour> colours = trackable.getTrackerColours();
         List<String> labels = trackable.getLabels();
-
+        assert labels.size() == colours.size() : "There must be the same number of labels and colours";
         pane.getChildren().clear();
         for (int i = 0; i < labels.size(); i++) {
             Label label = new Label(labels.get(i));
             String colourClass = switch (colours.get(i)) {
-                case GREEN -> baseClass + "-green";
-                case RED -> baseClass + "-red";
-                case GREY -> baseClass + "-grey";
+            case GREEN -> baseClass + "-green";
+            case RED -> baseClass + "-red";
+            case GREY -> baseClass + "-grey";
             };
             label.getStyleClass().addAll("status-label", colourClass);
             pane.getChildren().add(label);

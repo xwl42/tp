@@ -271,6 +271,7 @@ You can use this command to record whether selected students attended or were ab
 ```
 marka INDEX l/LAB_NUMBER s/STATUS
 ```
+Here `STATUS` is "y" for attended and "n" for not attended
 
 **Examples:**
 - `marka 1 l/1 s/y` — Marks Lab 1 as *attended* for the 1st student.
@@ -291,6 +292,7 @@ You can use this command to record or update whether selected students have comp
 ```
 marke INDEX ei/EXERCISE_INDEX s/STATUS
 ```
+Here, `STATUS` is "y" for completed and "n" for not completed.
 
 **Examples:**
 - `marke 1 ei/1 s/y` — Marks Exercise 1 as *done* for the 1st student.
@@ -303,38 +305,40 @@ marke INDEX ei/EXERCISE_INDEX s/STATUS
 
 <br>
 
-#### Record a student's score for an exam: `grade`
+#### Mark a Student’s Exam as Passed or Failed: `grade`
 
-You can use this command to assign or edit exam grades for selected students.
+The `grade` command allows you to mark one or more students as **passed** or **failed** for a specific exam.  
+It supports **multi-index input**, letting you update multiple students’ grades in a single command.
 
 **Format:**
 ```
-grade INDEX... en/EXAM_NAME sc/SCORE
+grade INDEX... en/EXAM_NAME s/STATUS
 ```
+Here, `STATUS` is "y" for passed and "n" for failed.
 
 **Examples:**
-- `grade 1 en/Midterm sc/87.5` — Records a score of 87.5 for the Midterm exam for the 1st student.
-- `grade 2:4 en/Final sc/90` — Assigns a score of 90 for the Final exam to students 2 through 4.
+- `grade 1 en/Midterm s/y` — Marks the first student as passed for the Midterm exam.
+- `grade 2:4 en/Final s/n` — Marks students 2 through 4 as failed for the Final exam.
 
 <box type="tip">
 
-**Tip:** Scores will automatically be rounded down to one decimal place.  
+If you regrade an exam, the previous pass/fail status will be **overwritten**.
 </box>
 
 <box type="warning">
 
-**Caution:** The exam name must be one of the valid exams defined in the system, as shown in the table below.
-Additionally, the score must be a valid number (e.g., `85`, `92.5`) that is no greater than the maximum score of the exam
-you intend to mark.
-</box>
+**Caution:**
+- The exam name must match one of the valid exams listed below.
+- Only valid exam names will be accepted — entering an invalid one will cause an error.
+- This command modifies students’ grade records directly, so ensure the correct exam and indices are specified.
+  </box>
 
-| **Valid Exam Name** | **Maximum score** |
-|----------------------|-------------------|
-| `pe1`               | 40                |
-| `midterm`           | 60                |
-| `pe2`               | 40                |
-| `final`             | 100               |
-
+| **Valid Exam Name** | **Description** |
+|----------------------|-----------------|
+| `pe1`               | Practical Exam 1 |
+| `midterm`           | Mid-Semester Exam |
+| `pe2`               | Practical Exam 2 |
+| `final`             | Final Exam |
 ---
 
 ### On timeslot/consultation

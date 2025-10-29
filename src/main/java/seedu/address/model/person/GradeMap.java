@@ -96,7 +96,6 @@ public class GradeMap {
             throw new InvalidExamNameException(
                     String.format(
                             MESSAGE_INVALID_EXAM_NAME_FORMAT,
-                            name,
                             Arrays.toString(VALID_EXAM_NAMES)
                     )
             );

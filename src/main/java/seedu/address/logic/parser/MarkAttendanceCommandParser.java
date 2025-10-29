@@ -2,13 +2,16 @@ package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_EXERCISE_INDEX;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_LAB_NUMBER;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_STATUS;
+import static seedu.address.logic.parser.ParserUtil.validateFields;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.core.index.MultiIndex;
 import seedu.address.commons.exceptions.InvalidIndexException;
 import seedu.address.logic.commands.MarkAttendanceCommand;
+import seedu.address.logic.commands.MarkExerciseCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 
 /**
@@ -31,13 +34,7 @@ public class MarkAttendanceCommandParser implements Parser<MarkAttendanceCommand
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_LAB_NUMBER, PREFIX_STATUS);
 
         // Check if required fields are present
-        if (argMultimap.getPreamble().isEmpty()
-                || argMultimap.getValue(PREFIX_LAB_NUMBER).isEmpty()
-                || argMultimap.getValue(PREFIX_STATUS).isEmpty()) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                    MarkAttendanceCommand.MESSAGE_USAGE));
-        }
-
+        validateFields(argMultimap, MarkAttendanceCommand.MESSAGE_USAGE, PREFIX_LAB_NUMBER, PREFIX_STATUS);
         MultiIndex multiIndex;
         Index labNumber;
         boolean isAttended;

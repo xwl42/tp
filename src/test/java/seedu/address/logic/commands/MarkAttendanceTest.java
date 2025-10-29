@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_LAB;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
-import static seedu.address.testutil.TypicalIndexes.INDEX_HUNDRED_LAB;
 import static seedu.address.testutil.TypicalIndexes.INDEX_HUNDRED_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_LAB;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
@@ -53,13 +52,6 @@ public class MarkAttendanceTest {
     public void execute_invalidPersonIndex_throwsCommandException() {
         MarkAttendanceCommand markAttendanceCommand = new MarkAttendanceCommand(
                 new MultiIndex(INDEX_HUNDRED_PERSON), INDEX_FIRST_LAB, true);
-        assertThrows(CommandException.class, () -> markAttendanceCommand.execute(model));
-    }
-
-    @Test
-    public void execute_invalidLabNumber_throwsCommandException() {
-        MarkAttendanceCommand markAttendanceCommand = new MarkAttendanceCommand(
-                new MultiIndex(INDEX_FIRST_PERSON), INDEX_HUNDRED_LAB, true);
         assertThrows(CommandException.class, () -> markAttendanceCommand.execute(model));
     }
 

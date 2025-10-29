@@ -10,9 +10,7 @@ import java.util.function.Predicate;
 
 import javafx.util.Pair;
 import seedu.address.commons.core.index.Index;
-import seedu.address.commons.exceptions.InvalidIndexException;
 import seedu.address.logic.commands.FilterCommand;
-import seedu.address.logic.commands.MarkAttendanceCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Status;
@@ -59,10 +57,9 @@ public class FilterCommandParser implements Parser<FilterCommand> {
             throws ParseException {
         assert(exerciseIndexOptional.isPresent());
         String exerciseIndexStatus = exerciseIndexOptional.get();
-        Pair<String, Status> indexStatusPair = ParserUtil.parseExerciseIndexStatus(exerciseIndexStatus);
+        Pair<Index, Status> indexStatusPair = ParserUtil.parseExerciseIndexStatus(exerciseIndexStatus);
         Status exerciseStatus = indexStatusPair.getValue();
-        String exerciseIndexString = indexStatusPair.getKey();
-        Index exerciseIndex = ParserUtil.parseExerciseIndex(exerciseIndexString);
+        Index exerciseIndex = indexStatusPair.getKey();
         return new ExerciseStatusMatchesPredicate(exerciseIndex, exerciseStatus);
     }
 
@@ -70,15 +67,9 @@ public class FilterCommandParser implements Parser<FilterCommand> {
             throws ParseException {
         assert(labNumberOptional.isPresent());
         String labNumberStatus = labNumberOptional.get();
-        Pair<String, Boolean> labNumberStatusPair = ParserUtil.parseLabNumberStatus(labNumberStatus);
-        Boolean labStatus = labNumberStatusPair.getValue();
-        String labNumberString = labNumberStatusPair.getKey();
-        Index labNumber;
-        try {
-            labNumber = ParserUtil.parseIndex(labNumberString);
-        } catch (InvalidIndexException iie) {
-            throw new ParseException(MarkAttendanceCommand.MESSAGE_FAILURE_INVALID_LAB_INDEX);
-        }
+        Pair<Index, String> labNumberStatusPair = ParserUtil.parseLabNumberStatus(labNumberStatus);
+        String labStatus = labNumberStatusPair.getValue();
+        Index labNumber = labNumberStatusPair.getKey();
         return new LabStatusMatchesPredicate(labNumber, labStatus);
     }
 

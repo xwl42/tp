@@ -519,6 +519,7 @@ public class ParserUtil {
 
 
     /**
+     * Ensures that prefixes of a command's required fields are used
      * @param argumentMultimap of the command parser
      * @param usageMessage that instructs the user of the proper format
      * @param requiredPrefixes prefixes of fields required for the parsed command

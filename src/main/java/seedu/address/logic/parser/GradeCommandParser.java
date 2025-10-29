@@ -43,12 +43,13 @@ public class GradeCommandParser implements Parser<GradeCommand> {
                     pe
             );
         }
-        isPassed = ParserUtil.parseStatus(argumentMultimap.getValue(PREFIX_STATUS).orElse(""));
-
+        isPassed = ParserUtil.parseStatus(argumentMultimap.getValue(PREFIX_STATUS).orElseThrow(()
+                -> new ParseException(
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, GradeCommand.MESSAGE_USAGE)
+        )));
         try {
             examName = argumentMultimap.getValue(PREFIX_EXAM_NAME).orElseThrow(()
                     -> new ParseException(String.format(EMPTY_PREFIX_FORMAT, PREFIX_EXAM_NAME)));
-
         } catch (IllegalValueException ive) {
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, GradeCommand.MESSAGE_USAGE),

@@ -1,7 +1,5 @@
 package seedu.address.logic.commands;
 
-import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,7 +48,6 @@ public abstract class MultiIndexCommand extends Command {
             }
         }
 
-        model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
         return buildResult(updatedPersons);
     }
 

@@ -1,7 +1,6 @@
 package seedu.address.logic.commands;
 
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
-import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 import static seedu.address.model.person.ExerciseTracker.NUMBER_OF_EXERCISES;
 
 import java.util.ArrayList;
@@ -97,7 +96,6 @@ public class MarkExerciseCommand extends MultiIndexCommand {
         );
 
         model.setPerson(personToEdit, updatedPerson);
-        model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
         return updatedPerson;
     }
 

@@ -34,7 +34,7 @@ public class GradeCommand extends MultiIndexCommand {
 
     public static final String MESSAGE_GRADE_SUCCESS = "%s marked as %s for: %s";
     public static final String MESSAGE_FAILURE_INVALID_NAME =
-            "%s is invalid! Here are the valid exam names: %s";
+            "Exam name is invalid! Here are the valid exam names: %s";
 
     private final String examName;
     private final boolean isPassed;
@@ -63,14 +63,12 @@ public class GradeCommand extends MultiIndexCommand {
             } else {
                 updatedGradeMap.markExamFailed(examName);
             }
-
             if (updatedGradeMap.getExamMap().get(examName) == null) {
                 throw new AssertionError("Updated GradeMap should contain the graded exam");
             }
         } catch (InvalidExamNameException e) {
             throw new CommandException(String.format(
                     MESSAGE_FAILURE_INVALID_NAME,
-                    examName,
                     Arrays.toString(VALID_EXAM_NAMES)
             ));
         }

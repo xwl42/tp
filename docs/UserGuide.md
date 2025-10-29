@@ -28,11 +28,11 @@
 
 <br><br>
 
-> [!TIP]
-> For any command using the INDEX parameter,
-> you can mark multiple students at once using a range (e.g. `1:5`).
-> note: This does not apply to the EXERCISE_INDEX or LAB_INDEX parameters
- 
+<box type="tip">
+
+**Tip:** For any command using the INDEX parameter, you can mark multiple students at once using a range (e.g. `1:5`). This does not apply to the EXERCISE_INDEX or LAB_INDEX parameters
+</box>
+
 ## **Data – Modifying**
 
 ### **Part 1: Person Data**
@@ -58,14 +58,16 @@ marka INDEX l/LAB_NUMBER s/STATUS
 - `marka 1 l/1 s/y` — Marks Lab 1 as *attended* for the 1st student.
 - `marka 1:5 l/1 s/n` — Marks Lab 1 as *not attended* for students 1 through 5.
 
-> [!WARNING]
-> Attempting to re-mark a lab with the same status will trigger a message indicating it was already marked.
+<box type="warning">
+
+**Caution:** Attempting to re-mark a lab with the same status will trigger a message indicating it was already marked.
+</box>
 
 <br>
 
 ##### Mark a student's exercise for completion: `marke`
 
-Use this command to record or update whether selected students have completed a particular exercise.  
+You can use this command to record or update whether selected students have completed a particular exercise.  
 
 **Format:**
 ```
@@ -76,14 +78,16 @@ marke INDEX ei/EXERCISE_INDEX s/STATUS
 - `marke 1 ei/1 s/y` — Marks Exercise 1 as *done* for the 1st student.
 - `marke 2:5 ei/3 s/n` — Marks Exercise 3 as *not done* for students 2 through 5.
 
-> [!WARNING]
-> If an exercise is already marked with the same status, the command will show a message indicating it was already marked.
+<box type="warning">
+
+**Caution:** If an exercise is already marked with the same status, the command will show a message indicating it was already marked.
+</box>
 
 <br>
 
 ##### Record a student's score for an exam: `grade`
 
-This command allows you to assign or edit exam grades for selected students.  
+You can use this command to assign or edit exam grades for selected students.  
 
 **Format:**
 ```
@@ -94,13 +98,15 @@ grade INDEX... en/EXAM_NAME s/SCORE
 - `grade 1 en/Midterm s/87.5` — Records a score of 87.5 for the Midterm exam for the 1st student.
 - `grade 2:4 en/Final s/90` — Assigns a score of 90 for the Final exam to students 2 through 4.
 
-> [!TIP]
-> Scores will automatically be rounded down to one decimal place.  
+<box type="tip">
 
-> [!WARNING]
-> The exam name must be one of the valid exams defined in the system.  
-> The score must be a valid number (e.g., `85`, `92.5`) 
-> that is no greater than the maximum score of the exam you intend to mark.
+**Tip:** Scores will automatically be rounded down to one decimal place.  
+</box>
+
+<box type="warning">
+
+**Caution:** The exam name must be one of the valid exams defined in the system. Additionally, the score must be a valid number (e.g., `85`, `92.5`) that is no greater than the maximum score of the exam you intend to mark.
+</box>
 
 | **Valid Exam Name** | **Maximum score** |
 |----------------------|-------------------|

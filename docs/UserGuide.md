@@ -329,9 +329,6 @@ You can use this command to show all students in the current list and clear any 
 
 **Format:** `list`
 
-**Examples:**
-- show all students: `list`
-- return to the full list after a search or filter: `list`
 
 <box type="tip">
 
@@ -354,9 +351,6 @@ You can use this command to close LambdaLab.
 
 **Format:** `exit`
 
-**Examples:**
-- close the application: `exit`
-
 
 <br>
 
@@ -366,9 +360,6 @@ which links to the User Guide and also provides brief explanations
 of each command.
 
 **Format:** `help`
-
-**Examples:**
-- open the help window: `help`
 
 <box type="tip">
 
@@ -389,16 +380,17 @@ Tip: You can also press `F1` or use the app’s Help menu to open the Help windo
 
 # Parameters
 
-| **Parameter**      | **Description**                                        | **Prefix**                                      | **Constraint**                                                                                  |
-|--------------------|--------------------------------------------------------|-------------------------------------------------|-------------------------------------------------------------------------------------------------|
-| **STUDENT_INDEX**  | Index or range of student(s) in the displayed list.    | *(no prefix — written before other parameters)* | Must be a whole number greater than 0, or a range in the format `X:Y`.                          |
-| **EXERCISE_INDEX** | Specific exercise number to mark.                      | `ei/`                                           | Must be between 0–9 (inclusive).                                                                |
-| **STATUS**         | Completion or attendance status (`y` = yes, `n` = no). | `s/`                                            | Must be either `y` or `n`.                                                                      |
-| **LAB_NUMBER**     | Specific lab session to mark attendance for.           | `l/`                                            | Must be between 1–10 (inclusive).                                                               |
-| **EXAM_NAME**      | Name of the exam to record or update a grade for.      | `en/`                                           | Must be one of: `pe1`, `midterm`, `pe2`, or `final`.                                            |
-| **SCORE**          | Numeric grade assigned for the exam.                   | `sc/`                                           | Must be a number; up to one decimal place.                                                      |
-| **START_DATETIME** | Starting datetime of the timeslot                      | `ts/`                                           | Must be in ISO_LOCAL_DATE_TIME or human-friendly format (specified in notes)                    |
-| **END_DATETIME**   | Ending datetime of the timeslot                        | `ts/`                                           | Must be in ISO_LOCAL_DATE_TIME or human-friendly format (specified in notes)                    |
-| **STUDENT_NAME**   | Name of student in consultation                        | `n/`                                            |                                                                                                 |
-| **CRITERION**      | Criterion to sort by                                   | `c/`                                            | Must be `name`, `id`, `lab`, `ex`                                                               |
-| **COMPARISON**     | Percentage of labs attended to filter by               | `la/`                                           | Must contain one of the following operators, ==, >=, <=, >, < followed by an integer from 0-100 |
+| **Parameter**       | **Description**                                        | **Prefix**                                      | **Constraint**                                                                                      |
+|---------------------|--------------------------------------------------------|-------------------------------------------------|-----------------------------------------------------------------------------------------------------|
+| **STUDENT_INDEX**   | Index or range of student(s) in the displayed list.    | *(no prefix — written before other parameters)* | Must be a whole number greater than 0, or a range in the format `X:Y`.                              |
+| **EXERCISE_INDEX**  | Specific exercise number to mark.                      | `ei/`                                           | Must be between 0–9 (inclusive).                                                                    |
+| **STATUS**          | Completion or attendance status (`y` = yes, `n` = no). | `s/`                                            | Must be either `y` or `n`.                                                                          |
+| **STATUS** (filter) | Completion or attendance status to be filtered         | `s/`                                            | Must be `y`, `n`, `o`(overdue) for exercise completion and `y`, `n`, `a`(absent) for lab attendance |
+| **LAB_NUMBER**      | Specific lab session to mark attendance for.           | `l/`                                            | Must be between 1–10 (inclusive).                                                                   |
+| **EXAM_NAME**       | Name of the exam to record or update a grade for.      | `en/`                                           | Must be one of: `pe1`, `midterm`, `pe2`, or `final`.                                                |
+| **SCORE**           | Numeric grade assigned for the exam.                   | `sc/`                                           | Must be a number; up to one decimal place.                                                          |
+| **START_DATETIME**  | Starting datetime of the timeslot                      | `ts/`                                           | Must be in ISO_LOCAL_DATE_TIME or human-friendly format (specified in notes)                        |
+| **END_DATETIME**    | Ending datetime of the timeslot                        | `ts/`                                           | Must be in ISO_LOCAL_DATE_TIME or human-friendly format (specified in notes)                        |
+| **STUDENT_NAME**    | Name of student in consultation                        | `n/`                                            |                                                                                                     |
+| **CRITERION**       | Criterion to sort by                                   | `c/`                                            | Must be `name`, `id`, `lab`, `ex`                                                                   |
+| **COMPARISON**      | Percentage of labs attended to filter by               | `la/`                                           | Must contain one of the following operators, ==, >=, <=, >, < followed by an integer from 0-100     |

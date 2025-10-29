@@ -267,8 +267,11 @@ use immediately after a mistaken action if your environment supports undo of oth
 | **Parameter**      | **Description** | **Prefix** | **Constraint** |
 |---------------------|------------------|-------------|----------------|
 | **STUDENT_INDEX**   | Index or range of student(s) in the displayed list. | *(no prefix — written before other parameters)* | Must be a whole number greater than 0, or a range in the format `X:Y`. |
-| **EXERCISE_INDEX**  | The specific exercise number to mark. | `ei/` | Must be between 0–9 (inclusive). |
-| **STATUS**          | Indicates completion or attendance status (`y` = yes, `n` = no). | `s/` | Must be either `y` or `n`. |
-| **LAB_NUMBER**      | The specific lab session to mark attendance for. | `l/` | Must be between 1–10 (inclusive). |
+| **EXERCISE_INDEX**  | Specific exercise number to mark. | `ei/` | Must be between 0–9 (inclusive). |
+| **STATUS**          | Completion or attendance status (`y` = yes, `n` = no). | `s/` | Must be either `y` or `n`. |
+| **LAB_NUMBER**      | Specific lab session to mark attendance for. | `l/` | Must be between 1–10 (inclusive). |
 | **EXAM_NAME**       | Name of the exam to record or update a grade for. | `en/` | Must be one of: `pe1`, `midterm`, `pe2`, or `final`. |
 | **SCORE**           | Numeric grade assigned for the exam. | `sc/` | Must be a number; up to one decimal place. |
+| **START_DATETIME**   | Starting datetime of the timeslot | `ts/` | Must be in ISO_LOCAL_DATE_TIME or human-friendly format (specified in notes) |
+| **END_DATETIME**   | Ending datetime of the timeslot | `ts/` | Must be in ISO_LOCAL_DATE_TIME or human-friendly format (specified in notes) |
+| **STUDENT_NAME**          | Name of student in consultation | `n/` |  |

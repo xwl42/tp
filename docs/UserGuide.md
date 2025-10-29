@@ -261,7 +261,9 @@ clear
 
 ---
 
-### On lab/exercise/grade
+### On the labs, exercises and examinations
+Before learning about the commands let's familiarise ourselves with the **Trackers**
+![Trackers.png](images/Trackers.png)
 
 #### Mark a student's lab attendance: `marka`
 
@@ -678,7 +680,6 @@ Similarly, lab attendance is tracked relative to the current week, allowing TAs 
 - The week number must be within the valid semester range (e.g., 1–13).
 - Setting the wrong week may cause inconsistencies in exercise deadlines and attendance tracking.
   </box>
-
 <br>
 
 ### Exiting the application: `exit`

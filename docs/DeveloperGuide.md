@@ -529,7 +529,7 @@ and passed to a `FindCommand`. The command then updates the model’s filtered l
 
 The sequence diagram below illustrates the key interactions for `execute("find <KEYWORD> [selectors]")`.
 
-<puml src="diagrams/findCommand/FindSequenceDiagram.puml" width="1500" />
+<puml src="diagrams/findCommand/FindSequenceDiagram.puml" width="574" />
 
 #### Parsing & Validation
 - `FindCommandParser` tokenises input into a preamble and selectors.

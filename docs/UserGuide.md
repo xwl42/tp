@@ -342,7 +342,7 @@ Here, `STATUS` is "y" for passed and "n" for failed.
 
 <box type="tip">
 
-If you regrade an exam, the previous pass/fail status will be **overwritten**.
+**Tip:** If you regrade an exam, the previous pass/fail status will be **overwritten**.
 </box>
 
 <box type="warning">
@@ -361,23 +361,11 @@ If you regrade an exam, the previous pass/fail status will be **overwritten**.
 
 ### On timeslot/consultation
 
-This section contains commands for managing unavailable times (blocked timeslots) and consultations. Timeslots can be used to mark regular events (e.g. classes), while consultation timeslots are specifically for CS2030S consultation sessions. These commands are designed to help users schedule and organize their consultation times more effectively.
-
-<box type="tip">
-
-**Tip:** Use `get-timeslots` to see your full schedule and `get-consultations` for an uncluttered view of your consultation schedule.
-
-</box>
-
-<box type="warning">
-Note on overlaps: LambdaLab prevents overlapping timeslots. If you try to add a timeslot that partially or fully overlaps an existing timeslot, the command will be rejected with an error ("A timeslot at the same time already exists."). This safeguard applies to both generic timeslots (block-timeslot) and consultations (add-consultation).
-</box>
-
 <br><br>
+### Blocking a timeslot: `block-timeslot`
 
-#### Blocking a timeslot: `block-timeslot`
-
-You can use this command to add a timeslot to the application's timeslot store.
+You can use this command to add a timeslot to the application's timeslot store. 
+Timeslots can be used to mark regular events (e.g. classes)
 
 **Format:**
 ```
@@ -389,6 +377,11 @@ block-timeslot ts/START_DATETIME te/END_DATETIME
     * `block-timeslot ts/2025-10-04T10:00:00 te/2025-10-04T13:00:00`
     * `block-timeslot ts/4 Oct 2025, 10:00 te/4 Oct 2025, 13:00`
     * `block-timeslot ts/4 Oct 2025 10:00 te/4 Oct 2025 13:00`
+
+<box type="warning">
+
+**Caution:** LambdaLab prevents overlapping timeslots. If you try to add a timeslot that partially or fully overlaps an existing timeslot, the command will be rejected with an error ("A timeslot at the same time already exists."). This safeguard applies to both generic timeslots (block-timeslot) and consultations (add-consultation).
+</box>
 
 <br><br>
 
@@ -418,7 +411,7 @@ unblock-timeslot ts/START_DATETIME te/END_DATETIME
 
 * If the unblock range is strictly inside a stored timeslot, the stored timeslot is split into two (before and after the unblock range).
 * If the unblock range overlaps one end of a stored timeslot, the stored timeslot is trimmed accordingly.
-  </box>
+</box>
 
 <br>
 
@@ -586,7 +579,7 @@ To change the order again, run `sort` with a different criterion.
 
 ### On timeslot/consultation
 
-#### Retrieving merged timeslot ranges: `get-timeslots`
+#### Retrieving timeslot ranges: `get-timeslots`
 
 You can use this command to display all timeslot ranges derived from stored timeslots. This allows the user to keep track of unavailable times for easier scheduling of consultations with students.
 
@@ -597,7 +590,9 @@ get-timeslots
 
 <box type="tip">
 
-**Tip:** The UI can display these timeslot ranges in the Timetable window (when available). Note that the Timetable view only shows timeslots between 08:00 and 23:00.
+**Tip:** Use `get-timeslots` to see your full schedule and `get-consultations` for an uncluttered view of your consultation schedule.
+
+A GUI similar to the below will appear upon entering of the command.
 ![Timetable window](images/timetableWindow.png)
 
 </box>

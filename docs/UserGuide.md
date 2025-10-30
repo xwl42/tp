@@ -377,7 +377,7 @@ block-timeslot ts/START_DATETIME te/END_DATETIME
 
 <box type="warning">
 
-**Caution:** LambdaLab prevents overlapping timeslots. If you try to add a timeslot that partially or fully overlaps an existing timeslot, the command will be rejected with an error ("A timeslot at the same time already exists."). This safeguard applies to both generic timeslots (block-timeslot) and consultations (add-consultation).
+**Caution:** LambdaLab prevents overlapping timeslots. If you try to add a timeslot that partially or fully overlaps an existing timeslot, the command will be rejected with an error ("A timeslot at the same time already exists."). This safeguard applies to both generic timeslots (`block-timeslot`) and consultations (`add-consultation`).
 </box>
 
 <br><br>
@@ -433,9 +433,10 @@ add-consultation ts/START_DATETIME te/END_DATETIME n/STUDENT_NAME
 
 </box>
 
+
 <box type="warning">
 
-**Caution:** The application prevents overlapping timeslots. If you try to add a timeslot that partially or fully overlaps an existing timeslot, the command will be rejected with an error ("A timeslot at the same time already exists."). This safeguard applies to both generic timeslots (block-timeslot) and consultations (add-consultation).
+**Caution:** NAME parameter in `add-consultation` does not need to match an existing student record. You may enter any attendee name as the command does not validate that the name exists in the database.
 </box>
 
 <br>
@@ -783,7 +784,6 @@ lab sessions to maintain accurate records.
 4. **If your Operating System (OS) is in Chinese or other non-English language**, you may encounter command format errors
    using human-friendly format for datetime parameters. The remedy is to use ISO_LOCAL_DATE_TIME format (e.g. `2023-10-01T09:00:00`
    for 1st Oct, 2023, 9:00AM) only.
-
 ---
 
 # Summary

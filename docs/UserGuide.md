@@ -178,12 +178,9 @@ add i/STUDENTID n/NAME p/PHONE e/EMAIL g/GITHUB_USERNAME [t/TAG]…​
 ```
 
 **Examples:**
-- `add i/A1234567X n/John Doe p/98765432 e/johnd@example.com g/JohnDoe` — Adds a student with student ID `A1234567X`,
-  name `John Doe`, phone number `98765432`, email `johnd@example.com`, and GitHub username `JohnDoe`.
-- `add i/A1234567X n/John Doe p/98765432 e/johnd@example.com g/JohnDoe t/modelStudent` — Adds the same student but with
-  an optional tag `modelStudent` included.
-- `add g/JohnDoe i/A1234567X p/98765432 t/modelStudent n/John Doe e/johnd@example.com` — Adds the same student with
-  parameters in different order.
+- Adds a student with student ID `A1234567X`, name `John Doe`, phone number `98765432`, email `johnd@example.com`, and GitHub username `JohnDoe`: `add i/A1234567X n/John Doe p/98765432 e/johnd@example.com g/JohnDoe`.
+- Adds the same student but with an optional tag `modelStudent` included: `add i/A1234567X n/John Doe p/98765432 e/johnd@example.com g/JohnDoe t/modelStudent`.
+- Adds the same student with parameters in different order: `add g/JohnDoe i/A1234567X p/98765432 t/modelStudent n/John Doe e/johnd@example.com`.
 
 <box type="tip">
 
@@ -209,8 +206,8 @@ edit INDEX [i/STUDENT ID] [n/NAME] [p/PHONE] [e/EMAIL] [g/GITHUB USERNAME] [t/TA
 ```
 
 **Examples:**
-- `edit 1 p/91234567 e/johndoe@example.com` — Edits the phone number and email address of the 1st student to be `91234567` and `johndoe@example.com` respectively.
-- `edit 2 n/Betsy Crower t/` — Edits the name of the 2nd student to be `Betsy Crower` and clears all existing tags.
+- Edits the phone number and email address of the 1st student to be `91234567` and `johndoe@example.com`: `edit 1 p/91234567 e/johndoe@example.com`.
+- Edits the name of the 2nd student to be `Betsy Crower` and clears all existing tags: `edit 2 n/Betsy Crower t/`.
 
 <box type="tip">
 
@@ -236,8 +233,8 @@ delete INDEX
 ```
 
 **Examples:**
-- `list` followed by `delete 2` — Deletes the 2nd student in the LambdaLab.
-- `find Betsy` followed by `delete 1` — Deletes the 1st student in the results of the `find` command.
+- Deletes the 2nd student in the LambdaLab: `list` followed by `delete 2`.
+- Deletes the 1st student in the results of the `find` command: `find Betsy` followed by `delete 1`.
 
 <box type="tip">
 
@@ -295,8 +292,8 @@ marka INDEX l/LAB_NUMBER s/STATUS
 Here `STATUS` is "y" for attended and "n" for not attended
 
 **Examples:**
-- `marka 1 l/1 s/y` — Marks Lab 1 as *attended* for the 1st student.
-- `marka 1:5 l/1 s/n` — Marks Lab 1 as *not attended* for students 1 through 5.
+- Marks Lab 1 as attended for the 1st student: `marka 1 l/1 s/y`.
+- Marks Lab 1 as not attended for students 1 through 5: `marka 1:5 l/1 s/n`.
 
 <box type="warning">
 
@@ -316,8 +313,8 @@ marke INDEX ei/EXERCISE_INDEX s/STATUS
 Here, `STATUS` is "y" for completed and "n" for not completed.
 
 **Examples:**
-- `marke 1 ei/1 s/y` — Marks Exercise 1 as *done* for the 1st student.
-- `marke 2:5 ei/3 s/n` — Marks Exercise 3 as *not done* for students 2 through 5.
+- Marks Exercise 1 as done for the 1st student: `marke 1 ei/1 s/y`.
+- Marks Exercise 3 as not done for students 2 through 5: `marke 2:5 ei/3 s/n`.
 
 <box type="warning">
 
@@ -337,8 +334,8 @@ grade INDEX... en/EXAM_NAME s/STATUS
 Here, `STATUS` is "y" for passed and "n" for failed.
 
 **Examples:**
-- `grade 1 en/Midterm s/y` — Marks the first student as passed for the Midterm exam.
-- `grade 2:4 en/Final s/n` — Marks students 2 through 4 as failed for the Final exam.
+- Marks the first student as passed for the Midterm exam: `grade 1 en/Midterm s/y`.
+- Marks students 2 through 4 as failed for the Final exam: `grade 2:4 en/Final s/n`.
 
 <box type="tip">
 
@@ -497,10 +494,10 @@ find KEYWORD [MORE_KEYWORDS]... [i/] [n/] [p/] [e/] [g/] [t/]
 ```
 
 **Examples:**
-- `find alex david` — Searches **all fields** for "alex" or "david".
-- `find alice n/` — Searches **names only** for "alice".
-- `find A123 john i/ n/` — Searches **Student ID** or **Name** for "A123" or "john".
-- `find lab1 t/` — Searches **tags only** for "lab1".
+- Searches **all fields** for "alex" or "david": `find alex david`.
+- Searches **names only** for "alice": `find alice n/`.
+- Searches **Student ID** or **Name** for "A123" or "john": `find A123 john i/ n/`.
+- Searches **tags only** for "lab1": `find lab1 t/`.
 
 <box type="tip">
 
@@ -529,11 +526,11 @@ filter [l/LAB_NUMBER s/ATTENDANCE_STATUS]... [ei/EXERCISE_INDEX s/EXERCISE_STATU
 ```
 
 **Examples:**
-- `filter l/7 s/y` — Shows students who attended Lab 7.
-- `filter ei/5 s/y` — Shows students who completed Exercise 5.
-- `filter l/2 s/y ei/4 s/y` — Shows students who attended Lab 2 **and** completed Exercise 4.
-- `filter l/3 s/n l/4 s/n` — Shows students absent for Lab 3 **and** Lab 4.
-- `filter la/>50% la/<70%` — Shows students who attended more than 50% of labs but less than 70% of labs.
+- Shows students who attended Lab 7: `filter l/7 s/y`.
+- Shows students who completed Exercise 5: `filter ei/5 s/y`.
+- Shows students who attended Lab 2 **and** completed Exercise 4: `filter l/2 s/y ei/4 s/y`.
+- Shows students absent for Lab 3 **and** Lab 4: `filter l/3 s/n l/4 s/n`.
+- Shows students who attended more than 50% but less than 70% of labs: `filter la/>50% la/<70%`.
 
 <box type="tip">
 
@@ -559,10 +556,10 @@ sort c/CRITERION
 ```
 
 **Examples:**
-- `sort c/name` — Sorts by name (A to Z).
-- `sort c/id` — Sorts by student ID.
-- `sort c/lab` — Sorts by lab attendance (high to low).
-- `sort c/ex` — Sorts by exercise progress (high to low).
+- Sorts by name (A to Z): `sort c/name`.
+- Sorts by student ID: `sort c/id`.
+- Sorts by lab attendance (high to low): `sort c/lab`.
+- Sorts by exercise progress (high to low): `sort c/ex`.
 
 <box type="tip">
 
@@ -640,10 +637,10 @@ undo
 ```
 
 **Examples:**
-- `delete 2` followed by `undo` — Restores the deleted student back to the list.
-- `edit 1 n/Wrong Name` followed by `undo` — Reverts the student's name to its original value.
-- `add i/A1234567X n/John Doe p/12345678 e/john@u.nus.edu g/JohnDoe` followed by `undo` — Removes the newly added student.
-- `delete 2` followed by `list` followed by `undo` — Still restores the deleted student back to the list (non-modifying commands like `list` don't affect undo).
+- Restores the deleted student back to the list: `delete 2` followed by `undo`.
+- Reverts the student's name to its original value: `edit 1 n/Wrong Name` followed by `undo`.
+- Removes the newly added student: `add i/A1234567X n/John Doe p/12345678 e/john@u.nus.edu g/JohnDoe` followed by `undo`.
+- Still restores the deleted student back to the list (non-modifying commands like `list` don't affect undo): `delete 2` followed by `list` followed by `undo`.
 
 <box type="tip">
 
@@ -668,8 +665,8 @@ This helps the system automatically manage time-sensitive features such as **exe
 set-week WEEK_NUMBER
 
 **Examples:**
-- `set-week 5` — Sets the current teaching week to Week 5.
-- `set-week 1` — Resets the current week to Week 1 at the start of a new semester.
+- Sets the current teaching week to Week 5: `set-week 5`.
+- Resets the current week to Week 1 at the start of a new semester: `set-week 1`.
 
 <box type="tip">
 

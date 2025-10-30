@@ -80,7 +80,6 @@ public class EditCommand extends MultiIndexCommand {
         }
 
         model.setPerson(personToEdit, editedPerson);
-        model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
         return editedPerson;
     }
 

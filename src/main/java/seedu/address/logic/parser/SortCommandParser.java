@@ -24,11 +24,16 @@ public class SortCommandParser implements Parser<SortCommand> {
         requireNonNull(args);
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_SORT_CRITERION);
 
+        if (argMultimap.getValue(PREFIX_SORT_CRITERION).isEmpty()) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, SortCommand.MESSAGE_USAGE));
+        }
+
         SortCriterion sortCriterion;
+
         try {
             sortCriterion = ParserUtil.parseSortCriterion(argMultimap.getValue(PREFIX_SORT_CRITERION).orElse(""));
-        } catch (IllegalValueException ive) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, SortCommand.MESSAGE_USAGE), ive);
+        } catch (ParseException e) {
+            throw new ParseException(e.getMessage(), e);
         }
 
         return new SortCommand(sortCriterion);

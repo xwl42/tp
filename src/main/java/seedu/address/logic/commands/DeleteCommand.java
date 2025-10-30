@@ -36,7 +36,6 @@ public class DeleteCommand extends MultiIndexCommand {
     protected Person applyActionToPerson(Model model, Person personToDelete) {
         requireNonNull(model);
         model.deletePerson(personToDelete);
-        model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
         return personToDelete;
     }
 

@@ -1,13 +1,10 @@
 package seedu.address.logic.commands;
 
-import static seedu.address.logic.Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX;
-import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import seedu.address.commons.core.index.Index;
 import seedu.address.commons.core.index.MultiIndex;
+import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
@@ -36,28 +33,42 @@ public abstract class MultiIndexCommand extends Command {
      */
     @Override
     public CommandResult execute(Model model) throws CommandException {
-        List<Person> lastShownList = model.getFilteredPersonList();
-
-        for (Index index : multiIndex.toIndexList()) {
-            if (index.getZeroBased() >= lastShownList.size()) {
-                throw new CommandException(MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
-            }
-        }
+        List<Person> lastShownList = getPeople(model);
 
         model.saveAddressBook();
 
         List<Person> updatedPersons = new ArrayList<>();
-        for (Index index : multiIndex.toIndexList()) {
-            Person personToEdit = lastShownList.get(index.getZeroBased());
-            Person editedPerson = applyActionToPerson(model, personToEdit);
+        List<Person> personsToUpdate = multiIndex
+                .toIndexList()
+                .stream()
+                .map(index -> lastShownList.get(index.getZeroBased()))
+                .toList();
+        for (Person person : personsToUpdate) {
+            Person editedPerson = applyActionToPerson(model, person);
 
             if (editedPerson != null) {
                 updatedPersons.add(editedPerson);
             }
         }
 
-        model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
         return buildResult(updatedPersons);
+    }
+
+    private List<Person> getPeople(Model model) throws CommandException {
+        List<Person> lastShownList = model.getFilteredPersonList();
+        assert multiIndex.getLowerBound().getOneBased() >= 1
+                : "lower bound cannot be less than 1";
+        if (multiIndex.getUpperBound().getOneBased() > lastShownList.size()) {
+            throw new CommandException(String.format(
+                    Messages.MESSAGE_INVALID_INDEX_FORMAT,
+                    multiIndex.getUpperBound().getOneBased(),
+                    "student",
+                    1,
+                    lastShownList.size()
+                )
+            );
+        }
+        return lastShownList;
     }
 
     /**

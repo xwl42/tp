@@ -2,91 +2,77 @@ package seedu.address.logic.commands;
 
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EXAM_NAME;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_SCORE;
-import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_STATUS;
 import static seedu.address.model.person.GradeMap.VALID_EXAM_NAMES;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import seedu.address.commons.core.index.Index;
-import seedu.address.logic.Messages;
+import seedu.address.commons.core.index.MultiIndex;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.GradeMap;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.exceptions.InvalidExamNameException;
-import seedu.address.model.person.exceptions.InvalidScoreException;
 
 /**
- * Marks the specified lab as attended of an existing person in the address book.
+ * Marks the specified exam as passed or failed
+ * for one or more students in the address book.
  */
-public class GradeCommand extends Command {
+public class GradeCommand extends MultiIndexCommand {
+
     public static final String COMMAND_WORD = "grade";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": grades the specific exam of the person identified "
-            + "by the index number used in the last person listing.\n"
-            + "Parameters: INDEX (must be a positive integer) "
-            + PREFIX_EXAM_NAME + " EXAM_NAME "
-            + PREFIX_SCORE + " SCORE\n"
-            + "Example: " + COMMAND_WORD + " 1 "
-            + PREFIX_EXAM_NAME + "midterm "
-            + PREFIX_SCORE + "30.5";
-    public static final String MESSAGE_GRADE_SUCCESS = "%s of %s graded with score %.1f";
-    private static final String MESSAGE_FAILURE_INVALID_SCORE =
-            "%.1f is invalid! Grade the exam with a number in between 0 and %.1f (inclusive)";
-    private static final String MESSAGE_FAILURE_INVALID_NAME =
-            "%s is invalid! Here are the valid exam names %s";
-    private final Index index;
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Marks the specified exam as passed or failed "
+            + "for one or more students identified by their index numbers in the displayed student list.\n"
+            + "Parameters: INDEX (must be a positive integer or range X:Y) "
+            + PREFIX_EXAM_NAME + "EXAM_NAME "
+            + PREFIX_STATUS + "STATUS (y/n)\n"
+            + "Example: " + COMMAND_WORD + " 1:3 " + PREFIX_EXAM_NAME + "midterm " + PREFIX_STATUS + "y\n"
+            + "Example: " + COMMAND_WORD + " 2 " + PREFIX_EXAM_NAME + "pe1 " + PREFIX_STATUS + "n\n";
+
+    public static final String MESSAGE_GRADE_SUCCESS = "%s marked as %s for: %s";
+    public static final String MESSAGE_FAILURE_INVALID_NAME =
+            "Exam name is invalid! Here are the valid exam names: %s";
+
     private final String examName;
-    private final double score;
+    private final boolean isPassed;
 
     /**
-     * @param index of the person in the filtered person list to mark their lab attendance
-     * @param index of the lab number to be marked as attended
+     * Constructs a GradeCommand.
+     *
+     * @param multiIndex List of students to update.
+     * @param examName   Name of the exam to mark.
+     * @param isPassed   True if passed, false if failed.
      */
-    public GradeCommand(Index index, String examName, double score) {
-        requireAllNonNull(index, examName, score);
-        assert index.getOneBased() > 0;
-        this.index = index;
-        this.examName = examName;
-        this.score = score;
+    public GradeCommand(MultiIndex multiIndex, String examName, boolean isPassed) {
+        super(multiIndex);
+        requireAllNonNull(multiIndex, examName);
+        this.examName = examName.toLowerCase();
+        this.isPassed = isPassed;
     }
+
     @Override
-    public CommandResult execute(Model model) throws CommandException {
-        List<Person> lastShownList = model.getFilteredPersonList();
-
-        if (index.getZeroBased() >= lastShownList.size()) {
-            throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
-        }
-        Person personToGrade = lastShownList.get(index.getZeroBased());
-
-        model.saveAddressBook(); // Save before modification
-
-        GradeMap updatedGradeMap = personToGrade.getGradeMap().copy(); // Create copy
+    protected Person applyActionToPerson(Model model, Person personToGrade) throws CommandException {
+        GradeMap updatedGradeMap = personToGrade.getGradeMap().copy();
 
         try {
-            updatedGradeMap.gradeExam(examName, score); // Modify the copy
-            assert updatedGradeMap.getGradeableHashMap().get(examName) != null
-                    : "Updated GradeMap should contain the graded exam";
-        } catch (InvalidExamNameException iene) {
-            throw new CommandException(
-                    String.format(
-                            MESSAGE_FAILURE_INVALID_NAME,
-                            examName,
-                            Arrays.toString(VALID_EXAM_NAMES)
-                    )
-            );
-        } catch (InvalidScoreException ise) {
-            throw new CommandException(
-                    String.format(MESSAGE_FAILURE_INVALID_SCORE,
-                            score,
-                            ise.getMaxScore()
-                    )
-            );
+            if (isPassed) {
+                updatedGradeMap.markExamPassed(examName);
+            } else {
+                updatedGradeMap.markExamFailed(examName);
+            }
+            if (updatedGradeMap.getExamMap().get(examName) == null) {
+                throw new AssertionError("Updated GradeMap should contain the graded exam");
+            }
+        } catch (InvalidExamNameException e) {
+            throw new CommandException(String.format(
+                    MESSAGE_FAILURE_INVALID_NAME,
+                    Arrays.toString(VALID_EXAM_NAMES)
+            ));
         }
 
-        // Create a NEW Person with the updated GradeMap
         Person gradedPerson = new Person(
                 personToGrade.getStudentId(),
                 personToGrade.getName(),
@@ -96,18 +82,33 @@ public class GradeCommand extends Command {
                 personToGrade.getGithubUsername(),
                 personToGrade.getExerciseTracker(),
                 personToGrade.getLabAttendanceList(),
-                updatedGradeMap // Use the modified copy here
+                updatedGradeMap
         );
 
-        model.setPerson(personToGrade, gradedPerson); // Replace old with new
-        model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+        model.setPerson(personToGrade, gradedPerson);
+        return gradedPerson;
+    }
 
-        return new CommandResult(String.format(MESSAGE_GRADE_SUCCESS,
+    @Override
+    protected CommandResult buildResult(List<Person> updatedPersons) {
+        String affectedStudents = updatedPersons.stream()
+                .map(Person::getNameAndID)
+                .collect(Collectors.joining(", "));
+
+        String resultString;
+
+        if (isPassed) {
+            resultString = "passed";
+        } else {
+            resultString = "failed";
+        }
+
+        return new CommandResult(String.format(
+                MESSAGE_GRADE_SUCCESS,
                 examName,
-                gradedPerson.getName(),
-                score
-        )
-        );
+                resultString,
+                affectedStudents
+        ));
     }
 
     @Override
@@ -116,14 +117,20 @@ public class GradeCommand extends Command {
             return true;
         }
 
-        // instanceof handles nulls
         if (!(other instanceof GradeCommand)) {
             return false;
         }
 
         GradeCommand otherCommand = (GradeCommand) other;
-        return index.equals(otherCommand.index)
-                && score == (otherCommand.score)
-                && examName.equals(otherCommand.examName);
+
+        if (!multiIndex.equals(otherCommand.multiIndex)) {
+            return false;
+        }
+
+        if (isPassed != otherCommand.isPassed) {
+            return false;
+        }
+
+        return examName.equals(otherCommand.examName);
     }
 }

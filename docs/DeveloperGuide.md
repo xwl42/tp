@@ -224,13 +224,13 @@ Given below is an example usage scenario and how the undo mechanism behaves at e
 initial address book and timeslots state, with `previousAddressBookState` and `previousTimeslotsState` set to `null`
 (no previous state to undo to).
 
-![UndoState0](images/UndoState0.png)
+<puml src="diagrams/UndoCommand/UndoState0.puml" with="574" />
 
 **Step 2.** The user executes `delete 5` command to delete the 5th person in the address book. The `delete` command
 calls `Model#saveAddressBook()` before deleting, saving the current state. After the deletion, the current state is
 modified but the previous state preserves the state before deletion.
 
-![UndoState1](images/UndoState1.png)
+<puml src="diagrams/UndoCommand/UndoState1.puml" with="574" />
 
 <box type="info" seamless>
 
@@ -243,13 +243,13 @@ not be updated.
 `Model#saveAddressBook()` before adding, which **replaces** the previous state with the current state (ab1),
 then adds the new student.
 
-![UndoState2](images/UndoState2.png)
+<puml src="diagrams/UndoCommand/UndoState2.puml" with="574" />
 
 **Step 4.** The user now decides that adding the student was a mistake, and decides to undo that action by
 executing the `undo` command. The `undo` command will call `Model#undoAddressBook()`, which restores the address book
 to the previous state (ab1) and sets both `previousAddressBookState` and `previousTimeslotsState` to `null`.
 
-![UndoState3](images/UndoState3.png)
+<puml src="diagrams/UndoCommand/UndoState3.puml" with="574" />
 
 <box type="info" seamless>
 
@@ -268,7 +268,7 @@ execute another modifying command before you can undo again. There is no redo fu
 
 The following sequence diagram shows how an undo operation goes through the `Logic` component:
 
-![UndoSequenceDiagram-Logic](images/UndoSequenceDiagram_Logic.png)
+<puml src="diagrams/UndoCommand/UndoSequenceDiagram-Logic" with="574" />
 
 <box type="info" seamless>
 
@@ -279,21 +279,21 @@ the lifeline reaches the end of diagram.
 
 Similarly, how an undo operation goes through the `Model` component is shown below:
 
-![UndoSequenceDiagram-Model](images/UndoSequenceDiagram_Model.png)
+<puml src="diagrams/UndoCommand/UndoSequenceDiagram-Model" with="574" />
 
 **Step 5.** The user then decides to execute the command `list`. Commands that do not modify the address book,
 such as `list`, `find`, or `get-timeslots`, will not call `Model#saveAddressBook()`. Thus, the previous state remains `null`.
 
-![UndoState4](images/UndoState4.png)
+<puml src="diagrams/UndoCommand/UndoState4.puml" with="574" />
 
 **Step 6.** The user executes `clear`, which calls `Model#saveAddressBook()` before clearing. The current state (ab1)
 is saved as the previous state, then all persons are deleted, creating a new current state.
 
-![UndoState5](images/UndoState5.png)
+<puml src="diagrams/UndoCommand/UndoState5.puml" with="574" />
 
 The following activity diagram summarises what happens when a user executes a new command:
 
-![SaveActivityDiagram](images/SaveActivityDiagram.png)
+<puml src="diagrams/UndoCommand/SaveActivityDiagram.puml" with="574" />
 
 #### Commands that support undo
 
@@ -306,7 +306,10 @@ The following commands call `Model#saveAddressBook()` and thus support undo:
 - `marka` - Marks attendance
 - `grade` - Marks grade of an assessment
 - `block-timeslot` - Adds a timeslot
+- `unblock-timeslot` - Unblock a timeslot
 - `clear-timeslots` - Clears all timeslots
+- `add-consultation` - Adds a consultation
+- `set-week` - Sets current week
 
 The following commands do NOT support undo (read-only commands):
 - `list` - Lists all students
@@ -314,6 +317,7 @@ The following commands do NOT support undo (read-only commands):
 - `filter` - Filters students
 - `sort` - Sorts students base on some criteria
 - `get-timeslots` - Displays timeslots
+- `get-consultations` - Gets consultation schedule
 - `help` - Shows help
 - `exit` - Exits the application
 
@@ -370,6 +374,182 @@ a student project with limited development time.
 * **Undo command confirmation:** For destructive commands like `clear`, prompt the user to confirm before executing,
   reducing the need for undo in the first place.
 
+### **Feature: Multi-Index Inputs**
+
+#### Overview
+
+LambdaLab supports commands that can target **multiple students at once** through the use of **multi-index inputs**.  
+This feature is powered by the `MultiIndex` and `MultiIndexCommand` classes, which together allow users to specify **a single index** (e.g., `2`) or **a contiguous range** (e.g., `1:5`) when executing commands.
+
+This enables bulk operations such as grading, marking attendance, or updating exercises — all in one concise command.
+
+---
+
+#### Motivation
+
+Before introducing this feature, commands like `marka`, `marke`, and `grade` could only operate on **one student** at a time.  
+This was inefficient for Teaching Assistants managing large classes, as they frequently needed to update the same record (e.g., lab attendance or exam results) for an entire group.
+
+By introducing **multi-index inputs**, LambdaLab allows a single command to efficiently modify multiple students’ data, improving usability and productivity during busy grading or lab sessions.
+
+---
+
+#### Implementation
+
+## MultiIndex
+The `MultiIndex` class represents a list of one or more indices that is written as the syntax as shown here:
+
+# MultiIndex syntax
+- A **single index** (e.g., `1` → only the first student), or
+- A **range of indices** (e.g., `1:5` → students 1 through 5, inclusive).
+
+It exposes methods such as:
+- `isSingle()` — checks if the command applies to one student only.
+- `toIndexList()` — returns a list of all `Index` objects represented by the multi-index input.
+
+## MultiIndexCommand
+Commands that use this feature extend the abstract class `MultiIndexCommand`,
+which defines a template for commands that support updates for multiple students at once using the 
+[MultiIndex syntax](#multiindex-syntax).
+
+Each subclass:
+1. Implements `applyActionToPerson(Model model, Person person)` — defining how each student is modified.
+2. Optionally overrides `buildResult(List<Person> updatedPersons)` to customize the final success message.
+
+**Subclasses that extend `MultiIndexCommand` :**
+
+| Command Class           | Command Word | Description                              |
+|--------------------------|---------------|------------------------------------------|
+| `MarkAttendanceCommand`  | `marka`       | Marks lab attendances.                   |
+| `MarkExerciseCommand`    | `marke`       | Marks exercises for completion.          |
+| `GradeCommand`           | `grade`       | Marks exams as passed or failed.         |
+| `DeleteCommand`          | `delete`      | Deletes students from LambdaLab.           |
+| `EditCommand`            | `edit`        | Edits students in LambdaLab.               |
+
+---
+
+#### Example Usage
+
+**Example 1: Single Index**
+marka 5 l/3 s/n - Marks Lab 3 as *absent* for the student at the (one-based) index of 5 of the student list.
+
+**Example 2: Range of Indices**
+grade 1:3 en/midterm s/y  - Marks the *Midterm* exam as *passed* for student 1.
+A sequence diagram for the execution of this command is shown over here:
+
+<puml src="diagrams/GradeCommand/GradeSequenceDiagram.puml" width="800" />
+
+---
+
+#### Design Considerations
+
+**Aspect: Code Reuse**  
+The iteration and validation logic for applying an action to multiple students is centralized within `MultiIndexCommand`.  
+This ensures consistent behavior across all commands that support bulk modification.
+
+**Aspect: Robustness**  
+If any index in the provided range is invalid (e.g., out of bounds), the command throws a `CommandException` before making any modifications.
+>
+
+**Aspect: Extensibility**  
+Future commands that require multi-student operations (e.g., adding group tags or resetting student progress) can easily extend `MultiIndexCommand` without duplicating logic.
+
+---
+
+#### Future Enhancements
+
+* **Partial Execution Reports:**  
+  Allow commands to apply valid operations even if some indices fail, returning a summary report of successes and failures.
+
+* **Parallel Execution:**  
+  For large datasets, multi-index operations could be processed concurrently for improved performance.
+
+### **Feature: Displaying Trackable Data**
+
+#### Overview
+
+LambdaLab displays each student’s academic progress using **trackable components**, which visually represent data such as **exercise completion**, **lab attendance**, and **exam performance**.  
+This feature leverages the `Trackable` interface and its implementing classes to unify how progress information is retrieved and displayed within the UI.
+
+Each trackable component defines both:
+- The **status colours** (e.g., green, red, grey) that indicate the current state.
+- The **labels** (e.g., EX1, L5, MIDTERM) used to identify individual tracked items.
+
+---
+
+#### Motivation
+
+Previously, progress indicators for labs, exercises, and exams existed only as stored data, without any visual representation on the student card.  
+Teaching Assistants had to rely on manual inspection or individual commands to check each student’s record, which was slow and error-prone.
+
+The **Display Trackable** feature introduces a clear and intuitive visualization of progress through coloured labels.  
+This allows Teaching Assistants to instantly gauge student performance and identify those who are struggling — directly from the main student list.
+
+---
+
+#### Implementation
+
+#### Implementation
+
+The **Trackable Display** feature enables LambdaLab to visually represent a student’s **exercises**, **lab attendance**, and **exam results** in a consistent and colour-coded format.
+
+This is achieved through the `Trackable` interface, which standardizes how trackable data is exposed to the UI.  
+Each of the following classes implements `Trackable`:
+- `ExerciseTracker` – tracks completion status of exercises.
+- `LabList` – tracks attendance for lab sessions.
+- `GradeMap` – tracks examination results.
+
+When a `PersonCard` is created, it directly retrieves these three trackers from the `Person` object:
+1. `person.getExerciseTracker()`
+2. `person.getLabAttendanceList()`
+3. `person.getGradeMap()`
+
+For each tracker, the `PersonCard`:
+- Calls `getLabels()` to obtain display names (e.g., **EX1**, **L3**, **MIDTERM**).
+- Calls `getTrackerColours()` to obtain their corresponding colour codes (`GREEN`, `GREY`, or `RED`).
+- Dynamically generates a label for each item and applies the appropriate CSS class based on its colour.
+
+This design cleanly separates **model data** from **UI rendering**, ensuring that any future updates to how data is displayed require no changes to the model logic.
+
+<puml src="diagrams/Trackable/TrackableClassDiagram.puml" width="800" />
+
+#### Design Considerations
+
+**Aspect: Reusability**  
+The abstraction of the `Trackable` interface allows all progress-tracking components to share the same rendering logic, reducing code duplication and simplifying maintenance.
+
+**Aspect: Extensibility**  
+Future features such as project submissions or participation tracking can easily be integrated by implementing the same interface.
+
+**Aspect: Visual Consistency**  
+Colours and font styles are centrally managed through CSS, ensuring that every type of status indicator follows the same visual pattern.
+
+---
+
+#### Example
+
+Each student card displays their current progress in three areas:
+
+| Category | Green Meaning | Grey Meaning | Red Meaning |
+|:----------|:---------------|:--------------|:-------------|
+| **Lab** | Attended | Not conducted yet | Absent |
+| **Exercise** | Completed | Not conducted | Overdue |
+| **Exam** | Passed | Not graded | Failed |
+
+This provides a concise and visual summary of each student’s standing in the course.
+
+---
+
+#### Future Enhancements
+
+* **Dynamic Updates:**  
+  Allow trackable status colours to update in real time when a record changes, without requiring a full refresh.
+
+* **Tooltips:**  
+  Provide contextual information (e.g., submission dates or marks) when hovering over each label.
+
+* **Custom Colour Themes:**  
+  Allow instructors to customize the colour scheme for accessibility or course preferences.
 
 ### \[Proposed\] Data archiving
 
@@ -377,7 +557,29 @@ _{Explain here how the data archiving feature will be implemented}_
 
 ### Find Feature:
 
-<puml src="diagrams/findCommand/find.puml" width="250" />
+#### Current Implementation
+The `find` mechanism performs a multi-keyword search over student records with **presence-only selectors** to restrict which fields are searched.
+Keywords are taken from the preamble (e.g., `find alice bob`), while empty selectors (e.g., `n/`, `g/`) 
+act as flags to limit the searched fields. If no selectors are provided, all supported fields are searched.
+
+Each selector creates a separate `Predicate` with the `keywords` then they are combined into a combined `PersonContainsKeywordPredicate`
+and passed to a `FindCommand`. The command then updates the model’s filtered list in one step.
+
+The sequence diagram below illustrates the key interactions for `execute("find <KEYWORD> [selectors]")`.
+
+<puml src="diagrams/findCommand/FindSequenceDiagram.puml" width="574" />
+
+#### Parsing & Validation
+- `FindCommandParser` tokenises input into a preamble and selectors.
+- It rejects inputs with **no keywords** or **non-empty selectors** (e.g., `n/Alice`) to enforce presence-only flags.
+- Selected fields are determined from which selectors appear; otherwise all fields are chosen.
+- Per-field predicates are OR-combined into a single `PersonContainsKeywordPredicate`
+that matches when **any** keyword is a case-insensitive **substring** of **any** selected field.
+
+#### Model Update
+- `FindCommand#execute(Model)` calls `model.updateFilteredPersonList(predicate)` once.
+- The UI observes the filtered list and refreshes automatically.
+
 
 
 --------------------------------------------------------------------------------------------------------------------

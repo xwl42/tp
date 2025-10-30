@@ -1,8 +1,7 @@
 package seedu.address.logic.parser;
 
-import static java.lang.Boolean.FALSE;
-import static java.lang.Boolean.TRUE;
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_STATUS;
 
 import java.util.ArrayList;
@@ -11,13 +10,18 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import javafx.util.Pair;
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.core.index.MultiIndex;
+import seedu.address.commons.exceptions.InvalidIndexException;
 import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.commands.FilterCommand;
-import seedu.address.logic.commands.FindCommand;
+import seedu.address.logic.helpers.Comparison;
+import seedu.address.logic.helpers.ExerciseIndexStatus;
+import seedu.address.logic.helpers.LabAttendanceComparison;
+import seedu.address.logic.helpers.LabIndexStatus;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Examination;
@@ -32,7 +36,6 @@ import seedu.address.model.person.Name;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.Status;
 import seedu.address.model.person.StudentId;
-import seedu.address.model.person.exceptions.InvalidScoreException;
 import seedu.address.model.person.sortcriterion.ExerciseSortCriterion;
 import seedu.address.model.person.sortcriterion.LabSortCriterion;
 import seedu.address.model.person.sortcriterion.NameSortCriterion;
@@ -45,8 +48,13 @@ import seedu.address.model.tag.Tag;
  */
 public class ParserUtil {
 
-    public static final String MESSAGE_INVALID_INDEX = "Index is not a non-zero unsigned integer.";
-    private static final String MESSAGE_INVALID_STATUS = "Status must be y or n";
+    public static final String MESSAGE_INVALID_INDEX = "index must be a number greater than 0";
+    public static final String MESSAGE_INVALID_STATUS = "Status input must be Y or N";
+    private static final String MESSAGE_INVALID_EXERCISE_INDEX =
+            "Exercise index is invalid! It must be between 0 and "
+                    + (ExerciseTracker.NUMBER_OF_EXERCISES - 1) + " (inclusive).";
+    private static final String MESSAGE_INVALID_LAB_INDEX =
+            "Lab index is invalid! It must be between 1 and " + LabList.NUMBER_OF_LABS + " (inclusive).";
     private static final String MESSAGE_INVALID_FILTER_EXERCISE_STATUS =
             "Exercise status must be Y, N or O";
     private static final String MESSAGE_INVALID_FILTER_LAB_STATUS =
@@ -55,8 +63,13 @@ public class ParserUtil {
             "Exercise index must always be followed by exercise status";
     private static final String MESSAGE_MISSING_LAB_STATUS =
             "Lab index must always be followed by lab status";
-
-
+    private static final String MESSAGE_EMPTY_INPUT = "Input string is empty!";
+    private static final String MESSAGE_INVALID_MULTIINDEX_BOUNDS =
+            "%s is invalid! Lower bound cannot be greater than upper bound";
+    private static final String MESSAGE_MISSING_OPERATOR =
+            "Missing appropriate operator for comparison, one of ==, >=, <=, >, < should follow la/";
+    private static final String MESSAGE_INVALID_PERCENTAGE =
+            "Attendance percentage must be an integer between 0 and 100.";
 
     /**
      * @param input a string that is either in the "X:Y" or "X" form
@@ -64,6 +77,9 @@ public class ParserUtil {
      * @throws ParseException if the input is invalid
      */
     public static MultiIndex parseMultiIndex(String input) throws ParseException {
+        if (input.isEmpty()) {
+            throw new ParseException(MESSAGE_EMPTY_INPUT);
+        }
         if (input.contains(":")) {
             return parseRange(input);
         } else {
@@ -76,14 +92,14 @@ public class ParserUtil {
     private static MultiIndex parseRange(String input) throws ParseException {
         String[] parts = input.split(":");
         if (parts.length != 2) {
-            throw new IllegalArgumentException("Invalid range format: " + input);
+            throw new InvalidIndexException("Invalid range format: " + input);
         }
 
         Index lower = ParserUtil.parseIndex(parts[0].trim());
         Index upper = ParserUtil.parseIndex(parts[1].trim());
 
         if (lower.getZeroBased() > upper.getZeroBased()) {
-            throw new IllegalArgumentException("Lower bound cannot be greater than upper bound: " + input);
+            throw new InvalidIndexException(String.format(MESSAGE_INVALID_MULTIINDEX_BOUNDS, input));
         }
 
         return new MultiIndex(lower, upper);
@@ -95,28 +111,54 @@ public class ParserUtil {
      */
     public static Index parseIndex(String oneBasedIndex) throws ParseException {
         String trimmedIndex = oneBasedIndex.trim();
+        if (trimmedIndex.isEmpty()) {
+            throw new ParseException(MESSAGE_EMPTY_INPUT);
+        }
         if (!StringUtil.isNonZeroUnsignedInteger(trimmedIndex)) {
-            throw new ParseException(MESSAGE_INVALID_INDEX);
+            throw new InvalidIndexException(MESSAGE_INVALID_INDEX);
         }
         return Index.fromOneBased(Integer.parseInt(trimmedIndex));
     }
+
+    /**
+     * Parses {@code oneBasedIndex} into an {@code Index} and returns it. Leading and trailing whitespaces will be
+     * trimmed. The index must be between 1 and the maximum number of labs (inclusive).
+     * @throws InvalidIndexException if the specified index is invalid
+     */
+    public static Index parseLabIndex(String oneBasedIndex) throws InvalidIndexException {
+        String trimmedIndex = oneBasedIndex.trim();
+        if (!StringUtil.isNonZeroUnsignedInteger(trimmedIndex)) {
+            throw new InvalidIndexException(MESSAGE_INVALID_LAB_INDEX);
+        }
+
+        int oneBased = Integer.parseInt(trimmedIndex);
+        if (oneBased > LabList.NUMBER_OF_LABS) {
+            throw new InvalidIndexException(MESSAGE_INVALID_LAB_INDEX);
+        }
+        return Index.fromOneBased(oneBased);
+    }
+
     /**
      * Parses {@code zeroBasedIndex} into an {@code Index} and returns it. Leading and trailing whitespaces will be
-     * trimmed.
-     * @throws ParseException if the specified index is invalid (not non-zero unsigned integer).
+     * trimmed. The index must be between 1 and the maximum number of labs - 1 (inclusive).
+     * @throws InvalidIndexException if the specified index is invalid
      */
-    public static Index parseZeroBasedIndex(String zeroBasedIndex) throws ParseException {
+    public static Index parseExerciseIndex(String zeroBasedIndex) throws InvalidIndexException {
         String trimmedIndex = zeroBasedIndex.trim();
         if (!StringUtil.isNonNegativeUnsignedInteger(trimmedIndex)) {
-            throw new ParseException(MESSAGE_INVALID_INDEX);
+            throw new InvalidIndexException(MESSAGE_INVALID_EXERCISE_INDEX);
         }
-        return Index.fromZeroBased(Integer.parseInt(trimmedIndex));
+        int zeroBased = Integer.parseInt(trimmedIndex);
+        if (zeroBased >= ExerciseTracker.NUMBER_OF_EXERCISES) {
+            throw new InvalidIndexException(MESSAGE_INVALID_EXERCISE_INDEX);
+        }
+        return Index.fromZeroBased(zeroBased);
     }
     /**
      * Parses a {@code String studentId} into a {@code StudentId}.
      * Leading and trailing whitespaces will be trimmed.
      *
-     * @throws ParseException if the given {@code studentId} is invalid.
+     * @throws InvalidIndexException if the given {@code studentId} is invalid.
      */
     public static StudentId parseStudentId(String studentId) throws ParseException {
         requireNonNull(studentId);
@@ -284,32 +326,46 @@ public class ParserUtil {
     }
 
     /**
-     * parses a {@code gradeMapString} into a {@code gradeMap}
-     * @throws ParseException if the given {@code exerciseTrackerString} is invalid
+     * Parses a {@code gradeMapString} into a {@code GradeMap}.
+     * Expected format: "pe1: Passed, midterm: Failed, pe2: NA"
+     *
+     * @throws ParseException if the given {@code gradeMapString} is invalid.
      */
     public static GradeMap parseGradeMap(String input) throws ParseException {
+        requireNonNull(input);
         GradeMap gradeMap = new GradeMap();
 
         for (String entry : input.split(",")) {
             String[] parts = entry.trim().split(":");
+
             if (parts.length != 2) {
                 continue;
             }
+
             String name = parts[0].trim().toLowerCase();
-            String scoreStr = parts[1].trim();
+            String resultStr = parts[1].trim().toLowerCase();
+
             Examination exam = new Examination(name);
-            if (!scoreStr.equalsIgnoreCase("NA")) {
-                try {
-                    exam.setPercentageScore(Double.parseDouble(scoreStr));
-                } catch (InvalidScoreException e) {
-                    throw new ParseException(e.getMessage());
+
+            if (!resultStr.equals("na")) {
+                if (resultStr.equals("passed")) {
+                    exam.markPassed();
+                } else if (resultStr.equals("failed")) {
+                    exam.markFailed();
+                } else {
+                    throw new ParseException(
+                            String.format("Invalid exam result '%s' for '%s'. Must be 'Passed', 'Failed', or 'NA'.",
+                                    resultStr, name)
+                    );
                 }
             }
+
             gradeMap.putExam(name, exam);
         }
 
         return gradeMap;
     }
+
 
     /**
      * Parses a {@code String criterionString} into a {@code SortCriterion}.
@@ -346,28 +402,17 @@ public class ParserUtil {
      * @param exerciseIndexString a string containing both the index and status as a combined string
      * @throws ParseException if the given {@code String} does not include a status.
      */
-    public static Pair<String, Status> parseExerciseIndexStatus(String exerciseIndexString) throws ParseException {
+    public static ExerciseIndexStatus parseExerciseIndexStatus(String exerciseIndexString) throws ParseException {
         ArgumentMultimap exerciseMultimap =
                 ArgumentTokenizer.tokenize(exerciseIndexString, PREFIX_STATUS);
-        Optional<String> status = exerciseMultimap.getValue(PREFIX_STATUS);
-        String exercise = exerciseMultimap.getPreamble();
-        if (exercise.isEmpty()) {
-            throw new ParseException(FilterCommand.MESSAGE_USAGE);
-        }
-        if (status.isEmpty()) {
+        Optional<String> statusString = exerciseMultimap.getValue(PREFIX_STATUS);
+
+        Index exerciseNumber = parseExerciseIndex(exerciseMultimap.getPreamble());
+        if (statusString.isEmpty()) {
             throw new ParseException(MESSAGE_MISSING_EXERCISE_STATUS);
         }
-        String statusString = status.get().toUpperCase();
-        switch (statusString) {
-        case "D":
-            return new Pair<>(exercise, Status.DONE);
-        case "N":
-            return new Pair<>(exercise, Status.NOT_DONE);
-        case "O":
-            return new Pair<>(exercise, Status.OVERDUE);
-        default:
-            throw new ParseException(MESSAGE_INVALID_FILTER_EXERCISE_STATUS);
-        }
+        Status status = parseExerciseStatusForFilter(exerciseMultimap.getValue(PREFIX_STATUS).orElse(""));
+        return new ExerciseIndexStatus(exerciseNumber, status);
     }
 
     /**
@@ -377,25 +422,119 @@ public class ParserUtil {
      * @param labNumberString a string containing both the index and status as a combined string
      * @throws ParseException if the given {@code String} does not include a status.
      */
-    public static Pair<String, Boolean> parseLabNumberStatus(String labNumberString) throws ParseException {
+    public static LabIndexStatus parseLabNumberStatus(String labNumberString) throws ParseException {
         ArgumentMultimap exerciseMultimap =
                 ArgumentTokenizer.tokenize(labNumberString, PREFIX_STATUS);
-        Optional<String> status = exerciseMultimap.getValue(PREFIX_STATUS);
-        String labNumber = exerciseMultimap.getPreamble();
-        if (labNumber.isEmpty()) {
-            throw new ParseException(FindCommand.MESSAGE_USAGE);
-        }
-        if (status.isEmpty()) {
+        Optional<String> statusString = exerciseMultimap.getValue(PREFIX_STATUS);
+
+        Index labNumber = parseLabIndex(exerciseMultimap.getPreamble());
+        if (statusString.isEmpty()) {
             throw new ParseException(MESSAGE_MISSING_LAB_STATUS);
         }
-        String statusString = status.get().toUpperCase();
-        switch (statusString) {
-        case "Y":
-            return new Pair<>(labNumber, TRUE);
-        case "N":
-            return new Pair<>(labNumber, FALSE);
+        // If needed, can replace OrElse with just get
+        String statusStr = parseLabStatusForFilter(exerciseMultimap.getValue(PREFIX_STATUS).orElse(""));
+        return new LabIndexStatus(labNumber, statusStr);
+    }
+
+    private static String parseLabStatusForFilter(String labStatus) throws ParseException {
+        requireNonNull(labStatus);
+        String trimmed = labStatus.trim();
+        switch (trimmed.toUpperCase()) {
+        case "Y": return "Y";
+        case "N": return "N";
+        case "A": return "A";
         default:
             throw new ParseException(MESSAGE_INVALID_FILTER_LAB_STATUS);
+        }
+    }
+
+    private static Status parseExerciseStatusForFilter(String exerciseStatus) throws ParseException {
+        requireNonNull(exerciseStatus);
+        String trimmed = exerciseStatus.trim();
+        switch (trimmed.toUpperCase()) {
+        case "Y": return Status.DONE;
+        case "N": return Status.NOT_DONE;
+        case "O": return Status.OVERDUE;
+        default:
+            throw new ParseException(MESSAGE_INVALID_FILTER_EXERCISE_STATUS);
+        }
+    }
+
+    /**
+     * Parses an attendance comparison like ">=60", "75%", "<=85".
+     *
+     * Accepted forms (spaces optional; '%' optional):
+     * - ==70, >=60, <=85, >40, <25
+     * - 75 or 75%
+     *
+     * Value must be an integer from 0 to 100.
+     * Operator must be one of: ==, >=, <=, >, <.
+     *
+     * @param attendanceComparison raw input string
+     * @return a LabAttendanceComparison with the parsed value and operator
+     * @throws ParseException if input is null, malformed, has an unsupported operator,
+     *                        or the value is outside 0–100
+     */
+    public static LabAttendanceComparison parseAttendanceComparison(String attendanceComparison) throws ParseException {
+        assert(attendanceComparison != null);
+        String s = attendanceComparison.trim().replaceAll("\\s+", "");
+
+        // Accept: ==70, >=60, <=85, >40, <25, 75, and any of those with a trailing %
+        Matcher m = Pattern
+                .compile("^(?:([<>]=?|==?|))?(-?\\d{1,3})(?:%)?$")
+                .matcher(s);
+        if (!m.matches()) {
+            throw new ParseException(FilterCommand.ATTENDED_PERCENTAGE_USAGE);
+        }
+
+        String operator = m.group(1);
+        int value = Integer.parseInt(m.group(2));
+        if (value < 0 || value > 100) {
+            throw new ParseException(MESSAGE_INVALID_PERCENTAGE);
+        }
+
+        Comparison comparison;
+        switch (operator) {
+        case "==":
+            comparison = Comparison.EQ;
+            break;
+        case ">=":
+            comparison = Comparison.GE;
+            break;
+        case "<=":
+            comparison = Comparison.LE;
+            break;
+        case ">":
+            comparison = Comparison.GT;
+            break;
+        case "<":
+            comparison = Comparison.LT;
+            break;
+        default:
+            throw new ParseException(MESSAGE_MISSING_OPERATOR);
+        };
+
+        return new LabAttendanceComparison(value, comparison);
+    }
+
+
+    /**
+     * Ensures that prefixes of a command's required fields are used
+     * @param argumentMultimap of the command parser
+     * @param usageMessage that instructs the user of the proper format
+     * @param requiredPrefixes prefixes of fields required for the parsed command
+     * @throws ParseException thrown when a field is left empty
+     */
+    public static void validateFields(ArgumentMultimap argumentMultimap,
+                                  String usageMessage,
+                                  Prefix... requiredPrefixes) throws ParseException {
+        if (argumentMultimap.getPreamble().isEmpty()) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, usageMessage));
+        }
+        for (Prefix prefix : requiredPrefixes) {
+            if (argumentMultimap.getValue(prefix).isEmpty()) {
+                throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, usageMessage));
+            }
         }
     }
 }

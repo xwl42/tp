@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -60,19 +59,6 @@ public class LabListTest {
         assertFalse(labAttendanceList.getLabs()[5].isAttended());
         labAttendanceList.markLabAsAttended(5);
         assertTrue(labAttendanceList.getLabs()[5].isAttended());
-    }
-
-    @Test
-    public void markLab_invalidIndex_throwsIndexOutOfBoundsException() {
-        LabList labAttendanceList = new LabList(labs);
-
-        assertThrows(IndexOutOfBoundsException.class, () -> {
-            labAttendanceList.markLabAsAttended(-1);
-        });
-
-        assertThrows(IndexOutOfBoundsException.class, () -> {
-            labAttendanceList.markLabAsAttended(10);
-        });
     }
 
     @Test

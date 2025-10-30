@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.core.index.MultiIndex;
+import seedu.address.commons.exceptions.InvalidIndexException;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.LabAttendanceList;
@@ -59,13 +60,13 @@ public class ParserUtilTest {
     @Test
     public void parseMultiIndex_invalidInputs_throwsException() {
         // Too many colons
-        assertThrows(IllegalArgumentException.class, () -> ParserUtil.parseMultiIndex("1:2:3"));
+        assertThrows(InvalidIndexException.class, () -> ParserUtil.parseMultiIndex("1:2:3"));
 
         // Lower bound > upper bound
-        assertThrows(IllegalArgumentException.class, () -> ParserUtil.parseMultiIndex("5:2"));
+        assertThrows(InvalidIndexException.class, () -> ParserUtil.parseMultiIndex("5:2"));
 
         // Non-numeric input
-        assertThrows(ParseException.class, () -> ParserUtil.parseMultiIndex("a:b"));
+        assertThrows(InvalidIndexException.class, () -> ParserUtil.parseMultiIndex("a:b"));
 
         // Empty input
         assertThrows(ParseException.class, () -> ParserUtil.parseMultiIndex(""));

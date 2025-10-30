@@ -1,5 +1,8 @@
 package seedu.address.model.person;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Represents a collection of lab attendance records for a student across all lab sessions.
  */
@@ -45,17 +48,15 @@ public class LabList implements LabAttendanceList {
 
     @Override
     public void markLabAsAttended(int index) {
-        if (index < 0 || index >= NUMBER_OF_LABS) {
-            throw new IndexOutOfBoundsException("Index should be between 0 and " + (NUMBER_OF_LABS - 1));
-        }
+        assert index >= 0 : "Index must be greater than zero (one based)";
+        assert index < NUMBER_OF_LABS : "Index must be smaller than " + NUMBER_OF_LABS + " (one based)";
         labs[index].markAsAttended();
     }
 
     @Override
     public void markLabAsAbsent(int index) {
-        if (index < 0 || index >= NUMBER_OF_LABS) {
-            throw new IndexOutOfBoundsException("Index should be between 0 and " + (NUMBER_OF_LABS - 1));
-        }
+        assert index >= 0 : "Index must be greater than zero (one based)";
+        assert index < NUMBER_OF_LABS : "Index must be smaller than " + NUMBER_OF_LABS + " (one based)";
         labs[index].markAsAbsent();
     }
 
@@ -154,5 +155,27 @@ public class LabList implements LabAttendanceList {
     @Override
     public int compareTo(LabAttendanceList other) {
         return Double.compare(this.calculateLabAttendance(), other.calculateLabAttendance());
+    }
+    @Override
+    public List<TrackerColour> getTrackerColours() {
+        List<TrackerColour> colours = new ArrayList<>();
+        for (LabAttendance lab : labs) {
+            String status = lab.getStatus();
+            TrackerColour colour = switch (status) {
+            case "Y" -> TrackerColour.GREEN;
+            case "A" -> TrackerColour.RED;
+            default -> TrackerColour.GREY; // "N"
+            };
+            colours.add(colour);
+        }
+        return colours;
+    }
+    @Override
+    public List<String> getLabels() {
+        List<String> labels = new ArrayList<>();
+        for (int i = 0; i < NUMBER_OF_LABS; i++) {
+            labels.add("L" + (i + 1));
+        }
+        return labels;
     }
 }

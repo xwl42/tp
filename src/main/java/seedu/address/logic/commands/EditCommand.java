@@ -16,7 +16,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
-import seedu.address.commons.core.index.Index;
+import seedu.address.commons.core.index.MultiIndex;
 import seedu.address.commons.util.CollectionUtil;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
@@ -34,65 +34,63 @@ import seedu.address.model.person.StudentId;
 import seedu.address.model.tag.Tag;
 
 /**
- * Edits the details of an existing student in LambdaLab.
+ * Edits the details of one or more existing students in LambdaLab.
  */
-public class EditCommand extends Command {
+public class EditCommand extends MultiIndexCommand {
 
     public static final String COMMAND_WORD = "edit";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Edits the details of the student identified "
-            + "by the index number used in the displayed student list. "
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Edits the details of one or more students "
+            + "identified by their index numbers in the displayed student list. "
             + "Existing values will be overwritten by the input values.\n"
-            + "Parameters: INDEX (must be a positive integer) "
+            + "Parameters: (must be a positive integer or range X:Y) "
             + "[" + PREFIX_STUDENTID + "STUDENTID] "
             + "[" + PREFIX_NAME + "NAME] "
             + "[" + PREFIX_PHONE + "PHONE] "
             + "[" + PREFIX_EMAIL + "EMAIL] "
             + "[" + PREFIX_GITHUB_USERNAME + "GITHUB_USERNAME] "
             + "[" + PREFIX_TAG + "TAG]...\n"
-            + "Example: " + COMMAND_WORD + " 1 "
+            + "Example: " + COMMAND_WORD + " 1:2 "
             + PREFIX_PHONE + "91234567 "
-            + PREFIX_EMAIL + "johndoe@example.com";
+            + PREFIX_EMAIL + "johndoe@example.com \n"
+            + "Example: " + COMMAND_WORD + " 5 " + PREFIX_TAG + "struggling";
 
-    public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Student: %1$s";
+    public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Student(s):\n%1$s";
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
     public static final String MESSAGE_DUPLICATE_PERSON = "This student already exists in LambdaLab.";
 
-    private final Index index;
     private final EditPersonDescriptor editPersonDescriptor;
 
     /**
-     * @param index of the person in the filtered person list to edit
-     * @param editPersonDescriptor details to edit the person with
+     * @param multiIndex of the persons in the filtered person list to edit
+     * @param editPersonDescriptor details to edit the persons with
      */
-    public EditCommand(Index index, EditPersonDescriptor editPersonDescriptor) {
-        requireNonNull(index);
+    public EditCommand(MultiIndex multiIndex, EditPersonDescriptor editPersonDescriptor) {
+        super(multiIndex);
         requireNonNull(editPersonDescriptor);
-
-        this.index = index;
         this.editPersonDescriptor = new EditPersonDescriptor(editPersonDescriptor);
     }
 
     @Override
-    public CommandResult execute(Model model) throws CommandException {
-        requireNonNull(model);
-        List<Person> lastShownList = model.getFilteredPersonList();
-
-        if (index.getZeroBased() >= lastShownList.size()) {
-            throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
-        }
-
-        Person personToEdit = lastShownList.get(index.getZeroBased());
+    protected Person applyActionToPerson(Model model, Person personToEdit) throws CommandException {
         Person editedPerson = createEditedPerson(personToEdit, editPersonDescriptor);
 
         if (!personToEdit.isSamePerson(editedPerson) && model.hasPerson(editedPerson)) {
             throw new CommandException(MESSAGE_DUPLICATE_PERSON);
         }
 
-        model.saveAddressBook();
         model.setPerson(personToEdit, editedPerson);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
-        return new CommandResult(String.format(MESSAGE_EDIT_PERSON_SUCCESS, Messages.format(editedPerson)));
+        return editedPerson;
+    }
+
+    @Override
+    protected CommandResult buildResult(List<Person> updatedPersons) {
+        StringBuilder sb = new StringBuilder();
+        for (Person p : updatedPersons) {
+            sb.append(Messages.format(p)).append("\n");
+        }
+        return new CommandResult(String.format(MESSAGE_EDIT_PERSON_SUCCESS, sb.toString().trim()));
     }
 
     /**
@@ -116,29 +114,28 @@ public class EditCommand extends Command {
         GradeMap updatedGradeMap = editPersonDescriptor.getGradeMap()
                 .orElse(personToEdit.getGradeMap());
         return new Person(updatedStudentId, updatedName, updatedPhone, updatedEmail,
-                 updatedTags, updatedGithubUsername, updatedExerciseTracker, updatedLabAttendanceList, updatedGradeMap);
+                updatedTags, updatedGithubUsername, updatedExerciseTracker, updatedLabAttendanceList, updatedGradeMap);
     }
 
     @Override
     public boolean equals(Object other) {
-        if (other == this) {
+        if (this == other) {
             return true;
         }
 
-        // instanceof handles nulls
         if (!(other instanceof EditCommand)) {
             return false;
         }
 
-        EditCommand otherEditCommand = (EditCommand) other;
-        return index.equals(otherEditCommand.index)
-                && editPersonDescriptor.equals(otherEditCommand.editPersonDescriptor);
+        EditCommand e = (EditCommand) other;
+        return multiIndex.equals(e.multiIndex)
+                && editPersonDescriptor.equals(e.editPersonDescriptor);
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .add("index", index)
+                .add("multiIndex", multiIndex)
                 .add("editPersonDescriptor", editPersonDescriptor)
                 .toString();
     }
@@ -156,7 +153,6 @@ public class EditCommand extends Command {
         private GithubUsername githubUsername;
         private ExerciseTracker exerciseTracker;
         private LabAttendanceList labAttendanceList;
-
         private GradeMap gradeMap;
 
         public EditPersonDescriptor() {}
@@ -235,19 +231,10 @@ public class EditCommand extends Command {
             return Optional.ofNullable(gradeMap);
         }
 
-        /**
-         * Sets {@code tags} to this object's {@code tags}.
-         * A defensive copy of {@code tags} is used internally.
-         */
         public void setTags(Set<Tag> tags) {
             this.tags = (tags != null) ? new HashSet<>(tags) : null;
         }
 
-        /**
-         * Returns an unmodifiable tag set, which throws {@code UnsupportedOperationException}
-         * if modification is attempted.
-         * Returns {@code Optional#empty()} if {@code tags} is null.
-         */
         public Optional<Set<Tag>> getTags() {
             return (tags != null) ? Optional.of(Collections.unmodifiableSet(tags)) : Optional.empty();
         }
@@ -266,7 +253,6 @@ public class EditCommand extends Command {
                 return true;
             }
 
-            // instanceof handles nulls
             if (!(other instanceof EditPersonDescriptor)) {
                 return false;
             }

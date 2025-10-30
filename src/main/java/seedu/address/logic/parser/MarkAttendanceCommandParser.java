@@ -1,12 +1,13 @@
 package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_LAB_NUMBER;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_STATUS;
+import static seedu.address.logic.parser.ParserUtil.validateFields;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.core.index.MultiIndex;
+import seedu.address.commons.exceptions.InvalidIndexException;
 import seedu.address.logic.commands.MarkAttendanceCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 
@@ -30,21 +31,15 @@ public class MarkAttendanceCommandParser implements Parser<MarkAttendanceCommand
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_LAB_NUMBER, PREFIX_STATUS);
 
         // Check if required fields are present
-        if (argMultimap.getPreamble().isEmpty()
-                || argMultimap.getValue(PREFIX_LAB_NUMBER).isEmpty()
-                || argMultimap.getValue(PREFIX_STATUS).isEmpty()) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                    MarkAttendanceCommand.MESSAGE_USAGE));
-        }
-
+        validateFields(argMultimap, MarkAttendanceCommand.MESSAGE_USAGE, PREFIX_LAB_NUMBER, PREFIX_STATUS);
         MultiIndex multiIndex;
         Index labNumber;
         boolean isAttended;
 
         try {
-            labNumber = ParserUtil.parseIndex(argMultimap.getValue(PREFIX_LAB_NUMBER).orElse(""));
-        } catch (ParseException e) {
-            throw new ParseException(MarkAttendanceCommand.MESSAGE_FAILURE_INVALID_LAB_INDEX);
+            labNumber = ParserUtil.parseLabIndex(argMultimap.getValue(PREFIX_LAB_NUMBER).orElse(""));
+        } catch (InvalidIndexException e) {
+            throw new ParseException(e.getMessage());
         }
 
         // The ParseException from this would go to AddressBook Parser
@@ -53,8 +48,8 @@ public class MarkAttendanceCommandParser implements Parser<MarkAttendanceCommand
         // Parse multi-index (it will throw uncaught parse exception if index is wrong);
         try {
             multiIndex = ParserUtil.parseMultiIndex(argMultimap.getPreamble());
-        } catch (IllegalArgumentException e) {
-            throw new ParseException(e.getMessage());
+        } catch (InvalidIndexException e) {
+            throw new ParseException("Student " + e.getMessage());
         }
 
         return new MarkAttendanceCommand(multiIndex, labNumber, isAttended);

@@ -12,12 +12,11 @@ import seedu.address.commons.core.index.Index;
 /**
  * Represents a Person's address in the address book.
  */
-public class ExerciseTracker implements Comparable<ExerciseTracker> {
+public class ExerciseTracker implements Comparable<ExerciseTracker>, Trackable {
 
     public static final String MESSAGE_CONSTRAINTS = "Exercise tracker takes in statuses";
     public static final int NUMBER_OF_EXERCISES = 10;
     private static final Logger logger = LogsCenter.getLogger(MainApp.class);
-    private static final String INDEX_OUT_OF_FOUNDS_FORMAT = "Index should be between 0 and %s";
     private static int currentWeekNumber;
     private ArrayList<Exercise> exercises = new ArrayList<>();
 
@@ -89,12 +88,8 @@ public class ExerciseTracker implements Comparable<ExerciseTracker> {
      */
     public void markExercise(Index index, boolean isDone) {
         logger.info(String.format("Marking ex %d with %s", index.getOneBased(), isDone));
-        if (index.getZeroBased() < 0 || index.getZeroBased() >= NUMBER_OF_EXERCISES) {
-            throw new IndexOutOfBoundsException(
-                    String.format(INDEX_OUT_OF_FOUNDS_FORMAT,
-                            NUMBER_OF_EXERCISES - 1)
-            );
-        }
+        assert index.getZeroBased() >= 0 : "Invalid Index";
+        assert index.getZeroBased() < NUMBER_OF_EXERCISES : "Invalid Index";
         exercises.get(index.getZeroBased()).markStatus(isDone);
     }
 
@@ -169,6 +164,28 @@ public class ExerciseTracker implements Comparable<ExerciseTracker> {
 
     public List<Status> getStatuses() {
         return exercises.stream().map(Exercise::getStatus).toList();
+    }
+
+    @Override
+    public List<TrackerColour> getTrackerColours() {
+        return exercises.stream()
+                .map(exercise -> {
+                    Status status = exercise.getStatus();
+                    return switch (status) {
+                    case DONE -> TrackerColour.GREEN;
+                    case OVERDUE -> TrackerColour.RED;
+                    case NOT_DONE -> TrackerColour.GREY;
+                    };
+                })
+                .collect(Collectors.toList());
+    }
+    @Override
+    public List<String> getLabels() {
+        List<String> labels = new ArrayList<>();
+        for (int i = 0; i < NUMBER_OF_EXERCISES; i++) {
+            labels.add("EX" + (i));
+        }
+        return labels;
     }
 }
 

@@ -519,7 +519,29 @@ _{Explain here how the data archiving feature will be implemented}_
 
 ### Find Feature:
 
-<puml src="diagrams/findCommand/find.puml" width="250" />
+#### Current Implementation
+The `find` mechanism performs a multi-keyword search over student records with **presence-only selectors** to restrict which fields are searched.
+Keywords are taken from the preamble (e.g., `find alice bob`), while empty selectors (e.g., `n/`, `g/`) 
+act as flags to limit the searched fields. If no selectors are provided, all supported fields are searched.
+
+Each selector creates a separate `Predicate` with the `keywords` then they are combined into a combined `PersonContainsKeywordPredicate`
+and passed to a `FindCommand`. The command then updates the model’s filtered list in one step.
+
+The sequence diagram below illustrates the key interactions for `execute("find <KEYWORD> [selectors]")`.
+
+<puml src="diagrams/findCommand/FindSequenceDiagram.puml" width="574" />
+
+#### Parsing & Validation
+- `FindCommandParser` tokenises input into a preamble and selectors.
+- It rejects inputs with **no keywords** or **non-empty selectors** (e.g., `n/Alice`) to enforce presence-only flags.
+- Selected fields are determined from which selectors appear; otherwise all fields are chosen.
+- Per-field predicates are OR-combined into a single `PersonContainsKeywordPredicate`
+that matches when **any** keyword is a case-insensitive **substring** of **any** selected field.
+
+#### Model Update
+- `FindCommand#execute(Model)` calls `model.updateFilteredPersonList(predicate)` once.
+- The UI observes the filtered list and refreshes automatically.
+
 
 
 --------------------------------------------------------------------------------------------------------------------

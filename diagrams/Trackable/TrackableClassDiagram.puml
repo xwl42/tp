@@ -1,31 +1,41 @@
 @startuml
-!include style.puml
+!include ../style.puml
 skinparam arrowThickness 1.1
-skinparam arrowColor LOGIC_COLOR_T4
-skinparam classBackgroundColor LOGIC_COLOR
+skinparam arrowColor MODEL_COLOR
+skinparam classBackgroundColor MODEL_COLOR
 
 package UI as UIPackage {
-    class PersonCard
+    class PersonCard UI_COLOR
 }
 
 package Model as ModelPackage {
-    interface Trackable
-    enum TrackerColour
+    interface Trackable <<interface>>
+    interface GradeTracker <<interface>>
+    interface ExerciseTracker <<interface>>
+    interface LabAttendanceList <<interface>>
+
+    enum TrackerColour <<enumeration>>
     class Person
-    class ExerciseTracker
+    class ExerciseList
     class LabList
     class GradeMap
 }
 
-PersonCard --> Person
-PersonCard --> Trackable : <<display>>
-Trackable <|.. ExerciseTracker
-Trackable <|.. LabList
-Trackable <|.. GradeMap
-Person --> ExerciseTracker
-Person --> LabList
-Person --> GradeMap
-Trackable --> TrackerColour
+PersonCard *--> Person
+PersonCard --- Trackable: displays
+
+Trackable <|-- GradeTracker
+Trackable <|-- ExerciseTracker
+Trackable <|-- LabAttendanceList
+
+GradeMap ..|> GradeTracker
+ExerciseList ..|> ExerciseTracker
+LabList ..|> LabAttendanceList
+
+Person *--> ExerciseList
+Person *--> LabList
+Person *--> GradeMap
+Trackable ..> TrackerColour
 
 note right of Trackable
 Represents any data structure
